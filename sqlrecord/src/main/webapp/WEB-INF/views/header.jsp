@@ -85,6 +85,9 @@
     <div class="navright">
         <div class="navbar-end">
             <div class="membox">
+            	<c:out value="${sessionScope.loginUser}" default="No loginUser in session" />
+                <c:out value="${sessionScope.loginUser.memberId}" default="No memberId in loginUser" />
+            
                 <c:choose>
 				    <c:when test="${not empty sessionScope.loginUser && sessionScope.loginUser.memberId ne 'admin'}">
 				        <div class="navbar-item">
