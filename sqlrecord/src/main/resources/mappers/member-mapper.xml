@@ -67,7 +67,7 @@
 	
 	<insert id="insGenre" parameterType="MemberGenre">
 		INSERT
-			INTO GENRE (
+			INTO MEMBER_GENRE (
 						TAG_NO,
 						MEMBER_NO
 						)
