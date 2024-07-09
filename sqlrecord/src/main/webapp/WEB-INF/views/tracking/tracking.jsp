@@ -46,6 +46,6 @@
 
 </div>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

@@ -6,7 +6,6 @@
 <c:set var="hpath" value="<%= request.getContextPath() %>"/>
 <html>
 <head>
-<%@ include file="/WEB-INF/views/bootstrap.jsp" %>
 <link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
 <link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>

@@ -120,7 +120,7 @@
 </style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <!-- 상단 탭 -->
 <div class="tab-bar">
