@@ -39,12 +39,12 @@
          <div style="width: 40px; height: 40px; padding: 2rem 0.3rem; cursor: pointer">
           <c:choose>
           	<c:when test="${ not empty loginUser }">
-          		<a href="${hpath }/cart/member/">
+          		<a href="${hpath }/cart/member/${loginUser.memberNo}">
            			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
           		</a>
           	</c:when>
           	<c:when test="${ not empty loginGuest }">
-          		<a href="${hpath }/cart/member/">
+          		<a href="${hpath }/cart/member">
            			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
           		</a>
           	</c:when>
