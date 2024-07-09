@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+
+
+.sticky {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: -2px;
+}
+
+
+#section_serch {
+	  	display: flex;
+	  	width: 100%;
+	  	height: 100px;
+	  	position: -webkit-sticky; /* For Safari */
+		animation: fadeIn 1s ease-out;
+	  	justify-content: center;
+	  	background-color: white;
+	  	z-index: 9999;
+	  	transition: all 1s ease; /* 전체 섹션에 부드러운 전환 효과 추가 */
+	  }
+	  #section_serch_box {
+	    width: 100%;
+	    max-width: 1700px;
+	    display: flex;
+	    justify-content: space-between;
+	    transition: all 1s ease; /* 박스에 부드러운 전환 효과 추가 */
+	  }
+	  #section_serch_item1 {
+	  	width: 1200px;
+	  	display: flex;
+	  	overflow: hidden;
+	  	transition: all 1s ease; /* 아이템1에 부드러운 전환 효과 추가 */
+	  }
+
+
+
+  #section_serch_item1_inputBox {
+	  	width: 340px;
+	  	padding: 2em 1.5em;;
+	  	transition: transform 0.3s ease; /* 입력 상자에 부드러운 전환 효과 추가 */
+	  }
+	  #section_serch_item1_inputBox_item {
+	    display: flex;
+	    justify-content: space-around;
+	  	width: 100%;
+	    background-color: white;
+	    border: 2px solid black;
+	    border-radius: 14px;
+	    padding: 0.5em;
+	    height: 40px; /* 동일한 높이를 설정합니다 */
+        line-height: 40px; /* 줄 높이를 동일하게 설정합니다 */
+
+        gap: 20px;
+	  }
+	  
+	  #section_serch_item1_inputBox_item div {
+	     flex-shrink: 0;
+	  }
+	  
+	    #section_serch_item1_inputBox_item.focused,
+        #section_serch_item1_input.focused {
+            background-color: #f0f0f0; /* 연한 회색 */
+        }
+	  
+	  #section_serch_item1_input {
+	    height: 150%;
+    	width: 80%;
+    	position: relative;
+    	top: -5px;
+    	left: -25px;
+    	outline: none;
+    	border: none;
+    	flex-grow: 1;
+	  }    
+	  
+	  
+	  #section_serch_item2 {
+	  	width: 310px;
+	  	display: flex;
+	  	transition: all 0.3s ease; /* 아이템2에 부드러운 전환 효과 추가 */
+	  }
+	  
+	  #section_serch_item_logo {
+	    width: 250px;
+	  }
+	  #section_serch_item_logo img {
+	    top: -20px;
+        position: relative;
+	  }
+	  
+	  .section_serch_item_box {
+	  	min-width: 15px;
+	  	padding: 2.5em;
+	  }
+	  
+	  .section_serch_item_textBox {
+	  	width: 100%;
+	  	font-size: 18px;
+	  	text-align: center;
+	  	color: black;
+	  	font-weight: 700;
+	  	height: 24px; /* 동일한 높이를 설정합니다 */
+        line-height: 24px; /* 줄 높이를 동일하게 설정합니다 */
+	  }
+	  
+	  .section_serch_item_textBox a {
+	    color: black;
+	  }
+	  
+	  
+	  @media (max-width: 1400px) {
+            #section_serch_item1 {
+            	flex-basis: 0;
+                opacity: 0;
+                visibility: hidden;
+                height: 0;
+                overflow: hidden;
+            }
+            #section_serch_box  {
+                display: block;
+            }
+            #section_serch_item1_inputBox {
+              width: 100%;
+            }
+            #section_serch_item2 {
+              width: 97%;
+            }
+       }

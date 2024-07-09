@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.cart.model.dao.CartMapper">
+
+	<resultMap type="cart" id="cartRM">
+    	<id property="cart_num" column="cart_num"/>
+    	<result property="member_no" column="member_no"/>  
+	    <result property="cart_amount" column="cart_amount" jdbcType="INTEGER"/>
+    	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
+	        <result property="product_no" column="product_no"/>
+	        <result property="product_name" column="product_name"/>
+	        <result property="product_price" column="product_price"/>
+	        <result property="product_status" column="product_status"/>
+	        <result property="product_date" column="product_date"/>
+	        <result property="product_photo1" column="product_photo1"/>
+	        <result property="product_photo2" column="product_photo2"/>
+	        <result property="product_photo3" column="product_photo3"/>
+	        <result property="tag_no" column="tag_no"/>
+	        <result property="product_detail" column="product_detail"/>
+	        <result property="product_cate" column="product_cate"/>
+	        <result property="color" column="color"/>
+	    </association>
+	</resultMap>
+
+	<resultMap type="guestCart" id="guestCartRM">
+    	<id property="guest_cart_num" column="cart_num"/>
+    	<result property="guest_no" column="guest_no"/>  
+	    <result property="guest_cart_amount" column="guest_cart_amount" jdbcType="INTEGER"/>
+    	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
+	        <result property="product_no" column="product_no"/>
+	        <result property="product_name" column="product_name"/>
+	        <result property="product_price" column="product_price"/>
+	        <result property="product_status" column="product_status"/>
+	        <result property="product_date" column="product_date"/>
+	        <result property="product_photo1" column="product_photo1"/>
+	        <result property="product_photo2" column="product_photo2"/>
+	        <result property="product_photo3" column="product_photo3"/>
+	        <result property="tag_no" column="tag_no"/>
+	        <result property="product_detail" column="product_detail"/>
+	        <result property="product_cate" column="product_cate"/>
+	        <result property="color" column="color"/>
+	    </association>
+	</resultMap>
+
+	<select id="cartListSelect" parameterType="_int" resultMap="cartRM">
+	 SELECT
+			c.PRODUCT_NO,
+			c.CART_AMOUNT,
+			p.PRODUCT_PRICE,
+			p.PRODUCT_PHOTO1,
+			p.PRODUCT_NAME
+	   FROM
+			CART c
+	   JOIN
+			PRODUCT p
+		 ON
+			c.PRODUCT_NO = p.PRODUCT_NO
+	  WHERE
+			c.member_NO = #{member_no}
+	  ORDER
+		 BY
+ 			c.CART_NUM
+	   DESC
+	
+	
+	</select>
+	
+	<select id="guestCartListSelect" parameterType="_int" resultMap="guestCartRM">
+	 SELECT
+			c.PRODUCT_NO,
+			c.GUEST_CART_AMOUNT,
+			p.PRODUCT_PRICE,
+			p.PRODUCT_PHOTO1,
+			p.PRODUCT_NAME
+	   FROM
+			GUEST_CART c
+	   JOIN
+			PRODUCT p
+		 ON
+			c.PRODUCT_NO = p.PRODUCT_NO
+	  WHERE
+			c.GUEST_NO = #{GUEST_no}
+	  ORDER
+		 BY
+ 			c.GUEST_CART_NUM
+	   DESC
+	
+	
+	</select>
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.member.model.dao.MemberMapper">
+	
+	<sql id="selectMember">
+		SELECT 
+				MEMBER_NO memberNo,    
+			    MEMBER_ID memberId,    
+			    MEMBER_PW memberPw,
+			    NAME,
+			    EMAIL,    
+			    TELL,
+			    ADDR1,
+			    ADDR2,
+			    POSTCODE,
+			    BIRTH,
+			    POINT,
+			    STATUS,
+			    RESDATE
+	      FROM
+	    		MEMBER
+	</sql>
+	
+	<select id="login" parameterType="member" resultType="member">
+		<include refid="selectMember"/>
+		WHERE
+				MEMBER_ID = #{memberId}
+		  AND
+		  		STATUS = 'Y'
+	</select>
+	
+	<select id="getMember" parameterType="String" resultType="member">
+		<include refid="selectMember"/>
+		WHERE
+				MEMBER_ID = #{memberId}
+	</select>
+	
+	<insert id="insMember" parameterType="member">
+		INSERT 
+			INTO MEMBER (
+						 MEMBER_NO,
+            			 MEMBER_ID,
+			             MEMBER_PW,
+			             NAME,
+			             EMAIL,
+			             TELL,
+			             ADDR1,
+			             ADDR2,
+			             POSTCODE,
+			             BIRTH
+        	   			) 
+        	   VALUES   (
+        	   			 member_SEQ.NEXTVAL,
+			             #{memberId},
+			             #{memberPw},
+			             #{name},
+			             #{email},
+			             #{tell},
+			             #{addr1},
+			             #{addr2},
+			             #{postcode},
+			             #{birth}
+       					)
+	</insert>
+	
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 	<settings>
+ 	  <setting name="jdbcTypeForNull" value="NULL"/>
+ 	</settings>
+ 	
+ 	<typeAliases>
+ 		<!-- typeAlias 양식 -->
+ 	  	<!-- <typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member"/> -->
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.Cart" alias="cart"/>
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.GuestCart" alias="guestCart"/>
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product" alias="product"/>
+ 	  	
+	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
+
+ 	  
+
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
+ 	</typeAliases>
+ 	
+ 	<mappers>
+ 		<!-- mapper.xml 양식 -->
+ 		<!-- <mapper resource="/mappers/member-mapper.xml"/>  -->
+ 	  	<mapper resource="/mappers/cart-mapper.xml"/>
+ 	  
+ 		  
+ 		<mapper resource="/mappers/member-mapper.xml"/>  
+ 	    
+
+ 	  	<mapper resource="/mappers/notice-mapper.xml" />
+
+ 	</mappers>
+ 	
+ </configuration>
