@@ -1,6 +1,4 @@
-<%@page import="com.sqlrecord.sqlrecord.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page session="false" %>
 <html>
 <head>
 <%@ include file="/WEB-INF/views/head.jsp" %>
