@@ -2,7 +2,6 @@ package com.sqlrecord.sqlrecord.orders.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sqlrecord.sqlrecord.cart.model.vo.Cart;
 import com.sqlrecord.sqlrecord.cart.model.vo.GuestCart;
-import com.sqlrecord.sqlrecord.member.model.service.MemberService;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
