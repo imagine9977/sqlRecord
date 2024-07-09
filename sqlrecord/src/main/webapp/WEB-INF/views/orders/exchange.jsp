@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-<%@ include file="/head.jsp" %>
+<%@ include file="/WEB-INF/views/head.jsp" %>
 <title>Home</title>
 <style>
 </style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <div id="main_content">
-<%@ include file="/searchHeader.jsp" %>
+<%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 
 <h1>교환 환불 조회</h1>
 
@@ -50,6 +50,6 @@
       </table>
 </div>
 <script src="hpath/resources/js/forHeader.js?after1"></script>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

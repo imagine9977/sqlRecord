@@ -4,8 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<%@ include file="/bootstrap.jsp" %>
-<%@ include file="/head.jsp" %>
+<%@ include file="/WEB-INF/views/head.jsp" %>
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <title>Cart</title>
 <style>
@@ -108,9 +107,9 @@ input[class="check"]:checked + label:after {
 </style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <div id="main_content">
-<%@ include file="/searchHeader.jsp" %>
+<%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 <div id="breadCrumb">
  <div id="breadCrumb_items">
   <p><a href="${hpath }">HOME</a></p>
@@ -269,6 +268,6 @@ function requestPay() {
 
 </script>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

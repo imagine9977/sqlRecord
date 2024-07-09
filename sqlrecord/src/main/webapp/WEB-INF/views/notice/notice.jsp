@@ -8,7 +8,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<%@ include file="/bootstrap.jsp" %>
 <title>공지사항</title>
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -222,9 +221,9 @@ header h1 {
 </head>
 
 <body>
-	<%@ include file="/header.jsp"%>
+	<%@ include file="/WEB-INF/views/header.jsp"%>
 	<div id="main_content">
-		<%@ include file="/searchHeader.jsp"%>
+		<%@ include file="/WEB-INF/views/searchHeader.jsp"%>
 		<header>
 			<h1>공지사항</h1>
 		</header>
@@ -757,7 +756,7 @@ header h1 {
 		</div>
 	</div>
 	<script src="${hpath }/resources/js/forHeader.js?after1"></script>
-	<%@ include file="/footer.jsp"%>
+	<%@ include file="/WEB-INF/views/footer.jsp"%>
 </body>
 
 </html>

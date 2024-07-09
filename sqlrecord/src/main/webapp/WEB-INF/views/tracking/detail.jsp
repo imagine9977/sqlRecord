@@ -7,9 +7,9 @@
 </style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <div id="main_content">
-<%@ include file="/searchHeader.jsp" %>
+<%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 <h1 style="text-align: center;">운송장 상세</h1>
     <a href="#">메인으로가기</a>
 
@@ -63,6 +63,6 @@
       </table>
 </div>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

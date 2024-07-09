@@ -7,8 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<%@ include file="/bootstrap.jsp" %>
-<%@ include file="/head.jsp" %>
+<%@ include file="/WEB-INF/views/head.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <title>관리자 페이지</title>
@@ -144,7 +143,7 @@
     <div id="content-area"></div>
 </div>
 
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 
 <script>
 $(document).ready(function() {

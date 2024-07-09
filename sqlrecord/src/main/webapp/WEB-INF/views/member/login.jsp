@@ -6,7 +6,7 @@
 <c:set var="hpath" value="<%= request.getContextPath() %>"/>
 <html>
 <head>
-<%@ include file="/bootstrap.jsp" %>
+<%@ include file="/WEB-INF/views/bootstrap.jsp" %>
 <link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
 <link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>
@@ -31,9 +31,9 @@
 	</style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <div id="main_content">
-<%@ include file="/searchHeader.jsp" %>
+<%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 
 	<div class="tab_content">
         <button class="pop_clo"><svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#EA3323"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></button>
@@ -309,6 +309,6 @@
     
 </div>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

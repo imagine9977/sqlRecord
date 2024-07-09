@@ -3,9 +3,9 @@
 <html>
 <head>
 
-<%@ include file="/bootstrap.jsp" %>
+<%@ include file="/WEB-INF/views/bootstrap.jsp" %>
 
-<%@ include file="/head.jsp" %>
+<%@ include file="/WEB-INF/views/head.jsp" %>
 <!-- Slick 불러오기 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
@@ -273,9 +273,9 @@ swiper-slide img {
 </style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <div id="main_content">
-<%@ include file="/searchHeader.jsp" %>
+<%@ include file="/WEB-INF/views/searchHeader.jsp" %>
   
 
   
@@ -722,6 +722,6 @@ swiper-slide img {
         
 </script>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>
