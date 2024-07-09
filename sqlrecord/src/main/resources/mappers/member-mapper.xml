@@ -65,4 +65,17 @@
        					)
 	</insert>
 	
+	<insert id="insGenre" parameterType="MemberGenre">
+		INSERT
+			INTO GENRE (
+						TAG_NO,
+						MEMBER_NO
+						)
+				VALUES (
+						#{tagNo},
+						member_SEQ.CURRVAL
+				     	)
+	</insert>
+	
+	
 </mapper>

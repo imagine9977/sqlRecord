@@ -141,7 +141,7 @@ input[class="check"]:checked + label:after {
 	      <div>${ item.product.product_name }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
 	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cart_amount}></div>
-	      
+	      <input type="text" name="member_no" value="${ item.member_no }" hidden="hidden">
 	      </c:forEach>
       </c:when>
       
@@ -156,7 +156,7 @@ input[class="check"]:checked + label:after {
 	      <div>${ item.product.product_name }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
 	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="guest_cart_amount" value=${ item.guest_cart_amount}></div>
-	      
+	      <input type="text" name="guest_no" value="${ item.guest_no }" hidden="hidden">
 	      </c:forEach>
       
       </c:otherwise>

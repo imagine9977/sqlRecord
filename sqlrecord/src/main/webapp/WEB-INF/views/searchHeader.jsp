@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
   <div id="section_serch">
     <div id="section_serch_box">
       <div id="section_serch_item1">
@@ -34,9 +37,23 @@
       <div id="section_serch_item2">
         <div id="section_serch_item1_cartBox">
          <div style="width: 40px; height: 40px; padding: 2rem 0.3rem; cursor: pointer">
-          <a href="${hpath }/cart/">
-           <img src="${hpath }/resources/imgs/homepageLogo/cart.png">
-          </a>
+          <c:choose>
+          	<c:when test="${ not empty loginUser }">
+          		<a href="${hpath }/cart/member/">
+           			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
+          		</a>
+          	</c:when>
+          	<c:when test="${ not empty loginGuest }">
+          		<a href="${hpath }/cart/member/">
+           			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
+          		</a>
+          	</c:when>
+          	<c:otherwise>
+          		<a href="${hpath }/member/login.do">
+           			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
+          		</a>
+          	</c:otherwise>
+          </c:choose>
          </div>
         </div>
         <div id="section_serch_item1_inputBox">

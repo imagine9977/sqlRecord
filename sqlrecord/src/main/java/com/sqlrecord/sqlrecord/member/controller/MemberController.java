@@ -2,6 +2,7 @@ package com.sqlrecord.sqlrecord.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -78,13 +79,19 @@ public class MemberController {
 	}
 	
 	@PostMapping("joinPro.do")
-	public ModelAndView joinPro(Member member,MemberGenre memberGenre, ModelAndView mv) {
+	public ModelAndView joinPro(Member member,@RequestParam("tagNo") List<Integer> tagNos, ModelAndView mv) {
 	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
 	    memberService.insMember(member);
 	    //memberGenre.setMemberNo(member.getMemberNo());
-	    memberService.insGenre(memberGenre);
-	    
+	    //memberService.insGenre(memberGenre);
 	    //log.info("회원이 입력한 값 : {} ", member);
+	    
+	    for (Integer tagNo : tagNos) {
+	        MemberGenre memberGenre = new MemberGenre();
+	        memberGenre.setTagNo(tagNo);
+	        memberGenre.setMemberNo(member.getMemberNo());
+	        memberService.insGenre(memberGenre);
+	    }
 	    
 	    mv.addObject("msg", "회원가입을 축하합니다.");
 	    mv.setViewName("redirect:/");
