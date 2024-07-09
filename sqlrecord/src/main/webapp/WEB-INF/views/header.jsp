@@ -85,7 +85,7 @@
     <div class="navright">
         <div class="navbar-end">
             <div class="membox">
-            	
+
             
                 <c:choose>
 				    <c:when test="${ sessionScope.loginUser.memberId eq 'admin'}">
@@ -123,7 +123,7 @@
 				<!--  
                 <c:if test="${sessionScope.loginUser.memberId eq 'admin'}">
                     <div class="navbar-item">
-                        <a href="${hpath}/admin/adminpage.do">
+                        <a href="${hpath}/admin">
                             관리자페이지
                         </a>
                     </div>
