@@ -40,4 +40,5 @@
 
 
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.notice.model.dao"/>
+		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.orders.model.dao"/>
 </beans>

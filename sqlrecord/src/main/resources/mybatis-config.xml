@@ -32,7 +32,7 @@
  	    
 
  	  	<mapper resource="/mappers/notice-mapper.xml" />
-
+		<mapper resource="/mappers/order-mapper.xml" />
  	</mappers>
  	
  </configuration>
