@@ -332,7 +332,7 @@ setupSelectAll('selectAllMembers', 'memberCheck');
 setupSelectAll('selectAllReviews', 'reviewCheck');
 setupSelectAll('selectAllNotices', 'noticeCheck');
 setupSelectAll('selectAllQna', 'qnaCheck');
-
+/*
 // 상품 관련 함수
 function editProduct(productNo) {
     console.log("상품 번호 " + productNo + " 수정");
@@ -398,7 +398,7 @@ function deleteQna(qnaNo) {
     console.log("Q&A 번호 " + qnaNo + " 삭제");
     // 구현 필요
 }
-
+*/
 // 아코디언 테이블 기능
 document.getElementById('accordionTable').addEventListener('click', function(e) {
     if (e.target.closest('tr').classList.contains('expandable-row')) {

@@ -50,4 +50,7 @@
 	        <hr/>
         </div>
     </c:when>
+    <c:otherwise>
+    	<div class="slidebar" style="display:none;"></div>
+    </c:otherwise>
 </c:choose>

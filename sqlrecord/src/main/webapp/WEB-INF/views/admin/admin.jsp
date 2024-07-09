@@ -151,6 +151,9 @@ $(document).ready(function() {
         $('.tab-btnItem').removeClass('active');
         $('.tab-btnItem[data-tab="' + tabName + '"]').addClass('active');
 
+        // 선택된 탭 저장
+        localStorage.setItem('selectedTab', tabName);
+
         $.ajax({
             url: '${hpath}/adminRest/sidebar',
             data: { tab: tabName },
@@ -188,7 +191,13 @@ $(document).ready(function() {
         loadTab(tabName);
     });
 
-    loadTab('product');
+    // 페이지 로드 시 저장된 탭 확인
+    var savedTab = localStorage.getItem('selectedTab');
+    if (savedTab) {
+        loadTab(savedTab);
+    } else {
+        loadTab('product');
+    }
 });
 </script>
 </body>
