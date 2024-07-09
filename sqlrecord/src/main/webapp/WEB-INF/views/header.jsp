@@ -86,7 +86,7 @@
         <div class="navbar-end">
             <div class="membox">
                 <c:choose>
-				    <c:when test="${not empty sessionScope.loginUser}">
+				    <c:when test="${not empty sessionScope.loginUser && sessionScope.loginUser.memberId ne 'admin'}">
 				        <div class="navbar-item">
 				            <a href="${hpath}/member/mypage.do">
 				                마이페이지
