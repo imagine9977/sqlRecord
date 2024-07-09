@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.member.model.dao.MemberMapper;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
+import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,11 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int insMember(Member member) {
 		return memberMapper.insMember(member);
+	}
+	
+	@Override
+	public int insGenre(MemberGenre memberGenre) {
+		return memberMapper.insGenre(memberGenre);
 	}
 
 }

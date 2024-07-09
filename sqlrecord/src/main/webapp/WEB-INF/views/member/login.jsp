@@ -178,15 +178,15 @@
 			            </p>
 			            <p style="font-size: 15px; font-weight: 600; margin-left: 20px;">관심 음악 장르</p>
 			            <p>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Pop"> Pop</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Rock"> Rock</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="HipHop"> HipHop</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Jazz"> Jazz</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Classical"> Classical</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Electronic"> Electronic</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Ballad"> Ballad</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Country"> Country</label>
-			                <label style="width: 180px;"><input type="checkbox" name="genre" value="Metal"> Metal</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="1"> Pop</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="2"> Rock</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="3"> HipHop</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="4"> Jazz</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="5"> Classical</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="6"> Electronic</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="7"> Ballad</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="8"> Country</label>
+			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="9"> Metal</label>
 			                
 			                <input type="hidden" id="tag1" name="tag1">
 			                <input type="hidden" id="tag2" name="tag2">

@@ -122,6 +122,7 @@
 <body>
 <%@ include file="/WEB-INF/views/header.jsp" %>
 
+
 <!-- 상단 탭 -->
 <div class="tab-bar">
     <ul class="tab-btnBox">
@@ -143,7 +144,7 @@
     <div id="content-area"></div>
 </div>
 
-<%@ include file="/WEB-INF/views/footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 
 <script>
 $(document).ready(function() {

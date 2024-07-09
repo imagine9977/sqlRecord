@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sqlrecord.sqlrecord.member.model.service.MemberService;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
+import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,14 +78,22 @@ public class MemberController {
 	}
 	
 	@PostMapping("joinPro.do")
-	public ModelAndView joinPro(Member member, ModelAndView mv) {
+	public ModelAndView joinPro(Member member,MemberGenre memberGenre, ModelAndView mv) {
 	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
 	    memberService.insMember(member);
+	    //memberGenre.setMemberNo(member.getMemberNo());
+	    memberService.insGenre(memberGenre);
 	    
-	    log.info("회원이 입력한 값 : {} ", member);
+	    //log.info("회원이 입력한 값 : {} ", member);
 	    
 	    mv.addObject("msg", "회원가입을 축하합니다.");
 	    mv.setViewName("redirect:/");
 	    return mv;
+	}
+	
+	@GetMapping("logout.do")
+	public String logout(HttpSession session) {
+		session.removeAttribute("loginUser");
+		return "redirect:/";
 	}
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/head.jsp" %>
+
 <title>Home</title>
 <style>
 </style>

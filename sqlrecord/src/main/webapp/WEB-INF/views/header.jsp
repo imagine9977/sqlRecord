@@ -85,31 +85,36 @@
     <div class="navright">
         <div class="navbar-end">
             <div class="membox">
-                <c:if test="${!empty sid}">
-                    <div class="navbar-item">
-                        <a href="${hpath}/member/mypage.do">
-                            마이페이지
-                        </a>
-                    </div>
-                    <div class="navbar-item">
-                        <a href="${hpath}/member/logout.do">
-                            로그아웃
-                        </a>
-                    </div>
-                </c:if>
-                <c:if test="${empty sid}">
-                    <div class="navbar-item">
-                        <a href="${hpath}/member/login.do">
-                            로그인
-                        </a>
-                    </div>
-                    <div class="navbar-item">
-                        <a href="${hpath}/member/term.do">
-                            회원가입
-                        </a>
-                    </div>
-                </c:if>
-                <c:if test="${sid.equals('admin')}">
+            	<c:out value="${sessionScope.loginUser}" default="No loginUser in session" />
+                <c:out value="${sessionScope.loginUser.memberId}" default="No memberId in loginUser" />
+            
+                <c:choose>
+				    <c:when test="${not empty sessionScope.loginUser && sessionScope.loginUser.memberId ne 'admin'}">
+				        <div class="navbar-item">
+				            <a href="${hpath}/member/mypage.do">
+				                마이페이지
+				            </a>
+				        </div>
+				        <div class="navbar-item">
+				            <a href="${hpath}/member/logout.do">
+				                로그아웃
+				            </a>
+				        </div>
+				    </c:when>
+				    <c:otherwise>
+				        <div class="navbar-item">
+				            <a href="${hpath}/member/login.do">
+				                로그인
+				            </a>
+				        </div>
+				        <div class="navbar-item">
+				            <a href="${hpath}/member/term.do">
+				                회원가입
+				            </a>
+				        </div>
+				    </c:otherwise>
+				</c:choose>
+                <c:if test="${sessionScope.loginUser.memberId eq 'admin'}">
                     <div class="navbar-item">
                         <a href="${hpath}/admin/adminpage.do">
                             관리자페이지
