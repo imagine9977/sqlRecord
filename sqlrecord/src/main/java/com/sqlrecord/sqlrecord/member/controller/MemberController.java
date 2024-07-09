@@ -86,12 +86,15 @@ public class MemberController {
 	    //memberService.insGenre(memberGenre);
 	    //log.info("회원이 입력한 값 : {} ", member);
 	    
+	    log.info("태그?? : {}" , tagNos.size());
 	    for (Integer tagNo : tagNos) {
 	        MemberGenre memberGenre = new MemberGenre();
 	        memberGenre.setTagNo(tagNo);
 	        memberGenre.setMemberNo(member.getMemberNo());
 	        memberService.insGenre(memberGenre);
 	    }
+	    
+	    
 	    
 	    mv.addObject("msg", "회원가입을 축하합니다.");
 	    mv.setViewName("redirect:/");
