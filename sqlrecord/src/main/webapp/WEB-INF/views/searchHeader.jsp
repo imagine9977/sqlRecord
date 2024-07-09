@@ -37,8 +37,9 @@
       <div id="section_serch_item2">
         <div id="section_serch_item1_cartBox">
          <div style="width: 40px; height: 40px; padding: 2rem 0.3rem; cursor: pointer">
+         <h3>${ loginUser.memberNo }</h3>
           <c:choose>
-          	<c:when test="${ not empty loginUser }">
+          	<c:when test="${ not empty loginUser.memberNo }">
           		<a href="${hpath }/cart/member/${loginUser.memberNo}">
            			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
           		</a>
