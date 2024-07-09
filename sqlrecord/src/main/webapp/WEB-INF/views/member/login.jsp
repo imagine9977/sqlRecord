@@ -188,9 +188,11 @@
 			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="8"> Country</label>
 			                <label style="width: 180px;"><input type="checkbox" name="tagNo" value="9"> Metal</label>
 			                
+			                <!--  
 			                <input type="hidden" id="tag1" name="tag1">
 			                <input type="hidden" id="tag2" name="tag2">
 			                <input type="hidden" id="tag3" name="tag3">
+							-->		            
 			            </p>
 			        </div>
 			        <p style="font-size: 15px; font-weight: 600; margin-left: 20px; margin-top: 30px;">
