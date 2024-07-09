@@ -80,8 +80,10 @@ public class MemberController {
 	public ModelAndView joinPro(Member member, ModelAndView mv) {
 	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
 	    memberService.insMember(member);
+	    //memberGenre.setMemberNo(member.getMemberNo());
+	    //memberService.insGenre(memberGenre);
 	    
-	    log.info("회원이 입력한 값 : {} ", member);
+	    //log.info("회원이 입력한 값 : {} ", member);
 	    
 	    mv.addObject("msg", "회원가입을 축하합니다.");
 	    mv.setViewName("redirect:/");

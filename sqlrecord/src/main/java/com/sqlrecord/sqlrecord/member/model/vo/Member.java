@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.vo;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,6 @@ public class Member {
     private int point;
     private char status;
     private Date resDate;
+    
+    private List<MemberGenre> memberGenre;
 }

@@ -9,4 +9,5 @@ public interface MemberMapper {
 	Member login(Member member);
 	Member getMember(String memberId);
 	int insMember(Member member);
+	//int insGenre(MemberGenre memberGenre);
 }

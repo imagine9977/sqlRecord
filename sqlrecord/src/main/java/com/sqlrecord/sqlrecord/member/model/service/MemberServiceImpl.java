@@ -27,5 +27,10 @@ public class MemberServiceImpl implements MemberService{
 	public int insMember(Member member) {
 		return memberMapper.insMember(member);
 	}
+	
+//	@Override
+//	public int insGenre(MemberGenre memberGenre) {
+//		return memberMapper.insGenre(memberGenre);
+//	}
 
 }

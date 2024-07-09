@@ -120,7 +120,7 @@
 </style>
 </head>
 <body>
-<%@ include file="/header.jsp" %>
+<%@ include file="../header.jsp" %>
 
 <!-- 상단 탭 -->
 <div class="tab-bar">
@@ -143,7 +143,7 @@
     <div id="content-area"></div>
 </div>
 
-<%@ include file="/WEB-INF/views/footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 
 <script>
 $(document).ready(function() {
