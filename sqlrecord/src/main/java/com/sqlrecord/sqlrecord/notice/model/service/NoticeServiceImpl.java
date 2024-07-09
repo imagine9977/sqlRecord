@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.notice.model.dao.NoticeMapper;
+import com.sqlrecord.sqlrecord.notice.model.vo.NFile;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
 
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,23 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public int save(Notice notice) {
-		// TODO Auto-generated method stub
-		return  noticeMapper.save(notice);	
+	    // Save the notice itself first
+	    int result = noticeMapper.save(notice);
+	    
+	    // If the notice was successfully saved, save the files
+	    if (result > 0 && notice.getFiles() != null) {
+	        for (NFile file : notice.getFiles()) {
+	            file.setNoticeNo(notice.getNoticeNo());
+	            result = noticeMapper.saveFile(file);
+	            if (result <= 0) {
+	                // Handle the failure case
+	                return result;
+	            }
+	        }
+	    }
+	    return result;
 	}
+
 
 	@Override
 	public int update(Notice notice) {
@@ -47,6 +62,12 @@ public class NoticeServiceImpl implements NoticeService {
 	public int delete(int NoticeNo) {
 		// TODO Auto-generated method stub
 		return noticeMapper.delete(NoticeNo);	
+	}
+
+	@Override
+	public List<NFile> findFiles(int id) {
+		// TODO Auto-generated method stub
+		return noticeMapper.findFiles(id);
 	}
 
 }

@@ -75,7 +75,7 @@
                 </a>
             </div>
             <div class="navbar-item">
-                <a href="${hpath}/board/getBoardList.do">
+                <a href="${hpath}/notices">
                     공지사항
                 </a>
             </div>

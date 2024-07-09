@@ -2,7 +2,14 @@ package com.sqlrecord.sqlrecord.notice.controller;
 
 
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +21,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sqlrecord.sqlrecord.message.Message;
 import com.sqlrecord.sqlrecord.notice.model.service.NoticeService;
+import com.sqlrecord.sqlrecord.notice.model.vo.NFile;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
 
 
@@ -67,6 +76,25 @@ public class NoticeController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
+	@GetMapping("/nFile/{id}")
+    public ResponseEntity<Message> findFiles(@PathVariable int id) {
+
+        List<NFile> noticeList = noticeService.findFiles(id);
+        if(noticeList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            		.body(Message.builder().message("조회결과가 없습니다.").build());
+        }	
+
+        Message responseMsg = Message.builder()
+                                     .data(noticeList)
+                                     .message("조회 요청 성공")
+                                     .build();
+
+        log.info("조회된 공지사항 목록 : {}" , noticeList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+    }
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Message> findById(@PathVariable int id) {
 		Notice notice = noticeService.findById(id);
@@ -87,6 +115,48 @@ public class NoticeController {
 	
 	}
 	
+	
+	@PostMapping("insert.do")
+	public String insert(Notice notice, MultipartFile[] upfile, HttpSession session) {
+	    log.info("게시글 정보: {}", notice);
+
+	    List<NFile> files = new ArrayList<>();
+
+	    if (upfile != null) {
+	        for (MultipartFile file : upfile) {
+	            if (!file.getOriginalFilename().equals("")) {
+	                String originName = file.getOriginalFilename();
+	                String ext = originName.substring(originName.lastIndexOf("."));
+	                int num = (int) (Math.random() * 900) + 100;
+	                String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+	                String savePath = session.getServletContext().getRealPath("resources/uploadFiles/");
+	                String changeName = "KH_" + currentTime + "_" + num + ext;
+
+	                try {
+	                    file.transferTo(new File(savePath + changeName));
+	                } catch (IllegalStateException | IOException e) {
+	                    e.printStackTrace();
+	                }
+
+	                NFile nfile = new NFile();
+	                nfile.setOriginalName(originName);
+	                nfile.setChangedName(savePath + changeName);
+	                files.add(nfile);
+	            }
+	        }
+	    }
+
+	    notice.setFiles(files); // Assuming Notice has a List<NFile> attribute named 'files'
+
+	    if (noticeService.save(notice) > 0) {
+	        session.setAttribute("alertMsg", "게시글 작성 성공");
+	        return "redirect:notice";
+	    } else {
+	        session.setAttribute("errorMsg", "게시글 작성 실패");
+	        return "common/errorPage";
+	    }
+	}
+
 	
 	@PostMapping
 	public  ResponseEntity<Message> save(Notice notice) {
