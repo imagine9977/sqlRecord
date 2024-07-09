@@ -3,7 +3,6 @@
 <html>
 <head>
 
-<%@ include file="/WEB-INF/views/bootstrap.jsp" %>
 
 <%@ include file="/WEB-INF/views/head.jsp" %>
 <!-- Slick 불러오기 -->
