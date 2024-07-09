@@ -83,9 +83,9 @@
     display: none;
     width: 100%;
 }
-.sidebar {
+.sidebar_area {
     display: block;
-    width : 13%;
+    width : 18%;
     height: auto;
     border: 1px solid black;
     padding: 10px;
@@ -93,7 +93,7 @@
 }
 .sidebar-element p {
     font-size: 17px;
-    padding: 0.5rem 0px;
+    font-weight: bold;
 }
 .sidebar a {
     color: inherit;
@@ -137,7 +137,7 @@
 
 <div id="tabContent" class="mainBox">
     <!-- 사이드바 -->
-    <div class="sidebar" id="sidebar"></div>
+    <div class="sidebar_area" id="sidebar"></div>
 
     <!-- 컨텐츠 영역 -->
     <div id="content-area"></div>
@@ -152,7 +152,7 @@ $(document).ready(function() {
         $('.tab-btnItem[data-tab="' + tabName + '"]').addClass('active');
 
         $.ajax({
-            url: '${hpath}/admin/sidebar',
+            url: '${hpath}/adminRest/sidebar',
             data: { tab: tabName },
             success: function(response) {
                 $('#sidebar').html(response);
@@ -165,7 +165,7 @@ $(document).ready(function() {
 
     function loadContent(tabName, contentType) {
         $.ajax({
-            url: '${hpath}/admin/content',
+            url: '${hpath}/adminRest/content',
             data: { tab: tabName, type: contentType },
             success: function(response) {
                 $('#content-area').html(response);

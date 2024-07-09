@@ -9,12 +9,16 @@
 .sidebar-element a:hover {
     text-decoration: underline;
 }
+.sidebar h4 {
+	font-weight : bold;
+	margin : 30px 0px;
+}
 </style>
 
 <c:choose>
     <c:when test="${tab eq 'product'}">
     	<div class="sidebar">
-	        <h2>상품 카테고리</h2>
+	        <h4>상품 카테고리</h4>
 	        <div class="sidebar-element"><p><a href="#" data-content="all">상품 전체</a></p></div>
 	        <hr/>
 	        <div class="sidebar-element"><p><a href="#" data-content="turntables">TURNTABLES</a></p></div>
@@ -36,7 +40,7 @@
     </c:when>
     <c:when test="${tab eq 'order'}">
     	<div class="sidebar">
-	        <h2>주문 관리</h2>
+	        <h4>주문 관리</h4>
 	        <div class="sidebar-element"><p><a href="#" data-content="all">주문 내역</a></p></div>
 	        <hr/>
 	        <div class="sidebar-element"><p><a href="#" data-content="turntables">교환 요청</a></p></div>

@@ -85,8 +85,6 @@
     <div class="navright">
         <div class="navbar-end">
             <div class="membox">
-            	<c:out value="${sessionScope.loginUser}" default="No loginUser in session" />
-                <c:out value="${sessionScope.loginUser.memberId}" default="No memberId in loginUser" />
             
                 <c:choose>
 				    <c:when test="${not empty sessionScope.loginUser && sessionScope.loginUser.memberId ne 'admin'}">
@@ -116,7 +114,7 @@
 				</c:choose>
                 <c:if test="${sessionScope.loginUser.memberId eq 'admin'}">
                     <div class="navbar-item">
-                        <a href="${hpath}/admin/adminpage.do">
+                        <a href="${hpath}/admin">
                             관리자페이지
                         </a>
                     </div>
