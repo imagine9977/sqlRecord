@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper">
 
+	
 	<insert id="insertMemberOrders">
 		INSERT
 		INTO
@@ -35,31 +36,77 @@
 	
 	
 	<insert id="insertOrdersDetail" parameterType="OrdersDetail">
-		INSERT
-		INTO
-				ORDERS_DETAIL
-		VALUES
-				(
-				ORDERS_DETAIL_SEQ.NEXTVAL,
-				#{product_no},
-				#{orders_no},
-				#{orders_detail_amount},
-				#{orders_detail_price},
-				DEFAULT,
-				DEFAULT 
-				)
+		INSERT INTO ORDERS_DETAIL (
+        ORDERS_DETAIL_NO,
+        PRODUCT_NO,
+        ORDERS_NO,
+        ORDERS_DETAIL_AMOUNT,
+        ORDERS_DETAIL_PRICE,
+        orders_detail_exchanged,
+        TRACKING_NUM,
+        ORDERS_DETAIL_STATUS
+    ) VALUES (
+        ORDERS_DETAIL_SEQ.NEXTVAL,
+        #{product.product_no},
+        #{memberOrders.orders_no},
+        #{orders_detail_amount},
+        #{orders_detail_price},
+        DEFAULT,
+        DEFAULT,
+        DEFAULT
+    )
 	</insert>
 	
-	<select id="getOrdersDetail" resultType="OrdersDetail">
+	<resultMap type="OrdersDetail" id="odRM">
+    	<id property="orders_detail_no" column="orders_detail_no"/>
+    	<result property="orders_detail_amount" column="orders_detail_amount"/>  
+	    <result property="orders_detail_price" column="orders_detail_price"/>
+	    <result property="TRACKING_NUM" column="TRACKING_NUM"/>
+	    <result property="ORDERS_EXCHANGED" column="ORDERS_EXCHANGED"/>
+	    <result property="ORDERS_DETAIL_STATUS" column="ORDERS_DETAIL_STATUS"/>
+	    <association property="product" javaType="product">
+	        <result property="product_no" column="product_no"/>
+	        <result property="product_name" column="product_name"/>
+	        <result property="product_price" column="product_price"/>
+	        <result property="product_status" column="product_status"/>
+	        <result property="product_date" column="product_date"/>
+	        <result property="product_photo1" column="product_photo1"/>
+	        <result property="product_photo2" column="product_photo2"/>
+	        <result property="product_photo3" column="product_photo3"/>
+	        <result property="tag_no" column="tag_no"/>
+	        <result property="product_detail" column="product_detail"/>
+	        <result property="product_cate" column="product_cate"/>
+	        <result property="color" column="color"/>
+	    </association>
+	    <association property="memberOrders" javaType="memberOrders">
+	    	<result property="MEMBER_NO" column="MEMBER_NO"/>
+	        <result property="orders_address" column="orders_address"/>
+	        <result property="orders_address2" column="orders_address2"/>
+	        <result property="orders_postcode" column="orders_postcode"/>
+	        <result property="ORDERS_DATE" column="ORDERS_DATE"/>
+	    </association>
+	</resultMap>
+	
+	
+	<select id="getOrdersDetail" resultMap="odRM">
 	    SELECT
 		        od.ORDERS_DETAIL_NO,
-		        od.PRODUCT_NO,
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_photo1,
+                p.product_price,
+                p.product_status,
 		        od.ORDERS_NO,
 		        od.ORDERS_DETAIL_AMOUNT,
 		        od.ORDERS_DETAIL_PRICE,
 		        od.ORDERS_EXCHANGED,
 		        od.TRACKING_NUM,
+		        od.ORDERS_DETAIL_STATUS,
                 mo.MEMBER_NO,
+                mo.orders_address,
+                mo.orders_address2,
+                mo.orders_postcode,
                 mo.ORDERS_DATE
 	    FROM
 	       	 	ORDERS_DETAIL od
@@ -67,8 +114,12 @@
                 MEMBER_ORDERS mo
         ON
                 od.ORDERS_NO = mo.ORDERS_NO
+        JOIN
+                PRODUCT p
+        ON
+                od.product_no = p.product_no
 	   WHERE
-                mo.MEMBER_NO = 18
+                mo.MEMBER_NO = #{memberNo}
         ORDER
         BY
                 mo.ORDERS_DATE
