@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,27 +69,26 @@ public class OrdersForwardController {
 			
 			List<OrdersDetail> odList = new ArrayList<OrdersDetail>();
 			
+			int successMO = ordersService.insertMemberOrders(memberOrders, member.getMemberNo());
+			
 			for(int i = 0; i < cart_amountArr.length; i++) {
 				OrdersDetail ordersDetail = new OrdersDetail();
 				ordersDetail.setProduct_no(Integer.parseInt(product_noArr[i]));
+				ordersDetail.setOrders_no(successMO);
 				ordersDetail.setOrders_detail_amount(Integer.parseInt(cart_amountArr[i]));
-				ordersDetail.setOrders_detail_price(product_no * Integer.parseInt(product_priceArr[i]));
+				ordersDetail.setOrders_detail_price(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
 				
-				
-				
+				odList.add(ordersDetail);
 			}
 			
+			log.info("이게 디테일? : {}" , odList.get(1).toString());
 			
-			
-			
-			int successMO = ordersService.insertMemberOrders(memberOrders, member.getMemberNo());
-			
-							ordersService.insertOrdersDetail();
-			log.info("hi? : {}" , successMO);
-			
-			if(successMO > 0) {
+			// 디테일 인서트 성공 시 디테일로 리다이렉트
+			if(ordersService.insertOrdersDetail(odList) > 0) {
+				
 				return "redirect:/orders/member/detail";
 			}
+			
 			
 			
 		} else {
@@ -103,7 +103,16 @@ public class OrdersForwardController {
 	}
 	
 	@GetMapping("/member/detail")
-	public String memberDetail() {
+	public String memberDetail(HttpServletRequest request , Model model) {
+		
+		HttpSession session = request.getSession();
+		
+		Member member =  (Member) session.getAttribute("loginUser");
+		
+		
+		List<OrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
+		
+		
 		return "orders/detail";
 	}
 	

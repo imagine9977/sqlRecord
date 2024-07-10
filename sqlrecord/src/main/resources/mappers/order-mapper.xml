@@ -32,6 +32,70 @@
 		DESC
 				
 	</select>
+	
+	
+	<insert id="insertOrdersDetail" parameterType="OrdersDetail">
+		INSERT
+		INTO
+				ORDERS_DETAIL
+		VALUES
+				(
+				ORDERS_DETAIL_SEQ.NEXTVAL,
+				#{product_no},
+				#{orders_no},
+				#{orders_detail_amount},
+				#{orders_detail_price},
+				DEFAULT,
+				DEFAULT 
+				)
+	</insert>
+	
+	<select id="getOrdersDetail" resultType="OrdersDetail">
+	    SELECT
+		        od.ORDERS_DETAIL_NO,
+		        od.PRODUCT_NO,
+		        od.ORDERS_NO,
+		        od.ORDERS_DETAIL_AMOUNT,
+		        od.ORDERS_DETAIL_PRICE,
+		        od.ORDERS_EXCHANGED,
+		        od.TRACKING_NUM,
+                mo.member_no,
+                mo.orders_date
+	    FROM
+	       	 	ORDERS_DETAIL od
+        JOIN
+                MEMBER_ORDERS mo
+        ON
+                od.ORDERS_NO = mo.ORDERS_NO
+	   WHERE
+                mo.MEMBER_NO = 18
+        ORDER
+        BY
+                mo.orders_date
+        desc;
+</select>
+	
+	
+	
+	<select id="getProduct" resultType="product">
+	    SELECT
+		        product_no,
+		        product_name,
+		        product_price,
+		        product_status,
+		        product_date,
+		        product_photo1,
+		        product_photo2,
+		        product_photo3,
+		        tag_no,
+		        product_detail
+	    FROM
+	        	PRODUCT
+	    WHERE
+	        	product_no = #{product_no}			
+	</select>
+	
+	
 
 
 </mapper>

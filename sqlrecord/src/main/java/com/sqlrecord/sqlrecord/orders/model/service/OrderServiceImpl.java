@@ -1,9 +1,12 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
+import com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +28,25 @@ public class OrderServiceImpl implements OrdersService {
 		}
 
 	}
+
+	@Override
+	public int insertOrdersDetail(List<OrdersDetail> odList) {
+		
+		int success = 0;
+		for(OrdersDetail item : odList) {
+			ordersMapper.insertOrdersDetail(item);
+			success += 1;
+		}
+		
+		
+		return success;
+	}
+
+	@Override
+	public List<OrdersDetail> getOrdersDetail(int memberNo) {
+		return ordersMapper.getOrdersDetail(memberNo);
+	}
+	
 	
 	
 	
