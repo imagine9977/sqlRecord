@@ -117,41 +117,40 @@ public class NoticeController {
 		
 	
 	}
-	
-	 @PostMapping("/insert.do")
+	@PostMapping("/insert.do")
 	public String insert(@ModelAttribute Notice notice, 
-            @RequestParam("upfile") MultipartFile[] upfiles, 
-            HttpSession session) {
+	                     @RequestParam("upfile") MultipartFile[] upfiles, 
+	                     HttpSession session) {
 	    log.info("게시글 정보: {}", notice);
 	    log.info("파일 정보: {}", upfiles);
 	    List<NFile> files = new ArrayList<>();
 
 	    if (upfiles != null) {
 	        for (MultipartFile file : upfiles) {
-	            if (!file.getOriginalFilename().equals("")) {
+	            if (!file.getOriginalFilename().isEmpty()) {
 	                String originName = file.getOriginalFilename();
 	                String ext = originName.substring(originName.lastIndexOf("."));
 	                int num = (int) (Math.random() * 900) + 100;
 	                String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 	                String savePath = session.getServletContext().getRealPath("resources/uploadFiles/notice/");
 	                String changeName = "KH_" + currentTime + "_" + num + ext;
-	                
+
 	                File directory = new File(savePath);
-                    if (!directory.exists()) {
-                        directory.mkdirs();
-                    }
-                    try {
-                        file.transferTo(new File(savePath + changeName));
-                    } catch (IllegalStateException | IOException e) {
-                        e.printStackTrace();
-                        session.setAttribute("errorMsg", "File upload failed");
-                        return "redirect:/notices/insert.do";
-                    }
+	                if (!directory.exists()) {
+	                    directory.mkdirs();
+	                }
+	                try {
+	                    file.transferTo(new File(savePath + changeName));
+	                } catch (IllegalStateException | IOException e) {
+	                    e.printStackTrace();
+	                    session.setAttribute("errorMsg", "File upload failed");
+	                    return "redirect:/notices/insert.do";
+	                }
 
-
+	                // Store the relative path for frontend access
 	                NFile nfile = new NFile();
 	                nfile.setOriginalName(originName);
-	                nfile.setChangedName(savePath + changeName);
+	                nfile.setChangedName("resources/uploadFiles/notice/" + changeName);
 	                files.add(nfile);
 	            }
 	        }
@@ -160,12 +159,12 @@ public class NoticeController {
 	    notice.setFiles(files); // Assuming Notice has a List<NFile> attribute named 'files'
 
 	    if (noticeService.save(notice) > 0) {
-            session.setAttribute("alertMsg", "게시글 작성 성공");
-            return "redirect:/notices";
-        } else {
-            session.setAttribute("errorMsg", "게시글 작성 실패");
-            return "redirect:/notices/insert.do";
-        }
+	        session.setAttribute("alertMsg", "게시글 작성 성공");
+	        return "redirect:/notices";
+	    } else {
+	        session.setAttribute("errorMsg", "게시글 작성 실패");
+	        return "redirect:/notices/insert.do";
+	    }
 	}
 
 	
@@ -188,14 +187,22 @@ public class NoticeController {
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Message> deletebyId(@PathVariable int id) {
+	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session ) {
+		Notice notice = noticeService.findById(id);
 		int result = noticeService.delete(id);
-		
+		String savePath = session.getServletContext().getRealPath("");
+		 
 		if(result == 0) {
 			return ResponseEntity.status(HttpStatus.OK)
     		.body(Message.builder().message("게시글이  존재하지 않음").build());
 		}
-		
+
+		for (NFile file : notice.getFiles()) {
+			 String filePath = file.getChangedName();
+			 File xFile = new File(savePath+filePath);
+			 
+		     boolean fileDelete = xFile.delete();
+		 }
 		Message responseMsg = Message.builder()
                 .data("삭제성공!")
                 .message("게시글 삭제 성공")

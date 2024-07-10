@@ -282,20 +282,7 @@ z-index: 10;
 								<div id="notice-detail">
 									<h4>파일 내려받기</h4>
 									<div id="files">
-										<c:choose>
-											<c:when test="${empty files}">
-												<p>파일이 존재하지 않습니다.</p>
-											</c:when>
-											<c:otherwise>
-												<c:forEach var="file" items="${files}"
-													varStatus="status">
-													<div>
-														<span>${status.index + 1}. </span> <a
-															href="${file.changedName}" download="${file.originalName}">${file.originalName}</a>
-													</div>
-												</c:forEach>
-											</c:otherwise>
-										</c:choose>
+										
 									</div>
 									<hr />
 									<div id="noticeContent"></div>
@@ -687,7 +674,7 @@ z-index: 10;
 			                const notice = response.data;
 			                currentNoticeNo = parseInt(noticeNo);
 			                // Update modal content with notice details
-			                 $('#noticeModal #noticeNo').text(noticeNo);
+			                $('#noticeModal #noticeNo').text(noticeNo);
 			                $('#noticeModal #noticeTitle').text(notice.noticeTitle);
 			                $('#noticeModal #noticeContent').text(notice.noticeContent);
 			                $('#noticeModal #files').empty();
@@ -697,7 +684,9 @@ z-index: 10;
 			                    notice.files.forEach((file, index) => {
 			                        const fileLink = $('<div>')
 			                            .append($('<span>').text((index + 1) + '. '))
-			                            .append($('<a>').attr('href', file.changedName).attr('download', file.originalName).text(file.originalName));
+			                            .append($('<a>').attr('href', '${path0}/' + file.changedName) // Ensure this path is correct
+			                                .attr('download', file.originalName)
+			                                .text(file.originalName));
 			                        
 			                        $('#noticeModal #files').append(fileLink);
 			                    });
@@ -705,13 +694,16 @@ z-index: 10;
 			                    // If no files exist
 			                    $('#noticeModal #files').html('<p>파일이 존재하지 않습니다.</p>');
 			                }
+
 			                document.getElementById('deleteButton').onclick = function() {
-        return ConfirmDelete(currentNoticeNo);
-    };
+			                    return ConfirmDelete(currentNoticeNo);
+			                };
+
 			                $('#noticeModal').modal('show');
 			            }
 			        });
 			    });
+
 			    const shareButton = document.querySelector('.share-button');
 			    shareButton.addEventListener('click', async () => {
 			    	  try {
