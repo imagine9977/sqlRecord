@@ -2,12 +2,20 @@ package com.sqlrecord.sqlrecord.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.List;
+import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sqlrecord.sqlrecord.mail.Mail;
 import com.sqlrecord.sqlrecord.member.model.service.MemberService;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
@@ -33,6 +42,18 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	/*
+	@Autowired
+	private JavaMailSenderImpl sender;
+	
+	@Autowired
+	private String content;
+	
+	이거 때문에 css 다깨저버림 
+	오류 원인 "TypeError: Bootstrap의 JavaScript는 jQuery를 필요로 합니다. jQuery는 Bootstrap의 JavaScript보다 먼저 포함되어야 합니다.
+at Object.jQueryDetection"
+	*/
 	
 	@GetMapping("login.do")
 	public String login(Model model) {
@@ -85,7 +106,9 @@ public class MemberController {
 	}
 	
 	@PostMapping("joinPro.do")
-	public ModelAndView joinPro(Member member,@RequestParam("tagNo") List<Integer> tagNos, ModelAndView mv) {
+	public ModelAndView joinPro(Member member,
+								@RequestParam("tagNo") List<Integer> tagNos, 
+								ModelAndView mv) {
 	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
 	    memberService.insMember(member);
 	    //memberGenre.setMemberNo(member.getMemberNo());
@@ -116,18 +139,75 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("emailck")
-	public String infoId(@RequestParam("name") String name, 
-						 @RequestParam("email") String email
-						 ) {
-		log.info("name1 : {}", name);
-		log.info("email1 : {}", email);
+	public ModelAndView infoId(@RequestParam("name") String name, 
+						 @RequestParam("email") String email,
+						 Member member,
+						 Mail mail,
+						 ModelAndView mv
+						 ) throws MessagingException {
+		
+		//log.info("name1 : {}", name);
+		//log.info("email1 : {}", email);
 		// 아이디 찾기 입력받은 값을 조회
-	 memberService.infoId(name,email);
-		log.info("name : {}", name);
-		log.info("email : {}", email);
+		member = memberService.infoId(member);
+		member.setName(name);
+		member.setEmail(email);
+		//log.info("name : {}", name);
+		//log.info("email : {}", email);
 		
+		// 인증번호 생성
+		Random r = new Random();
+		int i = r.nextInt(100000);
+		Format format = new DecimalFormat("000000");
+		String code = format.format(i);
 		
-		return "result";
+		// 메일 내용
+				String content = "<html>\n" +
+					    "<head>\n" +
+					    "    <style>\n" +
+					    "        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }\n" +
+					    "        .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n" +
+					    "        .header { background-color: #4CAF50; color: white; text-align: center; padding: 10px; }\n" +
+					    "        .content { background-color: #f4f4f4; padding: 20px; border-radius: 5px; }\n" +
+					    "        .auth-code { font-size: 24px; font-weight: bold; color: #4CAF50; text-align: center; margin: 20px 0; }\n" +
+					    "        .footer { text-align: center; margin-top: 20px; font-size: 12px; font-weight: 600; color: #777; }\n" +
+					    "        p {font-weight: 600;}"+
+					    "    </style>\n" +
+					    "</head>\n" +
+					    "<body>\n" +
+					    "    <div class=\"container\">\n" +
+					    "        <div class=\"header\">\n" +
+					    "            <h1>이메일 인증</h1>\n" +
+					    "        </div>\n" +
+					    "        <div class=\"content\">\n" +
+					    "            <p>안녕하세요,</p>\n" +
+					    "            <p>귀하의 계정 인증을 위한 인증 코드입니다 <br>아래의 인증 코드를 입력해주세요:</p>\n" +
+					    "            <div class=\"auth-code\">"+code+"</div>\n" +
+					    "            <p>이 인증 코드는 30분 동안 유효합니다<br> 본 메일을 요청하지 않으셨다면, 이 메일을 무시해주세요.</p>\n" +
+					    "            <p>감사합니다.</p>\n" +
+					    "        </div>\n" +
+					    "        <div class=\"footer\">\n" +
+					    "            <p>본 메일은 발신 전용이므로 회신하지 마세요. 문의사항은 고객센터를 이용해주세요.</p>\n" +
+					    "        </div>\n" +
+					    "    </div>\n" +
+					    "</body>\n" +
+					    "</html>";
+		
+		MimeMessage messeage = sender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(messeage,false,"UTF-8");
+		
+		if(member != null) {
+			helper.setSubject("정보찾기 이메일 인증 메일 입니다."); //제목
+			helper.setText(content,true); // 내용
+			helper.setTo("yyyjjjhhh13@gmail.com");
+			sender.send(messeage);
+			mv.setViewName("redirect:/");
+		} else {
+			mv.addObject("errorMsg", "로그인 실패 했습니다.").setViewName("common/errorPage");
+		}
+		return mv;  
 	}
+	
+	
 	
 }

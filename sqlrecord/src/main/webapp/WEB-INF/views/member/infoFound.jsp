@@ -70,7 +70,7 @@
            		success : result => {
            			console.log(result);
            		},
-           		error: result() {
+           		error: result => {
                     checkResult.show().css('color', 'red').text('오류가 발생했습니다.');
                 }
 	        });

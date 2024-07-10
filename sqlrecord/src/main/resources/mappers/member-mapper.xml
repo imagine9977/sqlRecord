@@ -77,7 +77,7 @@
 				     	)
 	</insert>
 	  
-	<select id="infoId" parameterType="map" resultType="member">
+	<select id="infoId" parameterType="member" resultType="member">
 		SELECT
 				NAME,
 				EMAIL

@@ -35,8 +35,8 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Member infoId(String name, String email) {
-		return memberMapper.infoId(name,email);
+	public Member infoId(Member member) {
+		return memberMapper.infoId(member);
 	}
 
 }
