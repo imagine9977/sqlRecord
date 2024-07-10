@@ -76,6 +76,17 @@
 						member_SEQ.CURRVAL
 				     	)
 	</insert>
-	
+	  
+	<select id="infoId" parameterType="map" resultType="member">
+		SELECT
+				NAME,
+				EMAIL
+		  FROM
+		  		MEMBER
+	  	 WHERE
+	  	 		NAME = #{name}
+  	 	   AND	
+	  	 		EMAIL = #{email} 
+	</select>
 	
 </mapper>

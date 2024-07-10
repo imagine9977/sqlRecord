@@ -37,24 +37,46 @@
         <div class="conbox con1">
         <form action="">
             <label for="idf">이름 </label>
-            <input type="text" name="idf" id="idf1" required><br>
-            <label for="idf">주민번호 </label>
-            <input type="text" name="idf" id="idf2" required>
-            <button type="submit" id="fnext" onclick="openPopup">NEXT</button>
+            <input type="text" name="name" id="name" required><br>
+            <label for="idf">이메일 </label>
+            <input type="text" name="email" id="email" required>
+            <button type="submit" id="fnext" onclick="emailchek()">NEXT</button>
         </form>
         </div>
         <div class="conbox con2">
         <form action="">
             <label for="idf">이름 </label>
-            <input type="text" name="idf" id="pwf1" required><br>
+            <input type="text" name="name" id="name1" required><br>
             <label for="idf">아이디 </label>
-            <input type="text" name="idf" id="pwf2" required>
-            <label for="idf">주민번호 </label>
-            <input type="text" name="idf" id="pwf3" required>
-            <button type="submit" id="fnext1">NEXT</button>
+            <input type="text" name="memberId" id="pwf2" required>
+            <label for="idf">이메일 </label>
+            <input type="text" name="email" id="email1" required>
+            <button type="submit" id="fnext1" onclick="emailchek1()">NEXT</button>
         </form> 
         </div>
     </div>
+    <script>
+    
+    
+	    function emailchek(){
+	        const name = $("#name").val();
+	        const email = $("#email").val();
+	
+	        $.ajax({
+	            url : '${hpath }/member/emailck',
+	            type : 'post',
+	            data : {name : name,
+	            		email : email},
+           		success : result => {
+           			console.log(result);
+           		},
+           		error: result() {
+                    checkResult.show().css('color', 'red').text('오류가 발생했습니다.');
+                }
+	        });
+	    }
+    
+    </script>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>

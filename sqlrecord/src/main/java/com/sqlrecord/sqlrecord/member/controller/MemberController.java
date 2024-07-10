@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sqlrecord.sqlrecord.member.model.service.MemberService;
@@ -112,5 +113,21 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	
+	@ResponseBody
+	@PostMapping("emailck")
+	public String infoId(@RequestParam("name") String name, 
+						 @RequestParam("email") String email
+						 ) {
+		log.info("name1 : {}", name);
+		log.info("email1 : {}", email);
+		// 아이디 찾기 입력받은 값을 조회
+	 memberService.infoId(name,email);
+		log.info("name : {}", name);
+		log.info("email : {}", email);
+		
+		
+		return "result";
+	}
 	
 }

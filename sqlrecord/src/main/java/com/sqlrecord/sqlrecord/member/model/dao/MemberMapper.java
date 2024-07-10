@@ -11,4 +11,5 @@ public interface MemberMapper {
 	Member getMember(String memberId);
 	int insMember(Member member);
 	int insGenre(MemberGenre memberGenre);
+	Member infoId(String name, String email);
 }
