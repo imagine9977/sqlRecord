@@ -19,4 +19,19 @@
 				)
 	</insert>
 
+	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
+		SELECT
+				Max(ORDERS_NO)
+		FROM
+				MEMBER_ORDERS
+		WHERE
+				MEMBER_NO = #{member_no}
+		ORDER
+		BY
+				ORDERS_NO
+		DESC
+				
+	</select>
+
+
 </mapper>

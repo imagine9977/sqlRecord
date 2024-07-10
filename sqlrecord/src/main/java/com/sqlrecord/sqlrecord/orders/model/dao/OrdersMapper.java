@@ -9,4 +9,6 @@ public interface OrdersMapper {
 
 	int insertMemberOrders(MemberOrders memberOrders);
 
+	int selectOneMemberOrdersNo(int member_no);
+
 }
