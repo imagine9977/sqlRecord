@@ -10,4 +10,10 @@ public class NoticeForwardController {
 		
 		return "notice/notice";
 	}
+	
+	@GetMapping("notices/insert.do")
+	public String insertNotice() {
+		
+		return "notice/insertForm";
+	}
 }

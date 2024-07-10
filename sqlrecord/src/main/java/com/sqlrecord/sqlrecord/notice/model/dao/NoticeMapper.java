@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.sqlrecord.sqlrecord.notice.model.vo.NFile;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
 
 @Mapper
@@ -17,4 +18,8 @@ public interface NoticeMapper {
 	int update(Notice notice);
 
 	int delete(int NoticeNo);
+	List<NFile> findFiles(int id);
+	int saveFile(NFile file);
+	Integer getNoticeNo();
+	int deleteFiles(int noticeNo);
 }

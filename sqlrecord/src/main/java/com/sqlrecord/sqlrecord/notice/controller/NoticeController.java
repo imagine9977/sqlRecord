@@ -2,28 +2,38 @@ package com.sqlrecord.sqlrecord.notice.controller;
 
 
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sqlrecord.sqlrecord.message.Message;
 import com.sqlrecord.sqlrecord.notice.model.service.NoticeService;
+import com.sqlrecord.sqlrecord.notice.model.vo.NFile;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
-
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/notice")
@@ -67,6 +77,25 @@ public class NoticeController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
+	@GetMapping("/nFile/{id}")
+    public ResponseEntity<Message> findFiles(@PathVariable int id) {
+
+        List<NFile> noticeList = noticeService.findFiles(id);
+        if(noticeList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            		.body(Message.builder().message("조회결과가 없습니다.").build());
+        }	
+
+        Message responseMsg = Message.builder()
+                                     .data(noticeList)
+                                     .message("조회 요청 성공")
+                                     .build();
+
+        log.info("조회된 공지사항 목록 : {}" , noticeList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+    }
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Message> findById(@PathVariable int id) {
 		Notice notice = noticeService.findById(id);
@@ -82,11 +111,63 @@ public class NoticeController {
                 .data(notice)
                 .message("조회 요청 성공")
                 .build();
+		
+		log.info("조회된 특정 공지사항 목록 : {}" , notice);
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 		
 	
 	}
 	
+	 @PostMapping("/insert.do")
+	public String insert(@ModelAttribute Notice notice, 
+            @RequestParam("upfile") MultipartFile[] upfiles, 
+            HttpSession session) {
+	    log.info("게시글 정보: {}", notice);
+	    log.info("파일 정보: {}", upfiles);
+	    List<NFile> files = new ArrayList<>();
+
+	    if (upfiles != null) {
+	        for (MultipartFile file : upfiles) {
+	            if (!file.getOriginalFilename().equals("")) {
+	                String originName = file.getOriginalFilename();
+	                String ext = originName.substring(originName.lastIndexOf("."));
+	                int num = (int) (Math.random() * 900) + 100;
+	                String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+	                String savePath = session.getServletContext().getRealPath("resources/uploadFiles/notice/");
+	                String changeName = "KH_" + currentTime + "_" + num + ext;
+	                
+	                File directory = new File(savePath);
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+                    try {
+                        file.transferTo(new File(savePath + changeName));
+                    } catch (IllegalStateException | IOException e) {
+                        e.printStackTrace();
+                        session.setAttribute("errorMsg", "File upload failed");
+                        return "redirect:/notices/insert.do";
+                    }
+
+
+	                NFile nfile = new NFile();
+	                nfile.setOriginalName(originName);
+	                nfile.setChangedName(savePath + changeName);
+	                files.add(nfile);
+	            }
+	        }
+	    }
+
+	    notice.setFiles(files); // Assuming Notice has a List<NFile> attribute named 'files'
+
+	    if (noticeService.save(notice) > 0) {
+            session.setAttribute("alertMsg", "게시글 작성 성공");
+            return "redirect:/notices";
+        } else {
+            session.setAttribute("errorMsg", "게시글 작성 실패");
+            return "redirect:/notices/insert.do";
+        }
+	}
+
 	
 	@PostMapping
 	public  ResponseEntity<Message> save(Notice notice) {
