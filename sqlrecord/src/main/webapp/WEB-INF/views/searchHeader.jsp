@@ -44,7 +44,7 @@
           		</a>
           	</c:when>
           	<c:when test="${ not empty loginGuest }">
-          		<a href="${hpath }/cart/guest/${ guest.}">
+          		<a href="${hpath }/cart/guest/${ guestUser.guest_no}">
            			<img src="${hpath }/resources/imgs/homepageLogo/cart.png">
           		</a>
           	</c:when>

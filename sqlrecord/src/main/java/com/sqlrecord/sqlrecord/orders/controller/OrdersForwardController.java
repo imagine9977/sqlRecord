@@ -1,5 +1,6 @@
 package com.sqlrecord.sqlrecord.orders.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -32,25 +33,32 @@ public class OrdersForwardController {
 								 int product_price , 
 								 int product_no ,
 								 GuestCart guestCart,
-								 HttpSession session
+								 HttpServletRequest request
 								 ) {
+		HttpSession session = request.getSession();
 		
 		if(cart.getCart_amount() != 0) {
 			
 			
+			
 			log.info("유저임{}" , cart.getCart_amount());
 			
-			Member member = (Member) session.getAttribute("loginUser");
+			Member member =  (Member) session.getAttribute("loginUser");
 			
+			
+			log.info("{}" , member);
 			MemberOrders memberOrders2 = new MemberOrders();
 			memberOrders2.setOrders_address(member.getAddr1());
 			memberOrders2.setOrders_address2(member.getAddr2());
 			memberOrders2.setOrders_postcode(member.getPostcode());
 			memberOrders2.setMember_no(member.getMemberNo());
 			
-			ordersService.insertMemberOrders(memberOrders2);
 			
+			int sucess = ordersService.insertMemberOrders(memberOrders2);
 			
+			if(sucess > 0) {
+				return "redirect:/orders/member/detail";
+			}
 			
 			
 		} else {
