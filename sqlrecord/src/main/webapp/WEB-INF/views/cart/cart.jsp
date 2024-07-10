@@ -196,6 +196,8 @@ let amountList = document.querySelectorAll(".amount input");
 let priceList = document.querySelectorAll(".price input");
 let totalInput = document.querySelector("#totalPrice");
 let totalPrice = 0;
+
+// 아무 선택도 안하면 결제 버튼은 보이지 않는다.
 function onClickCount(f) {
 	totalPrice = 0;
 	isChecked = 0;
@@ -213,7 +215,14 @@ function onClickCount(f) {
 	totalInput.value = totalPrice;
 }
 
-
+// 회원인데 장바구니가 없으면 결제 버튼 가림
+if("${sessionScope.loginUser.memberNo}" != 0 && "${ list.size()}" == 0) {
+	document.querySelector(".submitBtn").style.display = "none";
+}
+//회원인데 장바구니가 없으면 결제 버튼 가림
+if("${sessionScope.guestUser.guest_no}" != 0 && "${ glist.size()}" == 0) {
+	document.querySelector(".submitBtn").style.display = "none";
+}
 
 // 초기 계산 값 호출.
 function getTotalPrice() {
