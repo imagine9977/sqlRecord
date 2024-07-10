@@ -86,7 +86,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public int saveAll(Notice notice) {
 		// TODO Auto-generated method stub
-		return 0;
+		return 0;  
 	}
 
 	@Override
