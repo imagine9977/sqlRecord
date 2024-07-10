@@ -38,6 +38,11 @@ public class MemberController {
 		return "member/login";
 	}
 	
+	@GetMapping("findIdPw")
+	public String find(Model model) {
+		return "member/infoFound";
+	}
+	
 	@PostMapping("loginPro.do")
 	public ModelAndView login(Member member,
 							  ModelAndView mv,
@@ -106,4 +111,6 @@ public class MemberController {
 		session.removeAttribute("loginUser");
 		return "redirect:/";
 	}
+	
+	
 }
