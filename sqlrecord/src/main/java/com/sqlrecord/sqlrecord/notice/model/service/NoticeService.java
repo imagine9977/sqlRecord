@@ -12,9 +12,10 @@ public interface NoticeService {
 	Notice findById(int noticeNo);
 	
 	int save(Notice notice);
-	
+	int saveAll(Notice notice);
 	int update(Notice notice);
 	int delete(int NoticeNo);
 	List<Notice> findByCate(String cate);
 	List<NFile> findFiles(int id);
+	
 }

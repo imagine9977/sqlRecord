@@ -109,7 +109,7 @@
     cursor: pointer;
 }
 
-#notice-container #fileArea {
+#notice-container #files {
     background-color: lightgray;
     width: 300px;
     height: 100px;
@@ -147,13 +147,16 @@
 }
 
 #notice-container #noticeModal {
+    top: 100px;
     min-height: 300px;
+    z-index: 999999;
+   
 }
 
 #notice-container .modal-content {
     height: 60%;
-    border: 0;
-    border-radius: 0;
+    border: 1rem solid;
+    border-radius: 10;
 }
 
 #notice-container .inline-header {
@@ -228,6 +231,10 @@
 #notice-container .col-date {
     width: 20%;
 }
+
+#notice-container #liveAlertPlaceholder {
+z-index: 10;
+}
 </style>
 </head>
 
@@ -261,53 +268,53 @@
 					</form>
 				</div>
 			</div>
-			<div class="modal fade" id="noticeModal" tabindex="-1"
-				aria-labelledby="noticeModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 id="noticeNo" class="inline-header"></h5>
-							<h5 class="modal-title inline-header" id="noticeTitle">${noticeTitle}</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"
-								aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div id="notice-detail">
-								<h4>파일 내려받기</h4>
-								<div id="fileArea">
-									<c:choose>
-										<c:when test="${empty nfileListGlobal}">
-											<p>파일이 존재하지 않습니다.</p>
-										</c:when>
-										<c:otherwise>
-											<c:forEach var="file" items="${nfileListGlobal}"
-												varStatus="status">
-												<div>
-													<span>${status.index + 1}. </span> <a
-														href="${file.changedName}" download="${file.originalName}">${file.originalName}</a>
-												</div>
-											</c:forEach>
-										</c:otherwise>
-									</c:choose>
-								</div>
-								<hr />
-								<div id="noticeContent"></div>
+				<div class="modal fade" id="noticeModal" tabindex="-1"
+					aria-labelledby="noticeModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 id="noticeNo" class="inline-header"></h5>
+								<h5 class="modal-title inline-header" id="noticeTitle">${noticeTitle}</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
 							</div>
-						</div>
-						<div class="modal-footer">
-							<div id="noticeActions">
-								<a class="btn btn-sm btn-warning" data-toggle="modal"
-									href="#updateModal">수정하기</a> <a
-									class="btn btn-sm btn-secondary" id="deleteButton">삭제하기</a>
-								<button class="btn share-button btn-secondary"
-									title="Share this article">
-									<span>공유하기</span>
-								</button>
+							<div class="modal-body">
+								<div id="notice-detail">
+									<h4>파일 내려받기</h4>
+									<div id="files">
+										<c:choose>
+											<c:when test="${empty files}">
+												<p>파일이 존재하지 않습니다.</p>
+											</c:when>
+											<c:otherwise>
+												<c:forEach var="file" items="${files}"
+													varStatus="status">
+													<div>
+														<span>${status.index + 1}. </span> <a
+															href="${file.changedName}" download="${file.originalName}">${file.originalName}</a>
+													</div>
+												</c:forEach>
+											</c:otherwise>
+										</c:choose>
+									</div>
+									<hr />
+									<div id="noticeContent"></div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div id="noticeActions">
+									<a class="btn btn-sm btn-warning" data-toggle="modal"
+										href="#updateModal">수정하기</a> <a
+										class="btn btn-sm btn-secondary" id="deleteButton">삭제하기</a>
+									<button class="btn share-button btn-secondary"
+										title="Share this article">
+										<span>공유하기</span>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 			<!--
 			<div class="modal fade" id="insertModal" tabindex="-1"
 				aria-labelledby="insertModalLabel" aria-hidden="true">
@@ -683,9 +690,21 @@
 			                 $('#noticeModal #noticeNo').text(noticeNo);
 			                $('#noticeModal #noticeTitle').text(notice.noticeTitle);
 			                $('#noticeModal #noticeContent').text(notice.noticeContent);
-			                findFiles(noticeNo);
-			                // Show the modal
-			                console.log('번호: '+currentNoticeNo);
+			                $('#noticeModal #files').empty();
+
+			                // Append file links if files exist
+			                if (notice.files && notice.files.length > 0) {
+			                    notice.files.forEach((file, index) => {
+			                        const fileLink = $('<div>')
+			                            .append($('<span>').text((index + 1) + '. '))
+			                            .append($('<a>').attr('href', file.changedName).attr('download', file.originalName).text(file.originalName));
+			                        
+			                        $('#noticeModal #files').append(fileLink);
+			                    });
+			                } else {
+			                    // If no files exist
+			                    $('#noticeModal #files').html('<p>파일이 존재하지 않습니다.</p>');
+			                }
 			                document.getElementById('deleteButton').onclick = function() {
         return ConfirmDelete(currentNoticeNo);
     };
@@ -709,11 +728,11 @@
 			    
 			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
 
-			    const alert = (message, type) => {
+			    const alert = (message) => {
 			      const wrapper = document.createElement('div')
 			      wrapper.innerHTML = [
-			        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-			        `   <div>${message}</div>`,
+			        '<div class="alert alert-warning alert-dismissible" role="alert">',
+			        '   <div>${message}</div>',
 			        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
 			        '</div>'
 			      ].join('')

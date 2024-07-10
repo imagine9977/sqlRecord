@@ -29,27 +29,43 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public Notice findById(int noticeNo) {
 		// TODO Auto-generated method stub
-		return noticeMapper.findById(noticeNo);	
+		Notice notice =  noticeMapper.findById(noticeNo);	
+		if(notice != null ) {
+			List<NFile> nfiles = noticeMapper.findFiles(noticeNo);
+			if(nfiles!=null) notice.setFiles(nfiles);
+		}
+		
+		return notice;
 	}
 
 	@Override
 	public int save(Notice notice) {
-	    // Save the notice itself first
-	    int result = noticeMapper.save(notice);
-	    
-	    // If the notice was successfully saved, save the files
-	    if (result > 0 && notice.getFiles() != null) {
-	        for (NFile file : notice.getFiles()) {
-	            file.setNoticeNo(notice.getNoticeNo());
-	            result = noticeMapper.saveFile(file);
-	            if (result <= 0) {
-	                // Handle the failure case
-	                return result;
+	    int result = noticeMapper.save(notice); // Execute INSERT INTO NOTICE
+	    System.out.println("sql 저장");
+
+	    if (result > 0) {
+	        // Retrieve the generated noticeNo
+	        Integer noticeNo = noticeMapper.getNoticeNo();
+	        notice.setNoticeNo(noticeNo); // Set noticeNo in the Notice object
+	        System.out.println("번호 저장");
+
+	        // Save files associated with the notice
+	        if (notice.getFiles() != null) {
+	            for (NFile file : notice.getFiles()) {
+	                file.setNoticeNo(notice.getNoticeNo()); // Set noticeNo in each file object
+	                result = noticeMapper.saveFile(file); // Execute INSERT INTO NFILE
+	                if (result <= 0) {
+	                    // Handle failure to save file
+	                    return result;
+	                }
 	            }
 	        }
 	    }
+
 	    return result;
 	}
+
+
 
 
 	@Override
@@ -61,13 +77,22 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public int delete(int NoticeNo) {
 		// TODO Auto-generated method stub
+		int x =noticeMapper.deleteFiles(NoticeNo);
 		return noticeMapper.delete(NoticeNo);	
 	}
 
+	
+
 	@Override
-	public List<NFile> findFiles(int id) {
+	public int saveAll(Notice notice) {
 		// TODO Auto-generated method stub
-		return noticeMapper.findFiles(id);
+		return 0;
+	}
+
+	@Override
+	public List<NFile> findFiles(int noticeNo) {
+		// TODO Auto-generated method stub
+		return noticeMapper.findFiles(noticeNo);
 	}
 
 }

@@ -20,4 +20,6 @@ public interface NoticeMapper {
 	int delete(int NoticeNo);
 	List<NFile> findFiles(int id);
 	int saveFile(NFile file);
+	Integer getNoticeNo();
+	int deleteFiles(int noticeNo);
 }
