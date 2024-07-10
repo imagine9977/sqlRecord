@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page session="false" %>
 <html>
 <head>
-
-
 <%@ include file="/WEB-INF/views/head.jsp" %>
 <!-- Slick 불러오기 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -13,6 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 <title>Home</title>
 <style>
+
 body {
    background-color: #EDEDED;
 }
