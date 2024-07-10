@@ -59,8 +59,8 @@
 		        od.ORDERS_DETAIL_PRICE,
 		        od.ORDERS_EXCHANGED,
 		        od.TRACKING_NUM,
-                mo.member_no,
-                mo.orders_date
+                mo.MEMBER_NO,
+                mo.ORDERS_DATE
 	    FROM
 	       	 	ORDERS_DETAIL od
         JOIN
@@ -71,8 +71,8 @@
                 mo.MEMBER_NO = 18
         ORDER
         BY
-                mo.orders_date
-        desc;
+                mo.ORDERS_DATE
+        DESC
 </select>
 	
 	

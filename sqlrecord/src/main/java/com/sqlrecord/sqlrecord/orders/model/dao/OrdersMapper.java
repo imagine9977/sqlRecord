@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.orders.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
@@ -13,5 +15,7 @@ public interface OrdersMapper {
 	int selectOneMemberOrdersNo(int member_no);
 
 	int insertOrdersDetail(OrdersDetail item);
+
+	List<OrdersDetail> getOrdersDetail(int memberNo);
 
 }
