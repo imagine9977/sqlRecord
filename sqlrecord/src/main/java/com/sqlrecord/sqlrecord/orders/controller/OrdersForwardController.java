@@ -1,7 +1,13 @@
 package com.sqlrecord.sqlrecord.orders.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +25,7 @@ import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +57,7 @@ public class OrdersForwardController {
 			
 			
 			log.info("어마운트 갯수 : {}" , cart_amountArr[1]);
+			log.info("어마운트 갯수 : {}" , product_noArr[1]);
 			
 			Member member =  (Member) session.getAttribute("loginUser");
 			
@@ -64,15 +72,20 @@ public class OrdersForwardController {
 			
 			
 			// 멤버 오더 디테일에 넣을 값을 객체에 담기
-			
 			List<OrdersDetail> odList = new ArrayList<OrdersDetail>();
 			
+			// Member_Orders에 생성된 넘버를 가져옴 detail에 넣기 위해서
 			int successMO = ordersService.insertMemberOrders(memberOrders, member.getMemberNo());
 			
+			// name이 같은 값이 하나가 아니기 때문에 Array로 담아서 하나씩 List에 넣어줌
 			for(int i = 0; i < cart_amountArr.length; i++) {
 				OrdersDetail ordersDetail = new OrdersDetail();
-				ordersDetail.setProduct_no(Integer.parseInt(product_noArr[i]));
-				ordersDetail.setOrders_no(successMO);
+				Product product = new Product();
+				product.setProduct_no(Integer.parseInt(product_noArr[i]));
+				ordersDetail.setProduct(product);
+				MemberOrders memberOrders1 = new MemberOrders();
+				memberOrders1.setOrders_no(successMO);
+				ordersDetail.setMemberOrders(memberOrders1);
 				ordersDetail.setOrders_detail_amount(Integer.parseInt(cart_amountArr[i]));
 				ordersDetail.setOrders_detail_price(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
 				
@@ -104,11 +117,42 @@ public class OrdersForwardController {
 	public String memberDetail(HttpServletRequest request , Model model) {
 		
 		HttpSession session = request.getSession();
-		
 		Member member =  (Member) session.getAttribute("loginUser");
 		
-		
+		// 유저의 OrderDetail을 리스트로 담기
 		List<OrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
+		
+		// set에 OrderDetail의 Orders_no의 값을 넣어서 중복되지 않는 HashSet을 만듬 
+		Set<Integer> hs = new LinkedHashSet<Integer>();
+		
+		// HashSet에 add
+		for(OrdersDetail item : odList) {
+			hs.add(item.getMemberOrders().getOrders_no());
+		}
+		
+		// 2중 리스트를 만들기 위해서 준비
+		List<List<OrdersDetail>> newOdList = new ArrayList<List<OrdersDetail>>();
+		
+		
+		for(OrdersDetail od : odList) {
+			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getOrders_no());
+		}
+		
+		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
+		for(Integer hsItem : hs) {
+			log.info("얘는 hsItem : {}" , hsItem);
+			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getOrders_no() == hsItem) .collect(Collectors.toList());;
+			newOdList.add(od);
+		}
+		
+		log.info("오디? : {} , {}" , newOdList.get(0).size());
+		
+		
+		
+		model.addAttribute("newOdList",newOdList);
+		log.info("이게 오디 개수 : {}" , odList.size());
+		log.info("이게 뉴오디 개수 : {}" , newOdList.size());
+		log.info("이게 뉴오디 : {}" , newOdList.get(0).get(0).getProduct().getProduct_name());
 		
 		
 		return "orders/detail";

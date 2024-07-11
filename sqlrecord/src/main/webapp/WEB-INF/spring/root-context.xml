@@ -40,5 +40,24 @@
 
 
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.notice.model.dao"/>
+
+		
+		<!-- 메일 전송 도구 등록(기능 한 번에 묶기) -->    <!-- 나중에 의존성 주입 받을 수 있음!!! -->
+           <bean class="org.springframework.mail.javamail.JavaMailSenderImpl"
+                 id="sender">
+                 <!-- 계정관련설정 요소 설정 -->
+                 <property name="host" value="smtp.gmail.com" />    <!-- name : .setter() 이용해서 값을 넣고 싶은 >>필드명<< // value = 거기 넣을 값 -->
+                 <property name="port" value="587" />
+                 <property name="username" value="yyyjjjhhh13" />
+                 <property name="password" value="bjzjthfaisqatwmt" />
+                 <property name="javaMailProperties">
+                     <props>
+                         <prop key="mail.smtp.auth">true</prop>    <!-- Properties 객체의 Key-Value값 -->
+                         <prop key="mail.smtp.starttls.enable">true</prop>
+                     </props>
+                 </property>
+           </bean>
+
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.orders.model.dao"/>
+
 </beans>
