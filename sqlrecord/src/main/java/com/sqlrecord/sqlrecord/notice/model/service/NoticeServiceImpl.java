@@ -47,7 +47,7 @@ public class NoticeServiceImpl implements NoticeService {
 	        // Retrieve the generated noticeNo
 	        Integer noticeNo = noticeMapper.getNoticeNo();
 	        notice.setNoticeNo(noticeNo); // Set noticeNo in the Notice object
-	        System.out.println("번호 저장");
+	        System.out.println("번호 저장"+noticeNo);
 
 	        // Save files associated with the notice
 	        if (notice.getFiles() != null) {
@@ -70,8 +70,36 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public int update(Notice notice) {
-		// TODO Auto-generated method stub
-		return noticeMapper.update(notice);
+		int result = noticeMapper.update(notice);
+		if (result > 0) {
+	        
+			List<NFile> newFiles = notice.getFiles();
+			List<NFile> oldFiles = noticeMapper.findFiles(notice.getNoticeNo());
+	        // Save files associated with the notice
+	        if (newFiles!= null) {
+	        	
+	        	for (NFile file :newFiles) {
+	                file.setNoticeNo(notice.getNoticeNo()); // Set noticeNo in each file object
+	                if (file.getNfileNo() >0) {
+	                    // Existing file, perform update
+	                    result = noticeMapper.updateFile(file);
+	                } else {
+	                    // New file, perform insert
+	                    result = noticeMapper.saveFile(file);
+	                }
+	                if (result <= 0) {
+	                    // Handle failure to update or insert file
+	                    return result;
+	                }
+	            }
+	        }
+	        if (newFiles.size() < oldFiles.size()) {
+	            // Handle case where there were previously 3 files but now less than 3
+	            // In this case, ensure that any existing file beyond the current size is deleted
+	            
+	        }
+	    }
+		return result;
 	}
 
 	@Override

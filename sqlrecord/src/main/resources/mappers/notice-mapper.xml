@@ -79,6 +79,10 @@
 		NOTICE_NO =
 		#{noticeNo}
 	</delete>
+	<delete id="deleteFileByPosition" parameterType="map">
+    DELETE FROM NFILE
+    WHERE NFILE_NO = #{nfileNo}
+	</delete>
 	<update id="update" parameterType="notice">
 		UPDATE
 		NOTICE
@@ -90,8 +94,12 @@
 		#{noticeCategory}
 		WHERE
 		NOTICE_NO = #{noticeNo}
-		AND
-		NOTICE_CATE
-		=#{noticeCategory}
+		
+	</update>
+	<update id="updateFile"
+		parameterType="com.sqlrecord.sqlrecord.notice.model.vo.NFile">
+		UPDATE NFILE
+		SET
+		NFILE_ORIGINAL = #{originalName},NFILE_CHANGD #{changedName}
 	</update>
 </mapper>
