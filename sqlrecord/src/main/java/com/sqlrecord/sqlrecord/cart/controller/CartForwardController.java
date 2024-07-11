@@ -40,6 +40,9 @@ public class CartForwardController {
 		
 		List<Cart> cartList = cartService.getCartList(userid);
 		model.addAttribute("list",cartList);
+		for(Cart a : cartList) {
+			log.info("카드 하나 : {}" , a.toString());
+		}
 		log.info("{}" , cartList);
 		return "cart/cart";
 	}

@@ -1,5 +1,6 @@
 package com.sqlrecord.sqlrecord.cart.model.vo;
 
+import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.vo.Product;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Builder
 public class Cart {
 	private int cart_num;
-	private Product product;
-	private int member_no;
 	private int cart_amount;
+	private Product product;
+	private Member member;
 }
