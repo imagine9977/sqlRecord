@@ -61,31 +61,39 @@
 	</resultMap>
 
 	<select id="cartListSelect" parameterType="_int" resultMap="cartRM">
-	 SELECT
-			c.PRODUCT_NO,
-			c.MEMBER_NO,
-			c.CART_AMOUNT,
-			p.PRODUCT_NAME,
-			p.PRODUCT_PRICE,
-			ps.photo_no,
-			ps.photo_name,
-			ps.photo_path
-	   FROM
-			MEMBER_CART c
-	   JOIN
-			PRODUCT p
-		 ON
-			c.PRODUCT_NO = p.PRODUCT_NO
-	   JOIN
-	   		PRODUCT_PHOTOS ps
-	   	ON	
-	   		p.PRODUCT_NO = ps.PRODUCT_NO
-	  WHERE
-			c.MEMBER_NO = #{member_no}
-	  ORDER
-		 BY
- 			c.CART_NUM
-	   DESC
+	 WITH RankedCart AS (
+	    SELECT
+	        c.CART_NUM,
+	        c.PRODUCT_NO,
+	        c.MEMBER_NO,
+	        c.CART_AMOUNT,
+	        p.PRODUCT_NAME,
+	        p.PRODUCT_PRICE,
+	        ps.photo_path,
+	        ROW_NUMBER() OVER (PARTITION BY c.PRODUCT_NO ORDER BY c.CART_NUM DESC) AS rn
+	    FROM
+	        MEMBER_CART c
+	    JOIN
+	        PRODUCT p ON c.PRODUCT_NO = p.PRODUCT_NO
+	    LEFT JOIN
+	        PRODUCT_PHOTOS ps ON c.PRODUCT_NO = ps.PRODUCT_NO
+	    WHERE
+	        c.MEMBER_NO = #{member_no}
+		)
+		SELECT
+		    CART_NUM,
+		    PRODUCT_NO,
+		    MEMBER_NO,
+		    CART_AMOUNT,
+		    PRODUCT_NAME,
+		    PRODUCT_PRICE,
+		    PHOTO_PATH
+		FROM
+		    RankedCart
+		WHERE
+		    rn = 1
+		ORDER BY
+		    CART_NUM DESC
 	
 	
 	</select>

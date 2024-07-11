@@ -21,14 +21,14 @@
 
 	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
 		SELECT
-				Max(ORDERS_NO)
+				Max(MEMBER_ORDERS_NO)
 		FROM
 				MEMBER_ORDERS
 		WHERE
 				MEMBER_NO = #{member_no}
 		ORDER
 		BY
-				ORDERS_NO
+				MEMBER_ORDERS_NO
 		DESC
 				
 	</select>
@@ -37,10 +37,10 @@
 	<insert id="insertOrdersDetail" parameterType="OrdersDetail">
 		INSERT
 		INTO
-				ORDERS_DETAIL
+				MEMBER_ORDERS_DETAIL
 		VALUES
 				(
-				ORDERS_DETAIL_SEQ.NEXTVAL,
+				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
 				#{product_no},
 				#{orders_no},
 				#{orders_detail_amount},

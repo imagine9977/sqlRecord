@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class OrdersDetail {
 	
-	private int orders_detail_no;          
+	private int member_orders_detail_no;          
 	private int product_no;               
 	private int orders_no;               
 	private int orders_detail_amount;        
