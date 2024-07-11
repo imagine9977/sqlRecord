@@ -409,12 +409,12 @@
 			    $("#btnSubmit").prop("disabled", true);  // Disable the submit button
 			    
 			    $.ajax({             
-			        type: "POST",  
-			        url: "notice",
+			        type: "put",  
+			        url: "notice/update",
 			        enctype: 'multipart/form-data',  
-			        contentType: false,  // Set content type to false
+			        contentType: 'application/json; charset=UTF-8',  // Set content type to false
 			        processData: false,   // Set processData to false
-			        data: data,  // Pass FormData object
+			        data: JSON.stringify(data),  // Pass FormData object
 			        timeout: 600000,    
 			        success: function (result) {
 			            if (result.data === 1) {

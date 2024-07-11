@@ -152,6 +152,7 @@ public class NoticeController {
 		
 		return "resources/uploadFiles/notice" + changeName; //얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
 	}
+	/*
 	@PostMapping
 	public ResponseEntity<Message> save(Notice notice) {
 
@@ -164,7 +165,7 @@ public class NoticeController {
 		Message responseMsg = Message.builder().data(result).message("서비스 요청 성공").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
-
+	*/
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
 		Notice notice = noticeService.findById(id);
@@ -185,7 +186,7 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 
-	@PutMapping
+	@PutMapping("/update")
 	public ResponseEntity<Message> update(@RequestBody Notice notice, @RequestParam("upfile") MultipartFile[] upfiles,
 			HttpSession session) {
 		log.info("start");
@@ -199,11 +200,12 @@ public class NoticeController {
 			}
 			nfiles.add(nfile);
 		}
+		/*
 		int a= nfiles.size();
 		for(int i =a; i<3; i++) {
 			NFile nfile = new NFile();
 			nfiles.add(nfile);
-		}
+		} */
 		notice.setFiles(nfiles);
 		int result = noticeService.update(notice);
 		log.info(" result:{}", result);
