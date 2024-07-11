@@ -46,7 +46,7 @@
 				<div class="form-group">
 					<label for="noticeContent">내용</label>
 					<textarea class="form-control" rows="5" id="noticeContent"
-						name="noticeContent" style="resize: none;"></textarea>
+						name="noticeContent" style="resize: none;" required></textarea>
 				</div>
 				<button type="reset" class="btn"
 					style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</button>
