@@ -95,7 +95,7 @@
             const countdownElement = document.getElementById('countdown');
         
             const countdownTimer = setInterval(() => {
-                let minutes = Math.floor(time / 60);
+                let minutes = Math.floor(time / 60); //Math.floor 소수점 버리고 정수로 반환
                 let seconds = time % 60;
         
                 // 두 자리 숫자로 표시되도록 형식 지정

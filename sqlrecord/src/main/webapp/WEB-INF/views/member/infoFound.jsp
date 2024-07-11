@@ -33,31 +33,31 @@
         <label class="rala1" for="tab1">아이디</label>
         <input type="radio" name="idpw" id="tab2">
         <label class="rala2" for="tab2">비밀번호</label>
-
+		
         <div class="conbox con1">
-        <form action="">
+		<form action="${hpath }/member/emailck" method="post">
             <label for="idf">이름 </label>
             <input type="text" name="name" id="name" required><br>
             <label for="idf">이메일 </label>
             <input type="text" name="email" id="email" required>
-            <button type="submit" id="fnext" onclick="emailchek()">NEXT</button>
+            <button type="submit" id="fnext">NEXT</button>
         </form>
         </div>
         <div class="conbox con2">
-        <form action="">
+        <form action="${hpath }/member/emailck" method="post">
             <label for="idf">이름 </label>
             <input type="text" name="name" id="name1" required><br>
             <label for="idf">아이디 </label>
             <input type="text" name="memberId" id="pwf2" required>
             <label for="idf">이메일 </label>
             <input type="text" name="email" id="email1" required>
-            <button type="submit" id="fnext1" onclick="emailchek1()">NEXT</button>
-        </form> 
+            <button type="button" id="fnext1" onclick="emailchek1()">NEXT</button>
+        </form>
         </div>
     </div>
     <script>
     
-    
+    /*
 	    function emailchek(){
 	        const name = $("#name").val();
 	        const email = $("#email").val();
@@ -70,9 +70,11 @@
            		success : result => {
            			if (result.success) {
                         // 성공 시 리다이렉트
-                        window.location.href = result.redirectUrl;
+                        //console.log("성공?");
+                        window.location.href = '${hpath}' + result.redirectUrl;
                     } else {
                         // 실패 시 에러 메시지 표시
+                        console.log("실패?");
                         alert(result.errorMsg);
                     }
            		},
@@ -81,7 +83,7 @@
                 }
 	        });
 	    }
-    
+    */
     </script>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
 <%@ include file="/WEB-INF/views/footer.jsp" %>

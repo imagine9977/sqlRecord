@@ -7,16 +7,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
-<link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
-<link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
-<link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>
-<link rel="stylesheet" href="${hpath }/resources/css/searchHeader.css"/>
+<script src="${hpath}/resources/js/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="${hpath}/resources/css/common.css"/>
+<link rel="stylesheet" href="${hpath}/resources/css/header.css?after1"/>
+<link rel="stylesheet" href="${hpath}/resources/css/breadCrumb.css"/>
+<link rel="stylesheet" href="${hpath}/resources/css/searchHeader.css"/>
 <meta charset="UTF-8">
 <title>SUCCESS</title>
-	<style>
-		body {margin: 0px; padding: 0px;}
-        .einput {
+    <style>
+        body {margin: 0px; padding: 0px; background: #ededed;}
+        #einput {
             background-color: #e7dfdf;
             border: 1px solid #706767;
             border-radius: .3em;
@@ -51,6 +51,10 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 10px 10px rgba(255,255,255,0.1);
         }
         
+        .emailbtn:hover {
+                background-color: #294242;
+            }
+        
         .message {
             display: flex;
             align-items: center;
@@ -73,65 +77,80 @@
         }
 
         #countdown {
+        	margin-top:20px;
             color: #333;
             font-weight: 600;
         }
 
         .etext {
+        	margin-top:20px;
             font-weight: 600;
             color: #333;
         }
-	</style>
-	
-
+    </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 
-	<div class="tab_content">
-        <div class="message">
-            <img src="https://e7.pngegg.com/pngimages/333/868/png-clipart-mail-computer-icons-email-graphy-e-mail-miscellaneous-angle.png" alt="메일 아이콘" class="icon">
-            <p id="ems">메일 전송이 완료 되었습니다.</p>
-        </div>
-        <div class="input-container">
-            <input type="text" placeholder="인증번호 입력해주세요" class="einput">
-            <button class="emailbtn">확인</button>
-        </div>
-        <div class="countdown-container">
-            <p class="etext">인증번호 유효시간은 &nbsp; </p>
-            <p id="countdown">05:00</p>
-            <p class="etext">&nbsp;남았습니다.</p>
-        </div>
+<div class="tab_content">
+    <div class="message">
+        <img src="https://e7.pngegg.com/pngimages/333/868/png-clipart-mail-computer-icons-email-graphy-e-mail-miscellaneous-angle.png" alt="메일 아이콘" class="icon">
+        <p id="ems">메일 전송이 완료 되었습니다.</p>
     </div>
-    <script>
-        window.onload = function() {
-            let time = 5 * 60; // 5분을 초로 환산
-            const countdownElement = document.getElementById('countdown');
-        
-            const countdownTimer = setInterval(() => {
-                let minutes = Math.floor(time / 60); //Math.floor 소수점 버리고 정수로 반환
-                let seconds = time % 60;
-        
-                // 두 자리 숫자로 표시되도록 형식 지정
-                minutes = minutes < 10 ? '0' + minutes : minutes;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-        
-                countdownElement.innerHTML = `${minutes}:${seconds}`;
-        
-                if (time <= 0) {
-                    clearInterval(countdownTimer);
-                    countdownElement.innerHTML = '00:00';
-                }
-        
-                time--;
-            }, 1000);
-        }
-    </script>
+    <div class="input-container">
+        <input type="text" placeholder="인증번호 입력해주세요" id="einput">
+        <button class="emailbtn" onclick="numCheck()">확인</button>
+    </div>
+    <div class="countdown-container">
+        <p class="etext">인증번호 유효시간은 &nbsp; </p>
+        <p id="countdown">02:00</p>
+        <p class="etext">&nbsp;남았습니다.</p>
+    </div>
+</div>
 
+<div id="successId">
+	
+</div>
+<script>
+    window.onload = function() {
+        let time = 2 * 60; // 2분을 초로 환산
+        const countdownElement = document.getElementById('countdown');
 
+        const countdownTimer = setInterval(() => {
+            let minutes = Math.floor(time / 60); // 소수점 버리고 정수로 반환
+            let seconds = time % 60;
 
-<script src="${hpath }/resources/js/forHeader.js?after1"></script>
+            // 두 자리 숫자로 표시되도록 형식 지정
+          minutes = minutes < 10 ? '0' + minutes : minutes;
+          seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            countdownElement.innerHTML = minutes+':'+seconds;
+
+            if (time <= 0) {
+                clearInterval(countdownTimer);
+                countdownElement.innerHTML = '00:00';
+                document.getElementById('einput').disabled = false;
+            }
+
+            time--;
+        }, 1000);
+    }
+    
+    function numCheck(){
+    	const mvCode = "<c:out value='${code}'/>";
+    	console.log(mvCode);
+    	const codenum = $('#einput').val();
+    	if(mvCode != codenum){
+    		alert("인증번호가 일치하지 않습니다.");
+    	} else {
+    		window.location.href = `${hpath}/member/login.do`;
+    	}
+    }
+    
+</script>
+
+<script src="${hpath}/resources/js/forHeader.js?after1"></script>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

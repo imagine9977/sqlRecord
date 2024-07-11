@@ -16,7 +16,6 @@
 			    ADDR2,
 			    POSTCODE,
 			    BIRTH,
-			    POINT,
 			    STATUS,
 			    RESDATE
 	      FROM

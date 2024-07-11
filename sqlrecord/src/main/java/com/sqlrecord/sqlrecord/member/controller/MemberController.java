@@ -123,7 +123,7 @@ at Object.jQueryDetection"
 	    //memberService.insGenre(memberGenre);
 	    //log.info("회원이 입력한 값 : {} ", member);
 	    
-	    log.info("태그?? : {}" , tagNos.size());
+	    //log.info("태그?? : {}" , tagNos.size());
 	    for (Integer tagNo : tagNos) {
 	        MemberGenre memberGenre = new MemberGenre();
 	        memberGenre.setTagNo(tagNo);
@@ -145,13 +145,13 @@ at Object.jQueryDetection"
 	}
 	
 	
-	@ResponseBody
 	@PostMapping("emailck")
-	public Map<String, Object> infoId(@RequestParam("name") String name, 
-						 @RequestParam("email") String email,
-						 Member member,
-						 Mail mail
-						 ) throws MessagingException {
+	public ModelAndView infoId(@RequestParam("name") String name, 
+									  @RequestParam("email") String email,
+									  ModelAndView mv,
+									  Member member,
+								      Mail mail) throws MessagingException {
+										 
 		
 		//log.info("name1 : {}", name);
 		//log.info("email1 : {}", email);
@@ -190,7 +190,7 @@ at Object.jQueryDetection"
 					    "            <p>안녕하세요,</p>\n" +
 					    "            <p>귀하의 계정 인증을 위한 인증 코드입니다 <br>아래의 인증 코드를 입력해주세요:</p>\n" +
 					    "            <div class=\"auth-code\">"+code+"</div>\n" +
-					    "            <p>이 인증 코드는 30분 동안 유효합니다<br> 본 메일을 요청하지 않으셨다면, 이 메일을 무시해주세요.</p>\n" +
+					    "            <p>이 인증 코드는 2분 동안 유효합니다<br> 본 메일을 요청하지 않으셨다면, 이 메일을 무시해주세요.</p>\n" +
 					    "            <p>감사합니다.</p>\n" +
 					    "        </div>\n" +
 					    "        <div class=\"footer\">\n" +
@@ -202,20 +202,19 @@ at Object.jQueryDetection"
 		
 		MimeMessage messeage = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(messeage,false,"UTF-8");
-		Map<String, Object> result = new HashMap<>();
+		
 		
 		if(member != null) {
 			helper.setSubject("정보찾기 이메일 인증 메일 입니다."); //제목
 			helper.setText(content,true); // 내용
 			helper.setTo(member.getEmail());
 			sender.send(messeage);
-			result.put("success", true);
-	        result.put("redirectUrl", "/");
+			mv.addObject("code",code);
+			mv.setViewName("member/emailSuccess");
 		} else {
-			result.put("success", false);
-	        result.put("errorMsg", "회원이 존재하지 않습니다.");
+			mv.addObject("errorMsg", "일치하는 회원이 없습니다.").setViewName("member/infoFound");
 		}
-		return result;
+		return mv;
 	}
 	
 	
