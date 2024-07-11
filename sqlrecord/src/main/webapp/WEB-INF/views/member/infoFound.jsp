@@ -7,11 +7,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
 <link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/searchHeader.css"/>
-<script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
 <meta charset="UTF-8">
 <title>INFO FOUND</title>
 <link rel="stylesheet" href="${hpath}/resources/css/login.css">
@@ -68,7 +68,13 @@
 	            data : {name : name,
 	            		email : email},
            		success : result => {
-           			console.log(result);
+           			if (result.success) {
+                        // 성공 시 리다이렉트
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        // 실패 시 에러 메시지 표시
+                        alert(result.errorMsg);
+                    }
            		},
            		error: result => {
                     checkResult.show().css('color', 'red').text('오류가 발생했습니다.');

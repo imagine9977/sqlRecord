@@ -21,8 +21,8 @@ public class Mail {
 		// 계정 관련 설정
 		impl.setHost("smtp.gmail.com");
 		impl.setPort(587); //google
-		impl.setUsername(""); //로그인 아이디 
-		impl.setPassword("");
+		impl.setUsername("yyyjjjhhh13"); //로그인 아이디 
+		impl.setPassword("bjzjthfaisqatwmt");
 		
 		// 보안 관련 설정
 		Properties prop = new Properties();
@@ -76,7 +76,7 @@ public class Mail {
 		
 		helper.setSubject("정보찾기 이메일 인증 메일 입니다."); //제목
 		helper.setText(content,true); // 내용
-		helper.setTo("");
+		helper.setTo("yyyjjjhhh13@gmail.com");
 		
 		//helper.setTo(""); 네이버로는 html ,css 적용 안되어있는 메일 전송됨
 		sender.send(messeage);

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.Format;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.mail.MessagingException;
@@ -43,13 +45,14 @@ public class MemberController {
 	private final MemberService memberService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	/*
+	
 	@Autowired
 	private JavaMailSenderImpl sender;
 	
-	@Autowired
-	private String content;
+//	@Autowired
+//	private String content;
 	
+	/*
 	이거 때문에 css 다깨저버림 
 	오류 원인 "TypeError: Bootstrap의 JavaScript는 jQuery를 필요로 합니다. jQuery는 Bootstrap의 JavaScript보다 먼저 포함되어야 합니다.
 at Object.jQueryDetection"
@@ -81,6 +84,11 @@ at Object.jQueryDetection"
 		return mv;  
 	}
 	
+	private void alert(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@GetMapping("idCheck.do")
 	public void idCheck(@RequestParam("memberId") String memberId, HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
 		
@@ -139,11 +147,10 @@ at Object.jQueryDetection"
 	
 	@ResponseBody
 	@PostMapping("emailck")
-	public ModelAndView infoId(@RequestParam("name") String name, 
+	public Map<String, Object> infoId(@RequestParam("name") String name, 
 						 @RequestParam("email") String email,
 						 Member member,
-						 Mail mail,
-						 ModelAndView mv
+						 Mail mail
 						 ) throws MessagingException {
 		
 		//log.info("name1 : {}", name);
@@ -195,17 +202,20 @@ at Object.jQueryDetection"
 		
 		MimeMessage messeage = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(messeage,false,"UTF-8");
+		Map<String, Object> result = new HashMap<>();
 		
 		if(member != null) {
 			helper.setSubject("정보찾기 이메일 인증 메일 입니다."); //제목
 			helper.setText(content,true); // 내용
-			helper.setTo("yyyjjjhhh13@gmail.com");
+			helper.setTo(member.getEmail());
 			sender.send(messeage);
-			mv.setViewName("redirect:/");
+			result.put("success", true);
+	        result.put("redirectUrl", "/");
 		} else {
-			mv.addObject("errorMsg", "로그인 실패 했습니다.").setViewName("common/errorPage");
+			result.put("success", false);
+	        result.put("errorMsg", "회원이 존재하지 않습니다.");
 		}
-		return mv;  
+		return result;
 	}
 	
 	

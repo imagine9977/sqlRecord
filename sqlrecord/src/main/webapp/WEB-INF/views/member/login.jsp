@@ -6,11 +6,11 @@
 <c:set var="hpath" value="<%= request.getContextPath() %>"/>
 <html>
 <head>
+<script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
 <link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/searchHeader.css"/>
-<script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <title>Home</title>
 <link rel="stylesheet" href="${hpath}/resources/css/login.css">
