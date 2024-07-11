@@ -159,6 +159,7 @@ at Object.jQueryDetection"
 		member = memberService.infoId(member);
 		member.setName(name);
 		member.setEmail(email);
+		member.getMemberId();
 		//log.info("name : {}", name);
 		//log.info("email : {}", email);
 		
@@ -210,6 +211,7 @@ at Object.jQueryDetection"
 			helper.setTo(member.getEmail());
 			sender.send(messeage);
 			mv.addObject("code",code);
+			mv.addObject("memberId",member.getMemberId());
 			mv.setViewName("member/emailSuccess");
 		} else {
 			mv.addObject("errorMsg", "일치하는 회원이 없습니다.").setViewName("member/infoFound");

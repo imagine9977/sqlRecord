@@ -78,6 +78,7 @@
 	  
 	<select id="infoId" parameterType="member" resultType="member">
 		SELECT
+				MEMBER_ID memberId,
 				NAME,
 				EMAIL
 		  FROM
