@@ -13,7 +13,7 @@
 <h1>주문 조회</h1>
 
     <h2>2024/06/24</h2>
-    <br><br>
+    <br><br><br>
     <c:forEach begin="0" end="${ newOdList.size() - 1 }" var="i">
     	<h2>${ newOdList[i].member.orders_date }</h2>
     	<br>
