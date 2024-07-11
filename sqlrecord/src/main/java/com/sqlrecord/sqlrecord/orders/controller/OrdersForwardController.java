@@ -65,9 +65,9 @@ public class OrdersForwardController {
 			log.info("유저유저 : {}" , member.getEmail());
 			// 멤버 오더에 넣을 값을 객체에 담기
 			MemberOrders memberOrders = new MemberOrders();
-			memberOrders.setOrders_address(member.getAddr1());
-			memberOrders.setOrders_address2(member.getAddr2());
-			memberOrders.setOrders_postcode(member.getPostcode());
+			memberOrders.setMember_orders_address(member.getAddr1());
+			memberOrders.setMember_orders_address2(member.getAddr2());
+			memberOrders.setMember_orders_postcode(member.getPostcode());
 			memberOrders.setMember_no(member.getMemberNo());
 			
 			
@@ -84,10 +84,10 @@ public class OrdersForwardController {
 				product.setProduct_no(Integer.parseInt(product_noArr[i]));
 				ordersDetail.setProduct(product);
 				MemberOrders memberOrders1 = new MemberOrders();
-				memberOrders1.setOrders_no(successMO);
+				memberOrders1.setMember_orders_no(successMO);
 				ordersDetail.setMemberOrders(memberOrders1);
-				ordersDetail.setOrders_detail_amount(Integer.parseInt(cart_amountArr[i]));
-				ordersDetail.setOrders_detail_price(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
+				ordersDetail.setMember_orders_detail_amount(Integer.parseInt(cart_amountArr[i]));
+				ordersDetail.setMember_orders_detail_price(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
 				
 				odList.add(ordersDetail);
 			}
@@ -127,7 +127,7 @@ public class OrdersForwardController {
 		
 		// HashSet에 add
 		for(OrdersDetail item : odList) {
-			hs.add(item.getMemberOrders().getOrders_no());
+			hs.add(item.getMemberOrders().getMember_orders_no());
 		}
 		
 		// 2중 리스트를 만들기 위해서 준비
@@ -135,13 +135,13 @@ public class OrdersForwardController {
 		
 		
 		for(OrdersDetail od : odList) {
-			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getOrders_no());
+			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getMember_orders_no());
 		}
 		
 		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
 			log.info("얘는 hsItem : {}" , hsItem);
-			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getOrders_no() == hsItem) .collect(Collectors.toList());;
+			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMember_orders_no() == hsItem) .collect(Collectors.toList());;
 			newOdList.add(od);
 		}
 		

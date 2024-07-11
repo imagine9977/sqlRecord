@@ -12,9 +12,9 @@
 		VALUES
 				(
 				MEMBER_ORDERS_SEQ.NEXTVAL,
-				#{orders_address},
-				#{orders_address2},
-				#{orders_postcode},
+				#{member_orders_address},
+				#{member_orders_address2},
+				#{member_orders_postcode},
 				SYSDATE,
 				#{member_no}
 				)
@@ -43,84 +43,114 @@
 		VALUES
 				(
 				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
-				#{product_no},
-				#{orders_no},
-				#{orders_detail_amount},
-				#{orders_detail_price},
+				#{product.product_no},
+				#{memberOrders.member_orders_no},
+				#{member_orders_detail_amount},
+				#{member_orders_detail_price},
 				DEFAULT,
-				DEFAULT 
+				DEFAULT,
+				DEFAULT
 				)
 
 	</insert>
 	
 	<resultMap type="OrdersDetail" id="odRM">
-    	<id property="orders_detail_no" column="orders_detail_no"/>
-    	<result property="orders_detail_amount" column="orders_detail_amount"/>  
-	    <result property="orders_detail_price" column="orders_detail_price"/>
+    	<id property="member_orders_detail_no" column="MEMBER_orders_detail_no"/>
+    	<result property="member_orders_detail_amount" column="MEMBER_orders_detail_amount"/>  
+	    <result property="member_orders_detail_price" column="MEMBER_orders_detail_price"/>
 	    <result property="tracking_num" column="TRACKING_NUM"/>
-	    <result property="orders_detail_exchanged" column="ORDERS_DETAIL_EXCHANGED"/>
-	    <result property="orders_detail_status" column="ORDERS_DETAIL_STATUS"/>
+	    <result property="member_orders_detail_exd" column="MEMBER_ORDERS_DETAIL_EXD"/>
+	    <result property="member_orders_detail_status" column="MEMBER_ORDERS_DETAIL_STATUS"/>
 	    <association property="product" javaType="product">
 	        <result property="product_no" column="product_no"/>
 	        <result property="product_name" column="product_name"/>
 	        <result property="product_price" column="product_price"/>
 	        <result property="product_status" column="product_status"/>
 	        <result property="product_date" column="product_date"/>
-	        <result property="product_photo1" column="product_photo1"/>
-	        <result property="product_photo2" column="product_photo2"/>
-	        <result property="product_photo3" column="product_photo3"/>
 	        <result property="tag_no" column="tag_no"/>
 	        <result property="product_detail" column="product_detail"/>
 	        <result property="product_cate" column="product_cate"/>
 	        <result property="color" column="color"/>
+	        <association property="product_photos" javaType="product_photos">
+	        	<result property="photo_no" column="PHOTO_NO"/>
+			    <result property="product_no" column="PRODUCT_NO"/>
+			    <result property="photo_name" column="PHOTO_NAME"/>
+			    <result property="photo_path" column="PHOTO_PATH"/>
+	        </association>
 	    </association>
 	    <association property="memberOrders" javaType="memberOrders">
-	    	<result property="orders_no" column="ORDERS_NO"/>
-	    	<result property="member_no" column="MEMBER_NO"/>
-	        <result property="orders_address" column="ORDERS_ADDRESS"/>
-	        <result property="orders_address2" column="ORDERS_ADDRESS2"/>
-	        <result property="orders_postcode" column="ORDERS_POSTCODE"/>
-	        <result property="orders_date" column="ORDERS_DATE"/>
+	    	<result property="member_orders_no" column="MEMBER_ORDERS_NO"/>
+	        <result property="member_orders_address" column="MEMBER_ORDERS_ADDRESS"/>
+	        <result property="member_orders_address2" column="MEMBER_ORDERS_ADDRESS2"/>
+	        <result property="member_orders_postcode" column="MEMBER_ORDERS_POSTCODE"/>
+	        <result property="member_orders_date" column="MEMBER_ORDERS_DATE"/>
+	        <result property="member_no" column="MEMBER_NO"/>
 	    </association>
 	</resultMap>
 	
 	
 	<select id="getOrdersDetail" resultMap="odRM">
-	    SELECT
-		        od.ORDERS_DETAIL_NO,
+	    WITH RANKEDMOD AS (SELECT
+		        od.MEMBER_ORDERS_DETAIL_NO,
 		        p.PRODUCT_NO,
                 p.PRODUCT_NAME,
                 p.product_cate,
-                p.product_photo1,
                 p.product_price,
                 p.product_status,
                 mo.MEMBER_NO,
-                mo.orders_address,
-                mo.orders_address2,
-                mo.orders_postcode,
-                mo.ORDERS_DATE,
-		        od.ORDERS_NO,
-		        od.ORDERS_DETAIL_AMOUNT,
-		        od.ORDERS_DETAIL_PRICE,
-		        od.ORDERS_DETAIL_EXCHANGED,
+                mo.MEMBER_ORDERS_ADDRESS,
+                mo.MEMBER_ORDERS_ADDRESS2,
+                mo.MEMBER_ORDERS_POSTCODE,
+                mo.MEMBER_ORDERS_DATE,
+		        od.MEMBER_ORDERS_NO,
+		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        od.MEMBER_ORDERS_DETAIL_PRICE,
+		        od.MEMBER_ORDERS_EXD,
 		        od.TRACKING_NUM,
-		        od.ORDERS_DETAIL_STATUS orders_detail_status
+		        od.MEMBER_ORDERS_DETAIL_STATUS,
+                ps.photo_path,
+                ROW_NUMBER() OVER (PARTITION BY p.PRODUCT_NO ORDER BY od.MEMBER_ORDERS_NO DESC) AS rn
                 
 	    FROM
-	       	 	ORDERS_DETAIL od
+	       	 	MEMBER_ORDERS_DETAIL od
         JOIN
                 MEMBER_ORDERS mo
         ON
-                od.ORDERS_NO = mo.ORDERS_NO
+                od.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
         JOIN
                 PRODUCT p
         ON
-                od.product_no = p.product_no
+                od.PRODUCT_NO = p.product_no
+        LEFT JOIN
+	        PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
 	   WHERE
-                mo.MEMBER_NO = #{memberNo}
+                mo.MEMBER_NO = #{member_no})
+        SELECT
+                MEMBER_ORDERS_DETAIL_NO,
+		        PRODUCT_NO,
+                PRODUCT_NAME,
+                product_cate,
+                product_price,
+                product_status,
+                MEMBER_NO,
+                MEMBER_ORDERS_ADDRESS,
+                MEMBER_ORDERS_ADDRESS2,
+                MEMBER_ORDERS_POSTCODE,
+                MEMBER_ORDERS_DATE,
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ORDERS_DETAIL_AMOUNT,
+		        MEMBER_ORDERS_DETAIL_PRICE,
+		        MEMBER_ORDERS_EXD,
+		        TRACKING_NUM,
+		        MEMBER_ORDERS_DETAIL_STATUS,
+                photo_path
+        FROM
+                RANKEDMOD
+        WHERE
+                rn=1
         ORDER
         BY
-                mo.ORDERS_DATE
+                MEMBER_ORDERS_DATE
         DESC
 </select>
 	
