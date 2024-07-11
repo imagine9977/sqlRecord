@@ -22,4 +22,6 @@ public class Product {
 	private String product_photo3;
 	private int tag_no;
 	private String product_detail;
+	private String product_cate;
+	private String color;
 }
