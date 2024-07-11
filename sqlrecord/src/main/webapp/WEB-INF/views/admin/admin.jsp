@@ -83,9 +83,9 @@
     display: none;
     width: 100%;
 }
-.sidebar {
+.sidebar_area {
     display: block;
-    width : 13%;
+    width : 18%;
     height: auto;
     border: 1px solid black;
     padding: 10px;
@@ -93,7 +93,7 @@
 }
 .sidebar-element p {
     font-size: 17px;
-    padding: 0.5rem 0px;
+    font-weight: bold;
 }
 .sidebar a {
     color: inherit;
@@ -120,7 +120,8 @@
 </style>
 </head>
 <body>
-<%@ include file="../header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
+
 
 <!-- 상단 탭 -->
 <div class="tab-bar">
@@ -137,7 +138,7 @@
 
 <div id="tabContent" class="mainBox">
     <!-- 사이드바 -->
-    <div class="sidebar" id="sidebar"></div>
+    <div class="sidebar_area" id="sidebar"></div>
 
     <!-- 컨텐츠 영역 -->
     <div id="content-area"></div>
@@ -151,8 +152,11 @@ $(document).ready(function() {
         $('.tab-btnItem').removeClass('active');
         $('.tab-btnItem[data-tab="' + tabName + '"]').addClass('active');
 
+        // 선택된 탭 저장
+        localStorage.setItem('selectedTab', tabName);
+
         $.ajax({
-            url: '${hpath}/admin/sidebar',
+            url: '${hpath}/adminRest/sidebar',
             data: { tab: tabName },
             success: function(response) {
                 $('#sidebar').html(response);
@@ -165,7 +169,7 @@ $(document).ready(function() {
 
     function loadContent(tabName, contentType) {
         $.ajax({
-            url: '${hpath}/admin/content',
+            url: '${hpath}/adminRest/content',
             data: { tab: tabName, type: contentType },
             success: function(response) {
                 $('#content-area').html(response);
@@ -188,7 +192,13 @@ $(document).ready(function() {
         loadTab(tabName);
     });
 
-    loadTab('product');
+    // 페이지 로드 시 저장된 탭 확인
+    var savedTab = localStorage.getItem('selectedTab');
+    if (savedTab) {
+        loadTab(savedTab);
+    } else {
+        loadTab('product');
+    }
 });
 </script>
 </body>

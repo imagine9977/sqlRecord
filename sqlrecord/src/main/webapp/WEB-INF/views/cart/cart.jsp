@@ -141,7 +141,7 @@ input[class="check"]:checked + label:after {
 	      <div>${ item.product.product_name }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
 	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cart_amount}></div>
-	      
+	      <input type="text" name="member_no" value="${ item.member_no }" hidden="hidden">
 	      </c:forEach>
       </c:when>
       
@@ -156,7 +156,7 @@ input[class="check"]:checked + label:after {
 	      <div>${ item.product.product_name }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
 	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="guest_cart_amount" value=${ item.guest_cart_amount}></div>
-	      
+	      <input type="text" name="guest_no" value="${ item.guest_no }" hidden="hidden">
 	      </c:forEach>
       
       </c:otherwise>
@@ -196,6 +196,8 @@ let amountList = document.querySelectorAll(".amount input");
 let priceList = document.querySelectorAll(".price input");
 let totalInput = document.querySelector("#totalPrice");
 let totalPrice = 0;
+
+// 아무 선택도 안하면 결제 버튼은 보이지 않는다.
 function onClickCount(f) {
 	totalPrice = 0;
 	isChecked = 0;
@@ -213,7 +215,14 @@ function onClickCount(f) {
 	totalInput.value = totalPrice;
 }
 
-
+// 회원인데 장바구니가 없으면 결제 버튼 가림
+if("${sessionScope.loginUser.memberNo}" != 0 && "${ list.size()}" == 0) {
+	document.querySelector(".submitBtn").style.display = "none";
+}
+//회원인데 장바구니가 없으면 결제 버튼 가림
+if("${sessionScope.guestUser.guest_no}" != 0 && "${ glist.size()}" == 0) {
+	document.querySelector(".submitBtn").style.display = "none";
+}
 
 // 초기 계산 값 호출.
 function getTotalPrice() {

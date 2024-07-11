@@ -47,6 +47,7 @@
 	<select id="cartListSelect" parameterType="_int" resultMap="cartRM">
 	 SELECT
 			c.PRODUCT_NO,
+			c.MEMBER_NO,
 			c.CART_AMOUNT,
 			p.PRODUCT_PRICE,
 			p.PRODUCT_PHOTO1,
@@ -58,7 +59,7 @@
 		 ON
 			c.PRODUCT_NO = p.PRODUCT_NO
 	  WHERE
-			c.member_NO = #{member_no}
+			c.MEMBER_NO = #{member_no}
 	  ORDER
 		 BY
  			c.CART_NUM
@@ -70,6 +71,7 @@
 	<select id="guestCartListSelect" parameterType="_int" resultMap="guestCartRM">
 	 SELECT
 			c.PRODUCT_NO,
+			c.GUEST_NO,
 			c.GUEST_CART_AMOUNT,
 			p.PRODUCT_PRICE,
 			p.PRODUCT_PHOTO1,

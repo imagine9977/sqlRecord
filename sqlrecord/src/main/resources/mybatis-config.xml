@@ -18,6 +18,8 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="MemberGenre" />
+ 	  	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail" alias="OrdersDetail" />
  	</typeAliases>
  	
  	<mappers>
@@ -30,7 +32,7 @@
  	    
 
  	  	<mapper resource="/mappers/notice-mapper.xml" />
-
+		<mapper resource="/mappers/order-mapper.xml" />
  	</mappers>
  	
  </configuration>
