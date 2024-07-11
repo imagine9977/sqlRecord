@@ -61,9 +61,9 @@
     	<id property="orders_detail_no" column="orders_detail_no"/>
     	<result property="orders_detail_amount" column="orders_detail_amount"/>  
 	    <result property="orders_detail_price" column="orders_detail_price"/>
-	    <result property="TRACKING_NUM" column="TRACKING_NUM"/>
-	    <result property="ORDERS_EXCHANGED" column="ORDERS_EXCHANGED"/>
-	    <result property="ORDERS_DETAIL_STATUS" column="ORDERS_DETAIL_STATUS"/>
+	    <result property="tracking_num" column="TRACKING_NUM"/>
+	    <result property="orders_detail_exchanged" column="ORDERS_DETAIL_EXCHANGED"/>
+	    <result property="orders_detail_status" column="ORDERS_DETAIL_STATUS"/>
 	    <association property="product" javaType="product">
 	        <result property="product_no" column="product_no"/>
 	        <result property="product_name" column="product_name"/>
@@ -79,11 +79,12 @@
 	        <result property="color" column="color"/>
 	    </association>
 	    <association property="memberOrders" javaType="memberOrders">
-	    	<result property="MEMBER_NO" column="MEMBER_NO"/>
-	        <result property="orders_address" column="orders_address"/>
-	        <result property="orders_address2" column="orders_address2"/>
-	        <result property="orders_postcode" column="orders_postcode"/>
-	        <result property="ORDERS_DATE" column="ORDERS_DATE"/>
+	    	<result property="orders_no" column="ORDERS_NO"/>
+	    	<result property="member_no" column="MEMBER_NO"/>
+	        <result property="orders_address" column="ORDERS_ADDRESS"/>
+	        <result property="orders_address2" column="ORDERS_ADDRESS2"/>
+	        <result property="orders_postcode" column="ORDERS_POSTCODE"/>
+	        <result property="orders_date" column="ORDERS_DATE"/>
 	    </association>
 	</resultMap>
 	
@@ -97,17 +98,18 @@
                 p.product_photo1,
                 p.product_price,
                 p.product_status,
-		        od.ORDERS_NO,
-		        od.ORDERS_DETAIL_AMOUNT,
-		        od.ORDERS_DETAIL_PRICE,
-		        od.ORDERS_EXCHANGED,
-		        od.TRACKING_NUM,
-		        od.ORDERS_DETAIL_STATUS,
                 mo.MEMBER_NO,
                 mo.orders_address,
                 mo.orders_address2,
                 mo.orders_postcode,
-                mo.ORDERS_DATE
+                mo.ORDERS_DATE,
+		        od.ORDERS_NO,
+		        od.ORDERS_DETAIL_AMOUNT,
+		        od.ORDERS_DETAIL_PRICE,
+		        od.ORDERS_DETAIL_EXCHANGED,
+		        od.TRACKING_NUM,
+		        od.ORDERS_DETAIL_STATUS orders_detail_status
+                
 	    FROM
 	       	 	ORDERS_DETAIL od
         JOIN

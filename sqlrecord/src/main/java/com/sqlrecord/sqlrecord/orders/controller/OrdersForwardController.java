@@ -3,7 +3,9 @@ package com.sqlrecord.sqlrecord.orders.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -121,7 +123,7 @@ public class OrdersForwardController {
 		List<OrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
 		
 		// set에 OrderDetail의 Orders_no의 값을 넣어서 중복되지 않는 HashSet을 만듬 
-		HashSet<Integer> hs = new HashSet<Integer>();
+		Set<Integer> hs = new LinkedHashSet<Integer>();
 		
 		// HashSet에 add
 		for(OrdersDetail item : odList) {
@@ -131,18 +133,26 @@ public class OrdersForwardController {
 		// 2중 리스트를 만들기 위해서 준비
 		List<List<OrdersDetail>> newOdList = new ArrayList<List<OrdersDetail>>();
 		
+		
+		for(OrdersDetail od : odList) {
+			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getOrders_no());
+		}
+		
 		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
+			log.info("얘는 hsItem : {}" , hsItem);
 			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getOrders_no() == hsItem) .collect(Collectors.toList());;
 			newOdList.add(od);
 		}
 		
-		log.info("오디? : {} , {}" , newOdList.get(0).size() , newOdList.get(1).size());
+		log.info("오디? : {} , {}" , newOdList.get(0).size());
 		
 		
 		
 		model.addAttribute("newOdList",newOdList);
-		log.info("이게 오디 : {}" , odList.get(0).toString());
+		log.info("이게 오디 개수 : {}" , odList.size());
+		log.info("이게 뉴오디 개수 : {}" , newOdList.size());
+		log.info("이게 뉴오디 : {}" , newOdList.get(0).get(0).getProduct().getProduct_name());
 		
 		
 		return "orders/detail";
