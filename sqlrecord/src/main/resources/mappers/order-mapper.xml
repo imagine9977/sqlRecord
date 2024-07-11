@@ -22,39 +22,35 @@
 
 	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
 		SELECT
-				Max(ORDERS_NO)
+				Max(MEMBER_ORDERS_NO)
 		FROM
 				MEMBER_ORDERS
 		WHERE
 				MEMBER_NO = #{member_no}
 		ORDER
 		BY
-				ORDERS_NO
+				MEMBER_ORDERS_NO
 		DESC
 				
 	</select>
 	
 	
 	<insert id="insertOrdersDetail" parameterType="OrdersDetail">
-		INSERT INTO ORDERS_DETAIL (
-        ORDERS_DETAIL_NO,
-        PRODUCT_NO,
-        ORDERS_NO,
-        ORDERS_DETAIL_AMOUNT,
-        ORDERS_DETAIL_PRICE,
-        orders_detail_exchanged,
-        TRACKING_NUM,
-        ORDERS_DETAIL_STATUS
-    ) VALUES (
-        ORDERS_DETAIL_SEQ.NEXTVAL,
-        #{product.product_no},
-        #{memberOrders.orders_no},
-        #{orders_detail_amount},
-        #{orders_detail_price},
-        DEFAULT,
-        DEFAULT,
-        DEFAULT
-    )
+
+		INSERT
+		INTO
+				MEMBER_ORDERS_DETAIL
+		VALUES
+				(
+				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
+				#{product_no},
+				#{orders_no},
+				#{orders_detail_amount},
+				#{orders_detail_price},
+				DEFAULT,
+				DEFAULT 
+				)
+
 	</insert>
 	
 	<resultMap type="OrdersDetail" id="odRM">

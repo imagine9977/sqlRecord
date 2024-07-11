@@ -62,7 +62,7 @@ public class OrdersForwardController {
 			Member member =  (Member) session.getAttribute("loginUser");
 			
 			
-			log.info("{}" , member);
+			log.info("유저유저 : {}" , member.getEmail());
 			// 멤버 오더에 넣을 값을 객체에 담기
 			MemberOrders memberOrders = new MemberOrders();
 			memberOrders.setOrders_address(member.getAddr1());

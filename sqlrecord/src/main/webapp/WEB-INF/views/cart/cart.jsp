@@ -136,12 +136,12 @@ input[class="check"]:checked + label:after {
 	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.product_no }">
 	      <label for="check${status.count }"></label>
 	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.product_photo1 }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+	        <img src="${item.product.product_photos.photo_path }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 	      </div>
 	      <div>${ item.product.product_name }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
 	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cart_amount}></div>
-	      <input type="text" name="member_no" value="${ item.member_no }" hidden="hidden">
+	      <input type="text" name="member_no" value="${ item.member.member_no }" hidden="hidden">
 	      </c:forEach>
       </c:when>
       
@@ -151,7 +151,7 @@ input[class="check"]:checked + label:after {
 	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.product_no }">
 	      <label for="check${status.count }"></label>
 	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.product_photo1 }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+	        <img src="${item.product.product_photos.photo_path }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 	      </div>
 	      <div>${ item.product.product_name }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
