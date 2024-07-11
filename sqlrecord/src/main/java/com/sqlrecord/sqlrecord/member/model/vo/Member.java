@@ -28,5 +28,4 @@ public class Member {
     private char status;
     private Date resDate;
     
-    private List<MemberGenre> memberGenre;
 }

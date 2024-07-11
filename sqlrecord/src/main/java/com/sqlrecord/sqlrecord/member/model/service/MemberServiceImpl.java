@@ -34,4 +34,9 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.insGenre(memberGenre);
 	}
 
+	@Override
+	public Member infoId(Member member) {
+		return memberMapper.infoId(member);
+	}
+
 }

@@ -6,23 +6,14 @@
         });
 
 
-        //팝업창
-        $(document).ready(function(){
-            $(".infopop").click(function(event){
-                event.preventDefault();
-                $(".tab_content").addClass("active");
-            });
-            
-            $(".pop_clo").click(function(event){
-                event.preventDefault();
-                $(".tab_content").removeClass("active");
-            });
-
-        });
 
         //회원가입
         
         function joinCheck(f){
+	        if(f.agree.checked!=true){
+                alert("약관 및 개인정보처리 방침에 동의하지 않으셨습니다.");
+                return false;
+            }
             if(f.memberPw.value!=f.memberPw2.value){
                 alert("비밀번호와 비밀번호 확인이 서로 다릅니다.");
                 f.memberPw.focus();
@@ -42,7 +33,7 @@
                     console.log(data);
                     var roadAddr = data.roadAddress;
                     var jibunAddr = data.jibunAddress;
-                    document.getElementById("postNum").value = data.zonecode;
+                    document.getElementById("postcode").value = data.zonecode;
                     if(roadAddr !== '') {
                         document.getElementById("addr1").value = roadAddr;
                     } else if(jibunAddr !== ''){
