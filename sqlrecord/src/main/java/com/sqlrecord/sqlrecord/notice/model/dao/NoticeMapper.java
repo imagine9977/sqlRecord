@@ -22,4 +22,6 @@ public interface NoticeMapper {
 	int saveFile(NFile file);
 	Integer getNoticeNo();
 	int deleteFiles(int noticeNo);
+	int updateFile(NFile file);
+	int deleteFileByPosition(int noticeNo, int i);
 }

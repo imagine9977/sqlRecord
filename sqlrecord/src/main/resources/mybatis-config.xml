@@ -15,6 +15,9 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product" alias="product"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product_photos" alias="product_photos"/>
 	
+
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/>
+
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="MemberGenre" />
