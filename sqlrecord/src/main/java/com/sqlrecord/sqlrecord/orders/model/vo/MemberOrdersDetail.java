@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class OrdersDetail {
+public class MemberOrdersDetail {
 	
            
 

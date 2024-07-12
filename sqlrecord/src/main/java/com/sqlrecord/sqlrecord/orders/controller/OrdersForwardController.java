@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import com.sqlrecord.sqlrecord.cart.model.vo.GuestCart;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
-import com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
@@ -72,14 +73,14 @@ public class OrdersForwardController {
 			
 			
 			// 멤버 오더 디테일에 넣을 값을 객체에 담기
-			List<OrdersDetail> odList = new ArrayList<OrdersDetail>();
+			List<MemberOrdersDetail> odList = new ArrayList<MemberOrdersDetail>();
 			
 			// Member_Orders에 생성된 넘버를 가져옴 detail에 넣기 위해서
 			int successMO = ordersService.insertMemberOrders(memberOrders, member.getMemberNo());
 			
 			// name이 같은 값이 하나가 아니기 때문에 Array로 담아서 하나씩 List에 넣어줌
 			for(int i = 0; i < cart_amountArr.length; i++) {
-				OrdersDetail ordersDetail = new OrdersDetail();
+				MemberOrdersDetail ordersDetail = new MemberOrdersDetail();
 				Product product = new Product();
 				product.setProductNo(Integer.parseInt(product_noArr[i]));
 				ordersDetail.setProduct(product);
@@ -127,28 +128,28 @@ public class OrdersForwardController {
 		
 		
 		// 유저의 OrderDetail을 리스트로 담기
-		List<OrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
+		List<MemberOrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
 		
 		// set에 OrderDetail의 Orders_no의 값을 넣어서 중복되지 않는 HashSet을 만듬 
 		Set<Integer> hs = new LinkedHashSet<Integer>();
 		
 		// HashSet에 add
-		for(OrdersDetail item : odList) {
+		for(MemberOrdersDetail item : odList) {
 			hs.add(item.getMemberOrders().getMemberOrdersNo());
 		}
 		
 		// 2중 리스트를 만들기 위해서 준비
-		List<List<OrdersDetail>> newOdList = new ArrayList<List<OrdersDetail>>();
+		List<List<MemberOrdersDetail>> newOdList = new ArrayList<List<MemberOrdersDetail>>();
 		
 		
-		for(OrdersDetail od : odList) {
+		for(MemberOrdersDetail od : odList) {
 			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getMemberOrdersNo());
 		}
 		
 		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
 			log.info("얘는 hsItem : {}" , hsItem);
-			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem) .collect(Collectors.toList());;
+			List<MemberOrdersDetail> od = (List<MemberOrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem) .collect(Collectors.toList());;
 			newOdList.add(od);
 		}
 		
@@ -166,13 +167,28 @@ public class OrdersForwardController {
 		return "orders/detail";
 	}
 	
+	
+	@GetMapping("/insert/{memberOrdersDetailNo}")
+	public String exInsertPage(@PathVariable int memberOrdersDetailNo) {
+		
+		
+		log.info("멤버 상세 번호 : {}" , memberOrdersDetailNo);
+		
+		return "orders/insert";
+	}
+	
+	
 	@GetMapping("/exchange")
 	public String memberExchangePage() {
+		
+		
+		
+		
+		
+		
+		
 		return "orders/exchange";
 	}
 	
-	@GetMapping("/insert")
-	public String memberInsertPage() {
-		return "orders/insert";
-	}
+	
 }

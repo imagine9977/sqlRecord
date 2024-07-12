@@ -35,7 +35,7 @@
 	</select>
 	
 	
-	<insert id="insertOrdersDetail" parameterType="OrdersDetail">
+	<insert id="insertOrdersDetail" parameterType="MemberOrdersDetail">
 
 		INSERT
 		INTO
@@ -54,7 +54,7 @@
 
 	</insert>
 	
-	<resultMap type="OrdersDetail" id="odRM">
+	<resultMap type="MemberOrdersDetail" id="odRM">
     	<id property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
     	<result property="memberOrdersDetailAmount" column="MEMBER_orders_detail_amount"/>  
 	    <result property="memberOrdersDetailPrice" column="MEMBER_orders_detail_price"/>

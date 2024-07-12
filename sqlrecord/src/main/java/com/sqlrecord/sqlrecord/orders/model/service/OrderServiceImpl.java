@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
-import com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,10 +30,10 @@ public class OrderServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public int insertOrdersDetail(List<OrdersDetail> odList) {
+	public int insertOrdersDetail(List<MemberOrdersDetail> odList) {
 		
 		int success = 0;
-		for(OrdersDetail item : odList) {
+		for(MemberOrdersDetail item : odList) {
 			ordersMapper.insertOrdersDetail(item);
 			success += 1;
 		}
@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public List<OrdersDetail> getOrdersDetail(int memberNo) {
+	public List<MemberOrdersDetail> getOrdersDetail(int memberNo) {
 		return ordersMapper.getOrdersDetail(memberNo);
 	}
 	

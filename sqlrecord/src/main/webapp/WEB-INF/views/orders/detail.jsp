@@ -47,7 +47,7 @@
 		            		<td><button class="btn btn-danger">주문취소</button></td>
 		            	</c:when>
 		            	<c:when test="${item.memberOrdersDetailStatus eq '배송완료' }">
-		            		<td><button class="btn btn-warning">교환</button></td>
+		            		<td><button class="btn btn-warning"><a href="${hpath}/orders/insert/${ item.memberOrdersDetailNo}" >교환/환불</a></button></td>
 		            	</c:when>
 		            	<c:otherwise></c:otherwise>
 		            

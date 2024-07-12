@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
-import com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 
 @Mapper
 public interface OrdersMapper {
@@ -14,8 +14,8 @@ public interface OrdersMapper {
 
 	int selectOneMemberOrdersNo(int memberNo);
 
-	int insertOrdersDetail(OrdersDetail item);
+	int insertOrdersDetail(MemberOrdersDetail item);
 
-	List<OrdersDetail> getOrdersDetail(int memberNo);
+	List<MemberOrdersDetail> getOrdersDetail(int memberNo);
 
 }
