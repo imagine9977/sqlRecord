@@ -62,20 +62,20 @@
 	    <result property="member_orders_detail_exd" column="MEMBER_ORDERS_DETAIL_EXD"/>
 	    <result property="member_orders_detail_status" column="MEMBER_ORDERS_DETAIL_STATUS"/>
 	    <association property="product" javaType="product">
-	        <result property="product_no" column="product_no"/>
-	        <result property="product_name" column="product_name"/>
-	        <result property="product_price" column="product_price"/>
-	        <result property="product_status" column="product_status"/>
-	        <result property="product_date" column="product_date"/>
-	        <result property="tag_no" column="tag_no"/>
-	        <result property="product_detail" column="product_detail"/>
-	        <result property="product_cate" column="product_cate"/>
+	        <result property="productNo" column="product_no"/>
+	        <result property="productName" column="product_name"/>
+	        <result property="productPrice" column="product_price"/>
+	        <result property="productStatus" column="product_status"/>
+	        <result property="productDate" column="product_date"/>
+	        <result property="tagNo" column="tag_no"/>
+	        <result property="productDetail" column="product_detail"/>
+	        <result property="productCate" column="product_cate"/>
 	        <result property="color" column="color"/>
-	        <association property="product_photos" javaType="product_photos">
-	        	<result property="photo_no" column="PHOTO_NO"/>
-			    <result property="product_no" column="PRODUCT_NO"/>
-			    <result property="photo_name" column="PHOTO_NAME"/>
-			    <result property="photo_path" column="PHOTO_PATH"/>
+	        <association property="productPhotos" javaType="productPhotos">
+	        	<result property="photoNo" column="PHOTO_NO"/>
+			    <result property="productNo" column="PRODUCT_NO"/>
+			    <result property="photoName" column="PHOTO_NAME"/>
+			    <result property="photoPath" column="PHOTO_PATH"/>
 	        </association>
 	    </association>
 	    <association property="memberOrders" javaType="memberOrders">
@@ -176,14 +176,14 @@
                 PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
         )
         SELECT
-		        PRODUCT_NO,
-		        PRODUCT_NAME,
-                PRODUCT_CATE,
-		        PRODUCT_PRICE,
-		        PRODUCT_STATUS,
-		        PRODUCT_DATE,
-		        TAG_NO,
-                PHOTO_PATH
+		        PRODUCT_NO productNo,
+		        PRODUCT_NAME productName,
+                PRODUCT_CATE prodcutCate,
+		        PRODUCT_PRICE productPrice,
+		        PRODUCT_STATUS productStatus,
+		        PRODUCT_DATE productDate,
+		        TAG_NO tagNo,
+                PHOTO_PATH photoPath
 	    FROM
 	        	RANKEPRO
         ORDER
