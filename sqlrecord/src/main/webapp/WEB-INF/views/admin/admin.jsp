@@ -132,7 +132,7 @@
         <li class="tab-btnItem" data-tab="review"><a href="#">리뷰</a></li>
         <li class="tab-btnItem" data-tab="analytics"><a href="#">통계·분석</a></li>
         <li class="tab-btnItem" data-tab="notice"><a href="#">공지사항</a></li>
-        <li class="tab-btnItem" data-tab="qna"><a href="#">고객지원</a></li>
+        <li class="tab-btnItem" data-tab="qna↗"><a href="{hpath}/qna/qna">고객지원</a></li>
     </ul>
 </div>
 
