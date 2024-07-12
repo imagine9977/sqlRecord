@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sqlrecord.sqlrecord.message.Message;
@@ -187,8 +187,8 @@ public class NoticeController {
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<Message> update(@RequestBody Notice notice, @RequestParam("upfile") MultipartFile[] upfiles,
-			HttpSession session) {
+	public ResponseEntity<Message>update(@RequestPart("notice") Notice notice, @RequestPart("updatefile") MultipartFile[] upfiles,
+            HttpSession session) {
 		log.info("start");
 		List<NFile> nfiles = new ArrayList<>();
 		for (MultipartFile reupfile : upfiles) {
