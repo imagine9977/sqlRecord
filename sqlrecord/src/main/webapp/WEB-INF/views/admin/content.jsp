@@ -248,7 +248,7 @@
         <h2>공지사항 목록</h2>
         <table class="dataTable" id="selectAllNotices">
             <tr>
-                <th><input type="checkbox" id="selectAllNotices"></th>
+                <th><input type="checkbox" class="selectAllNotices"></th>
                 <th>No.</th>
                 <th>분류</th>
                 <th>제목</th>
