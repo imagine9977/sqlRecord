@@ -1,74 +1,52 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    .expandable-row {
-        cursor: pointer;
-    }
-    .details-row {
-        display: none;
-        background-color: #f9f9f9;
-    }
-    .details-cell {
-        padding: 10px;
-    }
-    .action-button {
-        padding: 5px 10px;
-        margin: 2px;
-        cursor: pointer;
-    }
-</style>
-
 <c:choose>
-    <c:when test="${tab eq 'product' and type eq 'all'}">
-        <h2>전체 상품 목록</h2>
-        <table class="dataTable" id="selectAllProduct">
-            <tr>
-                <th><input type="checkbox" id="selectAllProducts"></th>
-                <th>No.</th>
-                <th>상품 정보</th>
-                <th>작업</th>
-            </tr>
-            <c:forEach var="product" items="${productList}">
-                <tr class="data-row">
-                    <td><input type="checkbox" name="productCheck" value="${product.productNo}"></td>
-                    <td>${product.productNo}</td>
-                    <td class="data-details-row">
-                        <img src="${hpath}/resources/${product.productPhoto1}" alt="${product.productName}" />
-                        <p>${product.productCate} - No.${product.productNo}</p>
-                        <p><b>${product.productName}</b></p>
-                        <p><b>가격 : ${product.productPrice}원</b></p>
-                        <p>상품 등록일 : ${product.productDate}</p>
-                    </td>
-                    <td>
-                        <button class="action-button" onclick="editProduct(${product.productNo})">수정</button>
-                        <button class="action-button" onclick="deleteProduct(${product.productNo})">삭제</button>
-                    </td>
+    <c:when test="${tab eq 'product'}">
+    <h2>전체 상품 목록</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered" id="product-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
+                    <th>No.</th>
+                    <th>상품정보</th>
+                    <th>작업</th>
                 </tr>
-            </c:forEach>
+            </thead>
+            <tbody>
+                <c:forEach var="product" items="${productList}">
+                    <tr class="data-row">
+                        <td><input type="checkbox" name="productCheck" value="${product.productNo}"></td>
+                        <td>${product.productNo}</td>
+                        <td class="data-details-row">
+                            <img src="${hpath}/resources/${product.productPhoto1}" alt="${product.productName}" style="width:100px; height:100px;" />
+                            <p>${product.productCate} - No.${product.productNo}</p>
+                            <p><b>${product.productName}</b></p>
+                            <p><b>가격 : ${product.productPrice}원</b></p>
+                            <p>상품 등록일 : ${product.productDate}</p>
+                            <p>상품 상태 : ${product.productStatus}</p>	<!-- Y:판매가능/N:판매종료상품 -->
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" id="product-edit-btn" onclick="editProduct(${product.productNo})" type="button">수정</button>
+                            <button class="btn btn-sm btn-secondary" id="product-delete-btn" onclick="deleteProduct(${product.productNo})" type="button">삭제</button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
         </table>
         <button class="action-button" onclick="insertProduct()">상품추가</button>
         <button class="action-button" onclick="deleteProduct(${product.productNo})">선택상품삭제</button>
+    </div>
     </c:when>
 
     <c:when test="${tab eq 'order'}">
-        <div id="order-all" class="content-section">
-            <h2>전체 주문 내역</h2>
-            <table id="accordionTable">
+    <h2>전체 주문 내역</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered" id="orders-table">
+            <thead>
                 <tr>
-                    <th><input type="checkbox" id="selectAllOrders"></th>
+                    <th><input type="checkbox" id="selectAll"></th>
                     <th>No.</th>
                     <th>주문자</th>
                     <th>주문 상품</th>
@@ -76,11 +54,13 @@
                     <th>결제 가격</th>
                     <th>작업</th>
                 </tr>
+            </thead>
+            <tbody>
                 <c:forEach var="orders" items="${memberOrdersList}">
-                    <tr class="expandable-row">
+                    <tr class="data-row">
                         <td><input type="checkbox" name="orderCheck" value="${orders.ordersNo}"></td>
                         <td>${orders.ordersNo}</td>
-                        <td>${orders.member.memberId}</td>
+                        <td>${orders.member.name} (${orders.member.memberId})</td>
                         <td>
                             <c:choose>
                                 <c:when test="${orders.orderDetails.size() > 1}">
@@ -94,23 +74,35 @@
                         <td>${orders.ordersDate}</td>
                         <td>${orders_detail.ordersDetailPrice.totalPrice()}</td>
                         <td>
-                            <button class="action-button" onclick="viewOrderDetails(${orders.ordersNo})">상세보기</button>
+                            <button class="btn btn-sm btn-secondary" id="orders-ok-btn" type="button">수락</button>
+                            <button class="btn btn-sm btn-secondary" id="orders-notok-btn" type="button">배송불가</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="viewOrderDetails(${orders.ordersNo})" type="button" data-bs-toggle="collapse" data-bs-target="#detailsCollapse" aria-expanded="false" aria-controls="detailsCollapse">
+                                상세보기
+                            </button>
                         </td>
                     </tr>
-                    <c:forEach var="ordersDetail" items="${orders.orderDetails}">
-                        <tr class="details-row">
-                            <td colspan="7" class="details-cell">
-                                <img src="${hpath}/resources/${ordersDetail.product.productPhoto1}" alt="${ordersDetail.product.productName}" />
-                                <p>주문상세번호 : ${ordersDetail.ordersDetailNo}</p>
-                                <p>${ordersDetail.product.productCate} - No.${ordersDetail.product.productNo}</p>
-                                <p><b>${ordersDetail.product.productName}</b></p>
-                                <p>주문 수량 : ${ordersDetail.ordersDetailAmount}개</p>
-                            </td>
-                        </tr>
-                    </c:forEach>
+
+                    <div class="collapse mt-3" id="detailsCollapse">
+                        <div class="card card-body bg-light">
+                            <c:forEach var="ordersDetail" items="${orders.orderDetails}">
+                                <tr class="details-row">
+                                    <td colspan="7" class="details-cell">
+                                        <img src="${hpath}/resources/${ordersDetail.product.productPhoto1}" alt="${ordersDetail.product.productName}" />
+                                        <p>주문상세번호 : ${ordersDetail.ordersDetailNo}</p>
+                                        <p>${ordersDetail.product.productCate} - No.${ordersDetail.product.productNo}</p>
+                                        <p><b>${ordersDetail.product.productName}</b></p>
+                                        <p>주문 수량 : ${ordersDetail.ordersDetailAmount}개</p>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </div>
+                    </div>
                 </c:forEach>
-            </table>
-        </div>
+            </tbody>
+        </table>
+    </div>
 
         <div id="order-exchange" class="content-section" style="display: none;">
             <h2>교환 요청 정보</h2>
@@ -256,7 +248,7 @@
         <h2>공지사항 목록</h2>
         <table class="dataTable" id="selectAllNotices">
             <tr>
-                <th><input type="checkbox" id="selectAllNotices"></th>
+                <th><input type="checkbox" class="selectAllNotices"></th>
                 <th>No.</th>
                 <th>분류</th>
                 <th>제목</th>
@@ -312,6 +304,7 @@
         </table>
     </c:when>
 </c:choose>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 // 전체 선택 체크박스 기능
