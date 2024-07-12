@@ -126,6 +126,7 @@
             margin-top: 120px;
             text-align: center;
         }    
+        
     </style>
 </head>
 <body>
@@ -150,9 +151,9 @@
 
 
 	<div id="successPw">
-        <h3 id="idVeiw">회원님의 변경된 비밀번호는 <br><strong style="color: rgb(12, 113, 153);">"dfdf"</strong> 입니다. <br><br><br>개인정보 보안을 위하여
+        <h3 id="pwVeiw">회원님의 변경된 비밀번호는 <br><strong style="color: rgb(12, 113, 153);">"<c:out value='${memberPw}'/>"</strong> 입니다. <br><br><br>개인정보 보안을 위하여
         <br>비밀번호를 변경하여<br>이용해주시기 바랍니다.</h3>
-        <button id="loginGo"><a href="${hpath}/member/login.do">로그인 하러 가기</a></button>
+        <button id="loginGo"><a href="${hpath}/member/login.do">로그인</a></button>
     </div>
 <script>
     window.onload = function() {
@@ -187,7 +188,7 @@
     		alert("인증번호가 일치하지 않습니다.");
     	} else {
 			$('.tab_content').css('display','none');
-			$('#successId').css('display','block');
+			$('#successPw').css('display','block');
     	}
     }
     

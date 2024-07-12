@@ -35,7 +35,7 @@
         <label class="rala2" for="tab2">비밀번호</label>
 		
         <div class="conbox con1">
-		<form action="${hpath }/member/emailck" method="post">
+		<form action="${hpath }/member/emailckId" method="post">
             <label for="idf">이름 </label>
             <input type="text" name="name" id="name" required><br>
             <label for="idf">이메일 </label>
@@ -44,14 +44,14 @@
         </form>
         </div>
         <div class="conbox con2">
-        <form action="${hpath }/member/emailck" method="post">
+        <form action="${hpath }/member/emailckPw" method="post">
             <label for="idf">이름 </label>
             <input type="text" name="name" id="name1" required><br>
             <label for="idf">아이디 </label>
             <input type="text" name="memberId" id="pwf2" required>
             <label for="idf">이메일 </label>
             <input type="text" name="email" id="email1" required>
-            <button type="button" id="fnext1" onclick="emailchek1()">NEXT</button>
+            <button type="submit" id="fnext1">NEXT</button>
         </form>
         </div>
     </div>
