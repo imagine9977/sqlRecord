@@ -19,5 +19,6 @@ public interface MemberMapper {
 	 * 그냥 Member infoId(Member member); 멤버 객체로 이름 이메일만 조회를 해와서 이용하는게 편하네
 	 */
 	Member infoId(Member member);
+	int pwChange(Member member);
 	
 }

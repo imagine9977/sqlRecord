@@ -78,14 +78,30 @@
 	  
 	<select id="infoId" parameterType="member" resultType="member">
 		SELECT
+				MEMBER_ID memberId,
+				MEMBER_PW memberPw,
 				NAME,
 				EMAIL
 		  FROM
 		  		MEMBER
 	  	 WHERE
+	  	 		MEMBER_ID = #{memberId}
+		   AND		  	 
 	  	 		NAME = #{name}
   	 	   AND	
 	  	 		EMAIL = #{email} 
 	</select>
 	
+	<update id="pwChange" parameterType="member">
+		UPDATE
+				MEMBER
+		   SET
+		   		MEMBER_PW = #{memberPw}
+	   	 WHERE
+	   	 		MEMBER_ID = #{memberId}
+		   AND
+		        NAME = #{name}
+		   AND
+		        EMAIL = #{email}
+	</update>
 </mapper>

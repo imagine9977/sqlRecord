@@ -10,5 +10,6 @@ public interface MemberService {
 	int insMember(Member member);
 	int insGenre(MemberGenre memberGenre);
 	Member infoId(Member member);
+	int pwChange(Member member);
 
 }

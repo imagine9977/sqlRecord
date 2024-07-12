@@ -89,7 +89,7 @@
         }
         
         
-        #successId {
+        #successPw {
             margin: auto;
             margin-top: 200px;
             margin-bottom: 200px;
@@ -109,7 +109,7 @@
         #loginGo  {
             cursor: pointer;
             width: 120px; height: 30px;
-            margin-left: 100px;
+            margin-left: 160px;
             margin-top: 20px;
             background-color: #2f4f4f;
             color: white;
@@ -122,30 +122,11 @@
                 background-color: #294242;
             }
             
-        #idVeiw {
+        #pwVeiw {
             margin-top: 120px;
             text-align: center;
-        }
-        
-        #findPw {
-            cursor: pointer;
-            width: 120px; height: 30px;
-            margin-left: 10px;
-            margin-top: 20px;
-            background-color: #2f4f4f;
-            color: white;
-            border: 1px solid rgba(252, 248, 248, 0.4);
-            border-radius: .3em;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 10px 10px rgba(255,255,255,0.1);
-        }
-
-        #findPw:hover {
-                background-color: #294242;
-            }
-        
-        .btnbox {
-            display: flex;
         }    
+        
     </style>
 </head>
 <body>
@@ -168,15 +149,12 @@
 	    </div>
 	</div>
 
-	<div id="successId">
-        <h3 id="idVeiw">회원님이 사용중이신 아이디는<br><strong style="color: rgb(12, 113, 153);">"<c:out value='${memberId}'/>"</strong> 입니다.</h3>
-        <div class="btnbox">
-            <button id="loginGo"><a href="${hpath}/member/login.do">로그인</a></button>
-            <button id="findPw"><a href="${hpath}/member/findIdPw">비밀번호 찾기</a></button>
-        </div>
-    </div>
 
-	
+	<div id="successPw">
+        <h3 id="pwVeiw">회원님의 변경된 비밀번호는 <br><strong style="color: rgb(12, 113, 153);">"<c:out value='${memberPw}'/>"</strong> 입니다. <br><br><br>개인정보 보안을 위하여
+        <br>비밀번호를 변경하여<br>이용해주시기 바랍니다.</h3>
+        <button id="loginGo"><a href="${hpath}/member/login.do">로그인</a></button>
+    </div>
 <script>
     window.onload = function() {
         let time = 2 * 60; // 2분을 초로 환산
@@ -210,7 +188,7 @@
     		alert("인증번호가 일치하지 않습니다.");
     	} else {
 			$('.tab_content').css('display','none');
-			$('#successId').css('display','block');
+			$('#successPw').css('display','block');
     	}
     }
     
