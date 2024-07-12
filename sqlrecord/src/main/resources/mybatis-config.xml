@@ -13,7 +13,7 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.Cart" alias="cart"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.GuestCart" alias="guestCart"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product" alias="product"/>
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product_photos" alias="product_photos"/>
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.ProductPhotos" alias="productPhotos"/>
 	
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/>
