@@ -43,7 +43,7 @@
 	        <h4>주문 관리</h4>
 	        <div class="sidebar-element"><p><a href="#" data-content="all">주문 내역</a></p></div>
 	        <hr/>
-	        <div class="sidebar-element"><p><a href="#" data-content="turntables">교환 요청</a></p></div>
+	        <div class="sidebar-element"><p><a href="#" data-content="exchange">교환 요청</a></p></div>
 	        <hr/>
 	        <div class="sidebar-element"><p><a href="#" data-content="refund">환불 요청</a></p></div>
 	        <hr/>
