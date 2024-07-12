@@ -12,10 +12,9 @@
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 <h1>주문 조회</h1>
 
-    <h2>2024/06/24</h2>
     <br><br><br>
     <c:forEach begin="0" end="${ newOdList.size() - 1 }" var="i">
-    	<h2>${ newOdList[i].member.orders_date }</h2>
+    	<h2>${ newOdList[i][0].memberOrders.member_orders_date }</h2>
     	<br>
     	<table class="table">
     		<thead>
@@ -34,11 +33,25 @@
     				
     			  <tr>
 		            <th scope="row">${ status2.count }</th>
-		            <td>${item.product.product_photo1}</td>
+		            <td>${item.product.product_photos.photo_path}</td>
 		            <td>${item.product.product_name }</td>
-		            <td>${item.orders_detail_amount }</td>
-		            <td>${item.orders_detail_status }</td>
-		            <td><button class="btn btn-secondary">교환</button></td>
+		            <td>${item.member_orders_detail_amount }</td>
+		            <td>${item.member_orders_detail_status }</td>
+		            
+		            <c:choose>
+		            	<c:when test="${item.member_orders_detail_status eq '승인대기' }">
+		            		
+		            	</c:when>
+		            	<c:when test="${item.member_orders_detail_status eq '승인대기' }">
+		            		
+		            	</c:when>
+		            	<c:otherwise></c:otherwise>
+		            
+		            
+		            </c:choose>
+		            <td><button class="btn btn-warning">교환</button></td>
+		            
+		            
 		            <td><button class="btn btn-secondary">배송 현황 확인</button></td>
 		          </tr>
     				
@@ -49,7 +62,7 @@
     			</tbody>
       		</table>
     </c:forEach>
-    
+    <br><br><br>
 
     
       

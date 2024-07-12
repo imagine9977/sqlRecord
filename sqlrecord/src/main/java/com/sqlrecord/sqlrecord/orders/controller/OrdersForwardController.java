@@ -81,7 +81,7 @@ public class OrdersForwardController {
 			for(int i = 0; i < cart_amountArr.length; i++) {
 				OrdersDetail ordersDetail = new OrdersDetail();
 				Product product = new Product();
-				product.setProduct_no(Integer.parseInt(product_noArr[i]));
+				product.setProductNo(Integer.parseInt(product_noArr[i]));
 				ordersDetail.setProduct(product);
 				MemberOrders memberOrders1 = new MemberOrders();
 				memberOrders1.setMember_orders_no(successMO);
@@ -117,7 +117,14 @@ public class OrdersForwardController {
 	public String memberDetail(HttpServletRequest request , Model model) {
 		
 		HttpSession session = request.getSession();
+		
+		
+		
 		Member member =  (Member) session.getAttribute("loginUser");
+		if("".equals(member.getName())) {
+			return "redirect:/sqlrecord/member/login.do";
+		}
+		
 		
 		// 유저의 OrderDetail을 리스트로 담기
 		List<OrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
@@ -150,9 +157,10 @@ public class OrdersForwardController {
 		
 		
 		model.addAttribute("newOdList",newOdList);
+		log.info("이게 오디 개수 : {}" , newOdList.get(0).get(0).getMemberOrders().getMember_orders_date());
 		log.info("이게 오디 개수 : {}" , odList.size());
 		log.info("이게 뉴오디 개수 : {}" , newOdList.size());
-		log.info("이게 뉴오디 : {}" , newOdList.get(0).get(0).getProduct().getProduct_name());
+		log.info("이게 뉴오디 : {}" , newOdList.get(0).get(0).getProduct().getProductName());
 		
 		
 		return "orders/detail";

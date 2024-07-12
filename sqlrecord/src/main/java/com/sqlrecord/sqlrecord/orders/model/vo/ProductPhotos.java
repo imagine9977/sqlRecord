@@ -11,10 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product_photos {
+public class ProductPhotos {
 	
-	 	private int photo_no;
-	    private int product_no;
-	    private String photo_name;
-	    private String photo_path;
+	 	private int photoNo;
+	    private int productNo;
+	    private String photoName;
+	    private String photoPath;
 }

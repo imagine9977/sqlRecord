@@ -90,7 +90,7 @@
 	
 	
 	<select id="getOrdersDetail" resultMap="odRM">
-	    WITH RANKEDMOD AS (SELECT
+	     WITH RANKEDMOD AS (SELECT
 		        od.MEMBER_ORDERS_DETAIL_NO,
 		        p.PRODUCT_NO,
                 p.PRODUCT_NAME,
@@ -109,7 +109,7 @@
 		        od.TRACKING_NUM,
 		        od.MEMBER_ORDERS_DETAIL_STATUS,
                 ps.photo_path,
-                ROW_NUMBER() OVER (PARTITION BY p.PRODUCT_NO ORDER BY od.MEMBER_ORDERS_NO DESC) AS rn
+                ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
                 
 	    FROM
 	       	 	MEMBER_ORDERS_DETAIL od
@@ -121,8 +121,9 @@
                 PRODUCT p
         ON
                 od.PRODUCT_NO = p.product_no
-        LEFT JOIN
-	        PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
+        LEFT 
+        JOIN
+	        	PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
 	   WHERE
                 mo.MEMBER_NO = #{member_no})
         SELECT
@@ -157,21 +158,38 @@
 	
 	
 	<select id="getProduct" resultType="product">
-	    SELECT
-		        product_no,
-		        product_name,
-		        product_price,
-		        product_status,
-		        product_date,
-		        product_photo1,
-		        product_photo2,
-		        product_photo3,
-		        tag_no,
-		        product_detail
+	    WITH RANKEPRO AS (SELECT
+	
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                PRODUCT_DATE,
+                p.tag_no,
+                ps.photo_path,
+                ROW_NUMBER() OVER (PARTITION BY p.PRODUCT_NO ORDER BY ps.PRODUCT_NO ASC) AS rn    
 	    FROM
-	        	PRODUCT
-	    WHERE
-	        	product_no = #{product_no}			
+	       	 	PRODUCT p
+        LEFT 
+        JOIN
+                PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
+        )
+        SELECT
+		        PRODUCT_NO,
+		        PRODUCT_NAME,
+                PRODUCT_CATE,
+		        PRODUCT_PRICE,
+		        PRODUCT_STATUS,
+		        PRODUCT_DATE,
+		        TAG_NO,
+                PHOTO_PATH
+	    FROM
+	        	RANKEPRO
+        ORDER
+        BY
+                PRODUCT_NO
+        DESC			
 	</select>
 	
 	
