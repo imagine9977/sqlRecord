@@ -64,7 +64,7 @@
        					)
 	</insert>
 	
-	<insert id="insGenre" parameterType="MemberGenre">
+	<insert id="insGenre" parameterType="memberGenre">
 		INSERT
 			INTO MEMBER_GENRE (
 						TAG_NO,
@@ -104,4 +104,13 @@
 		   AND
 		        EMAIL = #{email}
 	</update>
+	
+	<select id="genre" parameterType="memberGenre" resultType="_int">
+		SELECT 
+				TAG_NO
+		  FROM 
+		  		MEMBER_GENRE
+	  	 WHERE
+	  	 		MEMBER_NO = #{memberNo}
+	</select>
 </mapper>

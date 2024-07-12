@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+            background: #ededed;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .sub-cont {
+            top: 0;
+            width: 700px; /* $contW */
+            height: 900px;
+            background: #fff;
+        }
+
+        input[type=text], input[type=password], input[type=date] {
+            background-color: #e7dfdf;
+            border: 1px solid #706767;
+            border-radius: .3em;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+            color: #0f0f0f;
+            margin-bottom: 20px;
+            font-size: 13px;
+            padding: 8px 5px;
+            width: 50%;
+        }
+
+        label {display: inline-block;
+            width: 110px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-left: 20px;
+        }
+
+        .ybtn {cursor: pointer;
+            border: 1px solid rgba(252, 248, 248, 0.4);
+            border-radius: .3em;
+            background-color: #2f4f4f;
+            color: white;
+            border-radius: 3px;
+            margin-left: 10px;
+            height: 30px;
+            width: 80px;
+            font-weight: 600;
+        }
+
+        .ybtn:hover {background: #294242;}
+        
+        input[type="radio"] + label {display: inline-block; padding: 20px; cursor: pointer;}
+    </style>
+</head>
+<body>
+    <div class="sub-cont">
+        <form name="frm1" id="frm1" action="${path2 }/member/joinPro.do" method="post" onsubmit=">
+            <div class="inset">
+                <p>
+                    <label class="label" for="id">아이디</label>
+                    <input type="text" id="id" name="id" disabled>
+                </p>
+                <p>
+                    <label for="pw">현재 비밀번호</label>
+                    <input type="password" id="pw" name="pw">
+                    <button class="ybtn" type="button" onclick="">확 인</button>
+                </p>
+                <p>
+                    <label for="pw">비밀번호</label>
+                    <input type="password" id="pw" name="pw" disabled>
+                </p>
+                <p>
+                    <label for="pw">비밀번호 확인</label>
+                    <input type="password" id="pw2" name="pw2" disabled>
+                </p>
+                <p>
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name">
+                </p>
+                <p>
+                    <label for="email">이메일</label>
+                    <input type="text" id="email" name="email">
+                </p>
+                <p>
+                    <label for="tel">연락처</label>
+                    <input type="text" id="tel" name="tel">
+                </p>
+                <p>
+                    <label for="postcode">우편번호</label>
+                    <input type="text" id="postcode" name="postcode">
+                    <button class="ybtn" type="button" onclick="searchpostcode()">주소 검색</button>
+                </p>
+                <p>
+                    <label for="addr1">주소</label>
+                    <input type="text" id="addr1" name="addr1">
+                </p>
+                <p>
+                    <label for="addr2">상세주소</label>
+                    <input type="text" id="addr2" name="addr2">
+                </p>
+                <p style="font-size: 15px; font-weight: 600; margin-left: 20px;">관심 게임 장르</p>
+                <p>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="1"> Pop</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="2"> Rock</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="3"> HipHop</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="4"> Jazz</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="5"> Classical</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="6"> Electronic</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="7"> Ballad</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="8"> Country</label>
+                    <label style="width: 180px;"><input type="checkbox" name="tagNo" value="9"> Metal</label>
+                </p>
+                <button style="width: 100px; margin-left: 250px; margin-top: 20px;" class="ybtn" type="button" onclick="">회원정보 수정</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

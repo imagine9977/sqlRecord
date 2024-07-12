@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.member.model.dao.MemberMapper;
@@ -42,6 +44,11 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int pwChange(Member member) {
 		return memberMapper.pwChange(member);
+	}
+
+	@Override
+	public List<Integer> genre(MemberGenre memberGenre) {
+		return memberMapper.genre(memberGenre);
 	}
 
 }
