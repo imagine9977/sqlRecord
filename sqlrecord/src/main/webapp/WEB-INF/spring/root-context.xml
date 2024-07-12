@@ -48,8 +48,8 @@
                  <!-- 계정관련설정 요소 설정 -->
                  <property name="host" value="smtp.gmail.com" />    <!-- name : .setter() 이용해서 값을 넣고 싶은 >>필드명<< // value = 거기 넣을 값 -->
                  <property name="port" value="587" />
-                 <property name="username" value="yyyjjjhhh13" />
-                 <property name="password" value="bjzjthfaisqatwmt" />
+                 <property name="username" value="" />
+                 <property name="password" value="" />
                  <property name="javaMailProperties">
                      <props>
                          <prop key="mail.smtp.auth">true</prop>    <!-- Properties 객체의 Key-Value값 -->
