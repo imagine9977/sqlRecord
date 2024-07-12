@@ -8,7 +8,7 @@ import com.sqlrecord.sqlrecord.orders.model.vo.OrdersDetail;
 public interface OrdersService {
 
 	// 주문건 멤버 정보 넣고 해당 주문건 번호 받기
-	int insertMemberOrders(MemberOrders memberOrders , int member_no);
+	int insertMemberOrders(MemberOrders memberOrders , int memberNo);
 
 	int insertOrdersDetail(List<OrdersDetail> odList);
 

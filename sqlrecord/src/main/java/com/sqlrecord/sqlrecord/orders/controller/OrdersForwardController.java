@@ -65,10 +65,10 @@ public class OrdersForwardController {
 			log.info("유저유저 : {}" , member.getEmail());
 			// 멤버 오더에 넣을 값을 객체에 담기
 			MemberOrders memberOrders = new MemberOrders();
-			memberOrders.setMember_orders_address(member.getAddr1());
-			memberOrders.setMember_orders_address2(member.getAddr2());
-			memberOrders.setMember_orders_postcode(member.getPostcode());
-			memberOrders.setMember_no(member.getMemberNo());
+			memberOrders.setMemberOrdersAddress(member.getAddr1());
+			memberOrders.setMemberOrdersAddress2(member.getAddr2());
+			memberOrders.setMemberOrdersPostcode(member.getPostcode());
+			memberOrders.setMemberNo(member.getMemberNo());
 			
 			
 			// 멤버 오더 디테일에 넣을 값을 객체에 담기
@@ -84,10 +84,10 @@ public class OrdersForwardController {
 				product.setProductNo(Integer.parseInt(product_noArr[i]));
 				ordersDetail.setProduct(product);
 				MemberOrders memberOrders1 = new MemberOrders();
-				memberOrders1.setMember_orders_no(successMO);
+				memberOrders1.setMemberOrdersNo(successMO);
 				ordersDetail.setMemberOrders(memberOrders1);
-				ordersDetail.setMember_orders_detail_amount(Integer.parseInt(cart_amountArr[i]));
-				ordersDetail.setMember_orders_detail_price(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
+				ordersDetail.setMemberOrdersDetailAmount(Integer.parseInt(cart_amountArr[i]));
+				ordersDetail.setMemberOrdersDetailPrice(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
 				
 				odList.add(ordersDetail);
 			}
@@ -121,8 +121,8 @@ public class OrdersForwardController {
 		
 		
 		Member member =  (Member) session.getAttribute("loginUser");
-		if("".equals(member.getName())) {
-			return "redirect:/sqlrecord/member/login.do";
+		if(member == null) {
+			return "redirect:member/login.do";
 		}
 		
 		
@@ -134,7 +134,7 @@ public class OrdersForwardController {
 		
 		// HashSet에 add
 		for(OrdersDetail item : odList) {
-			hs.add(item.getMemberOrders().getMember_orders_no());
+			hs.add(item.getMemberOrders().getMemberOrdersNo());
 		}
 		
 		// 2중 리스트를 만들기 위해서 준비
@@ -142,13 +142,13 @@ public class OrdersForwardController {
 		
 		
 		for(OrdersDetail od : odList) {
-			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getMember_orders_no());
+			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getMemberOrdersNo());
 		}
 		
 		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
 			log.info("얘는 hsItem : {}" , hsItem);
-			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMember_orders_no() == hsItem) .collect(Collectors.toList());;
+			List<OrdersDetail> od = (List<OrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem) .collect(Collectors.toList());;
 			newOdList.add(od);
 		}
 		
@@ -157,7 +157,7 @@ public class OrdersForwardController {
 		
 		
 		model.addAttribute("newOdList",newOdList);
-		log.info("이게 오디 개수 : {}" , newOdList.get(0).get(0).getMemberOrders().getMember_orders_date());
+		log.info("이게 오디 개수 : {}" , newOdList.get(0).get(0).getMemberOrders().getMemberOrdersDate());
 		log.info("이게 오디 개수 : {}" , odList.size());
 		log.info("이게 뉴오디 개수 : {}" , newOdList.size());
 		log.info("이게 뉴오디 : {}" , newOdList.get(0).get(0).getProduct().getProductName());

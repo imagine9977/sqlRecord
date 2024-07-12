@@ -12,21 +12,21 @@
 		VALUES
 				(
 				MEMBER_ORDERS_SEQ.NEXTVAL,
-				#{member_orders_address},
-				#{member_orders_address2},
-				#{member_orders_postcode},
+				#{memberOrdersAddress},
+				#{memberOrdersAddress2},
+				#{memberOrdersPostcode},
 				SYSDATE,
-				#{member_no}
+				#{memberNo}
 				)
 	</insert>
 
 	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
 		SELECT
-				Max(MEMBER_ORDERS_NO)
+				Max(MEMBER_ORDERS_NO) 
 		FROM
 				MEMBER_ORDERS
 		WHERE
-				MEMBER_NO = #{member_no}
+				MEMBER_NO = #{memberNo}
 		ORDER
 		BY
 				MEMBER_ORDERS_NO
@@ -43,10 +43,10 @@
 		VALUES
 				(
 				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
-				#{product.product_no},
-				#{memberOrders.member_orders_no},
-				#{member_orders_detail_amount},
-				#{member_orders_detail_price},
+				#{product.productNo},
+				#{memberOrders.memberOrdersNo},
+				#{memberOrdersDetailAmount},
+				#{memberOrdersDetailPrice},
 				DEFAULT,
 				DEFAULT,
 				DEFAULT
@@ -55,12 +55,12 @@
 	</insert>
 	
 	<resultMap type="OrdersDetail" id="odRM">
-    	<id property="member_orders_detail_no" column="MEMBER_orders_detail_no"/>
-    	<result property="member_orders_detail_amount" column="MEMBER_orders_detail_amount"/>  
-	    <result property="member_orders_detail_price" column="MEMBER_orders_detail_price"/>
-	    <result property="tracking_num" column="TRACKING_NUM"/>
-	    <result property="member_orders_detail_exd" column="MEMBER_ORDERS_DETAIL_EXD"/>
-	    <result property="member_orders_detail_status" column="MEMBER_ORDERS_DETAIL_STATUS"/>
+    	<id property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
+    	<result property="memberOrdersDetailAmount" column="MEMBER_orders_detail_amount"/>  
+	    <result property="memberOrdersDetailPrice" column="MEMBER_orders_detail_price"/>
+	    <result property="trackingNum" column="TRACKING_NUM"/>
+	    <result property="memberOrdersDetailExd" column="MEMBER_ORDERS_DETAIL_EXD"/>
+	    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
 	    <association property="product" javaType="product">
 	        <result property="productNo" column="product_no"/>
 	        <result property="productName" column="product_name"/>
@@ -79,12 +79,12 @@
 	        </association>
 	    </association>
 	    <association property="memberOrders" javaType="memberOrders">
-	    	<result property="member_orders_no" column="MEMBER_ORDERS_NO"/>
-	        <result property="member_orders_address" column="MEMBER_ORDERS_ADDRESS"/>
-	        <result property="member_orders_address2" column="MEMBER_ORDERS_ADDRESS2"/>
-	        <result property="member_orders_postcode" column="MEMBER_ORDERS_POSTCODE"/>
-	        <result property="member_orders_date" column="MEMBER_ORDERS_DATE"/>
-	        <result property="member_no" column="MEMBER_NO"/>
+	    	<result property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
+	        <result property="memberOrdersAddress" column="MEMBER_ORDERS_ADDRESS"/>
+	        <result property="memberOrdersAddress2" column="MEMBER_ORDERS_ADDRESS2"/>
+	        <result property="memberOrdersPostcode" column="MEMBER_ORDERS_POSTCODE"/>
+	        <result property="memberOrdersDate" column="MEMBER_ORDERS_DATE"/>
+	        <result property="memberNo" column="MEMBER_NO"/>
 	    </association>
 	</resultMap>
 	

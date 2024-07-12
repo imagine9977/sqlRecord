@@ -17,12 +17,12 @@ public class OrdersDetail {
 	
            
 
-	private int member_orders_detail_no;                        
-	private int member_orders_detail_amount;        
-	private int member_orders_detail_price;        
-	private String member_orders_detail_exd;  
-	private int tracking_num;  
-	private String member_orders_detail_status;
+	private int memberOrdersDetailNo;                        
+	private int memberOrdersDetailAmount;        
+	private int memberOrdersDetailPrice;        
+	private String memberOrdersDetailExd;  
+	private int trackingNum;  
+	private String memberOrdersDetailStatus;
 	private Product product;               
 	private MemberOrders memberOrders; 
 }
