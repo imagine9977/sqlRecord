@@ -329,4 +329,51 @@ at Object.jQueryDetection"
             return "fail";
         }
     }
+	
+	@PostMapping("update")
+	public String update(Member member,
+						MemberGenre memberGenre,
+						@RequestParam("tagNo") List<Integer> tagNos,
+						HttpSession session,
+						Model model) {
+		log.info("수정 요청 실패 :{}",member);
+		//String encPwd = bCryptPasswordEncoder.encode(member.getUserPwd());
+		//member.setUserPwd(encPwd);
+		Member currentUser = (Member) session.getAttribute("loginUser");
+		
+		memberService.deleteGenre(currentUser.getMemberNo());
+		
+		for (Integer tagNo : tagNos) {
+			memberGenre.setMemberNo(currentUser.getMemberNo());
+	        memberGenre.setTagNo(tagNo);
+	        memberService.insUpdateGenre(memberGenre);
+	    }
+		
+		 if (member.getMemberPw() != null && !member.getMemberPw().isEmpty()) {
+		        String encPwd = bCryptPasswordEncoder.encode(member.getMemberPw());
+		        member.setMemberPw(encPwd);
+		    } else {
+		        member.setMemberPw(currentUser.getMemberPw());
+		    }
+		
+		if(memberService.update(member)>0) {
+			
+			Member loginUser = memberService.login(member);
+			session.setAttribute("loginUser", loginUser);
+			session.setAttribute("infoMsg", "정보수정 성공");
+			
+			return "redirect:mypage";
+		}else {
+			model.addAttribute("errorMsg", "정보 수정에 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	@RequestMapping("delete")
+	public String delete(Member member,HttpSession session) {
+		memberService.delete(member);
+		session.removeAttribute("loginUser");
+		return "redirect:/";
+	}
+	
 }

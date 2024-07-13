@@ -28,7 +28,7 @@
         	margin-top:200px;
         	margin-bottom:200px;
             width: 700px; /* $contW */
-            height: 800px;
+            height: 850px;
             background: #fff;
         }
 
@@ -71,10 +71,49 @@
             margin-top: 50px;
         }
         
-        #checkResult,#checkResult1 {
+        #checkResult,#checkResult1,#checkResultbye {
         	margin-left:180px;
         	font-weight: 600;
         }
+
+        #btnbox {
+            display: flex;
+        }
+
+        #bye,#byebtn {
+            background-color: rgb(192, 38, 11);
+        }
+
+        #bye:hover,#byebtn:hover {
+            background-color: rgb(212, 59, 32);
+        }
+
+        #byecont {background-color: whitesmoke;
+		    width: 500px;
+		    height: 670px;
+		    margin: 80px auto;
+		    padding-top: 1px;
+		    border-radius: 5px;
+		    box-shadow: 0 0 5px gray;
+		    display: none;
+		    position: absolute;
+		    z-index: 9;
+		    top: 40%;
+		    left: 30%;
+		}
+		
+		.close-btn {
+		    background-color: transparent;
+		    color: red;
+		    border: none;
+		    font-size: 24px;
+		    font-weight: bold;
+		    cursor: pointer;
+		    position: absolute;
+		    top: 10px;
+		    right: 10px;
+		}
+		
     </style>
 <meta charset="UTF-8">
 <title></title>
@@ -84,7 +123,7 @@
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 	<div class="sub-cont">
-        <form name="frm1" id="frm1" action="${hpath }/member/" method="post">
+        <form name="frm1" id="frm1" action="${hpath }/member/update" method="post">
             <div class="inset">
                 <p>
                     <label class="label" for="memberId">아이디</label>
@@ -142,10 +181,27 @@
                     <label style="width: 150px;"><input type="checkbox" name="tagNo" value="8"> Country</label>
                     <label style="width: 150px;"><input type="checkbox" name="tagNo" value="9"> Metal</label>
                 </p>
-                <button style="width: 100px; margin-left: 300px; margin-top: 25px;" class="ybtn" type="button" onclick="">회원정보 수정</button>
+               <div id="btnbox">
+                    <button style="width: 100px; margin-left: 240px; margin-top: 25px;" class="ybtn" type="submit" >회원정보 수정</button>
+                    <button style="width: 100px; margin-left: 15px; margin-top: 25px;" class="ybtn" type="button" id="bye" >회원 탈퇴</button>
+                </div>
             </div>
         </form>
     </div>
+    
+    <div id="byecont">
+   		<button class="close-btn" type="button" id="closeByecont">&times;</button>
+        <img style="width: 150px; height: 150px; margin-left: 165px; margin-top: 50px; border-radius: 10px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrmih8V7yMeL9x-ZaT74Ww5Mzx0Y0XjY8Cyw&s" alt="">
+        <h2 style="text-align: center; margin-top: 80px; margin-bottom:20px;">회원을 탈퇴 하시면 보유중이신 <br>
+            <strong style="color: tomato;">"포인트머니, 정보"</strong>는 복구 불가능 합니다 <br>
+            탈퇴 하시기전에 확인 바랍니다.</h2>
+            
+        <input style="margin-left: 90px;" type="password" id="byepw" name="pw" placeholder="비밀번호를 입력 해주세요.">
+        <button class="ybtn" type="button" onclick="chekPwbye();">확 인</button>
+        <p id="checkResultbye" style="display:hidden; font-size:15px;"></p> <br>
+        <button style="width: 100px; margin-left: 200px; margin-top: 25px; display:none;" class="ybtn" type="button" id="byebtn"><a href="${hpath}/member/delete">회원 탈퇴</a></button>
+    </div>
+    
     <script>
        
     	$(document).ready(()=>{
@@ -155,6 +211,14 @@
     		console.log(tag);
     		$.each(tagList, function(index, item) {
                 $('input[name="tagNo"][value="' + item + '"]').prop('checked', true);
+            });
+    		
+    		$('#bye').click(function() {
+    			$('#byecont').show();
+            });
+
+            $('#closeByecont').click(function() {
+                $('#byecont').hide();
             });
     	});
     	
@@ -200,6 +264,35 @@
                            $('#memberPw2').removeAttr("readonly");
                        } else {
                            checkResult.show().css('color', 'red').text('비밀번호가 일치하지 않습니다.');
+                           checkResultbye.show().css('color', 'red').text('비밀번호가 일치하지 않습니다.');
+                       }
+                   },
+                   error: function() {
+                       checkResult.show().css('color', 'red').text('오류가 발생했습니다.');
+                   }
+               });
+           } else {
+               checkResult.show().css('color', 'red').text('비밀번호를 입력해주세요.');
+           }
+       }
+       
+       function chekPwbye(){
+
+    	   const checkPwd = $('#byepw').val();
+           const checkResult = $('#checkResultbye');
+           const bye = $('#byebtn');
+           if (checkPwd != "") {
+               $.ajax({
+                   url: 'pwCheck',
+                   type: 'GET',
+                   data: { checkPwd: checkPwd },
+                   success: function(result) {
+                       if (result == 'success') {
+                           checkResult.show().css('color', 'green').text('비밀번호가 일치합니다.');
+                           bye.show();
+                       } else {
+                           checkResult.show().css('color', 'red').text('비밀번호가 일치하지 않습니다.');
+                           checkResultbye.show().css('color', 'red').text('비밀번호가 일치하지 않습니다.');
                        }
                    },
                    error: function() {

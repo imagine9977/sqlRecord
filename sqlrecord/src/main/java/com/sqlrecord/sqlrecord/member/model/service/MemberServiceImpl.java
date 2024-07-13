@@ -51,4 +51,24 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.genre(memberGenre);
 	}
 
+	@Override
+	public int update(Member member) {
+		return memberMapper.update(member);
+	}
+
+	@Override
+	public int deleteGenre(int memberNo) {
+		return memberMapper.deleteGenre(memberNo);
+	}
+
+	@Override
+	public void insUpdateGenre(MemberGenre memberGenre) {
+		memberMapper.insUpdateGenre(memberGenre);
+	}
+
+	@Override
+	public void delete(Member member) {
+		memberMapper.delete(member);
+	}
+
 }
