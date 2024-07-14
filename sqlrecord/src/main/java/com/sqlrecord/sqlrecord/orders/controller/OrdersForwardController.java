@@ -187,6 +187,14 @@ public class OrdersForwardController {
 	}
 	
 	
+	
+	
+	@PostMapping("/insertMemberOD")
+	public String insertMemberOD() {
+		
+	}
+	
+	
 	@GetMapping("/exchange")
 	public String memberExchangePage() {
 		
