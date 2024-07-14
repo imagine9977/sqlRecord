@@ -1,8 +1,27 @@
 package com.sqlrecord.sqlrecord.product.model.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.RowBounds;
+
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
+
 public interface ProductService {
 
+	// 전체 상품 수 조회(페이징)
+	int productCount();
+
 	// 전체 상품 조회
+	List<Product> findAll(Map<String, Integer> map);
+
+	// 검색 결과 수
+	int searchCount(Map<String, String> map);
+	
+	// 상품 검색 결과
+	List<Product> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds);
+
+
 	
 	
 	// 상품 1개 조회
