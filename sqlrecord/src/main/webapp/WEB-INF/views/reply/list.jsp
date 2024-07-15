@@ -387,7 +387,7 @@
 	                        <h4 class="pavg1" class="yrestar" style="margin:0px;">${reply.star}</h4>
 	                    </div>
 		                    <span id="id">${sessionScope.loginUser.memberId}</span>
-		                    <div class="date">${reply.resdate}</div>
+		                    <div class="date">${reply.writeDate}</div>
 		                </div>
 		                <div class="review-content">
 		                	<span class="yrecon">${reply.content}</span>
@@ -407,14 +407,9 @@
 						    </div>
 						</div>    
 		                </div>
-		                <div class="review-images">
-		                    ${reply.img1}
-		                    ${reply.img2}
-		                    ${reply.img3}
-		                </div>
 		                <div class="reply-section">
 	                    <button class="reply-toggle">답글 (2)</button>
-	                    <c:if test="${!empty sid}">
+	                    <c:if test="${!empty sessionScope.loginUser}">
 	                    <div class="reply-list" style="display: none;">
 	                        <!-- 답글 목록이 여기에 추가됩니다 -->
 	                        <div class="reply-input">

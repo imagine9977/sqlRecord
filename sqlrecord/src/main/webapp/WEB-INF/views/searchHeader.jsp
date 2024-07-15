@@ -9,7 +9,7 @@
       	  </a>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>TURNTABLES</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath}/reply/getReplyStarAll.do">TURNTABLES</a></p>
       	</div>
       	<div class="section_serch_item_box">
       	  <p class="section_serch_item_textBox"><a>SPEAKERS</a></p>
