@@ -51,6 +51,7 @@
         
         <!-- OD의 갯수 가 맥스 -->
         <!-- 보내야 할값 -->
+        <div style="height: 50px;">
           <div class="col-auto">
             <label class="visually-hidden" for="memberOrdersExAmount">수량</label>
             <select class="form-select" id="memberOrdersExAmount" name="memberOrdersExAmount">
@@ -68,9 +69,8 @@
               <c:forEach var="productItem" items="${ productList }" >
               	<option value="${ productItem.productNo }">${ productItem.productName }</option>
               </c:forEach>
-              
-      
             </select>
+          </div>
           </div>
           
           
@@ -92,12 +92,14 @@
 <script>
 	const gridRadios1 = document.querySelector("#gridRadios1");
 	const gridRadios2 = document.querySelector("#gridRadios2");
+	const chooseEx = document.querySelector("#chooseEx");
 	
 	const exchange = document.querySelector("#exchange");
 	const refund = document.querySelector("#refund");
 	
 	if(gridRadios1.checked == true) {
 		exchange.style.display = 'none';
+		chooseEx.style.display = 'none';
 		refund.style.display = 'block';
 	}
 	
@@ -105,9 +107,11 @@
 		console.log(e.id);
 		if(e.id == 'gridRadios1') {
 			exchange.style.display = 'none';
+			chooseEx.style.display = 'none';
 			refund.style.display = 'block';
 		} else {
 			exchange.style.display = 'block';
+			chooseEx.style.display = 'block';
 			refund.style.display = 'none';
 		}
 		
