@@ -1,5 +1,11 @@
-package com.sqlrecord.sqlrecord.Tracking.model.service;
+package com.sqlrecord.sqlrecord.tracking.model.service;
 
-public class TrackingService {
+import java.util.List;
 
+import com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo;
+
+public interface TrackingService {
+
+	List<TrackingInfo> getTrackingInfoList(int trackingInfoNum);
+	
 }

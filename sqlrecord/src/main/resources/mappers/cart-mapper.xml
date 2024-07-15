@@ -31,11 +31,12 @@
 	        <result property="tagNo" column="tag_no"/>
 	        <result property="productDetail" column="product_detail"/>
 	        <result property="productCate" column="product_cate"/>
-	        <collection column="product_no = product_no" property="productPhotosList" javaType="List" select="getPhotos">
+	        <collection column="product_no" property="productPhotosList" javaType="List" select="getPhotos">
 	        	<result property="productPhotosNo" column="PHOTO_NO"/>
 			    <result property="productPhotosName" column="PHOTO_NAME"/>
 			    <result property="productPhotosPath" column="PHOTO_PATH"/>
-			</collection>
+			    <result property="productNo" column="PRODUCT_NO"/>
+		</collection>
 	    </association>
 	</resultMap>
 
@@ -123,7 +124,7 @@
 	</select>
 	
 	
-	<select id="getPhotos" resultType="productPhotos">
+	<select id="getPhotos" parameterType="int" resultType="productPhotos">
 		SELECT
 				PHOTO_NO productPhotosNo,         
 				PRODUCT_NO productNo,         
@@ -131,6 +132,8 @@
 				PHOTO_PATH productPhotosPath
 		FROM
 				PRODUCT_PHOTOS
+		WHERE
+				product_no = #{product_no}
 	</select>
 
 </mapper>

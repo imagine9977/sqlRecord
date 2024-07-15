@@ -1,4 +1,4 @@
-package com.sqlrecord.sqlrecord.Tracking.model.vo;
+package com.sqlrecord.sqlrecord.tracking.model.vo;
 
 public class TrackingNo {
 

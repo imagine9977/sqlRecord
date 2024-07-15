@@ -23,6 +23,8 @@
 		<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/> 	  	
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="memberOrdersDetail" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx" alias="memberOrdersEx" />
+ 	  	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo" alias="trackingInfo" />
  	</typeAliases>
  	
  	<mappers>
@@ -33,6 +35,8 @@
  	  	<mapper resource="/mappers/notice-mapper.xml" />
 		<!--<mapper resource="/mappers/product-mapper.xml" /> -->
 		<mapper resource="/mappers/memberOrders-mapper.xml" />
+		<mapper resource="/mappers/tracking-mapper.xml" />
+		
  	</mappers>
  	
  </configuration>

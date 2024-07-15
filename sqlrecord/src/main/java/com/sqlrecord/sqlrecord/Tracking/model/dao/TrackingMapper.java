@@ -1,5 +1,14 @@
-package com.sqlrecord.sqlrecord.Tracking.model.dao;
+package com.sqlrecord.sqlrecord.tracking.model.dao;
 
-public class TrackingMapper {
+import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
+import com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo;
+
+@Mapper
+public interface TrackingMapper {
+
+	List<TrackingInfo> getTrackingInfoList(int trackingInfoNum);
+	
 }

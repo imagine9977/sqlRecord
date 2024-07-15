@@ -51,7 +51,7 @@
         
         <!-- OD의 갯수 가 맥스 -->
         <!-- 보내야 할값 -->
-        <div style="height: 50px;">
+        <div style="height: 100px;">
           <div class="col-auto">
             <label class="visually-hidden" for="memberOrdersExAmount">수량</label>
             <select class="form-select" id="memberOrdersExAmount" name="memberOrdersExAmount">
@@ -62,7 +62,7 @@
             </select>
           </div>
           
-          <div class="col-auto">
+          <div class="col-auto" id="chooseEx">
             <label class="visually-hidden" for="productName">교환 상품 선택</label>
             <select class="form-select" id="productName" name="productName">
               <option selected>Choose...</option>
@@ -109,7 +109,7 @@
 			exchange.style.display = 'none';
 			chooseEx.style.display = 'none';
 			refund.style.display = 'block';
-		} else {
+		} else if(e.id == 'gridRadios2') {
 			exchange.style.display = 'block';
 			chooseEx.style.display = 'block';
 			refund.style.display = 'none';
