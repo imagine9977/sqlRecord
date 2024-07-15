@@ -30,21 +30,21 @@
 	crossorigin="anonymous"></script>
 
 <style>
-/* Scoped styles for notice.jsp content */
-#notice-container {
+/* Scoped styles for qna.jsp content */
+#qna-container {
 	font-family: Arial, sans-serif;
 	margin: 0;
 	padding: 0;
 	background-color: #f4f4f4;
 }
 
-#notice-container .container {
+#qna-container .container {
 	width: 80%;
 	margin: auto;
 	overflow: hidden;
 }
 
-#notice-container header {
+#qna-container header {
 	background: #161616;
 	color: #ffffff;
 	padding-top: 30px;
@@ -52,14 +52,14 @@
 	border-bottom: #2f4f4f 3px solid;
 }
 
-#notice-container header h1 {
+#qna-container header h1 {
 	text-align: center;
 	text-transform: uppercase;
 	margin: 0;
 	font-size: 24px;
 }
 
-#notice-container .filter-search-container {
+#qna-container .filter-search-container {
 	width: 900px;
 	margin: auto;
 	margin-top: 10px;
@@ -68,26 +68,26 @@
 	justify-content: space-between;
 }
 
-#notice-container .filter-buttons {
+#qna-container .filter-buttons {
 	display: flex;
 	flex: 1;
 	gap: 10px;
 }
 
-#notice-container .search {
+#qna-container .search {
 	margin-left: 10px;
 }
 
-#notice-container .search form {
+#qna-container .search form {
 	display: flex;
 }
 
-#notice-container .filter-buttons button:hover {
+#qna-container .filter-buttons button:hover {
 	background-color: #f0f0f0;
 	color: #000;
 }
 
-#notice-container .filter-buttons button:focus {
+#qna-container .filter-buttons button:focus {
 	text-decoration-line: underline;
 	text-decoration-thickness: 3px;
 	font-weight: bold;
@@ -95,13 +95,13 @@
 	background-color: #e0e0e0;
 }
 
-#notice-container .search input[type="search"] {
+#qna-container .search input[type="search"] {
 	padding: 10px;
 	font-size: 16px;
 	width: 200px;
 }
 
-#notice-container .search input[type="submit"] {
+#qna-container .search input[type="submit"] {
 	padding: 10px;
 	background: #2C2C2C;
 	color: #ffffff;
@@ -110,80 +110,80 @@
 	cursor: pointer;
 }
 
-#notice-container #files {
+#qna-container #files {
 	background-color: lightgray;
 	width: 300px;
 	 height: auto;
 }
 
-#notice-container #content {
+#qna-container #content {
 	width: 800px;
 	height: auto;
 	margin: auto;
 }
 
-#notice-container .load-more-container {
+#qna-container .load-more-container {
 	display: flex;
 	justify-content: center;
 	margin-top: 20px;
 }
 
-#notice-container #outerDiv {
+#qna-container #outerDiv {
 	width: 800px;
 	display: block;
 	overflow: auto;
 	padding-top: 20px;
 }
 
-#notice-container .headerRow, #notice-container .noticeEl {
+#qna-container .headerRow, #qna-container .qnaEl {
 	display: flex;
 	align-items: center;
 }
 
-#notice-container .headerRow>div, #notice-container .noticeEl>div {
+#qna-container .headerRow>div, #qna-container .qnaEl>div {
 	padding: 10px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-#notice-container #noticeModal {
+#qna-container #qnaModal {
 	top: 100px;
 	min-height: 300px;
 	height: auto;
 	z-index: 999999;
 }
 
-#notice-container #updateModal {
+#qna-container #updateModal {
 	top: 100px;
 	min-height: 300px;
 	height: auto;
 		z-index: 9999999;
 }
 
-#notice-container .modal-content {
+#qna-container .modal-content {
 	height: 60%;
 	border: 1rem solid;
 	border-radius: 10;
 }
 
-#notice-container .inline-header {
+#qna-container .inline-header {
 	display: inline-block;
 	margin-right: 10px;
 }
 
-#notice-container .modal-header {
+#qna-container .modal-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-#notice-container #title {
+#qna-container #title {
 	margin-top: 100px;
 	text-align: center;
 }
 
-#notice-container #detail {
+#qna-container #detail {
 	background-color: #23C293;
 	width: 800px;
 	margin: auto;
@@ -193,13 +193,13 @@
 	display: none;
 }
 
-#notice-container #detail>div {
+#qna-container #detail>div {
 	height: 50px;
 	line-height: 50px;
 	border: 1px solid rgba(255, 255, 255, 0.656);
 }
 
-#notice-container .button-line {
+#qna-container .button-line {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -208,14 +208,14 @@
 	margin: 20px 0;
 }
 
-#notice-container .button-line button {
+#qna-container .button-line button {
 	padding: 10px 20px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
-#notice-container .add-notice-button {
+#qna-container .add-qna-button {
 	padding: 10px 20px;
 	background: #4CAF50;
 	color: #ffffff;
@@ -224,23 +224,23 @@
 	cursor: pointer;
 }
 
-#notice-container .add-notice-button:hover {
+#qna-container .add-qna-button:hover {
 	background: #45a049;
 }
 
-#notice-container .col-category {
+#qna-container .col-category {
 	width: 10%;
 }
 
-#notice-container .col-title {
+#qna-container .col-title {
 	width: 50%;
 }
 
-#notice-container .col-date {
+#qna-container .col-date {
 	width: 20%;
 }
 
-#notice-container #liveAlertPlaceholder {
+#qna-container #liveAlertPlaceholder {
 	z-index: 10;
 }
 </style>
@@ -249,7 +249,7 @@
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../searchHeader.jsp"%>
-	<div id="notice-container">
+	<div id="qna-container">
 
 		<header>
 			<h1>공지사항</h1>
@@ -267,38 +267,40 @@
 						onclick="findByCate('event')">이벤트</button>
 					<button type="button" class="btn btn-outline-secondary"
 						onclick="findByCate('etc')">기타</button>
+					<button type="button" class="btn btn-outline-secondary"
+						onclick="turnQnaSolved()">미해결만 보기</button>
 				</div>
 				<div class="search">
 					<form action="/" method="get">
 						<input type="search" name="s" placeholder="검색어를 입력하세요." /> <input
-							type="hidden" name="post_type" value="notice" /> <input
+							type="hidden" name="post_type" value="qna" /> <input
 							type="submit" value="검색" />
 					</form>
 				</div>
 			</div>
-			<div class="modal fade" id="noticeModal" tabindex="-1"
-				aria-labelledby="noticeModalLabel" aria-hidden="true">
+			<div class="modal fade" id="qnaModal" tabindex="-1"
+				aria-labelledby="qnaModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 id="noticeHeader"></h5>
+							<h5 id="qnaHeader"></h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
 
-							<div id="notice-detail">
+							<div id="qna-detail">
 								<h4>파일 내려받기</h4>
 								<div id="files"></div>
 								<hr />
 								<div class="form-group">
-									<label for="noticeContent">내용</label>
-									<div id="noticeContent"></div>
+									<label for="qnaContent">내용</label>
+									<div id="qnaContent"></div>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<div id="noticeActions">
+							<div id="qnaActions">
 								<a class="btn btn-warning" onclick="toggleUpdateModal();"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp;
 								<a class="btn btn-danger" id="deleteButton"
@@ -326,37 +328,37 @@
 						<input type="hidden" id="fileNoDel" name="fileNoDel" value="">
 						<input type="hidden" id="fileNameDel" name="fileNameDel" value="">
 						<div class="modal-header">
-							<h5 id="noticeNo" class="inline-header"></h5>
-							<input type="hidden" name="noticeNo" value="${notice.noticeNo }" />
-							<label for="noticeTitle">제목</label> <input type="text"
-								class="form-control" id='noticeTitle' name='noticeTitle'
+							<h5 id="qnaNo" class="inline-header"></h5>
+							<input type="hidden" name="qnaNo" value="${qna.qnaNo }" />
+							<label for="qnaTitle">제목</label> <input type="text"
+								class="form-control" id='qnaTitle' name='qnaTitle'
 								value="">
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
 							<div class="form-group">
-								<label for="noticeCategory">분류</label> <select
-									class="form-control" id="noticeCategory" name="noticeCategory">
+								<label for="qnaCategory">분류</label> <select
+									class="form-control" id="qnaCategory" name="qnaCategory">
 									<option value="general">일반</option>
 									<option value="event">이벤트</option>
 									<option value="service">서비스</option>
 									<option value="etc">기타</option>
 								</select>
 							</div>
-							<div id="notice-detail">
+							<div id="qna-detail">
 								<h4>파일 내려받기</h4>
 								<div id="files"></div>
 								<hr />
 								<div class="form-group">
-									<label for="noticeContent">내용</label>
-									<textarea class="form-control" rows="5" id='noticeContent'
+									<label for="qnaContent">내용</label>
+									<textarea class="form-control" rows="5" id='qnaContent'
 										style="resize: none;"></textarea>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<div id="noticeActions">
+							<div id="qnaActions">
 								<button class="btn" type="button" id="btnSubmit"
 									style="background-color: orange; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">수정하기</button>
 								&nbsp;&nbsp; <a class="btn" data-bs-dismiss="modal"
@@ -375,21 +377,22 @@
 
 		<div class="button-line">
 			<div class="see-more">
-				<!--  <span class="get-more-list" onclick="loadMoreNotices()">더 보기</span> -->
+				<!--  <span class="get-more-list" onclick="loadMoreqnas()">더 보기</span> -->
 			</div>
 			<div class="add">
-				<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
+				<a class="add-qna-button" href="qnas/insert.do">공지 추가하기</a>
 			</div>
 		</div>
 
 		<script>
+			let solvedBoolean = 'N'; 
 			let currentPage = 0; // 현재 페이지 0으로 고정
 			const currentPageCate = {}; // 카테고리 사용시 현재 페이지 기억
-			const noticesPerPage = 10; // 공지사항 한번에 표시되는 공지사항 수
-			let noticeListGlobal = []; //초기 공지사항 목록을 저장할 전역 변수
+			const qnasPerPage = 10; // 공지사항 한번에 표시되는 공지사항 수
+			let qnaListGlobal = []; //초기 공지사항 목록을 저장할 전역 변수
 			let currentCategory = 'all'; // 현재 보고 있는 카테고리 추적
-			let nfileListGlobal = [];
-			let currentNoticeNo=0;
+			let qnaFileListGlobal = [];
+			let currentqnaNo=0;
 			
 			var fileNoArry = [];
 			var fileNameArry = [];
@@ -406,9 +409,21 @@
 			    $(this).parent().remove();
 			});
 			
+			function turnQnaSolved {
+	            if(solvedBoolean=='N'){
+	            	solvedBoolean='Y';
+	            }else{
+	            	solvedBoolean='N';
+	            }
+	            if(currentCategory='all'){
+	            	findAll();
+	            }else{
+	            	findByCate(currentCategory);
+	            }
+	        }
 			
 			// 공지사항 목록을 지우는 함수
-			const clearNoticeList = () => {
+			const clearqnaList = () => {
 			    const existingOuterDiv = document.getElementById('outerDiv');
 			    if (existingOuterDiv) {
 			        existingOuterDiv.remove(); // 기존의 outerDiv가 있으면 제거
@@ -434,7 +449,7 @@
 			    
 			    $.ajax({             
 			        type: "put",  
-			        url: "notice/update",
+			        url: "qna/update",
 			        data: data,  // Pass FormData object JSON.stringify(data)
 			    	/* 
 			        headers: { 
@@ -463,14 +478,14 @@
 			// 공지사항 추가하기 
 			function insert() {
                 const requestData = {
-                    "noticeTitle": document.getElementById('insertTitle').value,
-                    "noticeContent": document.getElementById('insertContent').value,
-                    "noticeCategory": document.getElementById('insertCategory').value,
-                    "noticeCategory": document.getElementById('insertCategory').value
+                    "qnaTitle": document.getElementById('insertTitle').value,
+                    "qnaContent": document.getElementById('insertContent').value,
+                    "qnaCategory": document.getElementById('insertCategory').value,
+                    "qnaCategory": document.getElementById('insertCategory').value
                 };
                 console.log(requestData);
                 $.ajax({
-                    url: 'notice',
+                    url: 'qna',
                     type: 'post',
                     data: requestData,
                     success: response => {
@@ -478,8 +493,8 @@
                         if (response.message === '서비스 요청 성공') {
                             document.getElementById('outerDiv').remove();
                             findAll();
-                            document.getElementById('noticeTitle').value = '';
-                            document.getElementById('noticeContent').value = '';
+                            document.getElementById('qnaTitle').value = '';
+                            document.getElementById('qnaContent').value = '';
                         }
                     }
                 });
@@ -487,13 +502,13 @@
 			
 			//공지 수정하기를 누르면 조회 모달을 숨기고 수정 모달로 변경
 			function toggleUpdateModal() {
-	            $('#noticeModal').modal('hide'); // Hide the main notice modal
+	            $('#qnaModal').modal('hide'); // Hide the main qna modal
 	            $('#updateModal').modal('show'); // Show the update modal
 	        }
 			
 			//공지 수정하기가 종료/성공하면 조회 모달로 변경
 			$('#updateModal').on('hidden.bs.modal', function () {
-	            $('#noticeModal').modal('show');
+	            $('#qnaModal').modal('show');
 	        });
 			
 			/*
@@ -503,15 +518,15 @@
 			});
 			function update() {
                 const updateData = {
-                		"noticeNo" : $('noticeNo').val(),
-    					"noticeTitle" : $('noticeTitle').val(),
-    					"noticeWriter" : $('updateWriter').val(),
-    					"noticeContent" : $('noticeContent').val(),
-    					"noticeCategory" : $('noticeCategory').val(),	
-    					"List<Nfile>" :data
+                		"qnaNo" : $('qnaNo').val(),
+    					"qnaTitle" : $('qnaTitle').val(),
+    					"qnaWriter" : $('updateWriter').val(),
+    					"qnaContent" : $('qnaContent').val(),
+    					"qnaCategory" : $('qnaCategory').val(),	
+    					"List<qnaFile>" :data
                 };
                 $.ajax({
-                    url: "notice",
+                    url: "qna",
                     type: "put",
                     enctype: 'multipart/form-data',  
                     data: JSON.stringify(updateData),
@@ -529,24 +544,24 @@
 			*/
 			
 			//공지 삭제하기 확인 프롬프트
-			function ConfirmDelete(noticeNo) {
-			    if (confirm("Are you sure you want to delete this notice?")) {
-			    	 console.log(noticeNo);
-			    	deleteById(noticeNo);
+			function ConfirmDelete(qnaNo) {
+			    if (confirm("Are you sure you want to delete this qna?")) {
+			    	 console.log(qnaNo);
+			    	deleteById(qnaNo);
 			    }
 			    return false;
 			}
 			//공지 삭제하기
-			 function deleteById(noticeNo) {
+			 function deleteById(qnaNo) {
                  $.ajax({
                 	
-                     url: 'notice/' + noticeNo,
+                     url: 'qna/' + qnaNo,
                      type: 'delete',
                      success: response => {
                          if (response.message === '게시글 삭제 성공') {
                         	 
-                        	 $('#noticeModal').modal('hide');
-                        	 $('#noticeModal').slideUp(300);
+                        	 $('#qnaModal').modal('hide');
+                        	 $('#qnaModal').slideUp(300);
                              document.getElementById('outerDiv').remove();
                              findAll();
                              alert('게시글 삭제 성공');
@@ -559,12 +574,12 @@
 			    currentCategory = 'all';
 			    currentPage = 0; // 페이지 갯수 초기화
 			    $.ajax({
-			        url: 'notice',
+			        url: 'qna',
 			        type: 'get',
 			        success: response => {
-			        	noticeListGlobal = response.data; // Store initial notice list globally
-			            noticeListGlobal = formatDates(noticeListGlobal); // Format the dates
-			            renderNotices(noticeListGlobal.slice(0, noticesPerPage));
+			        	qnaListGlobal = response.data; // Store initial qna list globally
+			            qnaListGlobal = formatDates(qnaListGlobal); // Format the dates
+			            renderqnas(qnaListGlobal.slice(0, qnasPerPage));
 			            currentPage++; // Increment page after loading initial data
 			            checkLoadMoreButton();
 			        },
@@ -574,17 +589,17 @@
 			    });
 			};
 
-			// Function to load notices by category
+			// Function to load qnas by category
 			const findByCate = (cate) => {
 			    currentCategory = cate;
 			    currentPageCate[cate] = 0; // Initialize page count for this category
 			    $.ajax({
-			        url: 'notice/category/' + cate,
+			        url: 'qna/category/' + cate,
 			        type: 'get',
 			        success: response => {
-			            noticeListGlobal = response.data; // Store initial notice list globally
-			            noticeListGlobal = formatDates(noticeListGlobal);
-			            renderNoticesCate(cate, noticeListGlobal.slice(0, noticesPerPage));
+			            qnaListGlobal = response.data; // Store initial qna list globally
+			            qnaListGlobal = formatDates(qnaListGlobal);
+			            renderqnasCate(cate, qnaListGlobal.slice(0, qnasPerPage));
 			            currentPageCate[cate]++; // Increment page after loading initial data
 			            checkLoadMoreButtonCate(cate);
 			        },
@@ -593,13 +608,13 @@
 			        }
 			    });
 			};
-			const findFiles = (noticeNo) => {
+			const findFiles = (qnaNo) => {
 			   
 			    $.ajax({
-			        url: 'notice/nFile/' + noticeNo,
+			        url: 'qna/qnaFile/' + qnaNo,
 			        type: 'get',
 			        success: response => {
-			        	nfileListGlobal = response.data; // Store initial notice list globally
+			        	qnaFileListGlobal = response.data; // Store initial qna list globally
 			        },
 			        error: err => {
 			            console.error('Error fetching data:', err);
@@ -607,25 +622,25 @@
 			    });
 			};
 			
-			// Function to load more notices when "Load More" is clicked for findAll
-			const loadMoreNotices = () => {
-			    renderNotices(noticeListGlobal.slice(0, (currentPage + 1) * noticesPerPage));
+			// Function to load more qnas when "Load More" is clicked for findAll
+			const loadMoreqnas = () => {
+			    renderqnas(qnaListGlobal.slice(0, (currentPage + 1) * qnasPerPage));
 			    currentPage++; // Increment page after loading more data
 			    checkLoadMoreButton();
 			};
 
-			// Function to load more notices by category when "Load More" is clicked for findByCate
-			const loadMoreNoticesCate = (cate) => {
-			    renderNoticesCate(cate, noticeListGlobal.slice(0, (currentPageCate[cate] + 1) * noticesPerPage));
+			// Function to load more qnas by category when "Load More" is clicked for findByCate
+			const loadMoreqnasCate = (cate) => {
+			    renderqnasCate(cate, qnaListGlobal.slice(0, (currentPageCate[cate] + 1) * qnasPerPage));
 			    currentPageCate[cate]++; // Increment page after loading more data
 			    checkLoadMoreButtonCate(cate);
 			};
-			const formatDates = (noticeList) => {
-			    return noticeList.map(notice => {
-			        if (notice.resdate) {
-			            notice.createDate = formatDate(notice.resdate);
+			const formatDates = (qnaList) => {
+			    return qnaList.map(qna => {
+			        if (qna.resdate) {
+			            qna.createDate = formatDate(qna.resdate);
 			        }
-			        return notice;
+			        return qna;
 			    });
 			};
 
@@ -639,8 +654,8 @@
 
 			    return `${year}-${month}-${day}`;
 			};
-			function getKoreanNoticeCategory(noticeCategory) {
-			    switch (noticeCategory) {
+			function getKoreanqnaCategory(qnaCategory) {
+			    switch (qnaCategory) {
 			        case 'etc':
 			        	console.log('기타');
 			            return '기타';
@@ -650,13 +665,15 @@
 			            return '이벤트';
 			        case 'general':
 			            return '일반';
+			        case 'unsolved':
+			            return '미해결';
 			        default:
 			            return 'Unknown Category'; // Default case if category does not match any known types
 			    }
 			}
-			// Function to render notices in the UI for findAll
-			const renderNotices = (noticeList) => {
-			    clearNoticeList(); // Clear existing notices
+			// Function to render qnas in the UI for findAll
+			const renderqnas = (qnaList) => {
+			    clearqnaList(); // Clear existing qnas
 			    const outerDiv = document.createElement('div');
 			    outerDiv.id = 'outerDiv';
 			    const headerRow = document.createElement('div');
@@ -667,36 +684,36 @@
 			    headerRow.appendChild(createDiv('날짜', '200px'));
 			    outerDiv.appendChild(headerRow);
 
-			    noticeList.forEach(o => {
-			        const noticeEl = document.createElement('div');
-			        noticeEl.className = 'noticeEl';
-			        noticeEl.appendChild(createDiv(o.noticeNo, '70px'));
+			    qnaList.forEach(o => {
+			        const qnaEl = document.createElement('div');
+			        qnaEl.className = 'qnaEl';
+			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        
-			        noticeEl.appendChild(createDiv(getKoreanNoticeCategory(o.noticeCategory), '130px'));
-			        noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
-			        noticeEl.appendChild(createDiv(o.resdate, '200px'));
-			        outerDiv.appendChild(noticeEl);
+			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
+			        qnaEl.appendChild(createDiv(o.qnaTitle, '400px'));
+			        qnaEl.appendChild(createDiv(o.resdate, '200px'));
+			        outerDiv.appendChild(qnaEl);
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
 
-			    // Add "Load More" button for findAll if there are more notices to load
-			    if (currentPage * noticesPerPage < noticeListGlobal.length) {
+			    // Add "Load More" button for findAll if there are more qnas to load
+			    if (currentPage * qnasPerPage < qnaListGlobal.length) {
 			        const loadMoreButtonContainer = document.createElement('div');
 			        loadMoreButtonContainer.className = 'load-more-container'; // Container for centering
 
 			        const loadMoreButton = document.createElement('button');
 			        loadMoreButton.className = 'get-more-list btn btn-outline-secondary';
 			        loadMoreButton.textContent = '더 보기';
-			        loadMoreButton.onclick = loadMoreNotices;
+			        loadMoreButton.onclick = loadMoreqnas;
 
 			        loadMoreButtonContainer.appendChild(loadMoreButton); // Add button to the container
 			        document.getElementById('content').appendChild(loadMoreButtonContainer); // Add container to the content
 			    }
 			};
 			
-			// Function to render notices by category in the UI for findByCate
-			const renderNoticesCate = (cate, noticeList) => {
-			    clearNoticeList(); // Clear existing notices
+			// Function to render qnas by category in the UI for findByCate
+			const renderqnasCate = (cate, qnaList) => {
+			    clearqnaList(); // Clear existing qnas
 			    const outerDiv = document.createElement('div');
 			    outerDiv.id = 'outerDiv';
 			    const headerRow = document.createElement('div');
@@ -706,26 +723,26 @@
 			    headerRow.appendChild(createDiv('제목', '400px'));
 			    headerRow.appendChild(createDiv('날짜', '200px'));
 			    outerDiv.appendChild(headerRow);
-			    noticeList.forEach(o => {
-			        const noticeEl = document.createElement('div');
-			        noticeEl.className = 'noticeEl';
-			        noticeEl.appendChild(createDiv(o.noticeNo, '70px'));
-			        noticeEl.appendChild(createDiv(getKoreanNoticeCategory(o.noticeCategory), '130px'));
-			        noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
-			        noticeEl.appendChild(createDiv(o.resdate, '200px'));
-			        outerDiv.appendChild(noticeEl);
+			    qnaList.forEach(o => {
+			        const qnaEl = document.createElement('div');
+			        qnaEl.className = 'qnaEl';
+			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
+			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
+			        qnaEl.appendChild(createDiv(o.qnaTitle, '400px'));
+			        qnaEl.appendChild(createDiv(o.resdate, '200px'));
+			        outerDiv.appendChild(qnaEl);
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
 
-			    // Add "Load More" button for this category if there are more notices to load
-			    if (currentPageCate[cate] * noticesPerPage < noticeListGlobal.length) {
+			    // Add "Load More" button for this category if there are more qnas to load
+			    if (currentPageCate[cate] * qnasPerPage < qnaListGlobal.length) {
 			        const loadMoreButtonContainer = document.createElement('div');
 			        loadMoreButtonContainer.className = 'load-more-container'; // Container for centering
 
 			        const loadMoreButton = document.createElement('button');
 			        loadMoreButton.className = 'get-more-list-cate btn btn-outline-secondary';
 			        loadMoreButton.textContent = '더 보기';
-			        loadMoreButton.onclick = () => loadMoreNoticesCate(cate);
+			        loadMoreButton.onclick = () => loadMoreqnasCate(cate);
 
 			        loadMoreButtonContainer.appendChild(loadMoreButton); // Add button to the container
 			        document.getElementById('content').appendChild(loadMoreButtonContainer); // Add container to the content
@@ -735,16 +752,16 @@
 			// Function to check and manage "Load More" button visibility for findAll
 			const checkLoadMoreButton = () => {
 			    const loadMoreButton = document.querySelector('.get-more-list');
-			    if (loadMoreButton && currentPage * noticesPerPage >= noticeListGlobal.length) {
-			        loadMoreButton.style.display = 'none'; // Hide button if no more notices to load
+			    if (loadMoreButton && currentPage * qnasPerPage >= qnaListGlobal.length) {
+			        loadMoreButton.style.display = 'none'; // Hide button if no more qnas to load
 			    }
 			};
 
 			// Function to check and manage "Load More" button visibility for findByCate
 			const checkLoadMoreButtonCate = (cate) => {
 			    const loadMoreButton = document.querySelector('.get-more-list-cate');
-			    if (loadMoreButton && currentPageCate[cate] * noticesPerPage >= noticeListGlobal.length) {
-			        loadMoreButton.style.display = 'none'; // Hide button if no more notices to load
+			    if (loadMoreButton && currentPageCate[cate] * qnasPerPage >= qnaListGlobal.length) {
+			        loadMoreButton.style.display = 'none'; // Hide button if no more qnas to load
 			    }
 			};
 
@@ -782,39 +799,39 @@
 			    
 			    
 			    //게시글 클릭할 시 
-			    $('#content').on('click', '.noticeEl', e => {
-			        const noticeNo = e.currentTarget.childNodes[0].innerText; // Assuming first child is the noticeNo
+			    $('#content').on('click', '.qnaEl', e => {
+			        const qnaNo = e.currentTarget.childNodes[0].innerText; // Assuming first child is the qnaNo
 
 			        $.ajax({
-			            url: 'notice/' + noticeNo,
+			            url: 'qna/' + qnaNo,
 			            type: 'get',
 			            success: response => {
-			                const notice = response.data;
-			                currentNoticeNo = parseInt(noticeNo);
-			                // Update modal content with notice details
-			                var textTitle = noticeNo+'. [' +getKoreanNoticeCategory(notice.noticeCategory)+'] '+notice.noticeTitle;
-			                $('#noticeModal #noticeHeader').text(textTitle);
-			                $('#noticeModal #noticeContent').text(notice.noticeContent);
-			                $('#noticeModal #files').empty();
+			                const qna = response.data;
+			                currentqnaNo = parseInt(qnaNo);
+			                // Update modal content with qna details
+			                var textTitle = qnaNo+'. [' +getKoreanqnaCategory(qna.qnaCategory)+'] '+qna.qnaTitle;
+			                $('#qnaModal #qnaHeader').text(textTitle);
+			                $('#qnaModal #qnaContent').text(qna.qnaContent);
+			                $('#qnaModal #files').empty();
 			                
 			                
-			                $('#updateModal #noticeNo').val(noticeNo);
-			                $('#updateModal #noticeTitle').val(notice.noticeTitle);
-			                $('#updateModal #noticeContent').val(notice.noticeContent);
+			                $('#updateModal #qnaNo').val(qnaNo);
+			                $('#updateModal #qnaTitle').val(qna.qnaTitle);
+			                $('#updateModal #qnaContent').val(qna.qnaContent);
 			                $('#updateModal #files').empty();
-			                $('select[name^="noticeCategory"] option:selected').attr("selected",null);
-			                $("select[name=noticeCategory]").val(notice.noticeCategory).prop("selected", true);
+			                $('select[name^="qnaCategory"] option:selected').attr("selected",null);
+			                $("select[name=qnaCategory]").val(qna.qnaCategory).prop("selected", true);
 							
 			                // Append file links if files exist
-			                if (notice.files && notice.files.length > 0) {
-			                    notice.files.forEach((file, index) => {
+			                if (qna.files && qna.files.length > 0) {
+			                    qna.files.forEach((file, index) => {
 			                        const fileLink = $('<div>')
 			                            .append($('<span>').text((index + 1) + '. '))
 			                            .append($('<a>').attr('href', '${path0}/' + file.changedName) // Ensure this path is correct
 			                                .attr('download', file.originalName)
 			                                .text(file.originalName));
 			                        
-			                        $('#noticeModal #files').append(fileLink);
+			                        $('#qnaModal #files').append(fileLink);
 			                        
 			                        const updatefileLink = $('<div>')
 			                        .append($('<span>').text((index + 1) + '. 현재 업로드된 파일: '))
@@ -828,19 +845,19 @@
 			                        .append($('<button>').attr('type', 'button')
 					                .attr('class', 'fileDelBtn')
 					                .text('삭제')
-					                .data('nfileNo', file.NFILE_NO)
-					                .data('fileName', 'NFILE_NO_' + index));
+					                .data('qnaFileNo', file.qnaFile_NO)
+					                .data('fileName', 'qnaFile_NO_' + index));
 			                    
 			                    $('#updateModal #files').append(updatefileLink);
 			                });
 							
 			                // Append additional input fields if less than 3 files exist
-			                for (let i = notice.files.length; i < 3; i++) {
+			                for (let i = qna.files.length; i < 3; i++) {
 			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
 			                } 
 			            } else {
 			                // If no files exist
-			                $('#noticeModal #files').html('<p>파일이 존재하지 않습니다.</p>');
+			                $('#qnaModal #files').html('<p>파일이 존재하지 않습니다.</p>');
 			                
 			                // Show 3 input fields for new file uploads
 			                for (let i = 0; i < 3; i++) {
@@ -849,10 +866,10 @@
 			            }
 
 			                document.getElementById('deleteButton').onclick = function() {
-			                    return ConfirmDelete(currentNoticeNo);
+			                    return ConfirmDelete(currentqnaNo);
 			                };
 
-			                $('#noticeModal').modal('show');
+			                $('#qnaModal').modal('show');
 			            }
 			        });
 			    });
