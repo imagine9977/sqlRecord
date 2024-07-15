@@ -371,6 +371,11 @@ at Object.jQueryDetection"
 	
 	@RequestMapping("delete")
 	public String delete(Member member,HttpSession session) {
+		Member currentUser = (Member) session.getAttribute("loginUser");
+		member.setMemberId(currentUser.getMemberId());
+		member.setStatus(currentUser.getStatus());
+		member.setResDate(currentUser.getResDate());
+		log.info("member : {}", member);
 		memberService.delete(member);
 		session.removeAttribute("loginUser");
 		return "redirect:/";

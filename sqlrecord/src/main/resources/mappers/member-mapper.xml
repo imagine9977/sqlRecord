@@ -137,7 +137,7 @@
 	    INSERT INTO MEMBER_GENRE (MEMBER_NO, TAG_NO) VALUES (#{memberNo}, #{tagNo})
 	</insert>
 	
-	<update id="delete">
+	<update id="delete" parameterType="member">
 		UPDATE
 				 MEMBER
 			SET

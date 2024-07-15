@@ -17,6 +17,6 @@ public interface MemberService {
 	int update(Member member);
 	int deleteGenre(int memberNo);
 	void insUpdateGenre(MemberGenre memberGenre);
-	void delete(Member member);
+	int delete(Member member);
 
 }
