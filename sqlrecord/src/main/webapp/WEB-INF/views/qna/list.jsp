@@ -409,7 +409,7 @@
 			    $(this).parent().remove();
 			});
 			
-			function turnQnaSolved {
+			function turnQnaSolved() {
 	            if(solvedBoolean=='N'){
 	            	solvedBoolean='Y';
 	            }else{
@@ -574,7 +574,7 @@
 			    currentCategory = 'all';
 			    currentPage = 0; // 페이지 갯수 초기화
 			    $.ajax({
-			        url: 'qna',
+			        url: 'qna/' + currentCategory,
 			        type: 'get',
 			        success: response => {
 			        	qnaListGlobal = response.data; // Store initial qna list globally
@@ -594,7 +594,7 @@
 			    currentCategory = cate;
 			    currentPageCate[cate] = 0; // Initialize page count for this category
 			    $.ajax({
-			        url: 'qna/category/' + cate,
+			        url: 'qna/' + cate,
 			        type: 'get',
 			        success: response => {
 			            qnaListGlobal = response.data; // Store initial qna list globally
@@ -622,23 +622,11 @@
 			    });
 			};
 			
-			// Function to load more qnas when "Load More" is clicked for findAll
-			const loadMoreqnas = () => {
-			    renderqnas(qnaListGlobal.slice(0, (currentPage + 1) * qnasPerPage));
-			    currentPage++; // Increment page after loading more data
-			    checkLoadMoreButton();
-			};
-
-			// Function to load more qnas by category when "Load More" is clicked for findByCate
-			const loadMoreqnasCate = (cate) => {
-			    renderqnasCate(cate, qnaListGlobal.slice(0, (currentPageCate[cate] + 1) * qnasPerPage));
-			    currentPageCate[cate]++; // Increment page after loading more data
-			    checkLoadMoreButtonCate(cate);
-			};
+			
 			const formatDates = (qnaList) => {
 			    return qnaList.map(qna => {
-			        if (qna.resdate) {
-			            qna.createDate = formatDate(qna.resdate);
+			        if (qna.createDate) {
+			            qna.createDate = formatDate(qna.createDate);
 			        }
 			        return qna;
 			    });
@@ -657,12 +645,11 @@
 			function getKoreanqnaCategory(qnaCategory) {
 			    switch (qnaCategory) {
 			        case 'etc':
-			        	console.log('기타');
 			            return '기타';
 			        case 'service':
 			            return '서비스';
-			        case 'event':
-			            return '이벤트';
+			        case 'pay':
+			            return '결제';
 			        case 'general':
 			            return '일반';
 			        case 'unsolved':
@@ -691,7 +678,7 @@
 			        
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
 			        qnaEl.appendChild(createDiv(o.qnaTitle, '400px'));
-			        qnaEl.appendChild(createDiv(o.resdate, '200px'));
+			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
 			        outerDiv.appendChild(qnaEl);
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
@@ -729,7 +716,7 @@
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
 			        qnaEl.appendChild(createDiv(o.qnaTitle, '400px'));
-			        qnaEl.appendChild(createDiv(o.resdate, '200px'));
+			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
 			        outerDiv.appendChild(qnaEl);
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
@@ -749,21 +736,7 @@
 			    }
 			};
 
-			// Function to check and manage "Load More" button visibility for findAll
-			const checkLoadMoreButton = () => {
-			    const loadMoreButton = document.querySelector('.get-more-list');
-			    if (loadMoreButton && currentPage * qnasPerPage >= qnaListGlobal.length) {
-			        loadMoreButton.style.display = 'none'; // Hide button if no more qnas to load
-			    }
-			};
-
-			// Function to check and manage "Load More" button visibility for findByCate
-			const checkLoadMoreButtonCate = (cate) => {
-			    const loadMoreButton = document.querySelector('.get-more-list-cate');
-			    if (loadMoreButton && currentPageCate[cate] * qnasPerPage >= qnaListGlobal.length) {
-			        loadMoreButton.style.display = 'none'; // Hide button if no more qnas to load
-			    }
-			};
+		
 
 			// div 생성을 도와주는 함수
 			const createDiv = (data, style) => {

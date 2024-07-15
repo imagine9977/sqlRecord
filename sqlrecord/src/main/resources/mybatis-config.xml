@@ -20,6 +20,7 @@
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.qna.model.vo.Qna" alias="qna" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="MemberGenre" />
  	  	
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="MemberOrdersDetail" />
@@ -32,6 +33,7 @@
  	  	<mapper resource="/mappers/cart-mapper.xml"/>
  		<mapper resource="/mappers/member-mapper.xml"/>  
  	  	<mapper resource="/mappers/notice-mapper.xml" />
+ 	  	<mapper resource="/mappers/qna-mapper.xml" />
 		<!--<mapper resource="/mappers/product-mapper.xml" /> -->
 		<mapper resource="/mappers/memberOrders-mapper.xml" />
  	</mappers>

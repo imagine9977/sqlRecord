@@ -81,6 +81,11 @@
                     공지사항
                 </a>
             </div>
+            <div class="navbar-item">
+                <a href="${hpath}/qnas">
+                    질문게시판
+                </a>
+            </div>
         </div>
     </div>
 
