@@ -79,7 +79,7 @@
 		NOTICE_NO =
 		#{noticeNo}
 	</delete>
-	<delete id="deleteFileByPosition" parameterType="map">
+	<delete id="deleteFileByPosition" parameterType="_int">
     DELETE FROM NFILE
     WHERE NFILE_NO = #{nfileNo}
 	</delete>

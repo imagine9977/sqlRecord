@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sqlrecord.sqlrecord.message.Message;
@@ -152,6 +152,7 @@ public class NoticeController {
 		
 		return "resources/uploadFiles/notice" + changeName; //얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
 	}
+	/*
 	@PostMapping
 	public ResponseEntity<Message> save(Notice notice) {
 
@@ -164,7 +165,7 @@ public class NoticeController {
 		Message responseMsg = Message.builder().data(result).message("서비스 요청 성공").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
-
+	*/
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
 		Notice notice = noticeService.findById(id);
@@ -185,9 +186,9 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 
-	@PutMapping
-	public ResponseEntity<Message> update(@RequestBody Notice notice, @RequestParam("upfile") MultipartFile[] upfiles,
-			HttpSession session) {
+	@PutMapping("/update")
+	public ResponseEntity<Message>update(@RequestPart("notice") Notice notice, @RequestPart("updatefile") MultipartFile[] upfiles,
+            HttpSession session) {
 		log.info("start");
 		List<NFile> nfiles = new ArrayList<>();
 		for (MultipartFile reupfile : upfiles) {
@@ -199,11 +200,12 @@ public class NoticeController {
 			}
 			nfiles.add(nfile);
 		}
+		/*
 		int a= nfiles.size();
 		for(int i =a; i<3; i++) {
 			NFile nfile = new NFile();
 			nfiles.add(nfile);
-		}
+		} */
 		notice.setFiles(nfiles);
 		int result = noticeService.update(notice);
 		log.info(" result:{}", result);

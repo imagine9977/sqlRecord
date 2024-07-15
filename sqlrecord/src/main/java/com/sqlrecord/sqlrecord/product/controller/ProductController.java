@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sqlrecord.sqlrecord.common.model.vo.PageInfo;
+
 import com.sqlrecord.sqlrecord.common.template.PageTemplate;
+import com.sqlrecord.sqlrecord.common.vo.PageInfo;
 import com.sqlrecord.sqlrecord.product.model.service.ProductService;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 import com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos;
@@ -114,7 +115,7 @@ public class ProductController {
 		
 		return "product/list";
 	}
-	
+
 	/*
 	// 상품 추가
 	@PostMapping("/saveProduct")
@@ -122,6 +123,4 @@ public class ProductController {
 		
 	}
 	 */
-	
-	
 }

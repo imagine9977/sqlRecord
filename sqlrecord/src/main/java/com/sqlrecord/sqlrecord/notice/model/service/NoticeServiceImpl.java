@@ -96,7 +96,9 @@ public class NoticeServiceImpl implements NoticeService {
 	        if (newFiles.size() < oldFiles.size()) {
 	            // Handle case where there were previously 3 files but now less than 3
 	            // In this case, ensure that any existing file beyond the current size is deleted
-	            
+	            for(int i = newFiles.size(); i< oldFiles.size(); i++) {
+	            	result = noticeMapper.deleteFileByPosition(newFiles.get(i).getNfileNo());
+	            }
 	        }
 	    }
 		return result;
