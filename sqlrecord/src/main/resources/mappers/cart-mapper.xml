@@ -5,8 +5,8 @@
 <mapper namespace="com.sqlrecord.sqlrecord.cart.model.dao.CartMapper">
 
 	<resultMap type="cart" id="cartRM">
-    	<id property="cart_num" column="cart_num"/>
-	    <result property="cart_amount" column="cart_amount" jdbcType="INTEGER"/>
+    	<id property="cartNum" column="cart_num"/>
+	    <result property="cartAmount" column="cart_amount" jdbcType="INTEGER"/>
 	    <association property="member" javaType="member">
 	    	<id property="memberNo" column="MEMBER_ID"/>
 		    <result property="memberId" column="MEMBER_ID"/>
@@ -42,9 +42,9 @@
 	</resultMap>
 
 	<resultMap type="guestCart" id="guestCartRM">
-    	<id property="guest_cart_num" column="cart_num"/>
-    	<result property="guest_no" column="guest_no"/>  
-	    <result property="guest_cart_amount" column="guest_cart_amount" jdbcType="INTEGER"/>
+    	<id property="guestCartNum" column="cart_num"/>
+    	<result property="guestNo" column="guest_no"/>  
+	    <result property="guestCartAmount" column="guest_cart_amount" jdbcType="INTEGER"/>
     	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
 	        <result property="productNo" column="product_no"/>
 	        <result property="productName" column="product_name"/>
@@ -69,7 +69,7 @@
 	        c.CART_AMOUNT,
 	        p.PRODUCT_NAME,
 	        p.PRODUCT_PRICE,
-	        ps.photo_path,
+	        ps.PHOTO_PATH,
 	        ROW_NUMBER() OVER (PARTITION BY c.PRODUCT_NO ORDER BY c.CART_NUM DESC) AS rn
 	    FROM
 	        MEMBER_CART c
@@ -82,12 +82,12 @@
 		)
 		SELECT
 		    CART_NUM,
-		    PRODUCT_NO productNo,
+		    PRODUCT_NO,
 		    MEMBER_NO,
 		    CART_AMOUNT,
-		    PRODUCT_NAME productName,
-		    PRODUCT_PRICE productPrice,
-		    PHOTO_PATH photoPath
+		    PRODUCT_NAME,
+		    PRODUCT_PRICE,
+		    PHOTO_PATH
 		FROM
 		    RankedCart
 		WHERE

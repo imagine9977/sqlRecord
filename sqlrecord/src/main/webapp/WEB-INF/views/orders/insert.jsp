@@ -15,65 +15,111 @@
     <br><br>
     
 
-    <form>
+    <form action="${ hpath }/orders/insertMemberOD" method="POST">
+    	<input text="text" name="memberOrdersDetailNo" hidden="hidden"/>
         <div class="row mb-3">
           <label for="inputEmail3" class="col-sm-2 col-form-label">상품명</label>
           <div class="col-sm-10">
-            <input type="email" class="form-control" id="inputEmail3">
+            <input type="text" class="form-control" value="${ memberOrdersDetail.product.productName }" readonly="readonly">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="inputPassword3" class="col-sm-2 col-form-label">교환 환불</label>
+          <label for="inputPassword3" class="col-sm-2 col-form-label">주문수량</label>
           <div class="col-sm-10">
-            <input type="password" class="form-control" id="inputPassword3">
+            <input type="text" class="form-control" value="${ memberOrdersDetail.memberOrdersDetailAmount }" readonly="readonly">
           </div>
         </div>
         <fieldset class="row mb-3">
           <legend class="col-form-label col-sm-2 pt-0">교환 / 환불</legend>
           <div class="col-sm-10">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+              <input class="form-check-input" type="radio" name="memberOrdersExType" id="gridRadios1" onclick="checkgridRadios(this)" value="option1" checked>
               <label class="form-check-label" for="gridRadios1">
                 환불
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" >
-              <label class="form-check-label" for="gridRadios3">
+              <input class="form-check-input" type="radio" name="memberOrdersExType" id="gridRadios2" onclick="checkgridRadios(this)" value="option2" >
+              <label class="form-check-label" for="gridRadios2">
                 교환
               </label>
             </div>
           </div>
         </fieldset>
-        <div class="col-auto">
-            <label class="visually-hidden" for="autoSizingSelect">색상</label>
-            <select class="form-select" id="autoSizingSelect">
-              <option selected>Choose...</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
+        
+        
+        
+        <!-- OD의 갯수 가 맥스 -->
+        <!-- 보내야 할값 -->
           <div class="col-auto">
-            <label class="visually-hidden" for="autoSizingSelect">수량</label>
-            <select class="form-select" id="autoSizingSelect">
+            <label class="visually-hidden" for="memberOrdersExAmount">수량</label>
+            <select class="form-select" id="memberOrdersExAmount" name="memberOrdersExAmount">
               <option selected>Choose...</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <c:forEach var="item" begin="1" end="${ memberOrdersDetail.memberOrdersDetailAmount }">
+              	<option value="${ item }">${ item }</option>
+              </c:forEach>
             </select>
           </div>
+          
+          <div class="col-auto">
+            <label class="visually-hidden" for="productName">교환 상품 선택</label>
+            <select class="form-select" id="productName" name="productName">
+              <option selected>Choose...</option>
+              <c:forEach var="productItem" items="${ productList }" >
+              	<option value="${ productItem.productNo }">${ productItem.productName }</option>
+              </c:forEach>
+              
+      
+            </select>
+          </div>
+          
+          
+          <!-- 보내야 할값 -->
           <div class="row mb-3">
             <label for="inputEmail3" class="col-sm-2 col-form-label">사유</label>
             <div class="col-sm-10">
-              <input type="email" class="form-control" id="inputEmail3">
+              <input type="email" class="form-control" id="memberOrdersExReason" name="memberOrdersExReason">
             </div>
           </div>
-        <button type="submit" class="btn btn-primary">교환 신청 하기</button>
-        <button type="submit" class="btn btn-primary">환불 신청 하기</button>
+          
+        <button type="submit" class="btn btn-primary" id="exchange">교환 신청 하기</button>
+        <button type="submit" class="btn btn-primary" id="refund">환불 신청 하기</button>
       </form>
+      
 </div>
-<script src="hpath/resources/js/forHeader.js?after1"></script>
+
+
+<script>
+	const gridRadios1 = document.querySelector("#gridRadios1");
+	const gridRadios2 = document.querySelector("#gridRadios2");
+	
+	const exchange = document.querySelector("#exchange");
+	const refund = document.querySelector("#refund");
+	
+	if(gridRadios1.checked == true) {
+		exchange.style.display = 'none';
+		refund.style.display = 'block';
+	}
+	
+	function checkgridRadios(e) {
+		console.log(e.id);
+		if(e.id == 'gridRadios1') {
+			exchange.style.display = 'none';
+			refund.style.display = 'block';
+		} else {
+			exchange.style.display = 'block';
+			refund.style.display = 'none';
+		}
+		
+		
+	}
+	
+	
+
+</script>
+
+
+<script src="${ hpath}/resources/js/forHeader.js?after1"></script>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

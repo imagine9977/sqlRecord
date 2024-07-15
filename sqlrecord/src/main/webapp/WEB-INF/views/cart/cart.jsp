@@ -133,30 +133,30 @@ input[class="check"]:checked + label:after {
       <c:when test="${not empty list }">
 	      <c:forEach var="item" items="${list }" varStatus="status">
 	      
-	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.product_no }">
+	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
 	      <label for="check${status.count }"></label>
 	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.product_photos.photo_path }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+	        <img src="${item.product.productPhotos.photoPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 	      </div>
-	      <div>${ item.product.product_name }</div>
-	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
-	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cart_amount}></div>
-	      <input type="text" name="member_no" value="${ item.member.member_no }" hidden="hidden">
+	      <div>${ item.product.productName }</div>
+	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
+	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cartAmount}></div>
+	      <input type="text" name="member_no" value="${ item.member.memberNo }" hidden="hidden">
 	      </c:forEach>
       </c:when>
       
       <c:otherwise>
       	  <c:forEach var="item" items="${glist }" varStatus="status">
 	      
-	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.product_no }">
+	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
 	      <label for="check${status.count }"></label>
 	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.product_photos.photo_path }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+	        <img src="${item.product.productPhotos.photoPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 	      </div>
-	      <div>${ item.product.product_name }</div>
-	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.product_price }></div>
-	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="guest_cart_amount" value=${ item.guest_cart_amount}></div>
-	      <input type="text" name="guest_no" value="${ item.guest_no }" hidden="hidden">
+	      <div>${ item.product.productName }</div>
+	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
+	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="guest_cart_amount" value=${ item.guestCartAmount}></div>
+	      <input type="text" name="guest_no" value="${ item.guestNo }" hidden="hidden">
 	      </c:forEach>
       
       </c:otherwise>
