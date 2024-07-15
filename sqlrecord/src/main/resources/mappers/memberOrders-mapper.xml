@@ -70,10 +70,11 @@
 	        <result property="tagNo" column="tag_no"/>
 	        <result property="productDetail" column="product_detail"/>
 	        <result property="productCate" column="product_cate"/>
-		<collection column="product_no = product_no" property="productPhotosList" javaType="List" select="getPhotos">
+		<collection column="product_no" property="productPhotosList" javaType="List" select="getPhotos">
 	        	<result property="productPhotosNo" column="PHOTO_NO"/>
 			    <result property="productPhotosName" column="PHOTO_NAME"/>
 			    <result property="productPhotosPath" column="PHOTO_PATH"/>
+			    <result property="productNo" column="PRODUCT_NO"/>
 		</collection>	
 	    </association>
 	    <association property="memberOrders" javaType="memberOrders">
@@ -88,67 +89,36 @@
 	
 	
 	<select id="getOrdersDetail" resultMap="odRM">
-	     WITH RANKEDMOD AS (SELECT
-		        od.MEMBER_ORDERS_DETAIL_NO,
+        SELECT
+                mod.MEMBER_ORDERS_DETAIL_NO,
 		        p.PRODUCT_NO,
                 p.PRODUCT_NAME,
                 p.product_cate,
                 p.product_price,
                 p.product_status,
                 mo.MEMBER_NO,
+                mo.MEMBER_ORDERS_NO,
                 mo.MEMBER_ORDERS_ADDRESS,
                 mo.MEMBER_ORDERS_ADDRESS2,
                 mo.MEMBER_ORDERS_POSTCODE,
                 mo.MEMBER_ORDERS_DATE,
-		        od.MEMBER_ORDERS_NO,
-		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
-		        od.MEMBER_ORDERS_DETAIL_PRICE,
-		        od.MEMBER_ORDERS_EXD,
-		        od.TRACKING_NUM,
-		        od.MEMBER_ORDERS_DETAIL_STATUS,
-		        ps.photo_no,
-		        ps.photo_name,
-                ps.photo_path,
-                ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
-                
-	    FROM
-	       	 	MEMBER_ORDERS_DETAIL od
+		        mod.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        mod.MEMBER_ORDERS_DETAIL_PRICE,
+		        mod.MEMBER_ORDERS_EXD,
+		        mod.TRACKING_NUM,
+		        mod.MEMBER_ORDERS_DETAIL_STATUS
+        FROM
+                MEMBER_ORDERS_DETAIL mod
         JOIN
                 MEMBER_ORDERS mo
         ON
-                od.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
+                mod.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO        
         JOIN
-                PRODUCT p
-        ON
-                od.PRODUCT_NO = p.product_no
-        LEFT 
-        JOIN
-	        	PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
-	   WHERE
-                mo.MEMBER_NO = #{memberNo})
-        SELECT
-                MEMBER_ORDERS_DETAIL_NO,
-		        PRODUCT_NO,
-                PRODUCT_NAME,
-                product_cate,
-                product_price,
-                product_status,
-                MEMBER_NO,
-                MEMBER_ORDERS_ADDRESS,
-                MEMBER_ORDERS_ADDRESS2,
-                MEMBER_ORDERS_POSTCODE,
-                MEMBER_ORDERS_DATE,
-		        MEMBER_ORDERS_NO,
-		        MEMBER_ORDERS_DETAIL_AMOUNT,
-		        MEMBER_ORDERS_DETAIL_PRICE,
-		        MEMBER_ORDERS_EXD,
-		        TRACKING_NUM,
-		        MEMBER_ORDERS_DETAIL_STATUS,
-                photo_no,
-		        photo_name,
-                photo_path
-        FROM
-                RANKEDMOD
+        		PRODUCT p
+        ON	
+        		mod.PRODUCT_NO = p.PRODUCT_NO
+       	WHERE
+                mo.MEMBER_NO = #{memberNo}
         ORDER
         BY
                 MEMBER_ORDERS_DATE
@@ -265,7 +235,7 @@
         DESC			
 	</select>
 	
-	<select id="getPhotos" resultType="productPhotos">
+	<select id="getPhotos" parameterType="int" resultType="productPhotos">
 		SELECT
 				PHOTO_NO productPhotosNo,         
 				PRODUCT_NO productNo,         
@@ -273,6 +243,8 @@
 				PHOTO_PATH productPhotosPath
 		FROM
 				PRODUCT_PHOTOS
+		WHERE
+				product_no = #{product_no}
 	</select>
 
 

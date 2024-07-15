@@ -136,6 +136,8 @@ public class OrdersForwardController {
 		// HashSet에 add
 		for(MemberOrdersDetail item : odList) {
 			hs.add(item.getMemberOrders().getMemberOrdersNo());
+			log.info("odList : {}" , odList.size());
+			log.info("odList안의 하나 포토들 : {}" , odList.get(0).getProduct().getProductPhotosList().size());
 		}
 		
 		// 2중 리스트를 만들기 위해서 준비
