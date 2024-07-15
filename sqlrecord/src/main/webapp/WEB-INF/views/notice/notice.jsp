@@ -407,7 +407,7 @@
 			});
 			
 			
-			// 공지사항 목록을 지우는 함수
+			// 공지사항 목록을 지우는 함수	
 			const clearNoticeList = () => {
 			    const existingOuterDiv = document.getElementById('outerDiv');
 			    if (existingOuterDiv) {

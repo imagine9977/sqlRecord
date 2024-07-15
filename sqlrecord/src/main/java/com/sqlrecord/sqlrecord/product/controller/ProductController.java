@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.sqlrecord.sqlrecord.common.model.vo.PageInfo;
+import com.sqlrecord.sqlrecord.common.template.PageTemplate;
+import com.sqlrecord.sqlrecord.common.vo.PageInfo;
 import com.sqlrecord.sqlrecord.product.model.service.ProductService;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
-	
+	/*
 	private final ProductService productService;
 	
 	// 전체 상품 조회 (list.jsp)
@@ -109,5 +110,5 @@ public class ProductController {
 	}
 
 	
-
+	*/
 }

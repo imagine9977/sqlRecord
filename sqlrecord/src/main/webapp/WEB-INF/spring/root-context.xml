@@ -41,7 +41,7 @@
 
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.notice.model.dao"/>
 		
-		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.product.model.dao"/>
+		<!-- <mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.product.model.dao"/>  -->
 
 		
 		<!-- 메일 전송 도구 등록(기능 한 번에 묶기) -->    <!-- 나중에 의존성 주입 받을 수 있음!!! -->

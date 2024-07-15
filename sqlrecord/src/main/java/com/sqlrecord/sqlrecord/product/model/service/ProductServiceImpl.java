@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
+	/*
 	private final ProductMapper productMapper;
 	private final SqlSessionTemplate sqlSession;
 
@@ -57,5 +57,5 @@ public class ProductServiceImpl implements ProductService {
 	
 	// 상품 삭제 (update status 'Y'->'N')
 	
-	
+	*/
 }
