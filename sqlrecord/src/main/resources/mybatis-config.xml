@@ -12,8 +12,8 @@
  	  	<!-- <typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member"/> -->
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.Cart" alias="cart"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.GuestCart" alias="guestCart"/>
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product" alias="product"/>
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.ProductPhotos" alias="productPhotos"/>
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.Product" alias="product"/>
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos" alias="productPhotos"/>
 	
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/>
@@ -30,12 +30,9 @@
  		<!-- mapper.xml 양식 -->
  		<!-- <mapper resource="/mappers/member-mapper.xml"/>  -->
  	  	<mapper resource="/mappers/cart-mapper.xml"/>
- 	  
- 		  
  		<mapper resource="/mappers/member-mapper.xml"/>  
- 	    
-
  	  	<mapper resource="/mappers/notice-mapper.xml" />
+		<mapper resource="/mappers/product-mapper.xml" />
 		<mapper resource="/mappers/memberOrders-mapper.xml" />
  	</mappers>
  	

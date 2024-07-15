@@ -12,6 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <title>관리자 페이지</title>
 <style>
+/* 기존 CSS 스타일 유지 */
 .tab-bar {
     width: 100%;
     height: 60px;
@@ -47,6 +48,11 @@
 .tab-btnItem a {
     color: black;
     text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .mainBox {
     width: 1500px;
@@ -84,12 +90,12 @@
     width: 100%;
 }
 .sidebar_area {
-    display: block;
-    width : 18%;
+    display: none;
+    width: 18%;
     height: auto;
     border: 1px solid black;
     padding: 10px;
-    text-align:left;
+    text-align: left;
 }
 .sidebar-element p {
     font-size: 17px;
@@ -103,14 +109,14 @@
 .sidebar a:hover, .sidebar a:active, .sidebar a:focus {
     color: inherit;
     text-decoration: none;
-    font-weight:bold;
+    font-weight: bold;
 }
 .sidebar h2 {
     padding-bottom: 0.5rem;
 }
 .tab-content {
-    margin : auto;
-    text-align : center;
+    margin: auto;
+    text-align: center;
 }
 #content-area {
     width: 85%;
@@ -122,24 +128,22 @@
 <body>
 <%@ include file="/WEB-INF/views/header.jsp" %>
 
-
 <!-- 상단 탭 -->
 <div class="tab-bar">
     <ul class="tab-btnBox">
-        <li class="tab-btnItem" data-tab="product"><a href="#">상품</a></li>
-        <li class="tab-btnItem" data-tab="order"><a href="#">주문</a></li>
-        <li class="tab-btnItem" data-tab="member"><a href="#">회원</a></li>
-        <li class="tab-btnItem" data-tab="review"><a href="#">리뷰</a></li>
-        <li class="tab-btnItem" data-tab="analytics"><a href="#">통계·분석</a></li>
-        <li class="tab-btnItem" data-tab="notice"><a href="#">공지사항</a></li>
-        <li class="tab-btnItem" data-tab="qna↗"><a href="{hpath}/qna/qna">고객지원</a></li>
+        <li class="tab-btnItem" data-tab="product"><a href="#product">상품</a></li>
+        <li class="tab-btnItem" data-tab="order"><a href="#order">주문</a></li>
+        <li class="tab-btnItem" data-tab="member"><a href="#member">회원</a></li>
+        <li class="tab-btnItem" data-tab="review"><a href="#review">리뷰</a></li>
+        <li class="tab-btnItem" data-tab="analytics"><a href="#analytics">통계·분석</a></li>
+        <li class="tab-btnItem" data-tab="notice"><a href="#notice">공지사항</a></li>
+        <li class="tab-btnItem"><a href="${hpath}/qna/qna">고객지원</a></li>
     </ul>
 </div>
 
 <div id="tabContent" class="mainBox">
     <!-- 사이드바 -->
     <div class="sidebar_area" id="sidebar"></div>
-
     <!-- 컨텐츠 영역 -->
     <div id="content-area"></div>
 </div>
@@ -152,19 +156,24 @@ $(document).ready(function() {
         $('.tab-btnItem').removeClass('active');
         $('.tab-btnItem[data-tab="' + tabName + '"]').addClass('active');
 
-        // 선택된 탭 저장
-        localStorage.setItem('selectedTab', tabName);
-
-        $.ajax({
-            url: '${hpath}/adminRest/sidebar',
-            data: { tab: tabName },
-            success: function(response) {
-                $('#sidebar').html(response);
-                addSidebarListeners();
-            }
-        });
+        if (tabName === 'product' || tabName === 'order' || tabName === 'member') {
+            $('#sidebar').show();
+            $.ajax({
+                url: '${hpath}/adminRest/sidebar',
+                data: { tab: tabName },
+                success: function(response) {
+                    $('#sidebar').html(response);
+                    addSidebarListeners();
+                }
+            });
+        } else {
+            $('#sidebar').hide();
+        }
 
         loadContent(tabName, 'default');
+        
+        // URL 해시 업데이트
+        window.location.hash = tabName;
     }
 
     function loadContent(tabName, contentType) {
@@ -187,18 +196,31 @@ $(document).ready(function() {
     }
 
     $('.tab-btnItem').click(function(e) {
-        e.preventDefault();
         var tabName = $(this).data('tab');
-        loadTab(tabName);
+        if(tabName) {
+            e.preventDefault();
+            loadTab(tabName);
+        }
+        // QNA 탭은 기본 동작 수행 (링크로 이동)
     });
 
-    // 페이지 로드 시 저장된 탭 확인
-    var savedTab = localStorage.getItem('selectedTab');
-    if (savedTab) {
-        loadTab(savedTab);
-    } else {
-        loadTab('product');
+    // 페이지 로드 시 탭 결정
+    function determineInitialTab() {
+        var hash = window.location.hash.substr(1);
+        if (hash && $('.tab-btnItem[data-tab="' + hash + '"]').length > 0) {
+            return hash;
+        } else {
+            return 'product';
+        }
     }
+
+    // 초기 탭 로드
+    loadTab(determineInitialTab());
+
+    // 해시 변경 감지
+    $(window).on('hashchange', function() {
+        loadTab(determineInitialTab());
+    });
 });
 </script>
 </body>

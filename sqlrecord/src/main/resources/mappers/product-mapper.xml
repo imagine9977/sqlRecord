@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sqlrecord.sqlrecord.product.model.dao.ProductMapper">
+	
+	<select id="productCount" resultType="_int">
+		SELECT
+		        COUNT(PRODUCT_NO)
+		  FROM
+		        PRODUCT
+		 WHERE
+		        PRODUCT_STATUS='Y';
+	</select>
+	
+	<select id="findAll" resultType="product" parameterType="map">
+		SELECT
+		        P.PRODUCT_NO,
+		        P.PRODUCT_NAME,
+		        P.PRODUCT_PRICE,
+		        P.PRODUCT_STATUS,
+		        P.PRODUCT_DATE,
+		        P.TAG_NO,
+		        P.PRODUCT_DETAIL,
+		        P.PRODUCT_CATE,
+		        PH.PHOTO_NO,
+		        PH.PHOTO_NAME,
+		        PH.PHOTO_PATH
+		  FROM
+		        PRODUCT P
+		  LEFT
+		  JOIN
+		        PRODUCT_PHOTOS PH
+		    ON
+		        P.PRODUCT_NO = PH.PRODUCT_NO
+		 WHERE
+		        PRODUCT_CATE = #
+		   AND
+		        PRODUCT_STATUS = 'Y'
+		 ORDER
+		    BY
+		        P.PRODUCT_DATE DESC;
+	</select>
+	
+	
+</mapper>
