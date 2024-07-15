@@ -35,7 +35,7 @@
 	</select>
 	
 	
-	<insert id="insertOrdersDetail" parameterType="MemberOrdersDetail">
+	<insert id="insertOrdersDetail" parameterType="memberOrdersDetail">
 
 		INSERT
 		INTO
@@ -70,13 +70,11 @@
 	        <result property="tagNo" column="tag_no"/>
 	        <result property="productDetail" column="product_detail"/>
 	        <result property="productCate" column="product_cate"/>
-	        <result property="color" column="color"/>
-	        <association property="productPhotos" javaType="productPhotos">
-	        	<result property="photoNo" column="PHOTO_NO"/>
-			    <result property="productNo" column="PRODUCT_NO"/>
-			    <result property="photoName" column="PHOTO_NAME"/>
-			    <result property="photoPath" column="PHOTO_PATH"/>
-	        </association>
+		<collection column="product_no = product_no" property="productPhotosList" javaType="List" select="getPhotos">
+	        	<result property="productPhotosNo" column="PHOTO_NO"/>
+			    <result property="productPhotosName" column="PHOTO_NAME"/>
+			    <result property="productPhotosPath" column="PHOTO_PATH"/>
+		</collection>	
 	    </association>
 	    <association property="memberOrders" javaType="memberOrders">
 	    	<result property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
@@ -108,6 +106,8 @@
 		        od.MEMBER_ORDERS_EXD,
 		        od.TRACKING_NUM,
 		        od.MEMBER_ORDERS_DETAIL_STATUS,
+		        ps.photo_no,
+		        ps.photo_name,
                 ps.photo_path,
                 ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
                 
@@ -144,11 +144,11 @@
 		        MEMBER_ORDERS_EXD,
 		        TRACKING_NUM,
 		        MEMBER_ORDERS_DETAIL_STATUS,
+                photo_no,
+		        photo_name,
                 photo_path
         FROM
                 RANKEDMOD
-        WHERE
-                rn=1
         ORDER
         BY
                 MEMBER_ORDERS_DATE
@@ -175,7 +175,10 @@
 		        od.MEMBER_ORDERS_EXD,
 		        od.TRACKING_NUM,
 		        od.MEMBER_ORDERS_DETAIL_STATUS,
+		        ps.photo_no,
+		        ps.photo_name,
                 ps.photo_path,
+                ps.product_no,
                 ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
                 
 	    FROM
@@ -211,6 +214,8 @@
 		        MEMBER_ORDERS_EXD,
 		        TRACKING_NUM,
 		        MEMBER_ORDERS_DETAIL_STATUS,
+                photo_no,
+		        photo_name,
                 photo_path
         FROM
                 RANKEDMOD
@@ -228,8 +233,8 @@
 	
 		        p.PRODUCT_NO,
                 p.PRODUCT_NAME,
-                p.product_cate,
                 p.product_price,
+                p.product_cate,
                 p.product_status,
                 PRODUCT_DATE,
                 p.tag_no,
@@ -244,12 +249,12 @@
         SELECT
 		        PRODUCT_NO productNo,
 		        PRODUCT_NAME productName,
-                PRODUCT_CATE prodcutCate,
 		        PRODUCT_PRICE productPrice,
+                PRODUCT_CATE prodcutCate,
 		        PRODUCT_STATUS productStatus,
 		        PRODUCT_DATE productDate,
 		        TAG_NO tagNo,
-                PHOTO_PATH photoPath
+                PHOTO_PATH productPhotos
 	    FROM
 	        	RANKEPRO
 	    WHERE
@@ -260,7 +265,15 @@
         DESC			
 	</select>
 	
-	
+	<select id="getPhotos" resultType="productPhotos">
+		SELECT
+				PHOTO_NO productPhotosNo,         
+				PRODUCT_NO productNo,         
+				PHOTO_NAME productPhotosName,
+				PHOTO_PATH productPhotosPath
+		FROM
+				PRODUCT_PHOTOS
+	</select>
 
 
 </mapper>

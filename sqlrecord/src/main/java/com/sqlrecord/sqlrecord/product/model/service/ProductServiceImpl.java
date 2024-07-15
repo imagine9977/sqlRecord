@@ -14,7 +14,30 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService {@Override
+	public int productCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Product> findAll(Map<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int searchCount(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Product> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/*
 	private final ProductMapper productMapper;
 	private final SqlSessionTemplate sqlSession;
@@ -58,4 +81,6 @@ public class ProductServiceImpl implements ProductService {
 	// 상품 삭제 (update status 'Y'->'N')
 	
 	*/
+	
+	
 }

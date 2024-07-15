@@ -26,7 +26,7 @@ import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
-import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +123,7 @@ public class OrdersForwardController {
 		
 		Member member =  (Member) session.getAttribute("loginUser");
 		if(member == null) {
-			return "redirect:member/login.do";
+			return "redirect:/member/login.do";
 		}
 		
 		

@@ -44,7 +44,7 @@ public class CartForwardController {
 			log.info("카드 하나 : {}" , a.getCartAmount());
 			log.info("상품 이름 : {}" , a.getProduct().getProductName());
 		}
-		log.info("{}" , cartList.get(0).getProduct().getProductPhotos().getPhotoPath());
+		log.info("{}" , cartList.get(0).getProduct().getProductPhotosList());
 		return "cart/cart";
 	}
 	

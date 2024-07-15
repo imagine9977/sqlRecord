@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
-import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
 

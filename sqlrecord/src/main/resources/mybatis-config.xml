@@ -15,15 +15,14 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.Product" alias="product"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos" alias="productPhotos"/>
 	
-
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/>
-
+	
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="MemberGenre" />
- 	  	
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="MemberOrdersDetail" />
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx" alias="MemberOrdersEx" />
+
+		<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/> 	  	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="memberOrdersDetail" />
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx" alias="memberOrdersEx" />
  	</typeAliases>
  	
  	<mappers>

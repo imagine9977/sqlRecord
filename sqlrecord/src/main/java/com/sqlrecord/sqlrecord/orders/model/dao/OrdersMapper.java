@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
-import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 @Mapper
 public interface OrdersMapper {
