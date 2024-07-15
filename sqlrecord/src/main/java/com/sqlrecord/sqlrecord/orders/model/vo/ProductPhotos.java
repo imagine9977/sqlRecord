@@ -6,16 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberOrders {
-	private int memberOrdersNo;
-	private String memberOrdersAddress;
-	private String memberOrdersAddress2;
-	private String memberOrdersPostcode;
-	private String memberOrdersDate;
-	private int memberNo;
+public class ProductPhotos {
+	
+	 	private int photoNo;
+	    private int productNo;
+	    private String photoName;
+	    private String photoPath;
 }

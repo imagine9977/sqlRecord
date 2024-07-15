@@ -5,65 +5,95 @@
 <mapper namespace="com.sqlrecord.sqlrecord.cart.model.dao.CartMapper">
 
 	<resultMap type="cart" id="cartRM">
-    	<id property="cart_num" column="cart_num"/>
-    	<result property="member_no" column="member_no"/>  
-	    <result property="cart_amount" column="cart_amount" jdbcType="INTEGER"/>
+    	<id property="cartNum" column="cart_num"/>
+	    <result property="cartAmount" column="cart_amount" jdbcType="INTEGER"/>
+	    <association property="member" javaType="member">
+	    	<id property="memberNo" column="MEMBER_ID"/>
+		    <result property="memberId" column="MEMBER_ID"/>
+		    <result property="memberPw" column="MEMBER_PW"/>
+		    <result property="name" column="NAME"/>
+		    <result property="email" column="EMAIL"/>
+		    <result property="tell" column="TELL"/>
+		    <result property="addr1" column="ADDR1"/>
+		    <result property="addr2" column="ADDR2"/>
+		    <result property="postcode" column="POSTCODE"/>
+		    <result property="birth" column="BIRTH"/>
+		    <result property="point" column="POINT"/>
+		    <result property="status" column="STATUS"/>
+		    <result property="resDate" column="RES_DATE"/>
+    	</association>  
     	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
-	        <result property="product_no" column="product_no"/>
-	        <result property="product_name" column="product_name"/>
-	        <result property="product_price" column="product_price"/>
-	        <result property="product_status" column="product_status"/>
-	        <result property="product_date" column="product_date"/>
-	        <result property="product_photo1" column="product_photo1"/>
-	        <result property="product_photo2" column="product_photo2"/>
-	        <result property="product_photo3" column="product_photo3"/>
-	        <result property="tag_no" column="tag_no"/>
-	        <result property="product_detail" column="product_detail"/>
-	        <result property="product_cate" column="product_cate"/>
+	        <result property="productNo" column="PRODUCT_NO"/>
+	        <result property="productName" column="PRODUCT_NAME"/>
+	        <result property="productPrice" column="PRODUCT_PRICE"/>
+	        <result property="productStatus" column="PRODUCT_STATUS"/>
+	        <result property="productDate" column="PRODUCT_DATE"/>
+	        <result property="tagNo" column="tag_no"/>
+	        <result property="productDetail" column="product_detail"/>
+	        <result property="productCate" column="product_cate"/>
 	        <result property="color" column="color"/>
+	        <association property="productPhotos" javaType="productPhotos">
+	        	<result property="photoNo" column="PHOTO_NO"/>
+			    <result property="productNo" column="PRODUCT_NO"/>
+			    <result property="photoName" column="PHOTO_NAME"/>
+			    <result property="photoPath" column="PHOTO_PATH"/>
+	        </association>
 	    </association>
 	</resultMap>
 
 	<resultMap type="guestCart" id="guestCartRM">
-    	<id property="guest_cart_num" column="cart_num"/>
-    	<result property="guest_no" column="guest_no"/>  
-	    <result property="guest_cart_amount" column="guest_cart_amount" jdbcType="INTEGER"/>
+    	<id property="guestCartNum" column="cart_num"/>
+    	<result property="guestNo" column="guest_no"/>  
+	    <result property="guestCartAmount" column="guest_cart_amount" jdbcType="INTEGER"/>
     	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
-	        <result property="product_no" column="product_no"/>
-	        <result property="product_name" column="product_name"/>
-	        <result property="product_price" column="product_price"/>
-	        <result property="product_status" column="product_status"/>
-	        <result property="product_date" column="product_date"/>
-	        <result property="product_photo1" column="product_photo1"/>
-	        <result property="product_photo2" column="product_photo2"/>
-	        <result property="product_photo3" column="product_photo3"/>
-	        <result property="tag_no" column="tag_no"/>
-	        <result property="product_detail" column="product_detail"/>
-	        <result property="product_cate" column="product_cate"/>
+	        <result property="productNo" column="product_no"/>
+	        <result property="productName" column="product_name"/>
+	        <result property="productPrice" column="product_price"/>
+	        <result property="productStatus" column="product_status"/>
+	        <result property="productDate" column="product_date"/>
+			
+
+	        <result property="tagNo" column="tag_no"/>
+	        <result property="productDetail" column="product_detail"/>
+	        <result property="productCate" column="product_cate"/>
 	        <result property="color" column="color"/>
 	    </association>
 	</resultMap>
 
 	<select id="cartListSelect" parameterType="_int" resultMap="cartRM">
-	 SELECT
-			c.PRODUCT_NO,
-			c.MEMBER_NO,
-			c.CART_AMOUNT,
-			p.PRODUCT_PRICE,
-			p.PRODUCT_PHOTO1,
-			p.PRODUCT_NAME
-	   FROM
-			CART c
-	   JOIN
-			PRODUCT p
-		 ON
-			c.PRODUCT_NO = p.PRODUCT_NO
-	  WHERE
-			c.MEMBER_NO = #{member_no}
-	  ORDER
-		 BY
- 			c.CART_NUM
-	   DESC
+	 WITH RankedCart AS (
+	    SELECT
+	        c.CART_NUM,
+	        c.PRODUCT_NO,
+	        c.MEMBER_NO,
+	        c.CART_AMOUNT,
+	        p.PRODUCT_NAME,
+	        p.PRODUCT_PRICE,
+	        ps.PHOTO_PATH,
+	        ROW_NUMBER() OVER (PARTITION BY c.PRODUCT_NO ORDER BY c.CART_NUM DESC) AS rn
+	    FROM
+	        MEMBER_CART c
+	    JOIN
+	        PRODUCT p ON c.PRODUCT_NO = p.PRODUCT_NO
+	    LEFT JOIN
+	        PRODUCT_PHOTOS ps ON c.PRODUCT_NO = ps.PRODUCT_NO
+	    WHERE
+	        c.MEMBER_NO = #{member_no}
+		)
+		SELECT
+		    CART_NUM,
+		    PRODUCT_NO,
+		    MEMBER_NO,
+		    CART_AMOUNT,
+		    PRODUCT_NAME,
+		    PRODUCT_PRICE,
+		    PHOTO_PATH
+		FROM
+		    RankedCart
+		WHERE
+		    rn = 1
+		ORDER BY
+		    CART_NUM DESC
 	
 	
 	</select>

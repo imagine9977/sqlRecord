@@ -39,4 +39,9 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.infoId(member);
 	}
 
+	@Override
+	public int pwChange(Member member) {
+		return memberMapper.pwChange(member);
+	}
+
 }

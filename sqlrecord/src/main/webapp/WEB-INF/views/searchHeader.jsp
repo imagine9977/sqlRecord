@@ -12,25 +12,25 @@
       	  </a>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>TURNTABLES</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='turntables'">TURNTABLES</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>SPEAKERS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='speakers'">SPEAKERS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>RADIOS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='radios'">RADIOS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>CD&nbspPLAYERS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='cd-players'">CD&nbspPLAYERS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>CASSETTE&nbspPLAYERS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='cassette-players'">CASSETTE&nbspPLAYERS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>MEDIA&nbspSTANDS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='media-stands'">MEDIA&nbspSTANDS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a>VINYL</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='vynyl'">VINYL</a></p>
       	</div>
       </div>
       

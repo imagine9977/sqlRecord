@@ -40,7 +40,11 @@ public class CartForwardController {
 		
 		List<Cart> cartList = cartService.getCartList(userid);
 		model.addAttribute("list",cartList);
-		log.info("{}" , cartList);
+		for(Cart a : cartList) {
+			log.info("카드 하나 : {}" , a.getCartAmount());
+			log.info("상품 이름 : {}" , a.getProduct().getProductName());
+		}
+		log.info("{}" , cartList.get(0).getProduct().getProductPhotos().getPhotoPath());
 		return "cart/cart";
 	}
 	

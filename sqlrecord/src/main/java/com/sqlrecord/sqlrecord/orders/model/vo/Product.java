@@ -12,16 +12,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Product {
-	private int product_no;
-	private String product_name;
-	private int product_price;
-	private String product_status;
-	private String product_date;
-	private String product_photo1;
-	private String product_photo2;
-	private String product_photo3;
-	private int tag_no;
-	private String product_detail;
-	private String product_cate;
-	private String color;
+	private int productNo;
+	private String productName;
+	private int productPrice;
+	private String productStatus;
+	private String productDate;
+	private int tagNo;
+	private String productDetail;
+	private String productCate;
+	private ProductPhotos productPhotos;
+
 }

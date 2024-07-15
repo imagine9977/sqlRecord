@@ -15,8 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class GuestCart {
-	private int guest_cart_num;
+	private int guestCartNum;
 	private Product product;
-	private int guest_no;
-	private int guest_cart_amount;
+	private int guestNo;
+	private int guestCartAmount;
 }
