@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.member.model.dao.MemberMapper">
+	
+	<sql id="selectMember">
+		SELECT 
+				MEMBER_NO memberNo,    
+			    MEMBER_ID memberId,    
+			    MEMBER_PW memberPw,
+			    NAME,
+			    EMAIL,    
+			    TELL,
+			    ADDR1,
+			    ADDR2,
+			    POSTCODE,
+			    BIRTH,
+			    STATUS,
+			    RESDATE
+	      FROM
+	    		MEMBER
+	</sql>
+	
+	<select id="login" parameterType="member" resultType="member">
+		<include refid="selectMember"/>
+		WHERE
+				MEMBER_ID = #{memberId}
+		  AND
+		  		STATUS = 'Y'
+	</select>
+	
+	<select id="getMember" parameterType="String" resultType="member">
+		<include refid="selectMember"/>
+		WHERE
+				MEMBER_ID = #{memberId}
+	</select>
+	
+	<insert id="insMember" parameterType="member">
+		INSERT 
+			INTO MEMBER (
+						 MEMBER_NO,
+            			 MEMBER_ID,
+			             MEMBER_PW,
+			             NAME,
+			             EMAIL,
+			             TELL,
+			             ADDR1,
+			             ADDR2,
+			             POSTCODE,
+			             BIRTH
+        	   			) 
+        	   VALUES   (
+        	   			 member_SEQ.NEXTVAL,
+			             #{memberId},
+			             #{memberPw},
+			             #{name},
+			             #{email},
+			             #{tell},
+			             #{addr1},
+			             #{addr2},
+			             #{postcode},
+			             #{birth}
+       					)
+	</insert>
+	
+	<insert id="insGenre" parameterType="memberGenre">
+		INSERT
+			INTO MEMBER_GENRE (
+						TAG_NO,
+						MEMBER_NO
+						)
+				VALUES (
+						#{tagNo},
+						member_SEQ.CURRVAL
+				     	)
+	</insert>
+	  
+	<select id="infoId" parameterType="member" resultType="member">
+		SELECT
+				MEMBER_ID memberId,
+				MEMBER_PW memberPw,
+				NAME,
+				EMAIL
+		  FROM
+		  		MEMBER
+	  	 WHERE
+	  	 		MEMBER_ID = #{memberId}
+		   AND		  	 
+	  	 		NAME = #{name}
+  	 	   AND	
+	  	 		EMAIL = #{email} 
+	</select>
+	
+	<update id="pwChange" parameterType="member">
+		UPDATE
+				MEMBER
+		   SET
+		   		MEMBER_PW = #{memberPw}
+	   	 WHERE
+	   	 		MEMBER_ID = #{memberId}
+		   AND
+		        NAME = #{name}
+		   AND
+		        EMAIL = #{email}
+	</update>
+	
+	<select id="genre" parameterType="memberGenre" resultType="_int">
+		SELECT 
+				TAG_NO
+		  FROM 
+		  		MEMBER_GENRE
+	  	 WHERE
+	  	 		MEMBER_NO = #{memberNo}
+	</select>
+	
+	<update id="update" parameterType="member">
+		UPDATE
+				MEMBER
+		   SET
+		   		MEMBER_PW = #{memberPw},
+				NAME = #{name},
+				EMAIL = #{email},
+				TELL = #{tell},
+				POSTCODE = #{postcode},
+				ADDR1 = #{addr1},
+				ADDR2 = #{addr2}
+			WHERE
+				MEMBER_ID = #{memberId}
+	</update>
+	
+	<delete id="deleteGenre" parameterType="memberGenre">
+	    DELETE FROM MEMBER_GENRE WHERE MEMBER_NO = #{memberNo}
+	</delete>
+	
+	<insert id="insUpdateGenre" parameterType="memberGenre">
+	    INSERT INTO MEMBER_GENRE (MEMBER_NO, TAG_NO) VALUES (#{memberNo}, #{tagNo})
+	</insert>
+	
+	<update id="delete" parameterType="member">
+		UPDATE
+				 MEMBER
+			SET
+				 STATUS = 'N',
+				 RESDATE = SYSDATE
+			WHERE
+				 MEMBER_ID = #{memberId} 
+	</update>
+</mapper>

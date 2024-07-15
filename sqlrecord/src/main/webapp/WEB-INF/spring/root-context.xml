@@ -37,6 +37,7 @@
 
 
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.member.model.dao"/>
+		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.reply.model.dao"/>
 
 
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.notice.model.dao"/>
