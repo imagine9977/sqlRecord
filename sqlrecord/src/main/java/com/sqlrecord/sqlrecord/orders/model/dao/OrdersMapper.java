@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.Product;
 
 @Mapper
 public interface OrdersMapper {
@@ -17,5 +18,9 @@ public interface OrdersMapper {
 	int insertOrdersDetail(MemberOrdersDetail item);
 
 	List<MemberOrdersDetail> getOrdersDetail(int memberNo);
+
+	MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo);
+
+	List<Product> getProduct();
 
 }

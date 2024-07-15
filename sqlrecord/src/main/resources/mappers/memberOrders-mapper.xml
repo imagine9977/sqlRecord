@@ -125,7 +125,7 @@
         JOIN
 	        	PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
 	   WHERE
-                mo.MEMBER_NO = #{member_no})
+                mo.MEMBER_NO = #{memberNo})
         SELECT
                 MEMBER_ORDERS_DETAIL_NO,
 		        PRODUCT_NO,
@@ -155,6 +155,72 @@
         DESC
 </select>
 	
+	
+	<select id="getOrdersDetailOne" parameterType="_int" resultMap="odRM">
+	     WITH RANKEDMOD AS (SELECT
+		        od.MEMBER_ORDERS_DETAIL_NO,
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                mo.MEMBER_NO,
+                mo.MEMBER_ORDERS_ADDRESS,
+                mo.MEMBER_ORDERS_ADDRESS2,
+                mo.MEMBER_ORDERS_POSTCODE,
+                mo.MEMBER_ORDERS_DATE,
+		        od.MEMBER_ORDERS_NO,
+		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        od.MEMBER_ORDERS_DETAIL_PRICE,
+		        od.MEMBER_ORDERS_EXD,
+		        od.TRACKING_NUM,
+		        od.MEMBER_ORDERS_DETAIL_STATUS,
+                ps.photo_path,
+                ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
+                
+	    FROM
+	       	 	MEMBER_ORDERS_DETAIL od
+        JOIN
+                MEMBER_ORDERS mo
+        ON
+                od.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
+        JOIN
+                PRODUCT p
+        ON
+                od.PRODUCT_NO = p.product_no
+        LEFT 
+        JOIN
+	        	PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
+	   WHERE
+                od.MEMBER_ORDERS_DETAIL_NO = #{memberOrdersDetailNo})
+        SELECT
+                MEMBER_ORDERS_DETAIL_NO,
+		        PRODUCT_NO,
+                PRODUCT_NAME,
+                product_cate,
+                product_price,
+                product_status,
+                MEMBER_NO,
+                MEMBER_ORDERS_ADDRESS,
+                MEMBER_ORDERS_ADDRESS2,
+                MEMBER_ORDERS_POSTCODE,
+                MEMBER_ORDERS_DATE,
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ORDERS_DETAIL_AMOUNT,
+		        MEMBER_ORDERS_DETAIL_PRICE,
+		        MEMBER_ORDERS_EXD,
+		        TRACKING_NUM,
+		        MEMBER_ORDERS_DETAIL_STATUS,
+                photo_path
+        FROM
+                RANKEDMOD
+        WHERE
+                rn=1
+        ORDER
+        BY
+                MEMBER_ORDERS_DATE
+        DESC
+</select>
 	
 	
 	<select id="getProduct" resultType="product">
@@ -186,6 +252,8 @@
                 PHOTO_PATH photoPath
 	    FROM
 	        	RANKEPRO
+	    WHERE
+                rn=1
         ORDER
         BY
                 PRODUCT_NO

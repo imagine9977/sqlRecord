@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.Product;
 
 public interface OrdersService {
 
@@ -13,6 +14,10 @@ public interface OrdersService {
 	int insertOrdersDetail(List<MemberOrdersDetail> odList);
 
 	List<MemberOrdersDetail> getOrdersDetail(int memberNo);
+
+	MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo);
+
+	List<Product> getProduct();
 	
 	
 }

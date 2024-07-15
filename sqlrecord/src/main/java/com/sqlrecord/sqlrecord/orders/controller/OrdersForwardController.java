@@ -169,12 +169,29 @@ public class OrdersForwardController {
 	
 	
 	@GetMapping("/insert/{memberOrdersDetailNo}")
-	public String exInsertPage(@PathVariable int memberOrdersDetailNo) {
+	public String exInsertPage(@PathVariable int memberOrdersDetailNo , Model model) {
 		
 		
 		log.info("멤버 상세 번호 : {}" , memberOrdersDetailNo);
 		
+		MemberOrdersDetail memberOrdersDetail = ordersService.getOrdersDetailOne(memberOrdersDetailNo);
+		List<Product> productList = ordersService.getProduct();
+		log.info("엑 오디 원 : {}" , memberOrdersDetail.getProduct().getProductName());
+		
+		
+		model.addAttribute("memberOrdersDetail" , memberOrdersDetail);
+		model.addAttribute("productList" , productList);
+		
+		
 		return "orders/insert";
+	}
+	
+	
+	
+	
+	@PostMapping("/insertMemberOD")
+	public String insertMemberOD() {
+		
 	}
 	
 	
