@@ -20,6 +20,7 @@ public class Product {
 	private int tagNo;
 	private String productDetail;
 	private String productCate;
+	private String color;
 	private ProductPhotos productPhotos;
 
 }
