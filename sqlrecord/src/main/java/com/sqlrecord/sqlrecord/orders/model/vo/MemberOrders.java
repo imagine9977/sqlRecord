@@ -12,10 +12,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class MemberOrders {
-	private int member_orders_no;
-	private String member_orders_address;
-	private String member_orders_address2;
-	private String member_orders_postcode;
-	private String member_orders_date;
-	private int member_no;
+	private int memberOrdersNo;
+	private String memberOrdersAddress;
+	private String memberOrdersAddress2;
+	private String memberOrdersPostcode;
+	private String memberOrdersDate;
+	private int memberNo;
 }

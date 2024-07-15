@@ -15,8 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Cart {
-	private int cart_num;
-	private int cart_amount;
+	private int cartNum;
+	private int cartAmount;
 	private Product product;
 	private Member member;
 }
