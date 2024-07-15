@@ -11,22 +11,22 @@
 		  FROM
 		        PRODUCT
 		 WHERE
-		        PRODUCT_STATUS='Y';
+		        PRODUCT_STATUS='Y'
 	</select>
 	
 	<select id="findAll" resultType="product" parameterType="map">
 		SELECT
-		        P.PRODUCT_NO,
-		        P.PRODUCT_NAME,
-		        P.PRODUCT_PRICE,
-		        P.PRODUCT_STATUS,
-		        P.PRODUCT_DATE,
-		        P.TAG_NO,
-		        P.PRODUCT_DETAIL,
-		        P.PRODUCT_CATE,
-		        PH.PHOTO_NO,
-		        PH.PHOTO_NAME,
-		        PH.PHOTO_PATH
+		        P.PRODUCT_NO productNo,
+		        P.PRODUCT_NAME productName,
+		        P.PRODUCT_PRICE productPrice,
+		        P.PRODUCT_STATUS productStatus,
+		        P.PRODUCT_DATE productDate,
+		        P.TAG_NO tagNo,
+		        P.PRODUCT_DETAIL productDetail,
+		        P.PRODUCT_CATE productCate,
+		        PH.PHOTO_NO photoNo,
+		        PH.PHOTO_NAME photoName,
+		        PH.PHOTO_PATH photoPath
 		  FROM
 		        PRODUCT P
 		  LEFT
@@ -35,13 +35,61 @@
 		    ON
 		        P.PRODUCT_NO = PH.PRODUCT_NO
 		 WHERE
-		        PRODUCT_CATE = #
+		        PRODUCT_CATE = #{productCate}
 		   AND
 		        PRODUCT_STATUS = 'Y'
 		 ORDER
 		    BY
-		        P.PRODUCT_DATE DESC;
+		        P.PRODUCT_DATE DESC
 	</select>
 	
+	<!-- 검색결과 수 -->
+	<select id="searchCount" parameterType="hashmap" resultType="_int">
+		SELECT
+				COUNT(PRODUCT_NO)
+		  FROM
+		  		PRODUCT
+		 WHERE
+		 		PRODUCT_STATUS='Y'
+		 <if test="condition == 'productName'">
+		   AND
+		   		PRODUCT_NAME
+		 </if>
+				LIKE '%' || #{keyword} || '%'
+	</select>
+	
+	<!-- 검색 결과 -->
+	<select id="findByConditionAndKeyword" parameterType="hashmap" resultType="product">
+		SELECT
+		        P.PRODUCT_NO productNo,
+		        P.PRODUCT_NAME productName,
+		        P.PRODUCT_PRICE productPrice,
+		        P.PRODUCT_STATUS productStatus,
+		        P.PRODUCT_DATE productDate,
+		        P.TAG_NO tagNo,
+		        P.PRODUCT_DETAIL productDetail,
+		        P.PRODUCT_CATE productCate,
+		        PH.PHOTO_NO photoNo,
+		        PH.PHOTO_NAME photoName,
+		        PH.PHOTO_PATH photoPath
+		  FROM
+		        PRODUCT P
+		  LEFT
+		  JOIN
+		        PRODUCT_PHOTOS PH
+		    ON
+		        P.PRODUCT_NO = PH.PRODUCT_NO
+		 WHERE
+		        PRODUCT_CATE = #{productCate}
+		   AND
+		        PRODUCT_STATUS = 'Y'
+        	<if test="condition == 'productName'">
+           		AND PRODUCT_NAME
+        	</if>
+         		LIKE '%' || #{keyword} || '%'
+		 ORDER
+		    BY
+		        P.PRODUCT_DATE DESC
+	</select>
 	
 </mapper>
