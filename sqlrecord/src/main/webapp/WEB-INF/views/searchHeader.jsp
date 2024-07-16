@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="hpath" value="${pageContext.request.contextPath }" />
   <div id="section_serch">
     <div id="section_serch_box">
       <div id="section_serch_item1">
@@ -12,7 +13,7 @@
       	  </a>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='turntables'">TURNTABLES</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/reply/getReplyStarAll.do">TURNTABLES</a></p>
       	</div>
       	<div class="section_serch_item_box">
       	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='speakers'">SPEAKERS</a></p>

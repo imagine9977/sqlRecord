@@ -2,6 +2,7 @@ package com.sqlrecord.sqlrecord.reply.model.vo;
 
 import java.sql.Date;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +17,10 @@ public class Reply {
 	 private int replyNo;       
      private int depth;           
      private String content;      
-     private int star;            
+     private float star;            
      private Date writeDate;      
      private int productNo;       
-     private int memberNo;      
+     private int memberNo;
+     private String memberId;
+     
 }

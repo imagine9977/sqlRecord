@@ -358,7 +358,8 @@
 			            </div>
 			            <div class="review-header">
 			                <p>리뷰 작성하기</p>
-			                <input type="hidden" name="productNo" id="productNo" value=""> <!-- 상품 번호를 포함 -->
+			                <input type="hidden" name="productNo" id="productNo" value="1"> <!-- 상품 번호를 포함 -->
+				    		<input type="hidden" name="depth" id="depth" value="0"> <!-- 기본 댓글이므로 깊이는 0 -->
 			                <div class="stars">
 			                    <div class="score-wrapper">
 			                        <div class="score" id="starRating">
@@ -371,7 +372,7 @@
 			                <input style="height: 30px;" class="recontent" id="content" name="content" type="text" placeholder="리뷰를 작성해주세요.">
 			                <button class="rebtn1" id="rebtn1"><img style="width: 20px; height: 20px;" src="${hpath}/resources/imgs/login/move_9743734.png" alt=""></button>
 			                <input type="file" id="fileInput" multiple="multiple" style="display: none;">
-			                <button class="rebtn2" id="rebtn2" onclick="commentWrite()" type="">등록</button>
+			                <button class="rebtn2" id="rebtn2" onclick="commentWrite()" >등록</button>
 			            </div>
 	            </div>
 	        </c:if>
@@ -386,7 +387,7 @@
 		                    </div>
 	                        <h4 class="pavg1" class="yrestar" style="margin:0px;">${reply.star}</h4>
 	                    </div>
-		                    <span id="id">${sessionScope.loginUser.memberId}</span>
+		                    <span id="id">${reply.memberId}</span>
 		                    <div class="date">${reply.writeDate}</div>
 		                </div>
 		                <div class="review-content">
@@ -408,21 +409,23 @@
 						</div>    
 		                </div>
 		                <div class="reply-section">
-	                    <button class="reply-toggle">답글 (2)</button>
-	                    <c:if test="${!empty sessionScope.loginUser}">
-	                    <div class="reply-list" style="display: none;">
-	                        <!-- 답글 목록이 여기에 추가됩니다 -->
-	                        <div class="reply-input">
-	                            <input type="text" placeholder="내용을 입력해주세요.">
-	                            <button class="reply-submit">등록</button>
-	                        </div>
-	                        <div class="reply">
-	                            <span class="reply-author">작성자 아이디</span>
-	                            <span class="reply-date">2023.07.15</span>
-	                            <p class="reply-content">대답을 합니다. 대답을 합니다.</p>
-	                        </div>
-	                    </div>
-	                    </c:if>
+	                    <c:forEach var="ChReply" items="${chList }">
+	                    	<button class="reply-toggle">답글 (${chList.count})</button>
+		                    <c:if test="${!empty chList.chReplyNo}">
+		                    <div class="reply-list" style="display: none;">
+		                        <!-- 답글 목록이 여기에 추가됩니다 -->
+		                        <div class="reply-input">
+		                            <input id="chContent" type="text" placeholder="내용을 입력해주세요.">
+		                            <button class="reply-submit" onclick="chIns()">등록</button>
+		                        </div>
+		                        <div class="reply">
+		                            <span class="reply-author">작성자 아이디</span>
+		                            <span class="reply-date">2023.07.15</span>
+		                            <p class="reply-content">대답을 합니다. 대답을 합니다.</p>
+		                        </div>
+		                    </div>
+		                    </c:if>
+	                    </c:forEach>
 	                </div>
 		            </div>
 		        </div>
@@ -445,6 +448,7 @@
                 const replyList = $(this).siblings(".reply-list");
                 replyList.slideToggle();
 
+                /*
                 if (replyList.is(":empty")) {
                     // 답글 목록이 비어있으면 서버에서 데이터를 가져옵니다
                     $.ajax({
@@ -468,6 +472,7 @@
                         }
                     });
                 }
+                */
             });
 	    });
 	    
@@ -671,6 +676,25 @@
         }
 
         
+        
+        function chIns(){
+        	const formData = new FormData();
+        	formData.append('chContent',$('#chContent').val());
+        	
+        	$.ajax({
+        		type: "POST",
+                url: "${hpath}/reply/chInsReply.do",
+                data: formData,
+                success: function(response) {
+                	alert("댓글 등록에 성공했습니다.");
+                	//location.reload();
+                },
+	            error: function(xhr, status, error) {
+	            	alert("댓글 등록에 실패했습니다.");
+	                console.error("파일 등록 실패:", error);
+           		}
+        	});
+        }
         
         function commentWrite() {
             // 파일 업로드를 위한 FormData 객체를 생성

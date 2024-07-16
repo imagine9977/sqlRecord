@@ -4,22 +4,108 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sqlrecord.sqlrecord.reply.model.dao.ReplyMapper">
 	
-	<sql id="">
-		
+	<sql id="replySelect">
+		SELECT 
+				REPLY_NO replyNo,
+				DEPTH,
+				CONTENT,
+				STAR,
+				WRITE_DATE writeDate,
+				PRODUCT_NO productNo,
+				MEMBER_NO memberNo
+		  FROM
+		  		REPLY
 	</sql>
-	<select id="getReplyList" resultType="reply">
-		select * from reply order by reply_No desc
-	</select>	
-	<select id="getReply" parameterType="int" resultType="reply">
-		select * from reply where reply_No=#{replyNo}
+	<!--  
+	<select id="replyCount">
+		SELECT 
+				 COUNT(*)
+			FROM
+				  REPLY
+		   WHERE
+		   		  PRODUCT_NO = #{productNo} 			
 	</select>
+	-->
 	<select id="replyCount" resultType="int">
-		select count(*) from reply
+		SELECT
+				COUNT(*)
+		  FROM
+		  		REPLY	
 	</select>
-	<select id="avgStar" resultType="float">
-		select round(AVG(star), 1) AS avgStar from Reply
+	<select id="getReplyList" resultType="reply">
+		SELECT 
+		        r.REPLY_NO replyNo,
+		        r.DEPTH,
+		        r.CONTENT,
+		        r.STAR,
+		        r.WRITE_DATE writeDate,
+		        r.PRODUCT_NO productNo,
+		        r.MEMBER_NO memberNo,
+		        m.MEMBER_ID memberId
+		  FROM
+		        REPLY r 
+		  JOIN 
+		  		MEMBER m
+		    ON
+		        r.MEMBER_NO = m.MEMBER_NO
+		 ORDER
+    		BY
+        		REPLY_NO
+  		  DESC      	
+	</select>	
+	
+	<select id="getReply" parameterType="reply" resultType="reply">
+		<include refid="replySelect"/>
+	  	 WHERE
+	  	 		REPLY_NO = #{replyNo}	
 	</select>
 	
+	<select id="avgStar" resultType="float">
+		SELECT 
+				ROUND(AVG(STAR), 1) AS avgStar 
+		  FROM
+		  		REPLY
+	</select>
+	
+	<insert id="insReply" parameterType="reply">
+		INSERT
+			INTO REPLY (
+						REPLY_NO,
+						DEPTH,
+						CONTENT,
+						STAR,
+						WRITE_DATE,
+						PRODUCT_NO,
+						MEMBER_NO	
+			 			)
+ 			    VALUES (
+ 			    		REPLY_SEQ.NEXTVAL,
+ 			    		#{depth},
+ 			    		#{content},
+ 			    		#{star},
+ 			    		SYSDATE,
+ 			    		#{productNo},
+ 			    		#{memberNo}
+ 			    )
+	</insert>
+	
+	<update id="changeReply" parameterType="reply">
+		UPDATE 
+				REPLY
+		   SET
+		   		STAR = #{star},
+		   		CONTENT = #{content}
+	   	 WHERE
+	   	 		REPLY_NO = #{replyNo}	 		
+	</update>
+	
+	<delete id="delReply" parameterType="reply">
+		DELETE 
+		  FROM 
+		  		REPLY
+  		 WHERE
+  		 		REPLY_NO = #{replyNo} 
+	</delete>
 	
 	<select id="getReplyStarAll" resultMap="StarMap">
     <![CDATA[ 
