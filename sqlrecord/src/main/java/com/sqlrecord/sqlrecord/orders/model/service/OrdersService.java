@@ -18,6 +18,8 @@ public interface OrdersService {
 	MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo);
 
 	List<Product> getProduct();
+
+	List<MemberOrdersDetail> getOrdersDetailAll();
 	
 	
 }

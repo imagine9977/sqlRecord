@@ -87,6 +87,43 @@
 	    </association>
 	</resultMap>
 	
+	<select id="getOrdersDetailAll" resultMap="odRM">
+        SELECT
+                mod.MEMBER_ORDERS_DETAIL_NO,
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                mo.MEMBER_NO,
+                mo.MEMBER_ORDERS_NO,
+                mo.MEMBER_ORDERS_ADDRESS,
+                mo.MEMBER_ORDERS_ADDRESS2,
+                mo.MEMBER_ORDERS_POSTCODE,
+                mo.MEMBER_ORDERS_DATE,
+		        mod.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        mod.MEMBER_ORDERS_DETAIL_PRICE,
+		        mod.MEMBER_ORDERS_EXD,
+		        mod.TRACKING_NUM,
+		        mod.MEMBER_ORDERS_DETAIL_STATUS
+        FROM
+                MEMBER_ORDERS_DETAIL mod
+        JOIN
+                MEMBER_ORDERS mo
+        ON
+                mod.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO        
+        JOIN
+        		PRODUCT p
+        ON	
+        		mod.PRODUCT_NO = p.PRODUCT_NO
+        ORDER
+        BY
+                MEMBER_ORDERS_DATE
+        DESC
+</select>
+	
+	
+	
 	
 	<select id="getOrdersDetail" resultMap="odRM">
         SELECT
@@ -124,6 +161,8 @@
                 MEMBER_ORDERS_DATE
         DESC
 </select>
+
+
 	
 	
 	<select id="getOrdersDetailOne" parameterType="_int" resultMap="odRM">

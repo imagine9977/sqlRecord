@@ -47,6 +47,9 @@ public class OrderServiceImpl implements OrdersService {
 	public List<MemberOrdersDetail> getOrdersDetail(int memberNo) {
 		return ordersMapper.getOrdersDetail(memberNo);
 	}
+	
+	
+	
 
 	@Override
 	public MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo) {
@@ -56,6 +59,11 @@ public class OrderServiceImpl implements OrdersService {
 	@Override
 	public List<Product> getProduct() {
 		return ordersMapper.getProduct();
+	}
+
+	@Override
+	public List<MemberOrdersDetail> getOrdersDetailAll() {
+		return ordersMapper.getOrdersDetailAll();
 	}
 	
 	

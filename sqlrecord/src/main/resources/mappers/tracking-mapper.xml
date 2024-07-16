@@ -4,12 +4,12 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sqlrecord.sqlrecord.tracking.model.dao.TrackingMapper">
 
-	<select id="getTrackingList" parameterType="_int" resultType="com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo">
+	<select id="getTrackingInfoList" parameterType="_int" resultType="com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo">
 		SELECT
-				TRACKING_INFO_NUM trackingInfoNum
-				TRACKING_INFO_WHERE trackingInfoWhere
-				TRACKING_INFO_DATE trackingInfoDate
-				TRACLONG_NUM trackingNum
+				TRACKING_INFO_NUM trackingInfoNum,
+				TRACKING_INFO_WHERE trackingInfoWhere,
+				TRACKING_INFO_DATE trackingInfoDate,
+				TRACKING_NUM trackingNum
 		FROM
 				TRACKING_INFO
 		WHERE

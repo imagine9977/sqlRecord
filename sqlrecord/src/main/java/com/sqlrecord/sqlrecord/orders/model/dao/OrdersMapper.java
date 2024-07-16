@@ -23,4 +23,6 @@ public interface OrdersMapper {
 
 	List<Product> getProduct();
 
+	List<MemberOrdersDetail> getOrdersDetailAll();
+
 }
