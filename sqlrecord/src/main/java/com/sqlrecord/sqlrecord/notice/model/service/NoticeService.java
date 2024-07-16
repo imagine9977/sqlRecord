@@ -20,5 +20,6 @@ public interface NoticeService {
 	List<Notice> findByCate(String cate);
 	List<NFile> findFiles(int id);
 	int update(Notice notice);
-	
+	int deleteFile(int nfileNo);
+	 
 }

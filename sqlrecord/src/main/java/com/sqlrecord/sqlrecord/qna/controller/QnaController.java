@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sqlrecord.sqlrecord.common.vo.PageInfo;
 import com.sqlrecord.sqlrecord.message.Message;
 import com.sqlrecord.sqlrecord.qna.model.service.QnaService;
+import com.sqlrecord.sqlrecord.qna.model.vo.PaginationAndList;
 import com.sqlrecord.sqlrecord.qna.model.vo.Qna;
 
 import lombok.RequiredArgsConstructor;
@@ -81,7 +82,8 @@ public class QnaController {
 		if (qnaList.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Message.builder().message("조회결과가 없습니다.").build());
 		}
-		Message responseMsg = Message.builder().data(qnaList).message("조회 요청 성공").build();
+		PaginationAndList PAList = new PaginationAndList(qnaList, pageInfo);
+		Message responseMsg = Message.builder().data(PAList).message("조회 요청 성공").build();
 
 		log.info("조회된 공지사항 목록 : {}", qnaList);
 

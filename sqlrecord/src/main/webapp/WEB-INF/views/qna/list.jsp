@@ -113,7 +113,7 @@
 #qna-container #files {
 	background-color: lightgray;
 	width: 300px;
-	 height: auto;
+	height: auto;
 }
 
 #qna-container #content {
@@ -158,7 +158,7 @@
 	top: 100px;
 	min-height: 300px;
 	height: auto;
-		z-index: 9999999;
+	z-index: 9999999;
 }
 
 #qna-container .modal-content {
@@ -252,13 +252,13 @@
 	<div id="qna-container">
 
 		<header>
-			<h1>공지사항</h1>
+			<h1>QNA 질문게시판</h1>
 		</header>
 		<div class="container">
 			<div class="filter-search-container">
 				<div class="filter-buttons">
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findAll()">전체</button>
+						id="toggleCategory1" onclick="findAll()">전체</button>
 					<button type="button" class="btn btn-outline-secondary"
 						onclick="findByCate('general')">일반</button>
 					<button type="button" class="btn btn-outline-secondary"
@@ -268,7 +268,7 @@
 					<button type="button" class="btn btn-outline-secondary"
 						onclick="findByCate('etc')">기타</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="turnQnaSolved()">미해결만 보기</button>
+						id="toggleSolved" onclick="turnQnaSolved()">미해결만 보기</button>
 				</div>
 				<div class="search">
 					<form action="/" method="get">
@@ -329,17 +329,16 @@
 						<input type="hidden" id="fileNameDel" name="fileNameDel" value="">
 						<div class="modal-header">
 							<h5 id="qnaNo" class="inline-header"></h5>
-							<input type="hidden" name="qnaNo" value="${qna.qnaNo }" />
-							<label for="qnaTitle">제목</label> <input type="text"
-								class="form-control" id='qnaTitle' name='qnaTitle'
-								value="">
+							<input type="hidden" name="qnaNo" value="${qna.qnaNo }" /> <label
+								for="qnaTitle">제목</label> <input type="text"
+								class="form-control" id='qnaTitle' name='qnaTitle' value="">
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
 							<div class="form-group">
-								<label for="qnaCategory">분류</label> <select
-									class="form-control" id="qnaCategory" name="qnaCategory">
+								<label for="qnaCategory">분류</label> <select class="form-control"
+									id="qnaCategory" name="qnaCategory">
 									<option value="general">일반</option>
 									<option value="event">이벤트</option>
 									<option value="service">서비스</option>
@@ -373,7 +372,9 @@
 		<div id="liveAlertPlaceholder"></div>
 
 		<div id="content"></div>
-
+		<div id="pagingArea">
+			<ul class="pagination" id="paginationUl"></ul>
+		</div>
 
 		<div class="button-line">
 			<div class="see-more">
@@ -392,6 +393,7 @@
 			let qnaListGlobal = []; //초기 공지사항 목록을 저장할 전역 변수
 			let currentCategory = 'all'; // 현재 보고 있는 카테고리 추적
 			let qnaFileListGlobal = [];
+			let pageInfoGlobal = {};
 			let currentqnaNo=0;
 			
 			var fileNoArry = [];
@@ -412,8 +414,10 @@
 			function turnQnaSolved() {
 	            if(solvedBoolean=='N'){
 	            	solvedBoolean='Y';
+	            	 document.getElementById('toggleSolved').textContent = "미해결/해결 보기";
 	            }else{
 	            	solvedBoolean='N';
+	            	document.getElementById('toggleSolved').textContent = "미해결 보기";
 	            }
 	            if(currentCategory='all'){
 	            	findAll();
@@ -576,12 +580,12 @@
 			    $.ajax({
 			        url: 'qna/' + currentCategory,
 			        type: 'get',
-			        success: response => {
-			        	qnaListGlobal = response.data; // Store initial qna list globally
-			            qnaListGlobal = formatDates(qnaListGlobal); // Format the dates
+			        success: function(response)  {
+			        	qnaListGlobal = response.data.qnaList; // Access qnaList
+			            const pageInfo = response.data.pageInfo; // Access pageInfo
 			            renderqnas(qnaListGlobal.slice(0, qnasPerPage));
 			            currentPage++; // Increment page after loading initial data
-			            checkLoadMoreButton();
+			            
 			        },
 			        error: err => {
 			            console.error('Error fetching data:', err);
@@ -598,7 +602,7 @@
 			        type: 'get',
 			        success: response => {
 			            qnaListGlobal = response.data; // Store initial qna list globally
-			            qnaListGlobal = formatDates(qnaListGlobal);
+			        
 			            renderqnasCate(cate, qnaListGlobal.slice(0, qnasPerPage));
 			            currentPageCate[cate]++; // Increment page after loading initial data
 			            checkLoadMoreButtonCate(cate);
@@ -622,26 +626,7 @@
 			    });
 			};
 			
-			
-			const formatDates = (qnaList) => {
-			    return qnaList.map(qna => {
-			        if (qna.createDate) {
-			            qna.createDate = formatDate(qna.createDate);
-			        }
-			        return qna;
-			    });
-			};
-
-
-			const formatDate = (dateString) => {
-			    const date = new Date(dateString); // Create a Date object from the datetime string
-
-			    const year = date.getFullYear(); // Get the year
-			    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Get the month (adding 1 because months are zero-indexed)
-			    const day = ('0' + date.getDate()).slice(-2); // Get the day
-
-			    return `${year}-${month}-${day}`;
-			};
+		
 			function getKoreanqnaCategory(qnaCategory) {
 			    switch (qnaCategory) {
 			        case 'etc':

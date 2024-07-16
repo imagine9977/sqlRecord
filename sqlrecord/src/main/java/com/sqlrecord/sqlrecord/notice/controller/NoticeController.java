@@ -185,12 +185,22 @@ public class NoticeController {
 		Message responseMsg = Message.builder().data("삭제성공!").message("게시글 삭제 성공").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
-
-	@PutMapping("/update")
-	public ResponseEntity<Message>update(@RequestPart("notice") Notice notice, @RequestPart("updatefile") MultipartFile[] upfiles,
+	//업데이트 모달용
+	@PutMapping("/update/{updateNo}")
+	public ResponseEntity<Message>update(@PathVariable(value="updateNo") int noticeNo,
+            @RequestParam("updateTitle") String noticeTitle,
+            @RequestParam("updateCategory") String noticeCategory,
+            @RequestParam("updateContent") String noticeContent,
+            @RequestParam(value="fileNoDel[]", required = false) int[] delfiles,
+            @RequestPart(value="updatefile", required = false) List<MultipartFile> upfiles,
             HttpSession session) {
 		log.info("start");
 		List<NFile> nfiles = new ArrayList<>();
+		if(delfiles.length !=0) {
+			for(int i=0; i<delfiles.length;i++) {
+				noticeService.deleteFile(delfiles[i]);
+			}	
+		}
 		for (MultipartFile reupfile : upfiles) {
 			NFile nfile = new NFile();
 			if (!reupfile.getOriginalFilename().equals("")) {
@@ -206,6 +216,11 @@ public class NoticeController {
 			NFile nfile = new NFile();
 			nfiles.add(nfile);
 		} */
+		Notice notice = new Notice();
+		notice.setNoticeNo(noticeNo);
+		notice.setNoticeCategory(noticeCategory);
+		notice.setNoticeContent(noticeContent);
+		notice.setNoticeTitle(noticeTitle);
 		notice.setFiles(nfiles);
 		int result = noticeService.update(notice);
 		log.info(" result:{}", result);
@@ -215,4 +230,52 @@ public class NoticeController {
 		Message responseMsg = Message.builder().data(result).message("공지사항 변경을 성공했습니다.").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
+	
+	//업데이트 페이지용 
+	@PostMapping("/update.do")
+	public ResponseEntity<Message>updateForm(Notice notice,@RequestParam("updatefile") MultipartFile[] upfiles,
+            HttpSession session, @RequestParam("fileNoDel") int[] delfiles) {
+		log.info("start");
+		List<NFile> nfiles = new ArrayList<>();
+		if(delfiles.length !=0) {
+			for(int i=0; i<delfiles.length;i++) {
+				noticeService.deleteFile(delfiles[i]);
+			}	
+		}
+		for (MultipartFile reupfile : upfiles) {
+			log.info("there are files");
+			NFile nfile = new NFile();
+			if (!reupfile.getOriginalFilename().equals("")) {
+				nfile.setOriginalName(reupfile.getOriginalFilename());
+				nfile.setChangedName(saveFile(reupfile, session));
+				
+			}
+			nfiles.add(nfile);
+		}
+		/*
+		int a= nfiles.size();
+		for(int i =a; i<3; i++) {
+			NFile nfile = new NFile();
+			nfiles.add(nfile);
+		} */
+		Notice newNotice = new Notice();
+		newNotice.setNoticeNo(notice.getNoticeNo());
+		newNotice.setNoticeCategory(notice.getNoticeCategory());
+		newNotice.setNoticeContent(notice.getNoticeContent());
+		newNotice.setNoticeTitle(notice.getNoticeTitle());
+		if(notice.getFiles().equals(nfiles)) {
+			newNotice.setFiles(notice.getFiles());
+		}else {
+			newNotice.setFiles(nfiles);
+		}
+		log.info(newNotice.toString());
+		int result = noticeService.update(notice);
+		log.info(" result:{}", result);
+		if (result == 0) {
+			return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("공지사항 변경에 실패했습니다").build());
+		}
+		Message responseMsg = Message.builder().data(result).message("공지사항 변경을 성공했습니다.").build();
+		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+	}
+	
 }

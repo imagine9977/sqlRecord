@@ -1,5 +1,9 @@
 package com.sqlrecord.sqlrecord.qna.model.vo;
 
+import java.util.List;
+
+import com.sqlrecord.sqlrecord.common.vo.PageInfo;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,9 +15,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QnaFile {
-	private int qnafileNo;
-    private String originalName;
-    private String changedName;
-    private int qnaNo;
+public class PaginationAndList {
+	List<Qna> qnaList;
+	PageInfo pageInfo;
 }
