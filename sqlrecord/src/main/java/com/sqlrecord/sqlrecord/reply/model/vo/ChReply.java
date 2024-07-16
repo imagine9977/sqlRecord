@@ -14,9 +14,10 @@ import lombok.ToString;
 public class ChReply {
 	
 	private int chReplyNo;
-	private String chReplyContent;
-	private int qnaNO;
+	private String content;
+	private int replyNo;
 	private int memberNo;
 	private Date writeDate;
 	private int depth;
+	private String memberId;
 }

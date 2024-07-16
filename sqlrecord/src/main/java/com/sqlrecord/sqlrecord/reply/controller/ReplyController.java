@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sqlrecord.sqlrecord.member.model.service.MemberService;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.reply.model.service.ReplyService;
+import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
 
 @Controller
@@ -27,9 +27,6 @@ public class ReplyController {
 	
 	@Autowired
 	private ReplyService replyService;
-	
-	@Autowired
-	private MemberService memberService;
 	
 	@Autowired
 	private HttpSession session;
@@ -53,6 +50,18 @@ public class ReplyController {
         model.addAttribute("replyCount", replyCount);
         return "reply/list"; 
     }
+	
+	@PostMapping("chInsReply.do")
+	@ResponseBody
+	public String chInsReply(@ModelAttribute ChReply chReply, 
+			   				 Member member, Model model, 
+			   				 HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		chReply.setMemberNo(loginUser.getMemberNo());
+		replyService.chInsReply();
+		return "redirect:getReplyStarAll.do";
+	}
+	
 	
 	@RequestMapping("insReply.do")
 	@ResponseBody
@@ -104,6 +113,9 @@ public class ReplyController {
         
         //댓글 목록 가져오기
         model.addAttribute("list", replyService.getReplyList());
+        
+        //답글 목록 가져오기
+        model.addAttribute("chList", replyService.getChReplyList());
         
         return "reply/list"; // 별점 분포를 표시할 JSP 페이지
     }

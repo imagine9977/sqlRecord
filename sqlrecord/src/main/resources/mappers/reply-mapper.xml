@@ -32,6 +32,7 @@
 		  FROM
 		  		REPLY	
 	</select>
+	
 	<select id="getReplyList" resultType="reply">
 		SELECT 
 		        r.REPLY_NO replyNo,
@@ -53,6 +54,27 @@
         		REPLY_NO
   		  DESC      	
 	</select>	
+	
+	<select id="getChReplyList" resultType="chReply">
+		SELECT 
+		        r.CHREPLY_NO chReplyNo,
+		        r.DEPTH,
+		        r.CONTENT,
+		        r.WRITE_DATE writeDate,
+		        r.MEMBER_NO memberNo,
+                r.REPLY_NO replyNo,
+		        m.MEMBER_ID memberId
+		  FROM
+		        CHREPLY r 
+		  JOIN 
+		  		MEMBER m
+		    ON
+		        r.MEMBER_NO = m.MEMBER_NO
+		 ORDER
+    		BY
+        		CHREPLY_NO
+  		  DESC
+	</select>
 	
 	<select id="getReply" parameterType="reply" resultType="reply">
 		<include refid="replySelect"/>
@@ -87,6 +109,26 @@
  			    		#{productNo},
  			    		#{memberNo}
  			    )
+	</insert>
+	
+	<insert id="chInsReply" parameterType="chReply">
+		INSERT
+			INTO CHREPLY (
+						  CHREPLY_NO,
+						  CONTENT,
+						  REPLY_NO,
+						  MEMBER_NO,
+						  WRITE_DATE,
+						  DEPTH	
+						  )
+				  VALUES (
+				  		  REPLY_SEQ1.NEXTVAL,
+				  		  #{content},
+				  		  #{replyNo},
+				  		  #{memberNo},
+				  		  SYSDATE,
+				  		  #{depth} 
+				  )
 	</insert>
 	
 	<update id="changeReply" parameterType="reply">

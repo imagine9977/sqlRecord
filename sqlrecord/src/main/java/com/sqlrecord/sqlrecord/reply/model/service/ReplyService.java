@@ -3,6 +3,7 @@ package com.sqlrecord.sqlrecord.reply.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
 
 public interface ReplyService {
@@ -15,4 +16,6 @@ public interface ReplyService {
 	public int delReply(Reply replyNo);
 	public List<Map<String, Object>> getReplyStarAll();
 	public float avgStar();
+	public int chInsReply();
+	public List<ChReply> getChReplyList();
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
 
 @Mapper
@@ -18,6 +19,8 @@ public interface ReplyMapper {
 	int delReply(Reply replyNo);
 	List<Map<String, Object>> getReplyStarAll();
 	float avgStar();
+	int chInsReply();
+	List<ChReply> getChReplyList();
 
 
 }
