@@ -16,4 +16,12 @@ public class TrackingForwardController {
 		
 		return "tracking/tracking";
 	}
+	
+	
+	@GetMapping("/detail")
+	public String getTrackingDetailPage() {
+		
+		
+		return "tracking/detail";
+	}
 }

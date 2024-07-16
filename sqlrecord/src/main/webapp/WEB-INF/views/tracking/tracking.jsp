@@ -11,6 +11,18 @@
 <div id="main_content">
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 
+<h2>민식 택배 - 배송중</h2>
+<button type="button" class="btn btn-secondary" id="trackingReq">배송 요청된 운송장</button>
+    <button type="button" class="btn btn-secondary" id="trackingReq">배송중 운송장</button>
+    <button type="button" class="btn btn-secondary" id="trackingReq">배송 완료 운송장</button>
+    <br><br>
+
+    <label for="inputPassword5" class="form-label">운송장 관리</label>
+    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="운송장 번호를 입력하세요">
+    <button type="button" class="btn btn-primary">운송장 검색</button>
+
+
+
 <table class="table">
         <thead>
           <tr>
