@@ -58,8 +58,8 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public int chInsReply() {
-		return replyMapper.chInsReply();
+	public int chInsReply(ChReply chReply) {
+		return replyMapper.chInsReply(chReply);
 	}
 
 	@Override

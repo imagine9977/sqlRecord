@@ -59,7 +59,7 @@
 		SELECT 
 		        r.CHREPLY_NO chReplyNo,
 		        r.DEPTH,
-		        r.CONTENT,
+		        r.CHCONTENT,
 		        r.WRITE_DATE writeDate,
 		        r.MEMBER_NO memberNo,
                 r.REPLY_NO replyNo,
@@ -115,7 +115,7 @@
 		INSERT
 			INTO CHREPLY (
 						  CHREPLY_NO,
-						  CONTENT,
+						  CHCONTENT,
 						  REPLY_NO,
 						  MEMBER_NO,
 						  WRITE_DATE,
@@ -123,7 +123,7 @@
 						  )
 				  VALUES (
 				  		  REPLY_SEQ1.NEXTVAL,
-				  		  #{content},
+				  		  #{chContent},
 				  		  #{replyNo},
 				  		  #{memberNo},
 				  		  SYSDATE,

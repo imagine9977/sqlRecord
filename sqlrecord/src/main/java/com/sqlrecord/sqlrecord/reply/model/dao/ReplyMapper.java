@@ -19,7 +19,7 @@ public interface ReplyMapper {
 	int delReply(Reply replyNo);
 	List<Map<String, Object>> getReplyStarAll();
 	float avgStar();
-	int chInsReply();
+	int chInsReply(ChReply chReply);
 	List<ChReply> getChReplyList();
 
 

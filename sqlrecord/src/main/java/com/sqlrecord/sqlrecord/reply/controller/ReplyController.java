@@ -58,7 +58,7 @@ public class ReplyController {
 			   				 HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		chReply.setMemberNo(loginUser.getMemberNo());
-		replyService.chInsReply();
+		replyService.chInsReply(chReply);
 		return "redirect:getReplyStarAll.do";
 	}
 	

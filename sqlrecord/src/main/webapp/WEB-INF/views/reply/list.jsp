@@ -415,8 +415,10 @@
 					        <div class="reply-list" style="display: none;">
 					            <!-- 답글 입력 폼 -->
 					            <div class="reply-input">
-					                <input type="text" class="reply-content-input" placeholder="내용을 입력해주세요.">
-					                <button class="reply-submit" data-parent-reply-no="${reply.replyNo}" onclick="chIns()">등록</button>
+					                <input type="hidden" class="pReply" value="${reply.replyNo}">
+					                <input type="hidden" class="pDepth" value="1">
+					                <input class="chContent" name="chContent" type="text" placeholder="내용을 입력해주세요.">
+					                <button class="reply-submit" data-reply-no="${reply.replyNo}">등록</button>
 					            </div>
 					            <!-- 기존 답글 목록 -->
 					            <c:forEach var="chReply" items="${chList}">
@@ -424,7 +426,7 @@
 					                    <div class="reply">
 					                        <span class="reply-author">${chReply.memberId}</span><br>
 					                        <span class="reply-date">${chReply.writeDate}</span>
-					                        <p class="reply-content">${chReply.content}</p>
+					                        <p class="reply-content">${chReply.chContent}</p>
 					                    </div>
 					                </c:if>
 					            </c:forEach>
@@ -575,6 +577,40 @@
 			        }
 			    });
 		     });
+		     
+		  // 답글 등록
+		     $(".reply-submit").click(function() {
+		         const $replySection = $(this).closest('.reply-section');
+		         const replyNo = $(this).data('reply-no');
+		         const chContent = $replySection.find('.chContent').val();
+		         const depth = $replySection.find('.pDepth').val();
+
+		         if (!chContent.trim()) {
+		             alert("내용을 입력해주세요.");
+		             return;
+		         }
+
+		         const formData = new FormData();
+		         formData.append('chContent', chContent);
+		         formData.append('replyNo', replyNo);
+		         formData.append('depth', depth);
+
+		         $.ajax({
+		             type: "POST",
+		             url: "${hpath}/reply/chInsReply.do",
+		             data: formData,
+		             contentType: false,
+		             processData: false,
+		             success: function(response) {
+		                 alert("댓글 등록에 성공했습니다.");
+		                 location.reload();
+		             },
+		             error: function(xhr, status, error) {
+		                 alert("댓글 등록에 실패했습니다.");
+		                 console.error(xhr.responseText);
+		             }
+		         });
+		     });
 	    });
 	        
 	     
@@ -680,25 +716,7 @@
         }
 
         
-        //답글 등록
-        function chIns(){
-        	const formData = new FormData();
-        	formData.append('chContent',$('#chContent').val());
-        	
-        	$.ajax({
-        		type: "POST",
-                url: "${hpath}/reply/chInsReply.do",
-                data: formData,
-                success: function(response) {
-                	alert("댓글 등록에 성공했습니다.");
-                	//location.reload();
-                },
-	            error: function(xhr, status, error) {
-	            	alert("댓글 등록에 실패했습니다.");
-	                console.error("파일 등록 실패:", error);
-           		}
-        	});
-        }
+        
         
         function commentWrite() {
             // 파일 업로드를 위한 FormData 객체를 생성

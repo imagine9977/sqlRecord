@@ -16,6 +16,6 @@ public interface ReplyService {
 	public int delReply(Reply replyNo);
 	public List<Map<String, Object>> getReplyStarAll();
 	public float avgStar();
-	public int chInsReply();
+	public int chInsReply(ChReply chReply);
 	public List<ChReply> getChReplyList();
 }
