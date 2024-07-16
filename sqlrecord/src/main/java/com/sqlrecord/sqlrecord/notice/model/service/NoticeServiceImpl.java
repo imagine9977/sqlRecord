@@ -3,6 +3,7 @@ package com.sqlrecord.sqlrecord.notice.model.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
+
+
 	private final NoticeMapper noticeMapper;
 	@Override
 	public List<Notice> findAll() {
@@ -125,4 +128,17 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeMapper.findFiles(noticeNo);
 	}
 
+	
+	//////////////////////////////////////////////////////////////// 관리자 페이지 ////////////////////////////////////////////////////////////////
+	// 전체 글 수 조회
+	@Override
+	public int noticeCount() {
+		return noticeMapper.noticeCount();
+	}
+
+	// 페이징 적용 전체 리스트 조회
+	@Override
+	public List<Notice> noticeFindAll(Map<String, Integer> map) {
+		return noticeMapper.noticeFindAll(map);
+	}
 }

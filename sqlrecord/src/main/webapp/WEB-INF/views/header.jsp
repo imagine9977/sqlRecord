@@ -92,7 +92,7 @@
                 <c:choose>
 				    <c:when test="${ sessionScope.loginUser.memberId eq 'admin'}">
 				        <div class="navbar-item">
-				            <a href="${hpath}/admin">
+				            <a href="${hpath}/adminFor">
 				                관리자페이지
 				            </a>
 				        </div>

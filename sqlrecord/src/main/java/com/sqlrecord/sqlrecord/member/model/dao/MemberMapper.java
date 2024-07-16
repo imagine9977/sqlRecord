@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
@@ -20,5 +22,12 @@ public interface MemberMapper {
 	 */
 	Member infoId(Member member);
 	int pwChange(Member member);
+	
+	
+	
+	// 관리자 페이지 메서드
+	List<Member> findAllMemberY();	// 회원 전체조회
+	List<Member> findAllMemberN();	// 탈퇴회원 전체조회
+	Member getOneMember();			// 회원 1인 조회
 	
 }

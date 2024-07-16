@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.service;
 
+import java.util.List;
+
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
 
@@ -11,5 +13,10 @@ public interface MemberService {
 	int insGenre(MemberGenre memberGenre);
 	Member infoId(Member member);
 	int pwChange(Member member);
+	
+	// 관리자페이지용 회원 전체조회
+	List<Member> findAllMemberY();
+	List<Member> findAllMemberN();
+	Member getOneMember(String memberNo);
 
 }
