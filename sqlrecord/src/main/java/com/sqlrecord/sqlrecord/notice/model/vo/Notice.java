@@ -1,6 +1,8 @@
 package com.sqlrecord.sqlrecord.notice.model.vo;
 
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -18,5 +20,5 @@ public class Notice {
 	private String noticeCategory;
 	private String noticeContent;
 	private String resdate;
-	
+	private List<NFile> files;
 }

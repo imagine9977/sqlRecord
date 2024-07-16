@@ -2,6 +2,9 @@ package com.sqlrecord.sqlrecord.cart.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +29,22 @@ public class CartForwardController {
 	
 	
 	@GetMapping("/member/{userid}")
-	public String getMemberCartListPage(@PathVariable int userid , Model model) {
+	public String getMemberCartListPage(@PathVariable int userid , Model model , HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		
 		
+		if(session.getAttribute("loginUser") == null) {
+			return "redirect:/member/login.do";
+		}
 		log.info("이게?{}" , userid);
 		
 		List<Cart> cartList = cartService.getCartList(userid);
 		model.addAttribute("list",cartList);
-		log.info("{}" , cartList);
+		for(Cart a : cartList) {
+			log.info("카드 하나 : {}" , a.getCartAmount());
+			log.info("상품 이름 : {}" , a.getProduct().getProductName());
+		}
+		log.info("{}" , cartList.get(0).getProduct().getProductPhotos().getPhotoPath());
 		return "cart/cart";
 	}
 	

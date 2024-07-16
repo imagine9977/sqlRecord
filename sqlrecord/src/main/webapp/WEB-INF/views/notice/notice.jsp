@@ -2,12 +2,17 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="java.util.*, java.lang.*"%>
+<%@ page import="java.text.*, java.net.InetAddress"%>
 <c:set var="path0" value="<%=request.getContextPath()%>" />
 <!DOCTYPE>
 <html lang="ko">
 <html>
 <head>
+<%@ include file="../head.jsp"%>
 <meta charset="UTF-8">
+
 <title>공지사항</title>
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -25,20 +30,21 @@
 	crossorigin="anonymous"></script>
 
 <style>
-body {
+/* Scoped styles for notice.jsp content */
+#notice-container {
 	font-family: Arial, sans-serif;
 	margin: 0;
 	padding: 0;
 	background-color: #f4f4f4;
 }
 
-.container {
+#notice-container .container {
 	width: 80%;
 	margin: auto;
 	overflow: hidden;
 }
 
-header {
+#notice-container header {
 	background: #161616;
 	color: #ffffff;
 	padding-top: 30px;
@@ -46,58 +52,56 @@ header {
 	border-bottom: #2f4f4f 3px solid;
 }
 
-header h1 {
+#notice-container header h1 {
 	text-align: center;
 	text-transform: uppercase;
 	margin: 0;
 	font-size: 24px;
 }
 
-.filter-search-container {
+#notice-container .filter-search-container {
 	width: 900px;
 	margin: auto;
 	margin-top: 10px;
-	display: flex; /* Use flexbox for layout */
-	align-items: center; /* Center items vertically */
+	display: flex;
+	align-items: center;
 	justify-content: space-between;
-	margin-top: 10px; /* Distribute items evenly with space between them */
 }
 
-.filter-buttons {
-	display: flex; /* Use flexbox for filter buttons */
-	flex: 1; /* Occupy remaining space */
-	gap: 10px; /* Spacing between buttons */
+#notice-container .filter-buttons {
+	display: flex;
+	flex: 1;
+	gap: 10px;
 }
 
-.search {
+#notice-container .search {
 	margin-left: 10px;
-	/* Add some margin between filter buttons and search */
 }
 
-.search form {
-	display: flex; /* Use flexbox for search form */
+#notice-container .search form {
+	display: flex;
 }
 
-.filter-buttons button:hover {
-	background-color: #f0f0f0; /* Light grey background on hover */
-	color: #000; /* Darker text color on hover */
+#notice-container .filter-buttons button:hover {
+	background-color: #f0f0f0;
+	color: #000;
 }
 
-.filter-buttons button:focus {
+#notice-container .filter-buttons button:focus {
 	text-decoration-line: underline;
 	text-decoration-thickness: 3px;
 	font-weight: bold;
-	outline: none; /* Remove default focus outline */
-	background-color: #e0e0e0; /* Slightly darker grey on focus */
+	outline: none;
+	background-color: #e0e0e0;
 }
 
-.search input[type="search"] {
+#notice-container .search input[type="search"] {
 	padding: 10px;
 	font-size: 16px;
 	width: 200px;
 }
 
-.search input[type="submit"] {
+#notice-container .search input[type="submit"] {
 	padding: 10px;
 	background: #2C2C2C;
 	color: #ffffff;
@@ -106,61 +110,80 @@ header h1 {
 	cursor: pointer;
 }
 
-#fileArea {
+#notice-container #files {
 	background-color: lightgray;
 	width: 300px;
-	height: 100px;
+	 height: auto;
 }
 
-#content {
+#notice-container #content {
 	width: 800px;
 	height: auto;
 	margin: auto;
 }
 
-.load-more-container {
+#notice-container .load-more-container {
 	display: flex;
 	justify-content: center;
-	margin-top: 20px; /* Adjust as needed */
+	margin-top: 20px;
 }
 
-#outerDiv {
+#notice-container #outerDiv {
 	width: 800px;
 	display: block;
 	overflow: auto;
 	padding-top: 20px;
 }
 
-.headerRow, .noticeEl {
+#notice-container .headerRow, #notice-container .noticeEl {
 	display: flex;
-	align-items: center; /* Align items vertically */
+	align-items: center;
 }
 
-.headerRow>div, .noticeEl>div {
-	padding: 10px; /* Adjust padding for spacing */
-	white-space: nowrap; /* Prevent text wrapping */
-	overflow: hidden; /* Hide overflow */
-	text-overflow: ellipsis; /* Show ellipsis for overflow */
+#notice-container .headerRow>div, #notice-container .noticeEl>div {
+	padding: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-#noticeModal {
+#notice-container #noticeModal {
+	top: 100px;
 	min-height: 300px;
+	height: auto;
+	z-index: 999999;
 }
 
-.modal-content {
-	height: 50%;
-	border: 0;
-	@
-	include
-	border-radius(0);
+#notice-container #updateModal {
+	top: 100px;
+	min-height: 300px;
+	height: auto;
+		z-index: 9999999;
 }
 
-#title {
+#notice-container .modal-content {
+	height: 60%;
+	border: 1rem solid;
+	border-radius: 10;
+}
+
+#notice-container .inline-header {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#notice-container .modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#notice-container #title {
 	margin-top: 100px;
 	text-align: center;
 }
 
-#detail {
+#notice-container #detail {
 	background-color: #23C293;
 	width: 800px;
 	margin: auto;
@@ -170,13 +193,13 @@ header h1 {
 	display: none;
 }
 
-#detail>div {
+#notice-container #detail>div {
 	height: 50px;
 	line-height: 50px;
 	border: 1px solid rgba(255, 255, 255, 0.656);
 }
 
-.button-line {
+#notice-container .button-line {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -185,14 +208,14 @@ header h1 {
 	margin: 20px 0;
 }
 
-.button-line button {
+#notice-container .button-line button {
 	padding: 10px 20px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
-.add-notice-button {
+#notice-container .add-notice-button {
 	padding: 10px 20px;
 	background: #4CAF50;
 	color: #ffffff;
@@ -201,29 +224,33 @@ header h1 {
 	cursor: pointer;
 }
 
-.add-notice-button:hover {
+#notice-container .add-notice-button:hover {
 	background: #45a049;
 }
 
-.col-category {
+#notice-container .col-category {
 	width: 10%;
 }
 
-.col-title {
+#notice-container .col-title {
 	width: 50%;
 }
 
-.col-date {
+#notice-container .col-date {
 	width: 20%;
 }
 
+#notice-container #liveAlertPlaceholder {
+	z-index: 10;
+}
 </style>
 </head>
 
 <body>
-	<%@ include file="/WEB-INF/views/header.jsp"%>
-	<div id="main_content">
-		<%@ include file="/WEB-INF/views/searchHeader.jsp"%>
+	<%@ include file="../header.jsp"%>
+	<%@ include file="../searchHeader.jsp"%>
+	<div id="notice-container">
+
 		<header>
 			<h1>공지사항</h1>
 		</header>
@@ -251,79 +278,286 @@ header h1 {
 			</div>
 			<div class="modal fade" id="noticeModal" tabindex="-1"
 				aria-labelledby="noticeModalLabel" aria-hidden="true">
-				<div class="modal-dialog 	modal-lg">
+				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="noticeTitle">${noticeTitle }</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
+							<h5 id="noticeHeader"></h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
+
 							<div id="notice-detail">
 								<h4>파일 내려받기</h4>
-								<div id="fileArea">
-									<h5>파일1:</h5>
-									<div id="noticeFile1"></div>
-									<h5>파일2:</h5>
-									<div id="noticeFile2"></div>
-									<h5>파일3:</h5>
-									<div id="noticeFile3"></div>
-								</div>
-
-								<div id="noticeContent"></div>
-								<div id="noticeActions">
-									<a class="btn btn-sm btn-warning" data-toggle="modal"
-										href="#updateModal">수정하기</a> <a
-										class="btn btn-sm btn-secondary" onclick="deleteById()">삭제하기</a>
-									<button class="share-button btn-secondary	" type="button"
-										title="Share this article">
-										
-										<span>Share</span>
-									</button>
+								<div id="files"></div>
+								<hr />
+								<div class="form-group">
+									<label for="noticeContent">내용</label>
+									<div id="noticeContent"></div>
 								</div>
 							</div>
 						</div>
+						<div class="modal-footer">
+							<div id="noticeActions">
+								<a class="btn btn-warning" onclick="toggleUpdateModal();"
+									style="height: 40px; color: white; border: 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp;
+								<a class="btn btn-danger" id="deleteButton"
+									style="height: 40px; color: white; border: 0px solid #388E3C;">삭제하기</a>&nbsp;&nbsp;
+								<a class="btn btn-secondary" data-bs-dismiss="modal"
+									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
+								<button class="btn share-button btn-secondary"
+									title="Share this article">
+									<span>공유하기</span>
+								</button>
+							</div>
+						</div>
 					</div>
+
 				</div>
 			</div>
+		</div>
 
-			<div id="content"></div>
-
-
-			<div class="button-line">
-				<div class="see-more">
-					<!--  <span class="get-more-list" onclick="loadMoreNotices()">더 보기</span> -->
-				</div>
-				<div class="add">
-					<button class="add-notice-button">공지 추가하기</button>
+		<div class="modal fade" id="updateModal" tabindex="-1"
+			aria-labelledby="updateModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<form method="POST" enctype="multipart/form-data"
+						id="fileUploadForm">
+						<input type="hidden" id="fileNoDel" name="fileNoDel" value="">
+						<input type="hidden" id="fileNameDel" name="fileNameDel" value="">
+						<div class="modal-header">
+							<h5 id="noticeNo" class="inline-header"></h5>
+							<input type="hidden" name="noticeNo" value="${notice.noticeNo }" />
+							<label for="noticeTitle">제목</label> <input type="text"
+								class="form-control" id='noticeTitle' name='noticeTitle'
+								value="">
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="noticeCategory">분류</label> <select
+									class="form-control" id="noticeCategory" name="noticeCategory">
+									<option value="general">일반</option>
+									<option value="event">이벤트</option>
+									<option value="service">서비스</option>
+									<option value="etc">기타</option>
+								</select>
+							</div>
+							<div id="notice-detail">
+								<h4>파일 내려받기</h4>
+								<div id="files"></div>
+								<hr />
+								<div class="form-group">
+									<label for="noticeContent">내용</label>
+									<textarea class="form-control" rows="5" id='noticeContent'
+										style="resize: none;"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div id="noticeActions">
+								<button class="btn" type="button" id="btnSubmit"
+									style="background-color: orange; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">수정하기</button>
+								&nbsp;&nbsp; <a class="btn" data-bs-dismiss="modal"
+									style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</a>&nbsp;&nbsp;
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
+		</div>
 
-			<script>
-			let currentPage = 0; // Keep track of current page for findAll
-			const currentPageCate = {}; // Object to keep track of current page for each category
-			const noticesPerPage = 10; // Number of notices to load per "Load More" click
-			let noticeListGlobal = []; // Global variable to store the initial notice list
-			let currentCategory = 'all'; // To track the current category being viewed
+		<div id="liveAlertPlaceholder"></div>
 
-			// Function to clear the notice list
+		<div id="content"></div>
+
+
+		<div class="button-line">
+			<div class="see-more">
+				<!--  <span class="get-more-list" onclick="loadMoreNotices()">더 보기</span> -->
+			</div>
+			<div class="add">
+				<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
+			</div>
+		</div>
+
+		<script>
+			let currentPage = 0; // 현재 페이지 0으로 고정
+			const currentPageCate = {}; // 카테고리 사용시 현재 페이지 기억
+			const noticesPerPage = 10; // 공지사항 한번에 표시되는 공지사항 수
+			let noticeListGlobal = []; //초기 공지사항 목록을 저장할 전역 변수
+			let currentCategory = 'all'; // 현재 보고 있는 카테고리 추적
+			let nfileListGlobal = [];
+			let currentNoticeNo=0;
+			
+			var fileNoArry = [];
+			var fileNameArry = [];
+
+			$(document).on('click', '.fileDelBtn', function() {
+			    var fileNo = $(this).data('fileNo');
+			    var fileName = $(this).data('fileName');
+			    
+			    fileNoArry.push(fileNo);
+			    fileNameArry.push(fileName);
+			    
+			    $('#fileNoDel').attr('value', fileNoArry);
+			    $('#fileNameDel').attr('value', fileNameArry);
+			    $(this).parent().remove();
+			});
+			
+			
+			// 공지사항 목록을 지우는 함수	
 			const clearNoticeList = () => {
 			    const existingOuterDiv = document.getElementById('outerDiv');
 			    if (existingOuterDiv) {
-			        existingOuterDiv.remove(); // Remove existing outerDiv if present
+			        existingOuterDiv.remove(); // 기존의 outerDiv가 있으면 제거
 			    }
-			    // Remove existing "Load More" buttons if present
+			    // 기존 "더 보기" 버튼이 있으면 제거
 			    $('.get-more-list').remove();
 			    $('.get-more-list-cate').remove();
 			    $('.load-more-container').remove();
 			}
+			// 공지사항 업데이트 
+			$("#btnSubmit").click(function (event) {         
+			    //event.preventDefault();  // 기본 폼 제출 방지
+			    console.log("Try");
+			    var form = $('#fileUploadForm')[0];  // 폼 요소 가져오기
+			    
+			    var data = new FormData(form);  // FormData 객체 생성
+			    console.log("Sending data: ",data);
+			 	// 필요한 경우 추가 파일을 FormData 객체에 추가 가능
+			    // 예를 들어, 'fileInput2', 'fileInput3' 등의 ID를 가진 추가 파일 입력이 있는 경우
+			   	 //data.append('updateFile2', $('#fileInput2')[0].files[0]);
+			     //data.append('updateFile3', $('#fileInput3')[0].files[0]);
+			   
+			    
+			    $.ajax({             
+			        type: "put",  
+			        url: "notice/update",
+			        data: data,  // Pass FormData object JSON.stringify(data)
+			    	/* 
+			        headers: { 
+				        Accept : "text/javascript; charset=utf-8",
+				        "Content-Type": "text/javascript; charset=utf-8"
+				    },
+				    */
+				  
+			        processData: false,  // Important: Do not process the data
+			        contentType: false, 
+			        success: function (result) {
+			            if (result.data === 1) {
+			                document.getElementById('outerDiv').remove();
+			                findAll();
+			                $('#detail').slideUp(300);
+			            }
+			        },
+			        error: function (e) {  
+			            console.log("ERROR : ", e);     
+			            $("#btnSubmit").prop("disabled", false);    
+			            alert("fail");      
+			        }   
+			    });  
+			});
 
-			// Function to load all notices
+			// 공지사항 추가하기 
+			function insert() {
+                const requestData = {
+                    "noticeTitle": document.getElementById('insertTitle').value,
+                    "noticeContent": document.getElementById('insertContent').value,
+                    "noticeCategory": document.getElementById('insertCategory').value,
+                    "noticeCategory": document.getElementById('insertCategory').value
+                };
+                console.log(requestData);
+                $.ajax({
+                    url: 'notice',
+                    type: 'post',
+                    data: requestData,
+                    success: response => {
+                        console.log(response);
+                        if (response.message === '서비스 요청 성공') {
+                            document.getElementById('outerDiv').remove();
+                            findAll();
+                            document.getElementById('noticeTitle').value = '';
+                            document.getElementById('noticeContent').value = '';
+                        }
+                    }
+                });
+            }
+			
+			//공지 수정하기를 누르면 조회 모달을 숨기고 수정 모달로 변경
+			function toggleUpdateModal() {
+	            $('#noticeModal').modal('hide'); // Hide the main notice modal
+	            $('#updateModal').modal('show'); // Show the update modal
+	        }
+			
+			//공지 수정하기가 종료/성공하면 조회 모달로 변경
+			$('#updateModal').on('hidden.bs.modal', function () {
+	            $('#noticeModal').modal('show');
+	        });
+			
+			/*
+			var data = new FormData();
+			jQuery.each(jQuery('#files')[0].files, function(i, file) {
+			    data.append('file-'+i, file);
+			});
+			function update() {
+                const updateData = {
+                		"noticeNo" : $('noticeNo').val(),
+    					"noticeTitle" : $('noticeTitle').val(),
+    					"noticeWriter" : $('updateWriter').val(),
+    					"noticeContent" : $('noticeContent').val(),
+    					"noticeCategory" : $('noticeCategory').val(),	
+    					"List<Nfile>" :data
+                };
+                $.ajax({
+                    url: "notice",
+                    type: "put",
+                    enctype: 'multipart/form-data',  
+                    data: JSON.stringify(updateData),
+                    contentType: 'application/json',
+                    success: result => {
+                        if (result.data === 1) {
+                            document.getElementById('outerDiv').remove();
+                            findAll();
+                            $('#detail').slideUp(300);
+                        }
+                    }
+                });
+            }
+			
+			*/
+			
+			//공지 삭제하기 확인 프롬프트
+			function ConfirmDelete(noticeNo) {
+			    if (confirm("Are you sure you want to delete this notice?")) {
+			    	 console.log(noticeNo);
+			    	deleteById(noticeNo);
+			    }
+			    return false;
+			}
+			//공지 삭제하기
+			 function deleteById(noticeNo) {
+                 $.ajax({
+                	
+                     url: 'notice/' + noticeNo,
+                     type: 'delete',
+                     success: response => {
+                         if (response.message === '게시글 삭제 성공') {
+                        	 
+                        	 $('#noticeModal').modal('hide');
+                        	 $('#noticeModal').slideUp(300);
+                             document.getElementById('outerDiv').remove();
+                             findAll();
+                             alert('게시글 삭제 성공');
+                         }
+                     } 
+                 });
+             }
+			// 공지 전부 띄우기 
 			const findAll = () => {
 			    currentCategory = 'all';
-			    currentPage = 0; // Reset page count for findAll
+			    currentPage = 0; // 페이지 갯수 초기화
 			    $.ajax({
 			        url: 'notice',
 			        type: 'get',
@@ -359,7 +593,20 @@ header h1 {
 			        }
 			    });
 			};
-
+			const findFiles = (noticeNo) => {
+			   
+			    $.ajax({
+			        url: 'notice/nFile/' + noticeNo,
+			        type: 'get',
+			        success: response => {
+			        	nfileListGlobal = response.data; // Store initial notice list globally
+			        },
+			        error: err => {
+			            console.error('Error fetching data:', err);
+			        }
+			    });
+			};
+			
 			// Function to load more notices when "Load More" is clicked for findAll
 			const loadMoreNotices = () => {
 			    renderNotices(noticeListGlobal.slice(0, (currentPage + 1) * noticesPerPage));
@@ -392,7 +639,21 @@ header h1 {
 
 			    return `${year}-${month}-${day}`;
 			};
-
+			function getKoreanNoticeCategory(noticeCategory) {
+			    switch (noticeCategory) {
+			        case 'etc':
+			        	console.log('기타');
+			            return '기타';
+			        case 'service':
+			            return '서비스';
+			        case 'event':
+			            return '이벤트';
+			        case 'general':
+			            return '일반';
+			        default:
+			            return 'Unknown Category'; // Default case if category does not match any known types
+			    }
+			}
 			// Function to render notices in the UI for findAll
 			const renderNotices = (noticeList) => {
 			    clearNoticeList(); // Clear existing notices
@@ -410,7 +671,8 @@ header h1 {
 			        const noticeEl = document.createElement('div');
 			        noticeEl.className = 'noticeEl';
 			        noticeEl.appendChild(createDiv(o.noticeNo, '70px'));
-			        noticeEl.appendChild(createDiv(o.noticeCategory, '130px'));
+			        
+			        noticeEl.appendChild(createDiv(getKoreanNoticeCategory(o.noticeCategory), '130px'));
 			        noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
 			        noticeEl.appendChild(createDiv(o.resdate, '200px'));
 			        outerDiv.appendChild(noticeEl);
@@ -448,7 +710,7 @@ header h1 {
 			        const noticeEl = document.createElement('div');
 			        noticeEl.className = 'noticeEl';
 			        noticeEl.appendChild(createDiv(o.noticeNo, '70px'));
-			        noticeEl.appendChild(createDiv(o.noticeCategory, '130px'));
+			        noticeEl.appendChild(createDiv(getKoreanNoticeCategory(o.noticeCategory), '130px'));
 			        noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
 			        noticeEl.appendChild(createDiv(o.resdate, '200px'));
 			        outerDiv.appendChild(noticeEl);
@@ -486,7 +748,7 @@ header h1 {
 			    }
 			};
 
-			// Helper function to create div elements
+			// div 생성을 도와주는 함수
 			const createDiv = (data, style) => {
 			    const divEl = document.createElement('div');
 			    const divText = document.createTextNode(data);
@@ -495,7 +757,7 @@ header h1 {
 			    return divEl;
 			};
 
-			// Initial loading on page load
+			// 사이트 시작할 때 로딩하는 정보
 			window.onload = () => {
 				findAll();
 
@@ -518,6 +780,8 @@ header h1 {
 			        etcButton.addEventListener('click', () => findByCate('etc'));
 			    }};
 			    
+			    
+			    //게시글 클릭할 시 
 			    $('#content').on('click', '.noticeEl', e => {
 			        const noticeNo = e.currentTarget.childNodes[0].innerText; // Assuming first child is the noticeNo
 
@@ -526,22 +790,79 @@ header h1 {
 			            type: 'get',
 			            success: response => {
 			                const notice = response.data;
-
+			                currentNoticeNo = parseInt(noticeNo);
 			                // Update modal content with notice details
-			                $('#noticeModal #noticeTitle').text(notice.noticeTitle);
+			                var textTitle = noticeNo+'. [' +getKoreanNoticeCategory(notice.noticeCategory)+'] '+notice.noticeTitle;
+			                $('#noticeModal #noticeHeader').text(textTitle);
 			                $('#noticeModal #noticeContent').text(notice.noticeContent);
+			                $('#noticeModal #files').empty();
+			                
+			                
+			                $('#updateModal #noticeNo').val(noticeNo);
+			                $('#updateModal #noticeTitle').val(notice.noticeTitle);
+			                $('#updateModal #noticeContent').val(notice.noticeContent);
+			                $('#updateModal #files').empty();
+			                $('select[name^="noticeCategory"] option:selected').attr("selected",null);
+			                $("select[name=noticeCategory]").val(notice.noticeCategory).prop("selected", true);
+							
+			                // Append file links if files exist
+			                if (notice.files && notice.files.length > 0) {
+			                    notice.files.forEach((file, index) => {
+			                        const fileLink = $('<div>')
+			                            .append($('<span>').text((index + 1) + '. '))
+			                            .append($('<a>').attr('href', '${path0}/' + file.changedName) // Ensure this path is correct
+			                                .attr('download', file.originalName)
+			                                .text(file.originalName));
+			                        
+			                        $('#noticeModal #files').append(fileLink);
+			                        
+			                        const updatefileLink = $('<div>')
+			                        .append($('<span>').text((index + 1) + '. 현재 업로드된 파일: '))
+			                        
+			                         .append($('<a>').attr('href', `${path0}/` + file.changedName) // Ensure this path is correct
+			                            .attr('download', file.originalName)
+			                            .text(file.originalName))
+			                        .append($('<input>').attr('type', 'file')
+			                            .attr('class', 'form-control-file border')
+			                            .attr('name', 'updatefile'))
+			                        .append($('<button>').attr('type', 'button')
+					                .attr('class', 'fileDelBtn')
+					                .text('삭제')
+					                .data('nfileNo', file.NFILE_NO)
+					                .data('fileName', 'NFILE_NO_' + index));
+			                    
+			                    $('#updateModal #files').append(updatefileLink);
+			                });
+							
+			                // Append additional input fields if less than 3 files exist
+			                for (let i = notice.files.length; i < 3; i++) {
+			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
+			                } 
+			            } else {
+			                // If no files exist
+			                $('#noticeModal #files').html('<p>파일이 존재하지 않습니다.</p>');
+			                
+			                // Show 3 input fields for new file uploads
+			                for (let i = 0; i < 3; i++) {
+			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
+			                }
+			            }
 
-			                // Show the modal
+			                document.getElementById('deleteButton').onclick = function() {
+			                    return ConfirmDelete(currentNoticeNo);
+			                };
+
 			                $('#noticeModal').modal('show');
 			            }
 			        });
 			    });
+				//공지사항 공유하기
 			    const shareButton = document.querySelector('.share-button');
 			    shareButton.addEventListener('click', async () => {
 			    	  try {
 			    	    await navigator.share({
-			    	      title: '재그지그의 개발 블로그',
-			    	      text: '디자인과 UI, UX에 관심이 많은 주니어 웹 프론트엔드 개발자입니다.',
+			    	      title: 'SQLRECORD 공지사항',
+			    	      text: 'SQLRECORD 공지사항 공유',
 			    	      url: '',
 			    	    });
 			    	    console.log('공유 성공');
@@ -549,214 +870,28 @@ header h1 {
 			    	    console.log('공유 실패');
 			    	  }
 			    	});
-			/*
-			$('#content').on('click' , '.noticeEl' , e => {
-	            //console.log(e.currentTarget.childNodes[0].innerText);
-	            const noticeNo = e.currentTarget.childNodes[0].innerText;
-	            $.ajax({
-	                url: 'notice/' + noticeNo,
-	                type: 'get',
-	                success: response => {
-                        const notice = response.data;
+			    
+			    //공지사항 삭제/오류 시 나오는 에러
+			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+				
+			 	//공지사항 에러 출력하기
+			    const alert = (message) => {
+			      const wrapper = document.createElement('div')
+			      wrapper.innerHTML = [
+			        '<div class="alert alert-warning alert-dismissible" role="alert">',
+			        '   <div>${message}</div>',
+			        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+			        '</div>'
+			      ].join('')
 
-                        const contentValue = '<div id="notice-detail">'
+			      alertPlaceholder.append(wrapper)
+			    }
 
-
-                                            + '<div>' + notice.noticeTitle + '</div>'
-                                            + '<div>' + notice.noticeContent + '</div>'
-                                            + '<div>'
-                                            + '<a class="btn btn-sm btn-warning" data-toggle="modal" href="#updateModal">'
-                                            + '수정하기'
-                                            + '</a>'
-                                            + '<a class="btn btn-sm btn-secondary" onclick="deleteById()">삭제하기</a>'
-                                            + '</div>'
-                                            + '</div>';
-                        $('#updateNo').val(notice.noticeNo);
-                        $('updateTitle').val(notice.noticeTitle);
-    					$('updateCategory').val(notice.noticeCategory);
-    					$('updateContent').val(notice.noticeContent);                
-                                                   
-                                            
-                        $('#detail').html(contentValue);
-                        $('#detail').slideDown(500);
-                    }
-                });
-            });
-                let currentPage = 0;
-                const notices = []; // Assuming notices array is defined somewhere
-
-                window.onload = () => {
-                    findAllNew();
-                    loadMoreNotices();
-                };
-                const findAllNew = () => {
-                    $.ajax({
-                        url: 'notice',
-                        type: 'get',
-                        success: response => {
-                            const noticeList = response.data;
-                            notices=response.data;
-                            const outerDiv = document.createElement('div');
-                            outerDiv.id = 'outerDiv';
-                            noticeList.map(o => {
-                                const noticeEl = document.createElement('div');
-                                noticeEl.className = 'noticeEl';
-                                noticeEl.appendChild(createDiv(o.noticeNo, '50px'));
-                                noticeEl.appendChild(createDiv(o.noticeCategory, '150px'));
-                                noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
-                                noticeEl.appendChild(createDiv(o.createDate, '200px'));
-                                outerDiv.appendChild(noticeEl);
-                            });
-                            document.getElementById('content').appendChild(outerDiv);
-                        }
-                    });
-                };
-
-                const findAll = () => {
-                    $.ajax({
-                        url: 'notice',
-                        type: 'get',
-                        success: response => {
-                        	document.getElementById('outerDiv').remove();
-                            const noticeList = response.data;
-                            const outerDiv = document.createElement('div');
-                            outerDiv.id = 'outerDiv';
-                            noticeList.map(o => {
-                                const noticeEl = document.createElement('div');
-                                noticeEl.className = 'noticeEl';
-                                noticeEl.appendChild(createDiv(o.noticeNo, '50px'));
-                                noticeEl.appendChild(createDiv(o.noticeCategory, '150px'));
-                                noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
-                                noticeEl.appendChild(createDiv(o.createDate, '200px'));
-                                outerDiv.appendChild(noticeEl);
-                            });
-                            document.getElementById('content').appendChild(outerDiv);
-                        }
-                    });
-                };
-	
-                const findByCate = (cate) => {
-                    $.ajax({
-                        url: 'notice/category/' + cate,
-                        type: 'get',
-                        success: response => {
-                        	document.getElementById('outerDiv').remove();
-                            const noticeList = response.data;
-                            const outerDiv = document.createElement('div');
-                            outerDiv.id = 'outerDiv';
-                            noticeList.map(o => {
-                                const noticeEl = document.createElement('div');
-                                noticeEl.className = 'noticeEl';
-                                noticeEl.appendChild(createDiv(o.noticeNo, '50px'));
-                                noticeEl.appendChild(createDiv(o.noticeCategory, '150px'));
-                                noticeEl.appendChild(createDiv(o.noticeTitle, '400px'));
-                                noticeEl.appendChild(createDiv(o.createDate, '200px'));
-                                outerDiv.appendChild(noticeEl);
-                            });
-                            document.getElementById('content').appendChild(outerDiv);
-                        }
-                    });
-                };
-                
-                const createDiv = (data, style) => {
-                    const divEl = document.createElement('div');
-                    const divText = document.createTextNode(data);
-                    divEl.style.width = style;
-                    divEl.appendChild(divText);
-                    return divEl;
-                };
-                
-                function update() {
-                    const updateData = {
-                        "noticeNo": document.getElementById('updateNo').value,
-                        "noticeTitle": document.getElementById('updateTitle').value,
-                        "noticeCategory": document.getElementById('updateCategory').value,
-                        "noticeContent": document.getElementById('updateContent').value
-                    };
-                    $.ajax({
-                        url: "notice",
-                        type: "put",
-                        data: JSON.stringify(updateData),
-                        contentType: 'application/json',
-                        success: result => {
-                            if (result.data === 1) {
-                                document.getElementById('outerDiv').remove();
-                                findAll();
-                                $('#detail').slideUp(300);
-                            }
-                        }
-                    });
-                }
-
-                function insert() {
-                    const requestData = {
-                        "noticeTitle": document.getElementById('noticeTitle').value,
-                        "noticeContent": document.getElementById('noticeContent').value,
-                        "noticeCategory": document.getElementById('noticeCategory').value
-                    };
-                    console.log(requestData);
-                    $.ajax({
-                        url: 'notice',
-                        type: 'post',
-                        data: requestData,
-                        success: response => {
-                            console.log(response);
-                            if (response.message === '서비스 요청 성공') {
-                                document.getElementById('outerDiv').remove();
-                                findAll();
-                                document.getElementById('noticeTitle').value = '';
-                                document.getElementById('noticeContent').value = '';
-                            }
-                        }
-                    });
-                }
-
-                function deleteById(noticeNo) {
-                    $.ajax({
-                        url: 'notice/' + noticeNo,
-                        type: 'delete',
-                        success: response => {
-                            if (response.message === '삭제성공!') {
-                                $('#detail').slideUp(300);
-                                document.getElementById('outerDiv').remove();
-                                findAll();
-                            }
-                        }
-                    });
-                }
-
-                $('#content').on('click', '.noticeEl', e => {
-                    const noticeNo = e.currentTarget.childNodes[0].innerText;
-                    $.ajax({
-                        url: 'notice/' + noticeNo,
-                        type: 'get',
-                        success: response => {
-                            const notice = response.data;
-                            const contentValue = `
-                                <div id="notice-detail">
-                                    <div>${notice.noticeTitle}</div>
-                                    <div>${notice.noticeContent}</div>
-                                    <div>
-                                        <a class="btn btn-sm btn-warning" data-toggle="modal" href="#updateModal">수정하기</a>
-                                        <a class="btn btn-sm btn-secondary" onclick="deleteById()">삭제하기</a>
-                                    </div>
-                                </div>`;
-                            document.getElementById('updateNo').value = notice.noticeNo;
-                            document.getElementById('updateTitle').value = notice.noticeTitle;
-                            document.getElementById('updateCategory').value = notice.noticeCategory;
-                            document.getElementById('updateContent').value = notice.noticeContent;
-
-                            document.getElementById('detail').innerHTML = contentValue;
-                            $('#detail').slideDown(500);
-                        }
-                    });
-                });
-                */
             </script>
-		</div>
+
 	</div>
 	<script src="${hpath }/resources/js/forHeader.js?after1"></script>
-	<%@ include file="/WEB-INF/views/footer.jsp"%>
+	<%@ include file="../footer.jsp"%>
 </body>
 
 </html>

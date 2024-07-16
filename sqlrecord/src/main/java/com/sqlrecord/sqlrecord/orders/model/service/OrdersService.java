@@ -1,5 +1,23 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
-public class OrdersService {
+import java.util.List;
 
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+
+public interface OrdersService {
+
+	// 주문건 멤버 정보 넣고 해당 주문건 번호 받기
+	int insertMemberOrders(MemberOrders memberOrders , int memberNo);
+
+	int insertOrdersDetail(List<MemberOrdersDetail> odList);
+
+	List<MemberOrdersDetail> getOrdersDetail(int memberNo);
+
+	MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo);
+
+	List<Product> getProduct();
+	
+	
 }

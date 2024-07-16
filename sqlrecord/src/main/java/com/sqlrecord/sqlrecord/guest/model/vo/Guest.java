@@ -15,11 +15,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Guest {
-	private int guest_no;
-    private String guest_name;
-    private String guest_pw;
-    private String guest_address1;
-    private String guest_address2;
-    private String guest_postcode;
-    private Date guest_date;
+	private int guestNo;
+    private String guestName;
+    private String guestPw;
+    private String guestAddress1;
+    private String guestAddress2;
+    private String guestPostcode;
+    private Date guestDate;
 }

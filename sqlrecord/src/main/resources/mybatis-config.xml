@@ -12,27 +12,38 @@
  	  	<!-- <typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member"/> -->
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.Cart" alias="cart"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.GuestCart" alias="guestCart"/>
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.Product" alias="product"/>
- 	  	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.Product" alias="product"/>
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos" alias="productPhotos"/>
 	
+
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/>
+
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="memberGenre" />
+
  	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.Reply" alias="reply" />
+
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="MemberGenre" />
+ 	  	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="MemberOrdersDetail" />
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx" alias="MemberOrdersEx" />
+
  	</typeAliases>
  	
  	<mappers>
  		<!-- mapper.xml 양식 -->
  		<!-- <mapper resource="/mappers/member-mapper.xml"/>  -->
  	  	<mapper resource="/mappers/cart-mapper.xml"/>
- 	  
- 		  
  		<mapper resource="/mappers/member-mapper.xml"/>  
+
  		<mapper resource="/mappers/reply-mapper.xml"/>  
  	    
 
- 	  	<mapper resource="/mappers/notice-mapper.xml" />
 
+
+ 	  	<mapper resource="/mappers/notice-mapper.xml" />
+		<!--<mapper resource="/mappers/product-mapper.xml" /> -->
+		<mapper resource="/mappers/memberOrders-mapper.xml" />
  	</mappers>
  	
  </configuration>

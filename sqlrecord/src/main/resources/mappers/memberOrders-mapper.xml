@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper">
+
+	
+	<insert id="insertMemberOrders">
+		INSERT
+		INTO
+				MEMBER_ORDERS
+		VALUES
+				(
+				MEMBER_ORDERS_SEQ.NEXTVAL,
+				#{memberOrdersAddress},
+				#{memberOrdersAddress2},
+				#{memberOrdersPostcode},
+				SYSDATE,
+				#{memberNo}
+				)
+	</insert>
+
+	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
+		SELECT
+				Max(MEMBER_ORDERS_NO) 
+		FROM
+				MEMBER_ORDERS
+		WHERE
+				MEMBER_NO = #{memberNo}
+		ORDER
+		BY
+				MEMBER_ORDERS_NO
+		DESC
+				
+	</select>
+	
+	
+	<insert id="insertOrdersDetail" parameterType="MemberOrdersDetail">
+
+		INSERT
+		INTO
+				MEMBER_ORDERS_DETAIL
+		VALUES
+				(
+				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
+				#{product.productNo},
+				#{memberOrders.memberOrdersNo},
+				#{memberOrdersDetailAmount},
+				#{memberOrdersDetailPrice},
+				DEFAULT,
+				DEFAULT,
+				DEFAULT
+				)
+
+	</insert>
+	
+	<resultMap type="MemberOrdersDetail" id="odRM">
+    	<id property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
+    	<result property="memberOrdersDetailAmount" column="MEMBER_orders_detail_amount"/>  
+	    <result property="memberOrdersDetailPrice" column="MEMBER_orders_detail_price"/>
+	    <result property="trackingNum" column="TRACKING_NUM"/>
+	    <result property="memberOrdersDetailExd" column="MEMBER_ORDERS_DETAIL_EXD"/>
+	    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
+	    <association property="product" javaType="product">
+	        <result property="productNo" column="product_no"/>
+	        <result property="productName" column="product_name"/>
+	        <result property="productPrice" column="product_price"/>
+	        <result property="productStatus" column="product_status"/>
+	        <result property="productDate" column="product_date"/>
+	        <result property="tagNo" column="tag_no"/>
+	        <result property="productDetail" column="product_detail"/>
+	        <result property="productCate" column="product_cate"/>
+	        <result property="color" column="color"/>
+	        <association property="productPhotos" javaType="productPhotos">
+	        	<result property="photoNo" column="PHOTO_NO"/>
+			    <result property="productNo" column="PRODUCT_NO"/>
+			    <result property="photoName" column="PHOTO_NAME"/>
+			    <result property="photoPath" column="PHOTO_PATH"/>
+	        </association>
+	    </association>
+	    <association property="memberOrders" javaType="memberOrders">
+	    	<result property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
+	        <result property="memberOrdersAddress" column="MEMBER_ORDERS_ADDRESS"/>
+	        <result property="memberOrdersAddress2" column="MEMBER_ORDERS_ADDRESS2"/>
+	        <result property="memberOrdersPostcode" column="MEMBER_ORDERS_POSTCODE"/>
+	        <result property="memberOrdersDate" column="MEMBER_ORDERS_DATE"/>
+	        <result property="memberNo" column="MEMBER_NO"/>
+	    </association>
+	</resultMap>
+	
+	
+	<select id="getOrdersDetail" resultMap="odRM">
+	     WITH RANKEDMOD AS (SELECT
+		        od.MEMBER_ORDERS_DETAIL_NO,
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                mo.MEMBER_NO,
+                mo.MEMBER_ORDERS_ADDRESS,
+                mo.MEMBER_ORDERS_ADDRESS2,
+                mo.MEMBER_ORDERS_POSTCODE,
+                mo.MEMBER_ORDERS_DATE,
+		        od.MEMBER_ORDERS_NO,
+		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        od.MEMBER_ORDERS_DETAIL_PRICE,
+		        od.MEMBER_ORDERS_EXD,
+		        od.TRACKING_NUM,
+		        od.MEMBER_ORDERS_DETAIL_STATUS,
+                ps.photo_path,
+                ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
+                
+	    FROM
+	       	 	MEMBER_ORDERS_DETAIL od
+        JOIN
+                MEMBER_ORDERS mo
+        ON
+                od.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
+        JOIN
+                PRODUCT p
+        ON
+                od.PRODUCT_NO = p.product_no
+        LEFT 
+        JOIN
+	        	PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
+	   WHERE
+                mo.MEMBER_NO = #{memberNo})
+        SELECT
+                MEMBER_ORDERS_DETAIL_NO,
+		        PRODUCT_NO,
+                PRODUCT_NAME,
+                product_cate,
+                product_price,
+                product_status,
+                MEMBER_NO,
+                MEMBER_ORDERS_ADDRESS,
+                MEMBER_ORDERS_ADDRESS2,
+                MEMBER_ORDERS_POSTCODE,
+                MEMBER_ORDERS_DATE,
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ORDERS_DETAIL_AMOUNT,
+		        MEMBER_ORDERS_DETAIL_PRICE,
+		        MEMBER_ORDERS_EXD,
+		        TRACKING_NUM,
+		        MEMBER_ORDERS_DETAIL_STATUS,
+                photo_path
+        FROM
+                RANKEDMOD
+        WHERE
+                rn=1
+        ORDER
+        BY
+                MEMBER_ORDERS_DATE
+        DESC
+</select>
+	
+	
+	<select id="getOrdersDetailOne" parameterType="_int" resultMap="odRM">
+	     WITH RANKEDMOD AS (SELECT
+		        od.MEMBER_ORDERS_DETAIL_NO,
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                mo.MEMBER_NO,
+                mo.MEMBER_ORDERS_ADDRESS,
+                mo.MEMBER_ORDERS_ADDRESS2,
+                mo.MEMBER_ORDERS_POSTCODE,
+                mo.MEMBER_ORDERS_DATE,
+		        od.MEMBER_ORDERS_NO,
+		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        od.MEMBER_ORDERS_DETAIL_PRICE,
+		        od.MEMBER_ORDERS_EXD,
+		        od.TRACKING_NUM,
+		        od.MEMBER_ORDERS_DETAIL_STATUS,
+                ps.photo_path,
+                ROW_NUMBER() OVER (PARTITION BY od.MEMBER_ORDERS_DETAIL_NO ORDER BY od.MEMBER_ORDERS_DETAIL_NO ASC) AS rn
+                
+	    FROM
+	       	 	MEMBER_ORDERS_DETAIL od
+        JOIN
+                MEMBER_ORDERS mo
+        ON
+                od.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
+        JOIN
+                PRODUCT p
+        ON
+                od.PRODUCT_NO = p.product_no
+        LEFT 
+        JOIN
+	        	PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
+	   WHERE
+                od.MEMBER_ORDERS_DETAIL_NO = #{memberOrdersDetailNo})
+        SELECT
+                MEMBER_ORDERS_DETAIL_NO,
+		        PRODUCT_NO,
+                PRODUCT_NAME,
+                product_cate,
+                product_price,
+                product_status,
+                MEMBER_NO,
+                MEMBER_ORDERS_ADDRESS,
+                MEMBER_ORDERS_ADDRESS2,
+                MEMBER_ORDERS_POSTCODE,
+                MEMBER_ORDERS_DATE,
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ORDERS_DETAIL_AMOUNT,
+		        MEMBER_ORDERS_DETAIL_PRICE,
+		        MEMBER_ORDERS_EXD,
+		        TRACKING_NUM,
+		        MEMBER_ORDERS_DETAIL_STATUS,
+                photo_path
+        FROM
+                RANKEDMOD
+        WHERE
+                rn=1
+        ORDER
+        BY
+                MEMBER_ORDERS_DATE
+        DESC
+</select>
+	
+	
+	<select id="getProduct" resultType="product">
+	    WITH RANKEPRO AS (SELECT
+	
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                PRODUCT_DATE,
+                p.tag_no,
+                ps.photo_path,
+                ROW_NUMBER() OVER (PARTITION BY p.PRODUCT_NO ORDER BY ps.PRODUCT_NO ASC) AS rn    
+	    FROM
+	       	 	PRODUCT p
+        LEFT 
+        JOIN
+                PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
+        )
+        SELECT
+		        PRODUCT_NO productNo,
+		        PRODUCT_NAME productName,
+                PRODUCT_CATE prodcutCate,
+		        PRODUCT_PRICE productPrice,
+		        PRODUCT_STATUS productStatus,
+		        PRODUCT_DATE productDate,
+		        TAG_NO tagNo,
+                PHOTO_PATH photoPath
+	    FROM
+	        	RANKEPRO
+	    WHERE
+                rn=1
+        ORDER
+        BY
+                PRODUCT_NO
+        DESC			
+	</select>
+	
+	
+
+
+</mapper>
