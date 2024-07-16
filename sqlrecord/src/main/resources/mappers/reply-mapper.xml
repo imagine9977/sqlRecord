@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.reply.model.dao.ReplyMapper">
+	
+	<sql id="">
+		
+	</sql>
+	<select id="getReplyList" resultType="reply">
+		select * from reply order by reply_No desc
+	</select>	
+	<select id="getReply" parameterType="int" resultType="reply">
+		select * from reply where reply_No=#{replyNo}
+	</select>
+	<select id="replyCount" resultType="int">
+		select count(*) from reply
+	</select>
+	<select id="avgStar" resultType="float">
+		select round(AVG(star), 1) AS avgStar from Reply
+	</select>
+	
+	
+	<select id="getReplyStarAll" resultMap="StarMap">
+    <![CDATA[ 
+         WITH stats AS (
+		      SELECT
+		        CASE 
+		          WHEN star = 5.0 THEN '5점 MAX'
+		          WHEN star >= 4.0 AND star < 5.0 THEN '4점 GPA'
+		          WHEN star >= 3.0 AND star < 4.0 THEN '3점 GPA'
+		          WHEN star >= 2.0 AND star < 3.0 THEN '2점 GPA'
+		          WHEN star >= 1.0 AND star < 2.0 THEN '1점 GPA'
+		        END AS rating_range,
+		        COUNT(*) AS count,
+		        CASE 
+		          WHEN star = 5.0 THEN 1
+		          WHEN star >= 4.0 AND star < 5.0 THEN 2
+		          WHEN star >= 3.0 AND star < 4.0 THEN 3
+		          WHEN star >= 2.0 AND star < 3.0 THEN 4
+		          WHEN star >= 1.0 AND star < 2.0 THEN 5
+		        END AS rating_index
+		      FROM reply
+		      GROUP BY
+		        CASE 
+		          WHEN star = 5.0 THEN '5점 MAX'
+		          WHEN star >= 4.0 AND star < 5.0 THEN '4점 GPA'
+		          WHEN star >= 3.0 AND star < 4.0 THEN '3점 GPA'
+		          WHEN star >= 2.0 AND star < 3.0 THEN '2점 GPA'
+		          WHEN star >= 1.0 AND star < 2.0 THEN '1점 GPA'
+		        END,
+		        CASE 
+		          WHEN star = 5.0 THEN 1
+		          WHEN star >= 4.0 AND star < 5.0 THEN 2
+		          WHEN star >= 3.0 AND star < 4.0 THEN 3
+		          WHEN star >= 2.0 AND star < 3.0 THEN 4
+		          WHEN star >= 1.0 AND star < 2.0 THEN 5
+		        END
+		    ),
+		    total AS (
+		      SELECT COUNT(*) AS total_count FROM reply
+		    )
+		    SELECT 
+		      s.rating_range,
+		      s.count,
+		      ROUND(s.count * 100.0 / t.total_count, 1) AS percentage,
+		      s.rating_index
+		    FROM stats s, total t
+		    ORDER BY s.rating_index
+	    ]]>
+	</select>
+
+<resultMap id="StarMap" type="java.util.HashMap">
+    <result property="ratingRange" column="rating_range"/>
+    <result property="count" column="count"/>
+    <result property="percentage" column="percentage"/>
+    <result property="ratingIndex" column="rating_index"/>
+</resultMap>
+	
+</mapper>

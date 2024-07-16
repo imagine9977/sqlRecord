@@ -111,7 +111,7 @@
 				    </c:when>
 				    <c:otherwise>
 				        <div class="navbar-item">
-				            <a href="${hpath}/member/mypage.do">
+				            <a href="${hpath}/member/mypage">
 				                마이페이지
 				            </a>
 				        </div>
