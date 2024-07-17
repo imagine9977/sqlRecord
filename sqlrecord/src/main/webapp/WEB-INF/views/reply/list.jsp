@@ -305,6 +305,38 @@
             margin-top: 5px;
             color: #666;
         }
+        
+        .deleteButton,.editButton {
+		    cursor: pointer;
+		    width: 100px; height: 30px;
+		    background-color: #2f4f4f;
+		    color: white;
+		    border: 1px solid rgba(252, 248, 248, 0.4);
+		    border-radius: .3em;
+		    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 10px 10px rgba(255,255,255,0.1);
+		}
+		
+		.deleteButton {
+		    background-color: #e61c31;
+		}
+		
+		.deleteButton:hover {
+		    background-color: #dc3545;
+		}
+		
+		.editButton {
+		    background-color: #0b889b;
+		}
+		.editButton:hover {
+		    background-color: #17a2b8;
+		}
+		
+		.chReplyedit {
+			display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+		}
     </style>
 </head>
 <body>
@@ -414,7 +446,7 @@
 					    <c:if test="${!empty sessionScope.loginUser}">
 					        <div class="reply-list" style="display: none;">
 					            <!-- 답글 입력 폼 -->
-					            <div class="reply-input">
+					            <div class="reply-input" >
 					                <input type="hidden" class="pReply" value="${reply.replyNo}">
 					                <input type="hidden" class="pDepth" value="1">
 					                <input class="chContent" name="chContent" type="text" placeholder="내용을 입력해주세요.">
@@ -423,11 +455,22 @@
 					            <!-- 기존 답글 목록 -->
 					            <c:forEach var="chReply" items="${chList}">
 					                <c:if test="${chReply.replyNo == reply.replyNo}">
-					                    <div class="reply">
-					                        <span class="reply-author">${chReply.memberId}</span><br>
-					                        <span class="reply-date">${chReply.writeDate}</span>
-					                        <p class="reply-content">${chReply.chContent}</p>
-					                    </div>
+					                    <div class="chBack" style="background-color: #E2E2E2; height:80px;">
+						                    <div class="reply" >
+						                        <span class="reply-author">${chReply.memberId}</span><br>
+						                        <span class="reply-date">${chReply.writeDate}</span>
+						                    </div>
+				            				<div class="chReplyedit">
+						                        <p class="reply-content">${chReply.chContent}</p>
+							                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
+							                        <div class="align-right">
+							                            <button class="editButton">수정</button>
+							                            <button class="deleteButton" style="margin-left: 10px;">삭제</button>
+							                        </div>
+							                    </c:if>
+								            </div>
+							            </div>
+					                <hr>
 					                </c:if>
 					            </c:forEach>
 					        </div>
