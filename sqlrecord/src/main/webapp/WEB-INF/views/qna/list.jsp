@@ -262,9 +262,9 @@
 					<button type="button" class="btn btn-outline-secondary"
 						onclick="findByCate('general')">일반</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findByCate('service')">서비스</button>
+						onclick="findByCate('pay')">결제</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findByCate('event')">이벤트</button>
+						onclick="findByCate('service')">서비스</button>
 					<button type="button" class="btn btn-outline-secondary"
 						onclick="findByCate('etc')">기타</button>
 					<button type="button" class="btn btn-outline-secondary"
@@ -340,7 +340,7 @@
 								<label for="qnaCategory">분류</label> <select class="form-control"
 									id="qnaCategory" name="qnaCategory">
 									<option value="general">일반</option>
-									<option value="event">이벤트</option>
+									<option value="pay">결제</option>
 									<option value="service">서비스</option>
 									<option value="etc">기타</option>
 								</select>
@@ -601,11 +601,11 @@
 			        url: 'qna/' + cate,
 			        type: 'get',
 			        success: response => {
-			            qnaListGlobal = response.data; // Store initial qna list globally
+			            qnaListGlobal = response.data.qnaList; // Store initial qna list globally
 			        
 			            renderqnasCate(cate, qnaListGlobal.slice(0, qnasPerPage));
 			            currentPageCate[cate]++; // Increment page after loading initial data
-			            checkLoadMoreButtonCate(cate);
+			           
 			        },
 			        error: err => {
 			            console.error('Error fetching data:', err);
@@ -670,16 +670,7 @@
 
 			    // Add "Load More" button for findAll if there are more qnas to load
 			    if (currentPage * qnasPerPage < qnaListGlobal.length) {
-			        const loadMoreButtonContainer = document.createElement('div');
-			        loadMoreButtonContainer.className = 'load-more-container'; // Container for centering
-
-			        const loadMoreButton = document.createElement('button');
-			        loadMoreButton.className = 'get-more-list btn btn-outline-secondary';
-			        loadMoreButton.textContent = '더 보기';
-			        loadMoreButton.onclick = loadMoreqnas;
-
-			        loadMoreButtonContainer.appendChild(loadMoreButton); // Add button to the container
-			        document.getElementById('content').appendChild(loadMoreButtonContainer); // Add container to the content
+			       
 			    }
 			};
 			
@@ -708,16 +699,7 @@
 
 			    // Add "Load More" button for this category if there are more qnas to load
 			    if (currentPageCate[cate] * qnasPerPage < qnaListGlobal.length) {
-			        const loadMoreButtonContainer = document.createElement('div');
-			        loadMoreButtonContainer.className = 'load-more-container'; // Container for centering
-
-			        const loadMoreButton = document.createElement('button');
-			        loadMoreButton.className = 'get-more-list-cate btn btn-outline-secondary';
-			        loadMoreButton.textContent = '더 보기';
-			        loadMoreButton.onclick = () => loadMoreqnasCate(cate);
-
-			        loadMoreButtonContainer.appendChild(loadMoreButton); // Add button to the container
-			        document.getElementById('content').appendChild(loadMoreButtonContainer); // Add container to the content
+			        
 			    }
 			};
 
