@@ -64,7 +64,7 @@
        					)
 	</insert>
 	
-	<insert id="insGenre" parameterType="MemberGenre">
+	<insert id="insGenre" parameterType="memberGenre">
 		INSERT
 			INTO MEMBER_GENRE (
 						TAG_NO,
@@ -103,5 +103,47 @@
 		        NAME = #{name}
 		   AND
 		        EMAIL = #{email}
+	</update>
+	
+	<select id="genre" parameterType="memberGenre" resultType="_int">
+		SELECT 
+				TAG_NO
+		  FROM 
+		  		MEMBER_GENRE
+	  	 WHERE
+	  	 		MEMBER_NO = #{memberNo}
+	</select>
+	
+	<update id="update" parameterType="member">
+		UPDATE
+				MEMBER
+		   SET
+		   		MEMBER_PW = #{memberPw},
+				NAME = #{name},
+				EMAIL = #{email},
+				TELL = #{tell},
+				POSTCODE = #{postcode},
+				ADDR1 = #{addr1},
+				ADDR2 = #{addr2}
+			WHERE
+				MEMBER_ID = #{memberId}
+	</update>
+	
+	<delete id="deleteGenre" parameterType="memberGenre">
+	    DELETE FROM MEMBER_GENRE WHERE MEMBER_NO = #{memberNo}
+	</delete>
+	
+	<insert id="insUpdateGenre" parameterType="memberGenre">
+	    INSERT INTO MEMBER_GENRE (MEMBER_NO, TAG_NO) VALUES (#{memberNo}, #{tagNo})
+	</insert>
+	
+	<update id="delete" parameterType="member">
+		UPDATE
+				 MEMBER
+			SET
+				 STATUS = 'N',
+				 RESDATE = SYSDATE
+			WHERE
+				 MEMBER_ID = #{memberId} 
 	</update>
 </mapper>
