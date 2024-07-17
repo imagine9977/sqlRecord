@@ -8,7 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 public interface ProductService {
-	
+/*
 	// 전체 상품 수 조회(페이징)
 	int productCount();
 
@@ -35,5 +35,5 @@ public interface ProductService {
 	
 	// 상품 삭제 (update status 'Y'->'N')
 	
-	
+*/	
 }

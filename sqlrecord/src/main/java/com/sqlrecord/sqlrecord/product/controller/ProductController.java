@@ -4,17 +4,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import com.sqlrecord.sqlrecord.common.template.PageTemplate;
 import com.sqlrecord.sqlrecord.common.vo.PageInfo;
 import com.sqlrecord.sqlrecord.product.model.service.ProductService;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +35,9 @@ public class ProductController {
 	
 	// 전체 상품 조회 (list.jsp)
 	@GetMapping("/list")
-	private String getAllProducts(@RequestParam(value="page", defaultValue="1") int page,
-								  Model model) {
+	private String getAllProductsByCate(@RequestParam(value="cate", defaultValue="turntables") String cate,
+										@RequestParam(value="page", defaultValue="1") int page,
+										Model model) {
 		// 페이징
 		int listCount = productService.productCount();
 		int currentPage = page;
@@ -109,6 +116,11 @@ public class ProductController {
 		return "product/list";
 	}
 
-	
-	*/
+	/*
+	// 상품 추가
+	@PostMapping("/saveProduct")
+	public String save(Product product, ProductPhotos productPhoto, MultipartFile upfile, HttpSession session, Model model) {
+		
+	}
+	 */
 }

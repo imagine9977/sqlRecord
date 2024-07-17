@@ -1,12 +1,15 @@
+body {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    background: #ededed;
+}
 
-
+a {text-decoration: none; color: white}
 .container {
     background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 80%;
     max-width: 800px;
-    border-radius: 10px;
     margin: auto;
     margin-top: 200px;
     margin-bottom: 200px;

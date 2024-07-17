@@ -190,8 +190,12 @@ public class OrdersForwardController {
 	
 	
 	@PostMapping("/insertMemberOD")
-	public String insertMemberOD() {
+	public String insertMemberOD(MemberOrdersDetail memberOrdersDetail) {
 		
+		
+		
+		
+		return "redirect:orders/exchange";
 	}
 	
 	

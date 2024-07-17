@@ -11,7 +11,7 @@ import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 @Mapper
 public class ProductMapper {
-
+/*
 	public int productCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("productMapper.productCount");
 	}
@@ -28,5 +28,5 @@ public class ProductMapper {
 			RowBounds rowBounds) {
 		return sqlSession.selectList("productMapper.findByConditionAndKeyword", map, rowBounds);
 	}
-
+*/
 }

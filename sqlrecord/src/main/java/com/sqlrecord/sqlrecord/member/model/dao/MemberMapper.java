@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
@@ -20,5 +22,10 @@ public interface MemberMapper {
 	 */
 	Member infoId(Member member);
 	int pwChange(Member member);
+	List<Integer> genre(MemberGenre memberGenre);
+	int update(Member member);
+	int deleteGenre(int memberNo);
+	void insUpdateGenre(MemberGenre memberGenre);
+	int delete(Member member);
 	
 }
