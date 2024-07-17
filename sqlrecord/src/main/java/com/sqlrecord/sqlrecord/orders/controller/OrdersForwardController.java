@@ -26,7 +26,7 @@ import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
-import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +123,7 @@ public class OrdersForwardController {
 		
 		Member member =  (Member) session.getAttribute("loginUser");
 		if(member == null) {
-			return "redirect:member/login.do";
+			return "redirect:/member/login.do";
 		}
 		
 		
@@ -136,6 +136,8 @@ public class OrdersForwardController {
 		// HashSet에 add
 		for(MemberOrdersDetail item : odList) {
 			hs.add(item.getMemberOrders().getMemberOrdersNo());
+			log.info("odList : {}" , odList.size());
+			log.info("odList안의 하나 포토들 : {}" , odList.get(0).getProduct().getProductPhotosList().size());
 		}
 		
 		// 2중 리스트를 만들기 위해서 준비
@@ -149,7 +151,8 @@ public class OrdersForwardController {
 		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
 			log.info("얘는 hsItem : {}" , hsItem);
-			List<MemberOrdersDetail> od = (List<MemberOrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem) .collect(Collectors.toList());;
+			List<MemberOrdersDetail> od = (List<MemberOrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem).collect(Collectors.toList());
+			
 			newOdList.add(od);
 		}
 		
@@ -189,8 +192,9 @@ public class OrdersForwardController {
 	
 	
 	
-	@PostMapping("/insertMemberOD")
+	@PostMapping("/insertMemberOE")
 	public String insertMemberOD(MemberOrdersDetail memberOrdersDetail) {
+		
 		
 		
 		

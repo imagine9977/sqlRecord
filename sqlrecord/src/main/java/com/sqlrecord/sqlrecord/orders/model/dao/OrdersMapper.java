@@ -3,10 +3,11 @@ package com.sqlrecord.sqlrecord.orders.model.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
-import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 @Mapper
 public interface OrdersMapper {
@@ -22,5 +23,11 @@ public interface OrdersMapper {
 	MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo);
 
 	List<Product> getProduct();
+
+	List<MemberOrdersDetail> getOrdersDetailAll();
+
+	MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum);
+
+	int updateMemberOrdersStatus(@Param("string") String string, @Param("trackingNum") int trackingNum);
 
 }

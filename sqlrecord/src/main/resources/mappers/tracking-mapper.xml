@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.tracking.model.dao.TrackingMapper">
+
+	<select id="getTrackingInfoList" parameterType="_int" resultType="com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo">
+		SELECT
+				TRACKING_INFO_NUM trackingInfoNum,
+				TRACKING_INFO_WHERE trackingInfoWhere,
+				TRACKING_INFO_DATE trackingInfoDate,
+				TRACKING_NUM trackingNum
+		FROM
+				TRACKING_INFO
+		WHERE
+				TRACKING_NUM = #{TRACKING_NUM}
+		ORDER
+		BY
+				TRACKING_INFO_DATE
+		ASC
+	
+	
+	
+	</select>
+	
+	<insert id="insertTrackingInfo" parameterType="trackingInfo">
+		INSERT
+		INTO
+				TRACKING_INFO
+		VALUES
+				(
+				TRACKING_INFO_SEQ.NEXTVAL,
+				#{trackingInfoWhere},
+				SYSDATE,
+				#{trackingNum}
+				)
+	
+	
+	</insert>
+
+</mapper>
