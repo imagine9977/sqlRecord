@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.tracking.model.service.TrackingService;
@@ -36,7 +34,7 @@ public class TrackingController {
 		
 		
 		List<MemberOrdersDetail> newList = (List<MemberOrdersDetail>) modList.stream()
-																			 .filter((item) -> param.equals(item.getMemberOrdersDetailStatus()))
+																			 .filter((item) -> param.equals(item.getMemberOrdersDetailStatus()) && item.getTrackingNum() != 0)
 																			 .collect(Collectors.toList());
 		
 		log.info("왔냐 : {}" , param);
@@ -46,7 +44,37 @@ public class TrackingController {
 	}
 	
 	
-	
+	@GetMapping(value = "/insert" , produces = "application/json; charset=UTF-8")
+	public TrackingInfo insertTrackingInf(int trackingNum , String  trackingInfoWhere , boolean trackingStatus) {
+		
+		log.info("트래킹넘버 왔냐 : {}" , trackingNum);
+		log.info("트래킹웨어 왔냐 : {}" , trackingInfoWhere);
+		log.info("트래킹스테이터스왔냐 : {}" , trackingStatus);
+		
+		MemberOrdersDetail memberOrdersDetail = ordersService.getOrdersDetailOneForTracking(trackingNum);
+		
+		if(trackingStatus) {
+			TrackingInfo trackingInfo = new TrackingInfo();
+			trackingInfo.setTrackingNum(trackingNum);
+			trackingInfo.setTrackingInfoWhere(trackingInfoWhere);
+			ordersService.updateMemberOrdersStatus("배송완료" , trackingNum);
+			trackingService.insertTrackingInfo(trackingInfo);
+		} else {
+			TrackingInfo trackingInfo = new TrackingInfo();
+			trackingInfo.setTrackingNum(trackingNum);
+			trackingInfo.setTrackingInfoWhere(trackingInfoWhere);
+			trackingService.insertTrackingInfo(trackingInfo);
+		}
+		
+		List<TrackingInfo> trackingInfoList = trackingService.getTrackingInfoList(trackingNum);
+
+		
+		
+		
+		
+		
+		return trackingInfoList.get(trackingInfoList.size()-1);
+	}
 	
 	
 	

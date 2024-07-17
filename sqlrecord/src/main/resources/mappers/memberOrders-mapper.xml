@@ -201,6 +201,61 @@
                 MEMBER_ORDERS_DATE
         DESC
 </select>
+
+	<select id="getOrdersDetailOneForTracking" parameterType="_int" resultMap="odRM">
+        SELECT
+                od.MEMBER_ORDERS_DETAIL_NO,
+		        p.PRODUCT_NO,
+                p.PRODUCT_NAME,
+                p.product_cate,
+                p.product_price,
+                p.product_status,
+                mo.MEMBER_NO,
+                mo.MEMBER_ORDERS_ADDRESS,
+                mo.MEMBER_ORDERS_ADDRESS2,
+                mo.MEMBER_ORDERS_POSTCODE,
+                mo.MEMBER_ORDERS_DATE,
+		        od.MEMBER_ORDERS_NO,
+		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
+		        od.MEMBER_ORDERS_DETAIL_PRICE,
+		        od.MEMBER_ORDERS_EXD,
+		        od.TRACKING_NUM,
+		        od.MEMBER_ORDERS_DETAIL_STATUS
+        FROM
+                MEMBER_ORDERS_DETAIL od
+        JOIN
+                MEMBER_ORDERS mo
+        ON
+                od.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
+        JOIN
+                PRODUCT p
+        ON
+                od.PRODUCT_NO = p.product_no
+        WHERE
+                od.TRACKING_NUM = #{trackingNum}           
+        ORDER
+        BY
+                MEMBER_ORDERS_DATE
+        DESC
+</select>
+
+
+	<update id="updateMemberOrdersStatus" parameterType="map">
+		UPDATE
+				MEMBER_ORDERS_DETAIL
+		SET
+				MEMBER_ORDERS_DETAIL_STATUS
+				=
+				#{string}
+		WHERE
+				TRACKING_NUM
+				=
+				#{trackingNum}
+				
+	
+	
+	
+	</update>
 	
 	
 	<select id="getProduct" resultType="product">

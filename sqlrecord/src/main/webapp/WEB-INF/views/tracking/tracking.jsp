@@ -2,7 +2,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/head.jsp" %>
-<title>Home</title>
+<title>Tracking</title>
 <style>
 </style>
 </head>
@@ -30,9 +30,9 @@
           </tr>
         </thead>
         <tbody id="trackTable">
-        <c:forEach var="item" items="${ trackingMap }">
+        <c:forEach var="item" items="${ newMoList }">
           <tr>
-            <td><a href="${ hpath }/tracking/${ item.value}"><c:out value="${item.value}"></c:out></a></td>
+            <td><a href="${ hpath }/tracking/${ item.trackingNum}"><c:out value="${item.trackingNum}"></c:out></a></td>
           </tr>        
         </c:forEach>
         </tbody>
@@ -54,9 +54,8 @@
 			type: "get",
 			data: {param } ,
 			success: (result) => {
-				str += "<tr>";
-				result.forEach((item) => str += "<td><a href='${hpath}/tracking/"+ item.trackingNum +"'>"+item.trackingNum+"</a></td>");
-				str += "</tr>";
+				result.forEach((item) => str += "<tr><td><a href='${hpath}/tracking/"+ item.trackingNum +"'>"+item.trackingNum+"</a></td></tr>");
+				trackTable.innerHTML = "";
 				trackTable.innerHTML = str;
 				console.log(result);
 				console.log(trackTable.innerHTML);

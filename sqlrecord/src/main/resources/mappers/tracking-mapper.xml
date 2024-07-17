@@ -13,14 +13,29 @@
 		FROM
 				TRACKING_INFO
 		WHERE
-				TRACKING_INFO_NUM = #{trackingInfoNum}
+				TRACKING_NUM = #{TRACKING_NUM}
 		ORDER
 		BY
 				TRACKING_INFO_DATE
-		DESC
+		ASC
 	
 	
 	
 	</select>
+	
+	<insert id="insertTrackingInfo" parameterType="trackingInfo">
+		INSERT
+		INTO
+				TRACKING_INFO
+		VALUES
+				(
+				TRACKING_INFO_SEQ.NEXTVAL,
+				#{trackingInfoWhere},
+				SYSDATE,
+				#{trackingNum}
+				)
+	
+	
+	</insert>
 
 </mapper>

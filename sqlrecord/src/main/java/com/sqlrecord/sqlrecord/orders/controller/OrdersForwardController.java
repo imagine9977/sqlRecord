@@ -192,8 +192,9 @@ public class OrdersForwardController {
 	
 	
 	
-	@PostMapping("/insertMemberOD")
+	@PostMapping("/insertMemberOE")
 	public String insertMemberOD(MemberOrdersDetail memberOrdersDetail) {
+		
 		
 		
 		

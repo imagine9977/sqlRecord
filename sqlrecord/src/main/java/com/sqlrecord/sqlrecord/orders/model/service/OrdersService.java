@@ -20,6 +20,10 @@ public interface OrdersService {
 	List<Product> getProduct();
 
 	List<MemberOrdersDetail> getOrdersDetailAll();
+
+	MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum);
+
+	int updateMemberOrdersStatus(String string, int trackingNum);
 	
 	
 }

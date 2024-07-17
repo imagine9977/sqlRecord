@@ -10,5 +10,7 @@ import com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo;
 public interface TrackingMapper {
 
 	List<TrackingInfo> getTrackingInfoList(int trackingInfoNum);
+
+	int insertTrackingInfo(TrackingInfo trackingInfo);
 	
 }
