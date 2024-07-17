@@ -216,7 +216,7 @@
 		
 		.edit-popup-content input,
 		.edit-popup-content textarea {
-		    width: 100%;
+		    width: 95%;
 		    padding: 10px;
 		    margin: 10px 0;
 		    border: 1px solid #ccc;
@@ -308,7 +308,7 @@
         
         .deleteButton,.editButton {
 		    cursor: pointer;
-		    width: 100px; height: 30px;
+		    width: 70px; height: 30px;
 		    background-color: #2f4f4f;
 		    color: white;
 		    border: 1px solid rgba(252, 248, 248, 0.4);
@@ -337,6 +337,45 @@
             align-items: center;
             margin-bottom: 10px;
 		}
+		
+		.deleteButton2,.editButton2 {
+		    cursor: pointer;
+		    width: 70px; height: 30px;
+		    background-color: #2f4f4f;
+		    color: white;
+		    border: 1px solid rgba(252, 248, 248, 0.4);
+		    border-radius: .3em;
+		    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 10px 10px rgba(255,255,255,0.1);
+		}
+		
+		.deleteButton2 {
+		    background-color: #e61c31;
+		}
+		
+		.deleteButton2:hover {
+		    background-color: #dc3545;
+		}
+		
+		.editButton2 {
+		    background-color: #0b889b;
+		}
+		.editButton2:hover {
+		    background-color: #17a2b8;
+		}
+		
+		#rebtn2 {
+			cursor: pointer;
+		    border: 1px solid rgba(252, 248, 248, 0.4);
+		    border-radius: .3em;
+		    background-color: #2f4f4f;
+		    color: white;
+		    border-radius: 3px;
+		    margin-left: 10px;
+		    height: 30px;
+		    width: 80px;
+		    font-weight: 600;
+		}
+		#rebtn2:hover {background: #294242;}
     </style>
 </head>
 <body>
@@ -402,7 +441,7 @@
 	                </div>
 	                <input style="height: 30px;" class="recontent" id="content" name="content" type="text" placeholder="리뷰를 작성해주세요.">
 	                <button class="rebtn1" id="rebtn1">
-	                    <img style="width: 20px; height: 20px;" src="${hpath}/resources/imgs/login/move_9743734.png" alt="">
+	                    <img style="width: 30px; height: 30px;" src="${hpath}/resources/imgs/login/move_9743734.png" alt="">
 	                </button>
 	                <input type="file" id="fileInput" multiple="multiple" style="display: none;">
 	                <button class="rebtn2" id="rebtn2" onclick="commentWrite()">등록</button>
@@ -431,6 +470,9 @@
 	                            <button class="deleteButton" style="margin-left: 10px;">삭제</button>
 	                        </div>
 	                    </c:if>
+	                    
+	                    <!-- 본 리뷰 수정팝업창 , 답글 수정 팝업창 -->
+	                    
 	                    <div id="editPopup" class="edit-popup">
 	                        <div class="edit-popup-content">
 	                            <span class="close" onclick="closeEditPopup()">&times;</span>
@@ -438,6 +480,14 @@
 	                            <input type="number" id="editRatingInput" name="star" min="0" max="5" step="0.1" placeholder="별점 입력">
 	                            <textarea id="editContent" name="content" rows="4" placeholder="내용 수정"></textarea>
 	                            <button class="submitButton" type="button">수정 완료</button>
+	                        </div>
+	                    </div>
+	                    <div id="editPopup2" class="edit-popup">
+	                        <div class="edit-popup-content">
+	                            <span class="close" onclick="closeEditPopup()">&times;</span>
+	                            <p>댓글 수정하기</p>
+	                            <textarea id="editContent2" name="content" rows="4" placeholder="내용 수정"></textarea>
+	                            <button class="submitButton2" type="button">수정 완료</button>
 	                        </div>
 	                    </div>
 	                </div>
@@ -464,8 +514,8 @@
 						                        <p class="reply-content">${chReply.chContent}</p>
 							                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
 							                        <div class="align-right">
-							                            <button class="editButton">수정</button>
-							                            <button class="deleteButton" style="margin-left: 10px;">삭제</button>
+							                            <button class="editButton2" id="chReplyNo-${chReply.chReplyNo}">수정</button>
+							                            <button class="deleteButton2" id="chReplyNo-${chReply.chReplyNo}" style="margin-left: 10px;">삭제</button>
 							                        </div>
 							                    </c:if>
 								            </div>
@@ -566,6 +616,29 @@
 	            }
 	        });
 	        
+	        
+	        $('.deleteButton2').on('click', function() {
+	        	const chReplyNo = $(this).closest('.deleteButton2').attr('id').split('-')[1];
+    			console.log(chReplyNo); // 댓글 번호 출력
+	            
+	            if (confirm('댓글을 삭제하시겠습니까?')) {
+	                $.ajax({
+	                    type: 'POST',
+	                    url: '${hpath}/reply/delChReply.do',
+	                    data: { "chReplyNo" : chReplyNo },
+	                    success: function(response) {
+	                        console.log('삭제 성공:', response);
+	                        // 삭제 후 페이지 리로드 또는 다른 동작 수행
+	                        location.reload();
+	                    },
+	                    error: function(xhr, status, error) {
+	                        console.error('삭제 실패:', error);
+	                    }
+	                });
+	            }
+	        });
+		       
+	        
 	     // 수정 버튼 클릭 시 해당 댓글의 내용과 별점을 가져와 수정 팝업을 열도록 설정
 			$(".editButton").click(function() {
 				/*
@@ -581,6 +654,15 @@
 			    openEditPopup(currentContent, currentRating,replyNo);
 			});
 	     
+	     	//답글 수정
+			$(".editButton2").click(function() {
+				
+			    const chReplyNo = $(this).closest('.editButton2').attr('id').split('-')[1];
+			    console.log(chReplyNo); // 댓글 번호 출력
+			    const currentContent = $(this).closest('.chReplyedit').find('.reply-content').text();
+			    openEditPopup2(currentContent, chReplyNo);
+			});
+	     
 		     //수정 완료 
 		     $(".submitButton").click(function() {
 		    	 // 저장된 replyNo 값을 가져옴
@@ -589,9 +671,7 @@
 			     
 			     const updatedContent = document.getElementById('editContent').value;
 			     const updatedRating = document.getElementById('editRatingInput').value;
-					
-				    
-			    // AJAX 요청 예시
+			     
 			    $.ajax({
 			        type: 'POST',
 			        url: '${hpath}/reply/upReply.do',
@@ -620,6 +700,40 @@
 			        }
 			    });
 		     });
+		     
+		  // 답글 수정
+		  	$(".submitButton2").click(function() {
+	    	     const chReplyNo = $(this).data('chReplyNo');
+	    	     console.log(chReplyNo); // 댓글 번호 출력
+			     
+			     const updatedContent = document.getElementById('editContent2').value;
+				
+			     $.ajax({
+				        type: 'POST',
+				        url: '${hpath}/reply/upChReply.do',
+				        data: {
+				        	chReplyNo: chReplyNo,
+				        	chContent: updatedContent
+				        },
+				        success: function(response) {
+				            alert("댓글 수정에 성공했습니다.");
+				            location.reload();
+				
+				            // 수정 완료 후 수정 창 닫기
+				            closeEditPopup();
+				
+				            // DOM 업데이트
+				            const reviewElement = chReplyNo;
+				            if (reviewElement) {
+				                reviewElement.querySelector('.reply-content').textContent = updatedContent;
+				            }
+				        },
+				        error: function(xhr, status, error) {
+				            alert("댓글 수정에 실패했습니다.");
+				            console.error("댓글 수정 실패:", error);
+				        }
+				    });
+			     });
 		     
 		  // 답글 등록
 		     $(".reply-submit").click(function() {
@@ -668,12 +782,21 @@
 		    document.getElementById('editContent').value = currentContent;
 		    document.getElementById('editRatingInput').value = currentRating;
 		}
+	 
+	 // 답글
+	    function openEditPopup2(currentContent,chReplyNo) {
+		    //console.log(replyNo); // 댓글 번호 출력
+		    $('.submitButton2').data('chReplyNo', chReplyNo);
+		    document.getElementById('editPopup2').style.display = 'block';
+		    document.getElementById('editContent2').value = currentContent;
+		}
 		
 		
 
 	    // 수정 창 닫기 함수
 	    function closeEditPopup() {
 	        document.getElementById('editPopup').style.display = 'none';
+	        document.getElementById('editPopup2').style.display = 'none';
 	    }
 
 	    // 수정 제출 함수

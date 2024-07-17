@@ -18,4 +18,6 @@ public interface ReplyService {
 	public float avgStar();
 	public int chInsReply(ChReply chReply);
 	public List<ChReply> getChReplyList();
+	public int changeChReply(ChReply chReply);
+	public int delChReply(ChReply chReplyNo);
 }

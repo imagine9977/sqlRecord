@@ -84,7 +84,15 @@ public class ReplyController {
     	return "redirect:getReplyStarAll.do";
 	}
     
+    @PostMapping("delChReply.do")
+    @ResponseBody
+	public String delChReply(@ModelAttribute ChReply chReplyNo) {
+    	replyService.delChReply(chReplyNo);
+    	return "redirect:getReplyStarAll.do";
+	}
+    
     @PostMapping("upReply.do")
+    @ResponseBody
     public String upReply(@ModelAttribute Reply reply,
     					  Member member, Model model, 
     					  HttpSession session) {
@@ -94,6 +102,20 @@ public class ReplyController {
     	//log.info("댓글 수정 : {}", reply);
     	return "redirect:getReplyStarAll.do";
     }
+    
+    @PostMapping("upChReply.do")
+    @ResponseBody
+    public String upChReply(@ModelAttribute ChReply chReply,
+    						Member member, Model model, 
+							HttpSession session) {
+    	Member loginUser = (Member) session.getAttribute("loginUser");
+    	chReply.setMemberNo(loginUser.getMemberNo());
+    	replyService.changeChReply(chReply);
+    	//log.info("댓글 수정 : {}", reply);
+    	return "redirect:getReplyStarAll.do";
+    }
+    
+    
     
     // 한페이지라서 호출을 별도로 못하니까 여기다 다 때려넣어버림 댓글 등록 빼고
     @RequestMapping("getReplyStarAll.do")

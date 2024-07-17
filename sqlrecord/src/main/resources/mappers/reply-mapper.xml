@@ -141,12 +141,29 @@
 	   	 		REPLY_NO = #{replyNo}	 		
 	</update>
 	
+	<update id="changeChReply" parameterType="chReply">
+		UPDATE
+				CHREPLY
+		   SET
+		   		CHCONTENT =#{chContent}
+   		 WHERE
+   		 		CHREPLY_NO = #{chReplyNo}	
+	</update>
+		
 	<delete id="delReply" parameterType="reply">
 		DELETE 
 		  FROM 
 		  		REPLY
   		 WHERE
   		 		REPLY_NO = #{replyNo} 
+	</delete>
+	
+	<delete id="delChReply" parameterType="chReply">
+		DELETE 
+		  FROM 
+		  		CHREPLY
+  		 WHERE
+  		 		CHREPLY_NO = #{chReplyNo}
 	</delete>
 	
 	<select id="getReplyStarAll" resultMap="StarMap">

@@ -21,6 +21,8 @@ public interface ReplyMapper {
 	float avgStar();
 	int chInsReply(ChReply chReply);
 	List<ChReply> getChReplyList();
+	int changeChReply(ChReply chReply);
+	int delChReply(ChReply chReplyNo);
 
 
 }
