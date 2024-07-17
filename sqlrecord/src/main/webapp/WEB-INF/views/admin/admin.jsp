@@ -151,6 +151,63 @@
     .sidebar h2 {
         padding: 1rem 0px;
     }
+    .pagination-custom {
+    margin-top: 20px;
+    text-align: center;
+	}
+	
+	.pagination-custom a {
+	    display: inline-block;
+	    padding: 5px 10px;
+	    margin: 0 10px;
+	    text-decoration: none;
+	    color: #333;
+	    font-size: 12px;
+	    border: 1px solid #ddd;
+	    border-radius: 3px;
+	}
+	
+	.pagination-custom a.active {
+	    background-color: #2f4f4f;
+	    color: white;
+	    border-color: #2f4f4f;
+	}
+	
+	.pagination-custom a:hover:not(.active) {
+	    background-color: #ddd;
+	}
+	.accordion-table .accordion-content {
+        display: none;
+    }
+
+    .accordion-table .member-details {
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .toggle-details {
+        cursor: pointer;
+    }
+    .member-details {
+	    position: relative;
+	    padding: 10px;
+	    background-color: #f9f9f9;
+	    min-height: 150px;  /* 필요에 따라 조정 */
+	}
+	
+	.details-content {
+	    margin-right: 100px;  /* 버튼 영역을 위한 여백 */
+	}
+	
+	.record-actions {
+	    position: absolute;
+	    bottom: 10px;
+	    right: 10px;
+	}
+	
+	.record-actions button {
+	    margin-left: 5px;
+	}
 </style>
 </head>
 <body>
@@ -183,6 +240,27 @@
 
 <script>
 $(document).ready(function() {
+	
+	// 문서 준비 시 페이지네이션 핸들러 호출
+	setupPaginationHandlers();
+	
+	// 페이지네이션 핸들러(클릭이벤트)
+	function setupPaginationHandlers() {
+	    $(document).on('click', '.pagination-custom a', function(e) {
+	        e.preventDefault();
+	        var page = $(this).data('page');
+	        var contentType = $(this).closest('.pagination-custom').data('content-type');
+	        var currentTab = $('.tab-btnItem.active').data('tab');
+
+	        if (currentTab === 'member') {
+	            loadMemberTable(contentType, page);
+	        } else if (currentTab === 'notice') {
+	            loadNoticeTable(contentType, page);
+	        }
+	    });
+	}
+	
+	// 탭 호출
     function loadTab(tabName) {
         $('.tab-btnItem').removeClass('active');
         $('.tab-btnItem[data-tab="' + tabName + '"]').addClass('active');
@@ -197,6 +275,7 @@ $(document).ready(function() {
         loadContent(tabName);
     }
 
+	// 사이드바 호출(탭 값 받기)
     function loadSidebar(tabName) {
         if (tabName === 'product') {
             loadProductSidebar();
@@ -207,6 +286,7 @@ $(document).ready(function() {
         }
     }
 
+	// 상품 탭 사이드바 호출
     function loadProductSidebar() {
         var sidebarContent = `
             <div class="sidebar">
@@ -232,6 +312,7 @@ $(document).ready(function() {
         addSidebarListeners();
     }
 
+	// 주문 탭 사이드바 호출
     function loadOrderSidebar() {
         var sidebarContent = `
             <div class="sidebar">
@@ -247,6 +328,7 @@ $(document).ready(function() {
         addSidebarListeners();
     }
 
+ 	// 회원 탭 사이드바 호출	
     function loadMemberSidebar() {
         var sidebarContent = `
             <div class="sidebar">
@@ -260,6 +342,7 @@ $(document).ready(function() {
         addSidebarListeners();
     }
 
+ 	// 사이드바 요소 클릭 이벤트(content호출용)
     function addSidebarListeners() {
         $('#sidebar a').click(function(e) {
             e.preventDefault();
@@ -269,6 +352,7 @@ $(document).ready(function() {
         });
     }
 
+ 	// 내용(표) 호출 (사이드바 값 받아옴)
     function loadContent(tabName, contentType = 'default') {
         $('#content-area').empty(); // 기존 콘텐츠 제거
 
@@ -284,7 +368,8 @@ $(document).ready(function() {
             $('#content-area').html('<div class="no-data">조회된 내용이 없습니다</div>');
         }
     }
-
+ 	
+	// 상품 테이블 생성
     function loadProductTable(contentType, page = 1) {
         $.ajax({
             url: '${hpath}/admin/productData',
@@ -357,6 +442,7 @@ $(document).ready(function() {
         });
     }
 
+	// 주문건 테이블 생성
     function loadOrderTable(contentType, page = 1) {
         $.ajax({
             url: '${hpath}/admin/orderData',
@@ -429,81 +515,87 @@ $(document).ready(function() {
         });
     }
 
+    // 회원 테이블 생성
     function loadMemberTable(contentType, page = 1) {
-        $.ajax({
-            url: '${hpath}/admin/memberData',
-            type: 'GET',
-            data: { page: page, type: contentType },
-            success: function(response) {
-                if (response.data && response.data.length > 0) {
-                    var table = '<table class="accordion-table">' +
-                        '<thead>' +
-                        '<tr>' +
-                        '<th><input type="checkbox"></th>' +
-                        '<th>No.</th>' +
-                        '<th>회원 카테고리</th>' +
-                        '<th>회원명</th>' +
-                        '<th>등록일</th>' +
-                        '<th>작업</th>' +
-                        '</tr>' +
-                        '</thead>' +
-                        '<tbody>';
+	    $.ajax({
+	        url: '${hpath}/admin/ajaxMemberManagement',
+	        type: 'GET',
+	        data: { page: page, type: contentType },
+	        success: function(response) {
+	            if (response.data && response.data.length > 0) {
+	                var table = '<table class="accordion-table">' +
+	                    '<thead>' +
+	                    '<tr>' +
+	                    '<th><input type="checkbox"></th>' +
+	                    '<th>No.</th>' +
+	                    '<th>아이디</th>' +
+	                    '<th>이름</th>' +
+	                    '<th>가입일</th>' +
+	                    '<th>보유포인트</th>' +
+	                    '<th>작업</th>' +
+	                    '</tr>' +
+	                    '</thead>' +
+	                    '<tbody>';
+	
+	                response.data.forEach(function(member) {
+	                    table += '<tr class="accordion-header">' +
+	                        '<td><input type="checkbox" name="memberCheck" value="' + member.memberNo + '"></td>' +
+	                        '<td>' + member.memberNo + '</td>' +
+	                        '<td>' + member.memberId + '</td>' +
+	                        '<td>' + member.name + '</td>' +
+	                        '<td>' + member.resdate + '</td>' +
+	                        '<td>' + member.point + '</td>' +
+	                        '<td><button class="btn btn-sm btn-secondary toggle-details">상세보기</button></td>' +
+	                    '</tr>' +
+	                    '<tr class="accordion-content">' +
+		                    '<td colspan="7">' +
+		                        '<div class="member-details">' +
+		                            '<div class="details-content">' +
+		                                '<p>회원 상세 정보</p>' +
+		                                '<p>아이디: ' + member.memberId + '</p>' +
+		                                '<p>이름: ' + member.name + '</p>' +
+		                                '<p>가입일: ' + member.resdate + '</p>' +
+		                                '<p>보유 포인트: ' + member.point + '</p>' +
+		                            '</div>' +
+		                            '<div class="record-actions">' +
+		                                '<button class="btn btn-sm btn-secondary" onclick="editMember(' + member.memberNo + ')" type="button">수정</button>' +
+		                                '<button class="btn btn-sm btn-secondary" onclick="deleteMember(' + member.memberNo + ')" type="button">삭제</button>' +
+		                            '</div>' +
+		                        '</div>' +
+		                    '</td>' +
+		                '</tr>';
+	                });
+	
+	                table += '</tbody></table>';
+	
+	                $('#content-area').html(table);
+	
+	                // 페이지네이션 생성
+	                var pageInfo = response.pageInfo;
+	                var pagingHtml = createPagination(pageInfo, 'member', 'loadMemberTable');
+	                $('#content-area').append(pagingHtml);
+	                
+	                setupPaginationHandlers();
+	
+	                // slideToggle 기능 추가
+	                $('.toggle-details').click(function() {
+	                    $(this).closest('tr').next('.accordion-content').slideToggle();
+	                });
+	            } else {
+	                $('#content-area').html('<div class="no-data">조회된 내용이 없습니다</div>');
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("회원 데이터 호출 중 오류 발생: ", error);
+	            $('#content-area').html('<div class="error">데이터를 불러오는 중 오류가 발생했습니다.</div>');
+	        }
+	    });
+	}
 
-                    var memberList = response.data;
-                    memberList.forEach(function(member) {
-                        table += '<tr class="data-row">' +
-                            '<td><input type="checkbox" name="memberCheck" value="' + member.memberNo + '"></td>' +
-                            '<td>' + member.memberNo + '</td>' +
-                            '<td>' + member.memberCategory + '</td>' +
-                            '<td><a href="${hpath}/member/detail/' + member.memberNo + '">' + member.memberTitle + '</a></td>' +
-                            '<td>' + member.resdate + '</td>' +
-                            '<td class="record-actions">' +
-                                '<button class="btn btn-sm btn-secondary" onclick="editMember(' + member.memberNo + ')" type="button">수정</button>' +
-                                '<button class="btn btn-sm btn-secondary" onclick="deleteMember(' + member.memberNo + ')" type="button">삭제</button>' +
-                            '</td>' +
-                            '</tr>';
-                    });
-
-                    table += '</tbody>' +
-                        '</table>' +
-                        '<div class="pagination-custom"></div>' +
-                        '<div class="table-footer">' +
-                        '<button>추가</button>' +
-                        '<button>삭제</button>' +
-                        '</div>';
-
-                    $('#content-area').html(table);
-
-                    // 페이지네이션 갱신
-                    var pageInfo = response.pageInfo;
-                    var pagingArea = $(".pagination-custom");
-                    pagingArea.empty();
-
-                    if (pageInfo.startPage > 1) {
-                        pagingArea.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.currentPage - 1) + '">이전</a></li>');
-                    }
-
-                    for (var i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
-                        var activeClass = (i === pageInfo.currentPage) ? 'active' : '';
-                        pagingArea.append('<li class="page-item ' + activeClass + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
-                    }
-
-                    if (pageInfo.endPage < pageInfo.maxPage) {
-                        pagingArea.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.currentPage + 1) + '">다음</a></li>');
-                    }
-                } else {
-                    $('#content-area').html('<div class="no-data">조회된 내용이 없습니다</div>');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("회원 데이터 호출 중 오류 발생: ", error);
-            }
-        });
-    }
-
+    // 공지 테이블 생성
     function loadNoticeTable(contentType, page = 1) {
         $.ajax({
-            url: '${hpath}/admin/noticeData',
+            url: '${hpath}/admin/ajaxNoticeManagement',
             type: 'GET',
             data: { page: page, type: contentType },
             success: function(response) {
@@ -521,8 +613,7 @@ $(document).ready(function() {
                         '</thead>' +
                         '<tbody>';
 
-                    var noticeList = response.data;
-                    noticeList.forEach(function(notice) {
+                    response.data.forEach(function(notice) {
                         table += '<tr class="data-row">' +
                             '<td><input type="checkbox" name="noticeCheck" value="' + notice.noticeNo + '"></td>' +
                             '<td>' + notice.noticeNo + '</td>' +
@@ -537,41 +628,44 @@ $(document).ready(function() {
                     });
 
                     table += '</tbody>' +
-                        '</table>' +
-                        '<div class="pagination-custom"></div>' +
-                        '<div class="table-footer">' +
-                        '<button>추가</button>' +
-                        '<button>삭제</button>' +
-                        '</div>';
+                        '</table>';
 
                     $('#content-area').html(table);
 
-                    // 페이지네이션 갱신
+                    // 페이지네이션 생성
                     var pageInfo = response.pageInfo;
-                    var pagingArea = $(".pagination-custom");
-                    pagingArea.empty();
-
-                    if (pageInfo.startPage > 1) {
-                        pagingArea.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.currentPage - 1) + '">이전</a></li>');
-                    }
-
-                    for (var i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
-                        var activeClass = (i === pageInfo.currentPage) ? 'active' : '';
-                        pagingArea.append('<li class="page-item ' + activeClass + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
-                    }
-
-                    if (pageInfo.endPage < pageInfo.maxPage) {
-                        pagingArea.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.currentPage + 1) + '">다음</a></li>');
-                    }
+                    var pagingHtml = createPagination(pageInfo, 'notice', 'loadNoticeTable');
+                    $('#content-area').append(pagingHtml);
+                    
+                    setupPaginationHandlers();
+                    
                 } else {
                     $('#content-area').html('<div class="no-data">조회된 내용이 없습니다</div>');
                 }
             },
             error: function(xhr, status, error) {
                 console.error("공지 데이터 호출 중 오류 발생: ", error);
+                $('#content-area').html('<div class="error">데이터를 불러오는 중 오류가 발생했습니다.</div>');
             }
         });
     }
+    
+    //페이지네이션 생성
+    function createPagination(pageInfo, contentType, loadFunction) {
+	    var html = '<div class="pagination-custom" data-content-type="' + contentType + '">';
+	    if (pageInfo.startPage > 1) {
+	        html += '<a href="#" data-page="' + (pageInfo.currentPage - 1) + '">이전</a>';
+	    }
+	    for (var i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
+	        var activeClass = (i === pageInfo.currentPage) ? 'active' : '';
+	        html += '<a class="' + activeClass + '" href="#" data-page="' + i + '">' + i + '</a>';
+	    }
+	    if (pageInfo.endPage < pageInfo.maxPage) {
+	        html += '<a href="#" data-page="' + (pageInfo.currentPage + 1) + '">다음</a>';
+	    }
+	    html += '</div>';
+	    return html;
+	}
 
     $('.tab-btnItem').click(function(e) {
         e.preventDefault();

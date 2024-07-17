@@ -27,12 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/admin")
 @Slf4j
 public class AdminController {
-	
-	// 페이징
+
+	// Notice 리스트 + 페이징
 	@ResponseBody
-    @GetMapping("/ajaxNoticeManagement")
-    public Map<String, Object> getAdminpageListAjax(@RequestParam(value = "page", defaultValue = "1") int page) {
-        int listCount = noticeService.noticeCount();
+	@GetMapping("/ajaxNoticeManagement")
+	public ResponseEntity<Map<String, Object>> getNoticeListAjax(@RequestParam(value="page", defaultValue="1") int page) {
+		int listCount = noticeService.noticeCount();
         int currentPage = page;
         int pageLimit = 5;
         int boardLimit = 10;
@@ -54,7 +54,7 @@ public class AdminController {
                 .startPage(startPage)
                 .endPage(endPage)
                 .build();
-
+        
         Map<String, Integer> map = new HashMap<>();
 
         int startValue = (currentPage - 1) * boardLimit + 1;
@@ -76,14 +76,72 @@ public class AdminController {
             formattedNoticeList.add(formattedNotice);
         }
         
-        log.info("값내놔 : {}" , formattedNoticeList);
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", formattedNoticeList);
+        response.put("pageInfo", pageInfo);
+        
+        log.info("공지값내놔 : {}", response);
+        
+        return ResponseEntity.ok(response);
+	}
+	
+	// Member 리스트 + 페이징
+	@ResponseBody
+	@GetMapping("/ajaxMemberManagement")
+	public ResponseEntity<Map<String, Object>> getMemberListAjax(@RequestParam(value="page", defaultValue="1") int page) {
+		int listCount = noticeService.noticeCount();
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 10;
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("noticeList", formattedNoticeList);
-        result.put("pageInfo", pageInfo);
+        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+        int endPage = startPage + pageLimit - 1;
 
-        return result;
-    }
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+
+        PageInfo pageInfo = PageInfo.builder()
+                .listCount(listCount)
+                .currentPage(currentPage)
+                .pageLimit(pageLimit)
+                .boardLimit(boardLimit)
+                .maxPage(maxPage)
+                .startPage(startPage)
+                .endPage(endPage)
+                .build();
+        
+        Map<String, Integer> map = new HashMap<>();
+
+        int startValue = (currentPage - 1) * boardLimit + 1;
+        int endValue = startValue + boardLimit - 1;
+
+        map.put("startValue", startValue);
+        map.put("endValue", endValue);
+
+        List<Member> memberList = memberService.memberFindAll(map);
+
+        List<Map<String, Object>> formattedMemberList = new ArrayList<>();
+        
+        for (Member member : memberList) {
+            Map<String, Object> formattedMember = new HashMap<>();
+            formattedMember.put("memberNo", member.getMemberNo());
+            formattedMember.put("memberId", member.getMemberId());
+            formattedMember.put("name", member.getName());
+            formattedMember.put("resdate", member.getResDate());
+            formattedMember.put("point", member.getPoint());
+            formattedMemberList.add(formattedMember);
+        }
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", formattedMemberList);
+        response.put("pageInfo", pageInfo);
+        
+        log.info("회원값내놔 : {}", response);
+        
+        return ResponseEntity.ok(response);
+	}
 	
 	
 //	// Service 생성자 주입

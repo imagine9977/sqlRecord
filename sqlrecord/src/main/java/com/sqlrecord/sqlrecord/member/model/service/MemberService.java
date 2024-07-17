@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
@@ -18,5 +19,6 @@ public interface MemberService {
 	List<Member> findAllMemberY();
 	List<Member> findAllMemberN();
 	Member getOneMember(String memberNo);
+	List<Member> memberFindAll(Map<String, Integer> map);
 
 }

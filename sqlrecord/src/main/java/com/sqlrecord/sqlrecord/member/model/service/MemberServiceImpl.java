@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.member.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
+
 
 	private final MemberMapper memberMapper;
 	
@@ -46,6 +48,7 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.pwChange(member);
 	}
 
+	// 관리자 페이지
 	@Override
 	public List<Member> findAllMemberY() {
 		return memberMapper.findAllMemberY();
@@ -61,6 +64,10 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.getOneMember();
 	}
 
+	@Override
+	public List<Member> memberFindAll(Map<String, Integer> map) {
+		return memberMapper.memberFindAll();
+	}
 
 
 }

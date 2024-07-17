@@ -24,6 +24,7 @@
 	
 	<sql id="findAllMember">
 		SELECT
+				M.MEMBER_NO memberNo,
 	            M.MEMBER_ID memberId,
 	            M.NAME name,
 	            M.RESDATE resdate,
@@ -153,6 +154,29 @@
 		<include refid="selectMember"/>
 		WHERE
 				MEMBER_NO = #{memberNo}
+	</select>
+	
+	<!-- 관리자 페이지 : 회원 전체 조회(조건X) -->
+	<select id="memberFindAll" resultType="member">
+		SELECT
+		        M.MEMBER_NO memberNo,
+		        M.MEMBER_ID memberId,
+		        M.NAME name,
+		        M.RESDATE resdate,
+		        SUM(PO.POINT_AMOUNT) CURRENT_POINT
+		  FROM
+		        MEMBER M
+		  LEFT
+		  JOIN
+		        POINT PO ON M.MEMBER_NO = PO.MEMBER_NO
+		 WHERE
+		        M.MEMBER_ID != 'admin'
+		 GROUP
+		    BY
+		        M.MEMBER_ID, M.NAME, M.RESDATE, M.MEMBER_NO
+		 ORDER
+		    BY
+		        M.MEMBER_NO ASC
 	</select>
 
 </mapper>
