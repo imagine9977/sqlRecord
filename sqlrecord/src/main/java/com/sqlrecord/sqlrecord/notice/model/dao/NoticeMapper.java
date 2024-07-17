@@ -19,6 +19,7 @@ public interface NoticeMapper {
 
 	int delete(int NoticeNo);
 	List<NFile> findFiles(int id);
+	NFile findFileById(int nfileId);
 	int saveFile(NFile file);
 	Integer getNoticeNo();
 	int deleteFiles(int noticeNo);

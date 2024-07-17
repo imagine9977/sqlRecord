@@ -72,7 +72,7 @@
     <div class="navleft">
         <div class="navbar-start">
             <div class="navbar-item">
-                <a href="${hpath}/qna/getQnaList.do">
+                <a href="${hpath}/qnas">
                     고객지원
                 </a>
             </div>
@@ -81,11 +81,7 @@
                     공지사항
                 </a>
             </div>
-            <div class="navbar-item">
-                <a href="${hpath}/qnas">
-                    질문게시판
-                </a>
-            </div>
+           
         </div>
     </div>
 

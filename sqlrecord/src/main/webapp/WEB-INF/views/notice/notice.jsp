@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="com.sqlrecord.sqlrecord.member.model.vo.Member"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -241,7 +242,7 @@
 }
 
 #notice-container #liveAlertPlaceholder {
-	z-index: 10;
+	height:auto;
 }
 </style>
 </head>
@@ -281,7 +282,7 @@
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
-						<input type="hidden" id="noticeNo" name="noticeNo" value="" />
+							<input type="hidden" id="noticeNo" name="noticeNo" value="" />
 							<h5 id="noticeHeader"></h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
@@ -298,17 +299,20 @@
 								</div>
 							</div>
 						</div>
-						
-						 
+
+
 						<div class="modal-footer">
 							<div id="noticeActions">
-								<a class="btn btn-warning" onclick="toggleUpdateModal();"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp;
-									<a class="btn btn-warning" id="goToUpdatePage"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">외부로 수정하기</a>&nbsp;&nbsp;
-								<a class="btn btn-danger" id="deleteButton"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">삭제하기</a>&nbsp;&nbsp;
-								<a class="btn btn-secondary" data-bs-dismiss="modal"
+							<!-- <a class="btn btn-warning" onclick="toggleUpdateModal();"
+										style="height: 40px; color: white; border:	 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp; -->
+								<a class="btn btn-warning admin-only" id="goToUpdatePage"
+									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
+									수정하기</a>&nbsp;&nbsp; 
+									<a class="btn btn-danger admin-only"
+									id="deleteButton"
+									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
+									삭제하기</a>&nbsp;&nbsp; <a class="btn btn-secondary"
+									data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
 								<button class="btn share-button btn-secondary"
 									title="Share this article">
@@ -366,6 +370,7 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 
 		<div id="liveAlertPlaceholder"></div>
@@ -377,9 +382,13 @@
 			<div class="see-more">
 				<!--  <span class="get-more-list" onclick="loadMoreNotices()">더 보기</span> -->
 			</div>
-			<div class="add">
-				<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
-			</div>
+			<c:if test="${ sessionScope.loginUser.memberId eq 'admin'}">
+				<div class="add">
+
+					<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
+
+				</div>
+			</c:if>
 		</div>
 
 		<script>
@@ -398,6 +407,16 @@
 		        location.href = "notices/update.do/"+currentNoticeNo;
 		    };
 			
+			var userRole = '${sessionScope.loginUser.memberId}';
+
+		    document.addEventListener('DOMContentLoaded', function() {
+		        if (userRole === 'admin') {
+		            var adminElements = document.querySelectorAll('.admin-only');
+		            adminElements.forEach(function(element) {
+		                element.style.display = 'inline-block';
+		            });
+		        }
+		    });
 			$(document).on('click', '.fileDelBtn', function() {
 			    var fileNo = $(this).data('nfileNo');
 			    
@@ -514,47 +533,18 @@
             }
 			
 			//공지 수정하기를 누르면 조회 모달을 숨기고 수정 모달로 변경
+			/*
 			function toggleUpdateModal() {
 	            $('#noticeModal').modal('hide'); // Hide the main notice modal
 	            $('#updateModal').modal('show'); // Show the update modal
 	        }
-			
+			*/
 			//공지 수정하기가 종료/성공하면 조회 모달로 변경
 			$('#updateModal').on('hidden.bs.modal', function () {
 	            $('#noticeModal').modal('show');
 	        });
 			
-			/*
-			var data = new FormData();
-			jQuery.each(jQuery('#files')[0].files, function(i, file) {
-			    data.append('file-'+i, file);
-			});
-			function update() {
-                const updateData = {
-                		"noticeNo" : $('noticeNo').val(),
-    					"noticeTitle" : $('noticeTitle').val(),
-    					"noticeWriter" : $('updateWriter').val(),
-    					"noticeContent" : $('noticeContent').val(),
-    					"noticeCategory" : $('noticeCategory').val(),	
-    					"List<Nfile>" :data
-                };
-                $.ajax({
-                    url: "notice",
-                    type: "put",
-                    enctype: 'multipart/form-data',  
-                    data: JSON.stringify(updateData),
-                    contentType: 'application/json',
-                    success: result => {
-                        if (result.data === 1) {
-                            document.getElementById('outerDiv').remove();
-                            findAll();
-                            $('#detail').slideUp(300);
-                        }
-                    }
-                });
-            }
 			
-			*/
 			
 			//공지 삭제하기 확인 프롬프트
 			function ConfirmDelete(noticeNo) {
@@ -898,21 +888,21 @@
 			    	});
 			    
 			    //공지사항 삭제/오류 시 나오는 에러
-			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
+				  // 공지사항 에러 출력하기
+				  const alert = (message) => {
+				    const wrapper = document.createElement('div');
+				    wrapper.innerHTML = `
+				      <div class="alert alert-warning alert-dismissible" role="alert">
+				        ${message}
+				        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				      </div>
+				    `;
 				
-			 	//공지사항 에러 출력하기
-			    const alert = (message) => {
-			      const wrapper = document.createElement('div')
-			      wrapper.innerHTML = [
-			        '<div class="alert alert-warning alert-dismissible" role="alert">',
-			        '   <div>${message}</div>',
-			        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-			        '</div>'
-			      ].join('')
-
-			      alertPlaceholder.append(wrapper)
-			    }
-
+				    alertPlaceholder.append(wrapper);
+				  };
+				  
             </script>
 
 	</div>

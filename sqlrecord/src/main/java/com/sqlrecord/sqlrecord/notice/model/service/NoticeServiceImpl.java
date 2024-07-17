@@ -65,7 +65,7 @@ public class NoticeServiceImpl implements NoticeService {
 	    return result;
 	}
 
-
+	
 
 
 	@Override
@@ -111,6 +111,12 @@ public class NoticeServiceImpl implements NoticeService {
 	public int deleteFile(int nfileNo) {
 		// TODO Auto-generated method stub
 		return noticeMapper.deleteFileByPosition(nfileNo);
+	}
+
+	@Override
+	public NFile findFileById(int nfileId) {
+		// TODO Auto-generated method stub
+		return noticeMapper.findFileById(nfileId);
 	}
 
 }

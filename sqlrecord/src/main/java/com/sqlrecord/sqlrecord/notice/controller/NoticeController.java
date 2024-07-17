@@ -111,7 +111,7 @@ public class NoticeController {
 					String originName = file.getOriginalFilename();
 					NFile nfile = new NFile();
 					nfile.setOriginalName(originName);
-					nfile.setChangedName(saveFile(file,session));
+					nfile.setChangedName(saveFile(file, session));
 					files.add(nfile);
 				}
 			}
@@ -127,7 +127,8 @@ public class NoticeController {
 			return "redirect:/notices/insert.do";
 		}
 	}
-	public String saveFile(MultipartFile upfile, HttpSession session){
+
+	public String saveFile(MultipartFile upfile, HttpSession session) {
 		String originName = upfile.getOriginalFilename();
 		String ext = originName.substring(originName.lastIndexOf("."));
 		int num = (int) (Math.random() * 900) + 100; // 0~899에서 100을 더하면 100~999로 3자리로 만듬
@@ -136,7 +137,7 @@ public class NoticeController {
 		log.info("currentTime: {}", new Date());
 		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
-		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/notice");
+		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/notice/");
 
 		String changeName = "KH_" + currentTime + "_" + num + ext;
 		File directory = new File(savePath);
@@ -149,23 +150,21 @@ public class NoticeController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return "resources/uploadFiles/notice" + changeName; //얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
-	}
-	/*
-	@PostMapping
-	public ResponseEntity<Message> save(Notice notice) {
 
-		if ("".equals(notice.getNoticeTitle()) || "".equals(notice.getNoticeNo())
-				|| "".equals(notice.getNoticeContent())) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(Message.builder().data("서비스 요청실패").message("필수 파라미터 누락").build());
-		}
-		int result = noticeService.save(notice);
-		Message responseMsg = Message.builder().data(result).message("서비스 요청 성공").build();
-		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+		return "resources/uploadFiles/notice/" + changeName; // 얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
 	}
-	*/
+
+	/*
+	 * @PostMapping public ResponseEntity<Message> save(Notice notice) {
+	 * 
+	 * if ("".equals(notice.getNoticeTitle()) || "".equals(notice.getNoticeNo()) ||
+	 * "".equals(notice.getNoticeContent())) { return
+	 * ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	 * .body(Message.builder().data("서비스 요청실패").message("필수 파라미터 누락").build()); }
+	 * int result = noticeService.save(notice); Message responseMsg =
+	 * Message.builder().data(result).message("서비스 요청 성공").build(); return
+	 * ResponseEntity.status(HttpStatus.OK).body(responseMsg); }
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
 		Notice notice = noticeService.findById(id);
@@ -185,37 +184,35 @@ public class NoticeController {
 		Message responseMsg = Message.builder().data("삭제성공!").message("게시글 삭제 성공").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
-	//업데이트 모달용
+
+	// 업데이트 모달용
+	// 미구현 상태, 모달 오류로 더미 데이터
 	@PutMapping("/update/{updateNo}")
-	public ResponseEntity<Message>update(@PathVariable(value="updateNo") int noticeNo,
-            @RequestParam("updateTitle") String noticeTitle,
-            @RequestParam("updateCategory") String noticeCategory,
-            @RequestParam("updateContent") String noticeContent,
-            @RequestParam(value="fileNoDel[]", required = false) int[] delfiles,
-            @RequestPart(value="updatefile", required = false) List<MultipartFile> upfiles,
-            HttpSession session) {
+	public ResponseEntity<Message> update(@PathVariable(value = "updateNo") int noticeNo,
+			@RequestParam("updateTitle") String noticeTitle, @RequestParam("updateCategory") String noticeCategory,
+			@RequestParam("updateContent") String noticeContent,
+			@RequestParam(value = "fileNoDel[]", required = false) int[] delfiles,
+			@RequestPart(value = "updatefile", required = false) List<MultipartFile> upfiles, HttpSession session) {
 		log.info("start");
 		List<NFile> nfiles = new ArrayList<>();
-		if(delfiles.length !=0) {
-			for(int i=0; i<delfiles.length;i++) {
+		if (delfiles.length != 0) {
+			for (int i = 0; i < delfiles.length; i++) {
+				NFile tempFile = new NFile();
+				tempFile = noticeService.findFileById(delfiles[i]);
 				noticeService.deleteFile(delfiles[i]);
-			}	
+				
+			}
 		}
 		for (MultipartFile reupfile : upfiles) {
 			NFile nfile = new NFile();
 			if (!reupfile.getOriginalFilename().equals("")) {
 				nfile.setOriginalName(reupfile.getOriginalFilename());
 				nfile.setChangedName(saveFile(reupfile, session));
-				
+
 			}
 			nfiles.add(nfile);
 		}
-		/*
-		int a= nfiles.size();
-		for(int i =a; i<3; i++) {
-			NFile nfile = new NFile();
-			nfiles.add(nfile);
-		} */
+		
 		Notice notice = new Notice();
 		notice.setNoticeNo(noticeNo);
 		notice.setNoticeCategory(noticeCategory);
@@ -230,52 +227,76 @@ public class NoticeController {
 		Message responseMsg = Message.builder().data(result).message("공지사항 변경을 성공했습니다.").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
-	
-	//업데이트 페이지용 
+
+	// 업데이트 페이지용
 	@PostMapping("/update.do")
-	public ResponseEntity<Message>updateForm(Notice notice,@RequestParam("updatefile") MultipartFile[] upfiles,
-            HttpSession session, @RequestParam("fileNoDel") int[] delfiles) {
+	public String updateForm(Notice notice, @RequestParam("updatefile") MultipartFile[] upfiles, HttpSession session,
+			@RequestParam(value = "fileNoDel", required = false) String fileNoDel) {
 		log.info("start");
+		log.info(fileNoDel);
 		List<NFile> nfiles = new ArrayList<>();
-		if(delfiles.length !=0) {
-			for(int i=0; i<delfiles.length;i++) {
-				noticeService.deleteFile(delfiles[i]);
-			}	
-		}
-		for (MultipartFile reupfile : upfiles) {
-			log.info("there are files");
-			NFile nfile = new NFile();
-			if (!reupfile.getOriginalFilename().equals("")) {
-				nfile.setOriginalName(reupfile.getOriginalFilename());
-				nfile.setChangedName(saveFile(reupfile, session));
-				
+		String savePath = session.getServletContext().getRealPath("");
+		if (fileNoDel != null && !fileNoDel.isEmpty()) {
+			String[] delFilesArray = fileNoDel.split(",");
+			int[] delfiles = new int[delFilesArray.length];
+			for (int i = 0; i < delFilesArray.length; i++) {
+				delfiles[i] = Integer.parseInt(delFilesArray[i]);
 			}
-			nfiles.add(nfile);
+
+			for (int delfile : delfiles) {
+				NFile tempFile = new NFile();
+				tempFile = noticeService.findFileById(delfile);
+	
+				log.info("Deleting file with ID: " + delfile);
+				String filePath = tempFile.getChangedName();
+				File xFile = new File(savePath + filePath);
+				
+				boolean fileDelete = xFile.delete();
+				noticeService.deleteFile(delfile);
+			}
+		} else {
+			log.info("No files to delete.");
 		}
-		/*
-		int a= nfiles.size();
-		for(int i =a; i<3; i++) {
-			NFile nfile = new NFile();
-			nfiles.add(nfile);
-		} */
+
+		if (upfiles != null) {
+			log.info(upfiles.toString());
+
+			for (MultipartFile reupfile : upfiles) {
+				log.info(reupfile.toString());
+				if (!reupfile.getOriginalFilename().isEmpty()) {
+
+					NFile nfile = new NFile();
+
+					nfile.setOriginalName(reupfile.getOriginalFilename());
+					nfile.setChangedName(saveFile(reupfile, session));
+					log.info(nfile.toString());
+					nfiles.add(nfile);
+				}
+
+			}
+		}
+		
 		Notice newNotice = new Notice();
 		newNotice.setNoticeNo(notice.getNoticeNo());
 		newNotice.setNoticeCategory(notice.getNoticeCategory());
 		newNotice.setNoticeContent(notice.getNoticeContent());
 		newNotice.setNoticeTitle(notice.getNoticeTitle());
-		if(notice.getFiles().equals(nfiles)) {
+		if (nfiles.equals(notice.getFiles())) {
 			newNotice.setFiles(notice.getFiles());
-		}else {
+		} else {
 			newNotice.setFiles(nfiles);
 		}
 		log.info(newNotice.toString());
-		int result = noticeService.update(notice);
+		log.info("updatef files");
+		int result = noticeService.update(newNotice);
 		log.info(" result:{}", result);
+
 		if (result == 0) {
-			return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("공지사항 변경에 실패했습니다").build());
+			session.setAttribute("errorMsg", "게시글 작성 실패");
+			return "redirect:/notices/update.do/" + newNotice.getNoticeNo();
 		}
-		Message responseMsg = Message.builder().data(result).message("공지사항 변경을 성공했습니다.").build();
-		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+		session.setAttribute("alertMsg", "게시글 작성 성공");
+		return "redirect:/notices";
 	}
-	
+
 }
