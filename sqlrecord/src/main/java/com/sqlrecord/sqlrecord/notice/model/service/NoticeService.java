@@ -15,10 +15,11 @@ public interface NoticeService {
 	
 	int save(Notice notice);
 	int saveAll(Notice notice);
-
+	NFile findFileById(int nfileId);
 	int delete(int NoticeNo);
 	List<Notice> findByCate(String cate);
 	List<NFile> findFiles(int id);
 	int update(Notice notice);
-	
+	int deleteFile(int nfileNo);
+	 
 }

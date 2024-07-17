@@ -72,7 +72,7 @@
     <div class="navleft">
         <div class="navbar-start">
             <div class="navbar-item">
-                <a href="${hpath}/qna/getQnaList.do">
+                <a href="${hpath}/qnas">
                     고객지원
                 </a>
             </div>
@@ -81,6 +81,7 @@
                     공지사항
                 </a>
             </div>
+           
         </div>
     </div>
 
@@ -111,7 +112,7 @@
 				    </c:when>
 				    <c:otherwise>
 				        <div class="navbar-item">
-				            <a href="${hpath}/member/mypage.do">
+				            <a href="${hpath}/member/mypage">
 				                마이페이지
 				            </a>
 				        </div>

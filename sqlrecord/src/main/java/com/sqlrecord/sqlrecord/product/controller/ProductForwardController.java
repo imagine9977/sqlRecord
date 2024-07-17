@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/productFor")
 public class ProductForwardController {
 
-	@GetMapping("/list")
-	private String getProductList() {
-		return "product/list";
+	// 개별 상품 상세보기 페이지로 이동
+	@GetMapping("/detail/{productNo}")
+	public String getProductOne(@PathVariable int productNo) {
+		return "product/detail";
 	}
 	
-	@GetMapping("/detail/{productNo}")
-	private String getProductOne(@PathVariable int productNo) {
-		return "product/detail";
+	// 상품 추가 페이지로 이동
+	@GetMapping("/saveProductForm")
+	public String saveProductFormForwarding() {
+		return "product/insertForm";
 	}
 }

@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.Format;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -68,6 +67,29 @@ at Object.jQueryDetection"
 		return "member/infoFound";
 	}
 	
+	@GetMapping("mypage")
+	public String mypage() {
+		return "member/mypage";
+	}
+	
+	@GetMapping("infoEdit")
+	public String infoEdit(Model model,
+			   			   HttpServletRequest request) {
+						   
+		
+		HttpSession session = request.getSession(); // session 불러와서
+		Member member = (Member) session.getAttribute("loginUser"); //로그인 회원 정보 담아서
+		MemberGenre memberGenre = new MemberGenre();
+		//log.info("member : {} ", member);
+		memberGenre.setMemberNo(member.getMemberNo());
+		
+		List<Integer> tag = memberService.genre(memberGenre);
+		session.setAttribute("tagNo", tag);
+		model.addAttribute("tagList",tag);
+		//log.info("tag : {} ", tag);
+		
+		return "member/infoEdit";
+	}
 	
 	@PostMapping("loginPro.do")
 	public ModelAndView login(Member member,
@@ -78,6 +100,7 @@ at Object.jQueryDetection"
 		if(loginUser != null && bCryptPasswordEncoder.matches(member.getMemberPw(), loginUser.getMemberPw())) {
 			session.setAttribute("loginUser", loginUser);
 			session.setAttribute("loginMSg", "로그인 성공");
+			//log.info("loginUser : {} ", loginUser);
 			mv.setViewName("redirect:/");
 		} else {
 			mv.addObject("errorMsg", "로그인 실패 했습니다.").setViewName("common/errorPage");
@@ -85,11 +108,8 @@ at Object.jQueryDetection"
 		return mv;  
 	}
 	
-	private void alert(String string) {
-		// TODO Auto-generated method stub
-		
-	}
 
+	
 	@GetMapping("idCheck.do")
 	public void idCheck(@RequestParam("memberId") String memberId, HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
 		
@@ -297,6 +317,68 @@ at Object.jQueryDetection"
 			mv.addObject("errorMsg", "일치하는 회원이 없습니다.").setViewName("member/infoFound");
 		}
 		return mv;
+	}
+	
+	@GetMapping("pwCheck")
+    @ResponseBody
+    public String checkPw(@RequestParam("checkPwd") String checkPwd, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        if (loginUser != null && bCryptPasswordEncoder.matches(checkPwd, loginUser.getMemberPw())) {
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+	
+	@PostMapping("update")
+	public String update(Member member,
+						MemberGenre memberGenre,
+						@RequestParam("tagNo") List<Integer> tagNos,
+						HttpSession session,
+						Model model) {
+		log.info("수정 요청 실패 :{}",member);
+		//String encPwd = bCryptPasswordEncoder.encode(member.getUserPwd());
+		//member.setUserPwd(encPwd);
+		Member currentUser = (Member) session.getAttribute("loginUser");
+		
+		memberService.deleteGenre(currentUser.getMemberNo());
+		
+		for (Integer tagNo : tagNos) {
+			memberGenre.setMemberNo(currentUser.getMemberNo());
+	        memberGenre.setTagNo(tagNo);
+	        memberService.insUpdateGenre(memberGenre);
+	    }
+		
+		 if (member.getMemberPw() != null && !member.getMemberPw().isEmpty()) {
+		        String encPwd = bCryptPasswordEncoder.encode(member.getMemberPw());
+		        member.setMemberPw(encPwd);
+		    } else {
+		        member.setMemberPw(currentUser.getMemberPw());
+		    }
+		
+		if(memberService.update(member)>0) {
+			
+			Member loginUser = memberService.login(member);
+			session.setAttribute("loginUser", loginUser);
+			session.setAttribute("infoMsg", "정보수정 성공");
+			
+			return "redirect:mypage";
+		}else {
+			model.addAttribute("errorMsg", "정보 수정에 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	@RequestMapping("delete")
+	public String delete(Member member,HttpSession session) {
+		Member currentUser = (Member) session.getAttribute("loginUser");
+		member.setMemberId(currentUser.getMemberId());
+		member.setStatus(currentUser.getStatus());
+		member.setResDate(currentUser.getResDate());
+		log.info("member : {}", member);
+		memberService.delete(member);
+		session.removeAttribute("loginUser");
+		return "redirect:/";
 	}
 	
 }

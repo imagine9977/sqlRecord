@@ -8,7 +8,7 @@ public class QnaForwardController {
 	@GetMapping("qnas")
 	public String getQna() {
 		
-		return "qna/qna";
+		return "qna/list";
 	}
 	
 	@GetMapping("qnas/insert.do")

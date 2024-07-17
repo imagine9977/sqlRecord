@@ -17,4 +17,5 @@ public class PageTemplate {
 				.endPage(endPage).pageLimit(pageLimit).startPage(startPage).boardLimit(boardLimit).build();
 
 	}
+
 }
