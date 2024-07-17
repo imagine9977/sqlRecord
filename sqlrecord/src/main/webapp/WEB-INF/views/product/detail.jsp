@@ -8,6 +8,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
+<link rel="stylesheet" href="${hpath}/resources/css/reply.css">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product One</title>
@@ -320,130 +323,9 @@
   </div>
 </div>
 
+<%@ include file="/WEB-INF/views/reply/list.jsp" %>
 
-<!-- 리뷰 박스 안 -->
-<div id="section_review" class="hidden"  style="width: 100%; display: flex; justify-content: center; margin-bottom: 100px;">
-  <div style="width: 1300px; height: 1667px; border: solid 2px #D6D6D6;">
-    <h2 style="text-align: center; padding: 50px; font-size: 40px;">REVIEW</h2>
-    
-    <div style="width: 100%; display: flex; margin-bottom: 50px;">
-    
-    
-      <div id="point_graph" style="width: 50%; border-right: 1px solid #D6D6D6;">
-    <div style="display: flex; justify-content: center; padding-bottom: 2px;">
-      <p>5점</p>&nbsp;
-      <div style="width: 250px; border: 2px solid #D6D6D6; border-radius: 10px; overflow: hidden;">
-        <div class="graph-bar" data-width="85%"></div>
-      </div>&nbsp;
-      <div class="number-container"><p>17</p></div>
-    </div>
-    <div style="display: flex; justify-content: center; padding-bottom: 2px;">
-      <p>4점</p>&nbsp;
-      <div style="width: 250px; border: 2px solid #D6D6D6; border-radius: 10px; overflow: hidden;">
-        <div class="graph-bar" data-width="15%"></div>
-      </div>&nbsp;
-      <div class="number-container"><p>3</p></div>
-    </div>
-    <div style="display: flex; justify-content: center; padding-bottom: 2px;">
-      <p>3점</p>&nbsp;
-      <div style="width: 250px; border: 2px solid #D6D6D6; border-radius: 10px; overflow: hidden;">
-        <div class="graph-bar" data-width="0%"></div>
-      </div>&nbsp;
-      <div class="number-container"><p>0</p></div>
-    </div>
-    <div style="display: flex; justify-content: center; padding-bottom: 2px;">
-      <p>2점</p>&nbsp;
-      <div style="width: 250px; border: 2px solid #D6D6D6; border-radius: 10px; overflow: hidden;">
-        <div class="graph-bar" data-width="0%"></div>
-      </div>&nbsp;
-      <div class="number-container"><p>0</p></div>
-    </div>
-    <div style="display: flex; justify-content: center; padding-bottom: 2px;">
-      <p>1점</p>&nbsp;
-      <div style="width: 250px; border: 2px solid #D6D6D6; border-radius: 10px; overflow: hidden;">
-        <div class="graph-bar" data-width="0%"></div>
-      </div>&nbsp;
-      <div class="number-container"><p>0</p></div>
-    </div>
-  </div>
 
-      <div id="point_mark" style="width: 50%; border-left: 1px solid #D6D6D6;">
-        <h5 style="text-align: center; padding-right: 1em; ">전체 평점</h5>
-        <br>
-        <div style="display: flex; justify-content: center; gap: 15px;">
-          <h3 style="font-size: 48px;">점수</h3>
-          <div>
-            <fieldset class="star-rating">
-  <input type="radio" id="star5" name="rating_readonly" value="5"><label for="star5" title="5 stars"></label>
-  <input type="radio" id="star4.5" name="rating_readonly" value="4.5"><label class="half" for="star4.5" title="4.5 stars"></label>
-  <input type="radio" id="star4" name="rating_readonly" value="4"><label for="star4" title="4 stars"></label>
-  <input type="radio" id="star3.5" name="rating_readonly" value="3.5"><label class="half" for="star3.5" title="3.5 stars"></label>
-  <input type="radio" id="star3" name="rating_readonly" value="3"><label for="star3" title="3 stars"></label>
-  <input type="radio" id="star2.5" name="rating_readonly" value="2.5"><label class="half" for="star2.5" title="2.5 stars"></label>
-  <input type="radio" id="star2" name="rating_readonly" value="2"><label for="star2" title="2 stars"></label>
-  <input type="radio" id="star1.5" name="rating_readonly" value="1.5"><label class="half" for="star1.5" title="1.5 stars"></label>
-  <input type="radio" id="star1" name="rating_readonly" value="1"><label for="star1" title="1 star"></label>
-  <input type="radio" id="star0.5" name="rating_readonly" value="0.5"><label class="half" for="star0.5" title="0.5 star"></label>
-</fieldset>
-           
-  		   <p style="font-weight: 800; font-size: 18px;">(리뷰개수)개 리뷰</p>
-  		  </div>
-        </div>
-      </div>
-    </div>
-    
-    <div style="width: 100%; display: flex; justify-content: center;">
-      <h2 style="width: 80%; display: block; font-weight: 800; padding-left: 10px;">리뷰 작성하기</h2>
-    </div>
-    <br>
-    
-    <!-- 리뷰 form -->
-    <form>
-    <div style="width: 100%; display: flex; justify-content: center;">
-      <div style="width: 80%;">
-							<fieldset class="rate">
-                                <input type="radio" id="rating10" name="rating" value="5"><label for="rating10" title="5점"></label>
-                                <input type="radio" id="rating9" name="rating" value="4.5"><label class="half" for="rating9" title="4.5점"></label>
-                                <input type="radio" id="rating8" name="rating" value="4"><label for="rating8" title="4점"></label>
-                                <input type="radio" id="rating7" name="rating" value="3.5"><label class="half" for="rating7" title="3.5점"></label>
-                                <input type="radio" id="rating6" name="rating" value="3"><label for="rating6" title="3점"></label>
-                                <input type="radio" id="rating5" name="rating" value="2.5"><label class="half" for="rating5" title="2.5점"></label>
-                                <input type="radio" id="rating4" name="rating" value="2"><label for="rating4" title="2점"></label>
-                                <input type="radio" id="rating3" name="rating" value="1.5"><label class="half" for="rating3" title="1.5점"></label>
-                                <input type="radio" id="rating2" name="rating" value="1"><label for="rating2" title="1점"></label>
-                                <input type="radio" id="rating1" name="rating" value="0.5"><label class="half" for="rating1" title="0.5점"></label>
-                            </fieldset>
-    
-        <span style="font-weight: 800; font-size: 40px;">별점</span>
-      </div>
-    </div>
-    <br>
-    <div class="section_review_input" style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px;">
-     <div style="width: 80%;">
-      <input type="text" name="content" placeholder="리뷰 작성 ..." style="border-bottom: 3px solid #EDEDED;">
-      <div id="review_input_button" style="display: none; width: 80px; height: 14px; text-align:center; margin-top: 25px; color: white; background-color: #D6D6D6; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: 700; padding: 1.2rem;">글등록</div>
-     </div> 
-    </div>
-    </form>
-    
-    
-    
-    <div class="section_reviews" style="width: 100%; display: flex; justify-content: center; margin: 100px 0;">
-      <div style="width: 80%;">
-         !!!!!!!!!!!!!!!!!!리뷰 작성시작!!!!!!!!!!!!!!!!
-      </div>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-  </div>
-</div>
-
-</div>
  <script>
     $('.slider-for').slick({
 	  slidesToShow: 1,
@@ -483,19 +365,6 @@
 		  const sections = document.querySelectorAll('.hidden');
 		  sections.forEach(section => observer.observe(section));
 
-		  const graphObserver = new IntersectionObserver((entries, observer) => {
-		    entries.forEach(entry => {
-		      if (entry.isIntersecting) {
-		        const bars = entry.target.querySelectorAll('.graph-bar');
-		        bars.forEach(bar => {
-		          bar.style.width = bar.getAttribute('data-width');
-		        });
-		        observer.unobserve(entry.target);  // Once the graph is animated, stop observing it
-		      }
-		    });
-		  }, { threshold: 0.1 });
-
-		  graphObserver.observe(document.getElementById('point_graph'));
 		});
 	
 	
@@ -558,10 +427,7 @@
 	const contentInput = document.querySelector('.section_review_input div input');
 	const reviewInputButton = document.getElementById('review_input_button');
 
-	// input 요소가 포커스를 얻을 때
-	contentInput.addEventListener('focus', () => {
-	  reviewInputButton.style.display = 'block';
-	});
+	
 
 	// input 요소가 포커스를 잃을 때
 	contentInput.addEventListener('blur', (event) => {
@@ -593,7 +459,7 @@
 
 	
  </script>
-<script src="hpath/resources/js/forHeader.js?after1"></script>
+<script src="${hpath }/resources/js/forHeader.js?after1"></script>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 
