@@ -241,21 +241,22 @@
 <script>
 $(document).ready(function() {
 	
-	// 문서 준비 시 페이지네이션 핸들러 호출
-	setupPaginationHandlers();
-	
 	// 페이지네이션 핸들러(클릭이벤트)
 	function setupPaginationHandlers() {
-	    $(document).on('click', '.pagination-custom a', function(e) {
+	    $(document).off('click', '.pagination-custom a').on('click', '.pagination-custom a', function(e) {
 	        e.preventDefault();
 	        var page = $(this).data('page');
 	        var contentType = $(this).closest('.pagination-custom').data('content-type');
 	        var currentTab = $('.tab-btnItem.active').data('tab');
-
+	
+	        console.log('Clicked page:', page);
+	        console.log('Content type:', contentType);
+	        console.log('Current tab:', currentTab);
+	
 	        if (currentTab === 'member') {
-	            loadMemberTable(contentType, page);
+	            loadMemberTable('all', page);
 	        } else if (currentTab === 'notice') {
-	            loadNoticeTable(contentType, page);
+	            loadNoticeTable('default', page);
 	        }
 	    });
 	}
@@ -572,7 +573,7 @@ $(document).ready(function() {
 	
 	                // 페이지네이션 생성
 	                var pageInfo = response.pageInfo;
-	                var pagingHtml = createPagination(pageInfo, 'member', 'loadMemberTable');
+	                var pagingHtml = createPagination(pageInfo, 'member');
 	                $('#content-area').append(pagingHtml);
 	                
 	                setupPaginationHandlers();
@@ -634,7 +635,7 @@ $(document).ready(function() {
 
                     // 페이지네이션 생성
                     var pageInfo = response.pageInfo;
-                    var pagingHtml = createPagination(pageInfo, 'notice', 'loadNoticeTable');
+                    var pagingHtml = createPagination(pageInfo, 'notice');
                     $('#content-area').append(pagingHtml);
                     
                     setupPaginationHandlers();
@@ -651,27 +652,44 @@ $(document).ready(function() {
     }
     
     //페이지네이션 생성
-    function createPagination(pageInfo, contentType, loadFunction) {
+    function createPagination(pageInfo, contentType) {
 	    var html = '<div class="pagination-custom" data-content-type="' + contentType + '">';
 	    if (pageInfo.startPage > 1) {
-	        html += '<a href="#" data-page="' + (pageInfo.currentPage - 1) + '">이전</a>';
+	        html += '<a href="#" data-page="' + (pageInfo.startPage - 1) + '">이전</a>';
 	    }
 	    for (var i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
 	        var activeClass = (i === pageInfo.currentPage) ? 'active' : '';
 	        html += '<a class="' + activeClass + '" href="#" data-page="' + i + '">' + i + '</a>';
 	    }
 	    if (pageInfo.endPage < pageInfo.maxPage) {
-	        html += '<a href="#" data-page="' + (pageInfo.currentPage + 1) + '">다음</a>';
+	        html += '<a href="#" data-page="' + (pageInfo.endPage + 1) + '">다음</a>';
 	    }
 	    html += '</div>';
 	    return html;
 	}
-
-    $('.tab-btnItem').click(function(e) {
-        e.preventDefault();
-        var tabName = $(this).data('tab');
-        window.location.hash = tabName;
-    });
+    
+    //탭 전환 시 페이지네이션 핸들러 재설정
+    function loadContent(tabName, contentType = 'default') {
+	    $('#content-area').empty(); // 기존 콘텐츠 제거
+	
+	    if (tabName === 'product') {
+	        loadProductTable(contentType);
+	    } else if (tabName === 'order') {
+	        loadOrderTable(contentType);
+	    } else if (tabName === 'member') {
+	        loadMemberTable(contentType);
+	    } else if (tabName === 'reply') {
+	        loadMemberTable(contentType);
+	    } else if (tabName === 'notice') {
+	        loadNoticeTable(contentType);
+	    } else if (tabName === 'qna') {
+	        loadNoticeTable(contentType);
+	    } else {
+	        $('#content-area').html('<div class="no-data">조회된 내용이 없습니다</div>');
+	    }
+	
+	    setupPaginationHandlers();
+	}
 
     // 해시 기반으로 탭 로드
     function loadInitialTab() {
@@ -689,6 +707,9 @@ $(document).ready(function() {
 
     // 페이지 로드 시 초기 탭 로드
     loadInitialTab();
+    
+	// 문서 준비 시 페이지네이션 핸들러 호출
+	setupPaginationHandlers();
 });
 </script>
 </body>
