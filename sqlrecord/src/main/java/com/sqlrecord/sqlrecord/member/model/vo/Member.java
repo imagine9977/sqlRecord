@@ -24,8 +24,8 @@ public class Member {
     private String addr2;
     private String postcode;
     private String birth;
-    private int point;
     private char status;
     private Date resDate;
     
+	private int pointAmount;
 }
