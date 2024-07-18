@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 @Mapper
@@ -29,5 +30,13 @@ public interface OrdersMapper {
 	MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum);
 
 	int updateMemberOrdersStatus(@Param("string") String string, @Param("trackingNum") int trackingNum);
+
+	int updateMemberOrdersExd(MemberOrdersEx memberOrdersEx);
+	
+	int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx);
+
+	List<MemberOrdersEx> getOrdersEx(int memberNo);
+
+	
 
 }

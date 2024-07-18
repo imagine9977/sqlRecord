@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.orders.model.vo;
 
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +25,8 @@ public class MemberOrdersEx {
     private String memberOrdersExPostcode;
     private String memberOrdersExStatus;
     private String memberOrdersExReason;
-    private MemberOrdersDetail memberOrdersDetailNo;
+    private Product product;		//교환 하려는 상품
+    private MemberOrdersDetail memberOrdersDetail;
     
     
 }

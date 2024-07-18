@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,21 @@ public class OrderServiceImpl implements OrdersService {
 	@Override
 	public int updateMemberOrdersStatus(String string , int trackingNum) {
 		return ordersMapper.updateMemberOrdersStatus(string , trackingNum);
+	}
+
+	@Override
+	public int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx) {
+		
+		if(ordersMapper.updateMemberOrdersExd(memberOrdersEx) > 0) {
+			return ordersMapper.insertMemberOrdersEx(memberOrdersEx);
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public List<MemberOrdersEx> getOrdersEx(int memberNo) {
+		return ordersMapper.getOrdersEx(memberNo);
 	}
 	
 	

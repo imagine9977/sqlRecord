@@ -26,6 +26,7 @@ import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 import lombok.RequiredArgsConstructor;
@@ -57,13 +58,10 @@ public class OrdersForwardController {
 			
 			
 			
-			log.info("어마운트 갯수 : {}" , cart_amountArr[1]);
-			log.info("어마운트 갯수 : {}" , product_noArr[1]);
 			
 			Member member =  (Member) session.getAttribute("loginUser");
 			
 			
-			log.info("유저유저 : {}" , member.getEmail());
 			// 멤버 오더에 넣을 값을 객체에 담기
 			MemberOrders memberOrders = new MemberOrders();
 			memberOrders.setMemberOrdersAddress(member.getAddr1());
@@ -93,7 +91,6 @@ public class OrdersForwardController {
 				odList.add(ordersDetail);
 			}
 			
-			log.info("이게 디테일? : {}" , odList.get(1).toString());
 			
 			// 디테일 인서트 성공 시 디테일로 리다이렉트
 			if(ordersService.insertOrdersDetail(odList) > 0) {
@@ -144,27 +141,19 @@ public class OrdersForwardController {
 		List<List<MemberOrdersDetail>> newOdList = new ArrayList<List<MemberOrdersDetail>>();
 		
 		
-		for(MemberOrdersDetail od : odList) {
-			log.info("얘는 멤버 오더스 넘버 : {}" , od.getMemberOrders().getMemberOrdersNo());
-		}
 		
 		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
-			log.info("얘는 hsItem : {}" , hsItem);
 			List<MemberOrdersDetail> od = (List<MemberOrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem).collect(Collectors.toList());
 			
 			newOdList.add(od);
 		}
 		
-		log.info("오디? : {} , {}" , newOdList.get(0).size());
 		
 		
 		
 		model.addAttribute("newOdList",newOdList);
-		log.info("이게 오디 개수 : {}" , newOdList.get(0).get(0).getMemberOrders().getMemberOrdersDate());
-		log.info("이게 오디 개수 : {}" , odList.size());
-		log.info("이게 뉴오디 개수 : {}" , newOdList.size());
-		log.info("이게 뉴오디 : {}" , newOdList.get(0).get(0).getProduct().getProductName());
+	
 		
 		
 		return "orders/detail";
@@ -193,18 +182,60 @@ public class OrdersForwardController {
 	
 	
 	@PostMapping("/insertMemberOE")
-	public String insertMemberOD(MemberOrdersDetail memberOrdersDetail) {
+	public String insertMemberOD(MemberOrdersEx memberOrdersEx) {
+		
+		
+		log.info("mod가 왔나? : {}" , memberOrdersEx.getMemberOrdersDetail().getMemberOrdersDetailNo());
+		log.info("product가 왔나? : {}" , memberOrdersEx.getProduct().getProductNo());
+		ordersService.insertMemberOrdersEx(memberOrdersEx);
 		
 		
 		
 		
-		
-		return "redirect:orders/exchange";
+		return "redirect:exchange";
 	}
 	
 	
 	@GetMapping("/exchange")
-	public String memberExchangePage() {
+	public String memberExchangePage(HttpServletRequest request , Model model) {
+		
+		HttpSession session = request.getSession();
+		
+		Member member =  (Member) session.getAttribute("loginUser");
+		if(member == null) {
+			return "redirect:/member/login.do";
+		}
+		
+		List<MemberOrdersEx> memberOrdersExList = ordersService.getOrdersEx(member.getMemberNo());
+		
+		log.info("이게 돼? : {}" , memberOrdersExList.get(0).getMemberOrdersDetail().getMemberOrders().getMemberNo());
+		log.info("그전 상품 사진 : {}" , memberOrdersExList.get(0).getMemberOrdersDetail().getProduct().getProductName());
+		log.info("스테이터스 : {}" , memberOrdersExList.get(0).getMemberOrdersExStatus());
+		
+		
+		
+		
+		
+		
+		
+		// 유저의 OrderDetail을 리스트로 담기
+		
+		
+		
+		
+		
+		
+		model.addAttribute("memberOrdersExList",memberOrdersExList);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		

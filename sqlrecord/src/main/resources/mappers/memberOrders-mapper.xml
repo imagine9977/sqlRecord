@@ -54,7 +54,7 @@
 
 	</insert>
 	
-	<resultMap type="MemberOrdersDetail" id="odRM">
+	<resultMap type="memberOrdersDetail" id="odRM">
     	<id property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
     	<result property="memberOrdersDetailAmount" column="MEMBER_orders_detail_amount"/>  
 	    <result property="memberOrdersDetailPrice" column="MEMBER_orders_detail_price"/>
@@ -87,6 +87,8 @@
 	    </association>
 	</resultMap>
 	
+	
+	
 	<select id="getOrdersDetailAll" resultMap="odRM">
         SELECT
                 mod.MEMBER_ORDERS_DETAIL_NO,
@@ -103,7 +105,7 @@
                 mo.MEMBER_ORDERS_DATE,
 		        mod.MEMBER_ORDERS_DETAIL_AMOUNT,
 		        mod.MEMBER_ORDERS_DETAIL_PRICE,
-		        mod.MEMBER_ORDERS_EXD,
+		        mod.MEMBER_ORDERS_DETAIL_EXD,
 		        mod.TRACKING_NUM,
 		        mod.MEMBER_ORDERS_DETAIL_STATUS
         FROM
@@ -141,7 +143,7 @@
                 mo.MEMBER_ORDERS_DATE,
 		        mod.MEMBER_ORDERS_DETAIL_AMOUNT,
 		        mod.MEMBER_ORDERS_DETAIL_PRICE,
-		        mod.MEMBER_ORDERS_EXD,
+		        mod.MEMBER_ORDERS_DETAIL_EXD,
 		        mod.TRACKING_NUM,
 		        mod.MEMBER_ORDERS_DETAIL_STATUS
         FROM
@@ -181,7 +183,7 @@
 		        od.MEMBER_ORDERS_NO,
 		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
 		        od.MEMBER_ORDERS_DETAIL_PRICE,
-		        od.MEMBER_ORDERS_EXD,
+		        od.MEMBER_ORDERS_DETAIL_EXD,
 		        od.TRACKING_NUM,
 		        od.MEMBER_ORDERS_DETAIL_STATUS
         FROM
@@ -218,7 +220,7 @@
 		        od.MEMBER_ORDERS_NO,
 		        od.MEMBER_ORDERS_DETAIL_AMOUNT,
 		        od.MEMBER_ORDERS_DETAIL_PRICE,
-		        od.MEMBER_ORDERS_EXD,
+		        od.MEMBER_ORDERS_DETAIL_EXD,
 		        od.TRACKING_NUM,
 		        od.MEMBER_ORDERS_DETAIL_STATUS
         FROM
@@ -259,23 +261,6 @@
 	
 	
 	<select id="getProduct" resultType="product">
-	    WITH RANKEPRO AS (SELECT
-	
-		        p.PRODUCT_NO,
-                p.PRODUCT_NAME,
-                p.product_price,
-                p.product_cate,
-                p.product_status,
-                PRODUCT_DATE,
-                p.tag_no,
-                ps.photo_path,
-                ROW_NUMBER() OVER (PARTITION BY p.PRODUCT_NO ORDER BY ps.PRODUCT_NO ASC) AS rn    
-	    FROM
-	       	 	PRODUCT p
-        LEFT 
-        JOIN
-                PRODUCT_PHOTOS ps ON p.PRODUCT_NO = ps.PRODUCT_NO
-        )
         SELECT
 		        PRODUCT_NO productNo,
 		        PRODUCT_NAME productName,
@@ -283,12 +268,9 @@
                 PRODUCT_CATE prodcutCate,
 		        PRODUCT_STATUS productStatus,
 		        PRODUCT_DATE productDate,
-		        TAG_NO tagNo,
-                PHOTO_PATH productPhotos
+		        TAG_NO tagNo
 	    FROM
-	        	RANKEPRO
-	    WHERE
-                rn=1
+	        	PRODUCT
         ORDER
         BY
                 PRODUCT_NO
@@ -308,11 +290,157 @@
 	</select>
 	
 	
-	<!-- <select id="getTrackingInfo" parameterType="_int" resultType="">
+	<update id="updateMemberOrdersExd" parameterType="memberOrdersEx">
+		UPDATE
+				MEMBER_ORDERS_DETAIL
+		SET
+				MEMBER_ORDERS_DETAIL_EXD
+				=
+				#{memberOrdersExType}
+		WHERE
+				MEMBER_ORDERS_DETAIL_NO
+				=
+				#{memberOrdersDetailNo.memberOrdersDetailNo}
+
+	</update>
+	
+	<insert id="insertMemberOrdersEx" parameterType="memberOrdersEx">
+		INSERT
+		INTO
+				MEMBER_ORDERS_EX
+		VALUES
+				(
+				MEMBER_ORDERS_EX_SEQ.NEXTVAL,
+				#{memberOrdersExType},
+				#{memberOrdersExAmount},
+				SYSDATE,
+				#{memberOrdersDetailNo.memberOrdersDetailNo},
+				DEFAULT,
+				#{memberOrdersExAddress},
+				#{memberOrdersExAddress2},
+				#{memberOrdersExPostcode},
+				DEFAULT,
+				<choose>
+					<when test="productNo.productNo == 0">
+						DEFAULT,
+					</when>
+					<otherwise>
+						#{productNo.productNo},
+					</otherwise>
+				</choose>
+				#{memberOrdersExReason}				
+				)
+			
+	</insert>
 	
 	
-	
-	</select> -->
+	<resultMap type="memberOrdersEx" id="oeRM">
+		<id property="memberOrdersExNo" column="MEMBER_ORDERS_EX_NO"/>
+		<result property="memberOrdersExType" column="MEMBER_ORDERS_EX_TYPE"/>
+		<result property="memberOrdersExAmount" column="MEMBER_ORDERS_EX_AMOUNT"/>
+		<result property="memberOrdersExDate" column="MEMBER_ORDERS_EX_DATE"/>
+		<result property="trackingNum" column="TRACKING_NUM"/>
+		<result property="memberOrdersExAddress" column="MEMBER_ORDERS_EX_ADDRESS"/>
+		<result property="memberOrdersExAddress2" column="MEMBER_ORDERS_EX_ADDRESS2"/>
+		<result property="memberOrdersExPostcode" column="MEMBER_ORDERS_EX_POSTCODE"/>
+		<result property="memberOrdersExStatus" column="MEMBER_ORDERS_EX_STATUS"/>
+		<result property="memberOrdersExReason" column="MEMBER_ORDERS_EX_REASON"/>
+		<association property="product" javaType="product">
+	        <result property="productNo" column="product_no"/>
+	        <result property="productName" column="product_name"/>
+	        <result property="productPrice" column="product_price"/>
+	        <result property="productStatus" column="product_status"/>
+	        <result property="productDate" column="product_date"/>
+	        <result property="tagNo" column="tag_no"/>
+	        <result property="productDetail" column="product_detail"/>
+	        <result property="productCate" column="product_cate"/>
+		<collection property="productPhotosList" column="product_no" javaType="List" select="getPhotos">
+	        	<result property="productPhotosNo" column="PHOTO_NO"/>
+			    <result property="productPhotosName" column="PHOTO_NAME"/>
+			    <result property="productPhotosPath" column="PHOTO_PATH"/>
+			    <result property="productNo" column="PRODUCT_NO"/>
+		</collection>
+		</association>
+		<association property="memberOrdersDetail" resultMap="odRM">
+			<result property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
+	    	<result property="memberOrdersDetailAmount" column="MEMBER_orders_detail_amount"/>  
+		    <result property="memberOrdersDetailPrice" column="MEMBER_orders_detail_price"/>
+		    <result property="trackingNum" column="TRACKING_NUM"/>
+		    <result property="memberOrdersDetailExd" column="MEMBER_ORDERS_DETAIL_EXD"/>
+		    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
+		    <association property="product" javaType="product">
+		        <result property="productNo" column="product_no"/>
+		        <result property="productName" column="product_name"/>
+		        <result property="productPrice" column="product_price"/>
+		        <result property="productStatus" column="product_status"/>
+		        <result property="productDate" column="product_date"/>
+		        <result property="tagNo" column="tag_no"/>
+		        <result property="productDetail" column="product_detail"/>
+		        <result property="productCate" column="product_cate"/>
+			<collection property="productPhotosList" column="product_no" javaType="List" select="getPhotos">
+		        	<result property="productPhotosNo" column="PHOTO_NO"/>
+				    <result property="productPhotosName" column="PHOTO_NAME"/>
+				    <result property="productPhotosPath" column="PHOTO_PATH"/>
+				    <result property="productNo" column="PRODUCT_NO"/>
+			</collection>
+			</association>
+			<association property="memberOrders" javaType="memberOrders">
+		    	<result property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
+		        <result property="memberOrdersAddress" column="MEMBER_ORDERS_ADDRESS"/>
+		        <result property="memberOrdersAddress2" column="MEMBER_ORDERS_ADDRESS2"/>
+		        <result property="memberOrdersPostcode" column="MEMBER_ORDERS_POSTCODE"/>
+		        <result property="memberOrdersDate" column="MEMBER_ORDERS_DATE"/>
+		        <result property="memberNo" column="MEMBER_NO"/>
+		    </association>
+		</association>
+	</resultMap>
+
+	<select id="getOrdersEx" resultMap="oeRM">
+		SELECT
+			    moe.MEMBER_ORDERS_EX_NO,
+			    moe.MEMBER_ORDERS_EX_TYPE,
+			    moe.MEMBER_ORDERS_EX_AMOUNT,
+			    moe.MEMBER_ORDERS_EX_DATE,
+			    moe.TRACKING_NUM,
+			    moe.MEMBER_ORDERS_EX_ADDRESS,
+			    moe.MEMBER_ORDERS_EX_ADDRESS2,
+			    moe.MEMBER_ORDERS_EX_POSTCODE,
+			    moe.MEMBER_ORDERS_EX_STATUS,
+			    moe.MEMBER_ORDERS_EX_REASON,
+			    p.PRODUCT_NO,
+			    p.PRODUCT_NAME,
+			    p.PRODUCT_PRICE,
+			    p.PRODUCT_STATUS,
+			    p.PRODUCT_DATE,
+			    p.TAG_NO,
+			    p.PRODUCT_DETAIL,
+			    p.PRODUCT_CATE,
+			    mod.MEMBER_ORDERS_DETAIL_NO,
+			    mod.MEMBER_ORDERS_DETAIL_AMOUNT,
+			    mod.MEMBER_ORDERS_DETAIL_PRICE,
+			    mod.MEMBER_ORDERS_DETAIL_EXD,
+			    mod.MEMBER_ORDERS_DETAIL_STATUS,
+			    mo.MEMBER_ORDERS_NO,
+			    mo.MEMBER_ORDERS_ADDRESS,
+			    mo.MEMBER_ORDERS_ADDRESS2,
+			    mo.MEMBER_ORDERS_POSTCODE,
+			    mo.MEMBER_ORDERS_DATE,
+			    mo.MEMBER_NO
+		FROM
+		    	MEMBER_ORDERS_EX moe
+		LEFT JOIN
+		    	MEMBER_ORDERS_DETAIL mod ON moe.MEMBER_ORDERS_DETAIL_NO = mod.MEMBER_ORDERS_DETAIL_NO
+		LEFT JOIN
+		    	PRODUCT p ON mod.PRODUCT_NO = p.PRODUCT_NO
+		LEFT JOIN
+		    	MEMBER_ORDERS mo ON mod.MEMBER_ORDERS_NO = mo.MEMBER_ORDERS_NO
+		WHERE
+		    	mo.MEMBER_NO = #{memberNo}
+		ORDER BY
+    			moe.MEMBER_ORDERS_EX_NO 
+    	DESC
+		
+	</select>
 
 
 </mapper>

@@ -16,7 +16,7 @@
     
 
     <form action="${ hpath }/orders/insertMemberOE" method="POST">
-    	<input text="text" name="memberOrdersDetailNo" hidden="hidden"/>
+    	<input text="text" name="memberOrdersDetail.memberOrdersDetailNo" value="${ memberOrdersDetail.memberOrdersDetailNo }" hidden="hidden"/>
         <div class="row mb-3">
           <label for="inputEmail3" class="col-sm-2 col-form-label">상품명</label>
           <div class="col-sm-10">
@@ -64,8 +64,8 @@
           
           <div class="col-auto" id="chooseEx">
             <label class="visually-hidden" for="productName">교환 상품 선택</label>
-            <select class="form-select" id="productName" name="productName">
-              <option selected>Choose...</option>
+            <select class="form-select" id="productName" name="product.productNo">
+              <option value="0" selected>Choose...</option>
               <c:forEach var="productItem" items="${ productList }" >
               	<option value="${ productItem.productNo }">${ productItem.productName }</option>
               </c:forEach>
@@ -82,7 +82,7 @@
           <div class="row mb-3">
             <label for="inputEmail3" class="col-sm-2 col-form-label">사유</label>
             <div class="col-sm-10">
-              <input type="email" class="form-control" id="memberOrdersExReason" name="memberOrdersExReason">
+              <input type="text" class="form-control" id="memberOrdersExReason" name="memberOrdersExReason">
             </div>
           </div>
           

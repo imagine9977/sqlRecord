@@ -13,6 +13,13 @@
 <h1>주문 조회</h1>
 
     <br><br><br>
+    
+    <c:choose>
+    	<c:when test="${ newOdList.size() eq 0 }">
+    		<h2>구매상품이 없습니다.</h2>
+    	</c:when>
+    	<c:otherwise>
+    
     <c:forEach begin="0" end="${ newOdList.size() - 1 }" var="i">
     	<h2>${ newOdList[i][0].memberOrders.memberOrdersDate }</h2>
     	<br>
@@ -43,7 +50,7 @@
 		            <td>${item.memberOrdersDetailStatus }</td>
 		            
 		            <c:choose>
-		            	<c:when test="${item.memberOrdersDetailStatus eq '배송요청' }">
+		            	<c:when test="${item.memberOrdersDetailStatus eq '상품준비중' }">
 		            		<td><button class="btn btn-danger"><a href="${hpath}/orders/delete/${ item.memberOrdersDetailNo}" >주문 취소</a></button></td>
 		            	</c:when>
 		            	<c:when test="${item.memberOrdersDetailStatus eq '배송중' }">
@@ -77,7 +84,11 @@
 		 </c:forEach>
     			</tbody>
       		</table>
-    </c:forEach>
+    	</c:forEach>
+    	</c:otherwise>
+    </c:choose>
+    
+    
     <br><br><br>
 
     
