@@ -22,7 +22,8 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.qna.model.vo.Qna" alias="qna" />
-
+		<typeAlias type="com.sqlrecord.sqlrecord.qna.model.vo.QnaFile" alias="qnaFile" />
+		<typeAlias type="com.sqlrecord.sqlrecord.qna.model.vo.Comment" alias="comm" />
 
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.Reply" alias="reply" />

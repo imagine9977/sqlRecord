@@ -117,7 +117,7 @@
 }
 
 #qna-container #content {
-	width: 800px;
+	width: 1000px;
 	height: auto;
 	margin: auto;
 }
@@ -129,7 +129,7 @@
 }
 
 #qna-container #outerDiv {
-	width: 800px;
+	width: 1000px;
 	display: block;
 	overflow: auto;
 	padding-top: 20px;
@@ -243,6 +243,30 @@
 #qna-container #liveAlertPlaceholder {
 	z-index: 10;
 }
+#qna-container #pagingArea {
+    text-align: center;
+    margin-top: 20px; /* Optional, to add some space above the pagination */
+    display: inline-block;
+    width:500px;
+    margin-left:500px;
+}
+
+
+#qna-container .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+#qna-container .pagination .page-item .page-link {
+    color: #007bff;
+}
+
+#qna-container .pagination .page-item .page-link:hover {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}
 </style>
 </head>
 
@@ -258,15 +282,15 @@
 			<div class="filter-search-container">
 				<div class="filter-buttons">
 					<button type="button" class="btn btn-outline-secondary"
-						id="toggleCategory1" onclick="findAll()">전체</button>
+						id="toggleCategory1" onclick="findAll(solvedBoolean,1)">전체</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findByCate('general')">일반</button>
+						onclick="findByCate('general', solvedBoolean,1)">일반</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findByCate('pay')">결제</button>
+						onclick="findByCate('pay', solvedBoolean,1)">결제</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findByCate('service')">서비스</button>
+						onclick="findByCate('service', solvedBoolean,1)">서비스</button>
 					<button type="button" class="btn btn-outline-secondary"
-						onclick="findByCate('etc')">기타</button>
+						onclick="findByCate('etc', solvedBoolean,1)">기타</button>
 					<button type="button" class="btn btn-outline-secondary"
 						id="toggleSolved" onclick="turnQnaSolved()">미해결만 보기</button>
 				</div>
@@ -298,14 +322,28 @@
 									<div id="qnaContent"></div>
 								</div>
 							</div>
+							<hr />
+							<div id="qna-comments">
+								<div id="comments"></div>
+								<button id="addCommentButton" class="btn btn-primary">Add Comment</button>
+
+
+								<div id="commentForm" style="display: none;">
+								    <textarea id="newCommentContent" placeholder="Enter your comment"></textarea>
+								    <button id="submitCommentButton" class="btn btn-success">Submit Comment</button>
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<div id="qnaActions">
-								<a class="btn btn-warning" onclick="toggleUpdateModal();"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp;
-								<a class="btn btn-danger" id="deleteButton"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">삭제하기</a>&nbsp;&nbsp;
-								<a class="btn btn-secondary" data-bs-dismiss="modal"
+								<a class="btn btn-warning user-only" id="goToUpdatePage"
+									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
+									수정하기</a>&nbsp;&nbsp; 
+									<a class="btn btn-danger user-only"
+									id="deleteButton"
+									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
+									삭제하기</a>&nbsp;&nbsp; <a class="btn btn-secondary"
+									data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
 								<button class="btn share-button btn-secondary"
 									title="Share this article">
@@ -398,7 +436,25 @@
 			
 			var fileNoArry = [];
 			var fileNameArry = [];
+			var userRole = '${sessionScope.loginUser.memberId}';
 
+		    document.addEventListener('DOMContentLoaded', function() {
+		        if (userRole === 'admin') {
+		            var adminElements = document.querySelectorAll('.admin-only');
+		            adminElements.forEach(function(element) {
+		                element.style.display = 'inline-block';
+		            });
+		            var userElements = document.querySelectorAll('.user-only');
+		        	userElements.forEach(function(element) {
+		                element.style.display = 'inline-block';
+		            });
+		        }else if(userRole!=null){
+		        	var userElements = document.querySelectorAll('.user-only');
+		        	userElements.forEach(function(element) {
+		                element.style.display = 'inline-block';
+		            });
+		        }
+		    });
 			$(document).on('click', '.fileDelBtn', function() {
 			    var fileNo = $(this).data('fileNo');
 			    var fileName = $(this).data('fileName');
@@ -410,7 +466,49 @@
 			    $('#fileNameDel').attr('value', fileNameArry);
 			    $(this).parent().remove();
 			});
-			
+			$('#addCommentButton').on('click', () => {
+			    $('#commentForm').toggle();
+			});
+
+			// Handle comment form submission
+			$('#submitCommentButton').on('click', () => {
+			    const commentContent = $('#newCommentContent').val();
+			    if (!commentContent) {
+			        alert('Comment content cannot be empty');
+			        return;
+			    }
+
+			    const newComment = {
+			        qnaNo: currentqnaNo,
+			        memberId: userRole ,
+			        commentContent: commentContent, 
+			    };
+
+			    $.ajax({
+			        url: 'qna/comment/',
+			        type: 'post',
+			        contentType: 'application/json',
+			        data: JSON.stringify(newComment),
+			        success: response => {
+			            if (response.success) {
+			                // Add the new comment to the comments section
+			                const commentDiv = $('<div>')
+			                    .addClass('comment')
+			                    .append($('<div>').addClass('comment-content').text(newComment.commentContent))
+			                    .append($('<div>').addClass('comment-details')
+			                        .append($('<span>').addClass('comment-author').text('Author: ' + newComment.memberNo))
+			                        .append($('<span>').addClass('comment-date').text('Date: ' + newComment.resdate))
+			                    );
+
+			                $('#qnaModal #comments').append(commentDiv);
+			                $('#newCommentContent').val(''); // Clear the comment input
+			                $('#commentForm').hide(); // Hide the comment form
+			            } else {
+			                alert('Failed to add comment');
+			            }
+			        }
+			    });
+			});
 			function turnQnaSolved() {
 	            if(solvedBoolean=='N'){
 	            	solvedBoolean='Y';
@@ -419,10 +517,10 @@
 	            	solvedBoolean='N';
 	            	document.getElementById('toggleSolved').textContent = "미해결 보기";
 	            }
-	            if(currentCategory='all'){
-	            	findAll();
+	            if(currentCategory=='all'){
+	            	findAll(solvedBoolean,1);
 	            }else{
-	            	findByCate(currentCategory);
+	            	findByCate(currentCategory,solvedBoolean,1);
 	            }
 	        }
 			
@@ -437,115 +535,6 @@
 			    $('.get-more-list-cate').remove();
 			    $('.load-more-container').remove();
 			}
-			// 공지사항 업데이트 
-			$("#btnSubmit").click(function (event) {         
-			    //event.preventDefault();  // 기본 폼 제출 방지
-			    console.log("Try");
-			    var form = $('#fileUploadForm')[0];  // 폼 요소 가져오기
-			    
-			    var data = new FormData(form);  // FormData 객체 생성
-			    console.log("Sending data: ",data);
-			 	// 필요한 경우 추가 파일을 FormData 객체에 추가 가능
-			    // 예를 들어, 'fileInput2', 'fileInput3' 등의 ID를 가진 추가 파일 입력이 있는 경우
-			   	 //data.append('updateFile2', $('#fileInput2')[0].files[0]);
-			     //data.append('updateFile3', $('#fileInput3')[0].files[0]);
-			   
-			    
-			    $.ajax({             
-			        type: "put",  
-			        url: "qna/update",
-			        data: data,  // Pass FormData object JSON.stringify(data)
-			    	/* 
-			        headers: { 
-				        Accept : "text/javascript; charset=utf-8",
-				        "Content-Type": "text/javascript; charset=utf-8"
-				    },
-				    */
-				  
-			        processData: false,  // Important: Do not process the data
-			        contentType: false, 
-			        success: function (result) {
-			            if (result.data === 1) {
-			                document.getElementById('outerDiv').remove();
-			                findAll();
-			                $('#detail').slideUp(300);
-			            }
-			        },
-			        error: function (e) {  
-			            console.log("ERROR : ", e);     
-			            $("#btnSubmit").prop("disabled", false);    
-			            alert("fail");      
-			        }   
-			    });  
-			});
-
-			// 공지사항 추가하기 
-			function insert() {
-                const requestData = {
-                    "qnaTitle": document.getElementById('insertTitle').value,
-                    "qnaContent": document.getElementById('insertContent').value,
-                    "qnaCategory": document.getElementById('insertCategory').value,
-                    "qnaCategory": document.getElementById('insertCategory').value
-                };
-                console.log(requestData);
-                $.ajax({
-                    url: 'qna',
-                    type: 'post',
-                    data: requestData,
-                    success: response => {
-                        console.log(response);
-                        if (response.message === '서비스 요청 성공') {
-                            document.getElementById('outerDiv').remove();
-                            findAll();
-                            document.getElementById('qnaTitle').value = '';
-                            document.getElementById('qnaContent').value = '';
-                        }
-                    }
-                });
-            }
-			
-			//공지 수정하기를 누르면 조회 모달을 숨기고 수정 모달로 변경
-			function toggleUpdateModal() {
-	            $('#qnaModal').modal('hide'); // Hide the main qna modal
-	            $('#updateModal').modal('show'); // Show the update modal
-	        }
-			
-			//공지 수정하기가 종료/성공하면 조회 모달로 변경
-			$('#updateModal').on('hidden.bs.modal', function () {
-	            $('#qnaModal').modal('show');
-	        });
-			
-			/*
-			var data = new FormData();
-			jQuery.each(jQuery('#files')[0].files, function(i, file) {
-			    data.append('file-'+i, file);
-			});
-			function update() {
-                const updateData = {
-                		"qnaNo" : $('qnaNo').val(),
-    					"qnaTitle" : $('qnaTitle').val(),
-    					"qnaWriter" : $('updateWriter').val(),
-    					"qnaContent" : $('qnaContent').val(),
-    					"qnaCategory" : $('qnaCategory').val(),	
-    					"List<qnaFile>" :data
-                };
-                $.ajax({
-                    url: "qna",
-                    type: "put",
-                    enctype: 'multipart/form-data',  
-                    data: JSON.stringify(updateData),
-                    contentType: 'application/json',
-                    success: result => {
-                        if (result.data === 1) {
-                            document.getElementById('outerDiv').remove();
-                            findAll();
-                            $('#detail').slideUp(300);
-                        }
-                    }
-                });
-            }
-			
-			*/
 			
 			//공지 삭제하기 확인 프롬프트
 			function ConfirmDelete(qnaNo) {
@@ -567,23 +556,24 @@
                         	 $('#qnaModal').modal('hide');
                         	 $('#qnaModal').slideUp(300);
                              document.getElementById('outerDiv').remove();
-                             findAll();
+                             findAll(solvedBoolean,1);
                              alert('게시글 삭제 성공');
                          }
                      } 
                  });
              }
 			// 공지 전부 띄우기 
-			const findAll = () => {
+			const findAll = (solvedBoolean,page=1) => {
 			    currentCategory = 'all';
 			    currentPage = 0; // 페이지 갯수 초기화
 			    $.ajax({
-			        url: 'qna/' + currentCategory,
+			        url: 'qna/' + currentCategory+'/'+solvedBoolean+'/'+page,
 			        type: 'get',
 			        success: function(response)  {
 			        	qnaListGlobal = response.data.qnaList; // Access qnaList
 			            const pageInfo = response.data.pageInfo; // Access pageInfo
 			            renderqnas(qnaListGlobal.slice(0, qnasPerPage));
+			            renderPagination(pageInfo);
 			            currentPage++; // Increment page after loading initial data
 			            
 			        },
@@ -594,16 +584,17 @@
 			};
 
 			// Function to load qnas by category
-			const findByCate = (cate) => {
+			const findByCate = (cate,solvedBoolean,page=1) => {
 			    currentCategory = cate;
 			    currentPageCate[cate] = 0; // Initialize page count for this category
 			    $.ajax({
-			        url: 'qna/' + cate,
+			        url: 'qna/' + cate+'/'+solvedBoolean+'/'+page,
 			        type: 'get',
 			        success: response => {
 			            qnaListGlobal = response.data.qnaList; // Store initial qna list globally
-			        
+			            const pageInfo = response.data.pageInfo; // Access pageInfo
 			            renderqnasCate(cate, qnaListGlobal.slice(0, qnasPerPage));
+			            renderPagination(pageInfo);
 			            currentPageCate[cate]++; // Increment page after loading initial data
 			           
 			        },
@@ -652,8 +643,9 @@
 			    headerRow.className = 'headerRow';
 			    headerRow.appendChild(createDiv('번호', '70px'));
 			    headerRow.appendChild(createDiv('분류', '130px'));
-			    headerRow.appendChild(createDiv('제목', '400px'));
+			    headerRow.appendChild(createDiv('제목', '450px'));
 			    headerRow.appendChild(createDiv('날짜', '200px'));
+			    headerRow.appendChild(createDiv('해결', '150px'));
 			    outerDiv.appendChild(headerRow);
 
 			    qnaList.forEach(o => {
@@ -662,8 +654,9 @@
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
-			        qnaEl.appendChild(createDiv(o.qnaTitle, '400px'));
+			        qnaEl.appendChild(createDiv(o.qnaTitle, '450px'));
 			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
+			        qnaEl.appendChild(createDiv(o.solved, '150px'));
 			        outerDiv.appendChild(qnaEl);
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
@@ -683,16 +676,18 @@
 			    headerRow.className = 'headerRow';
 			    headerRow.appendChild(createDiv('번호', '70px'));
 			    headerRow.appendChild(createDiv('분류', '130px'));
-			    headerRow.appendChild(createDiv('제목', '400px'));
+			    headerRow.appendChild(createDiv('제목', '450px'));
 			    headerRow.appendChild(createDiv('날짜', '200px'));
+			    headerRow.appendChild(createDiv('해결', '150px'));
 			    outerDiv.appendChild(headerRow);
 			    qnaList.forEach(o => {
 			        const qnaEl = document.createElement('div');
 			        qnaEl.className = 'qnaEl';
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
-			        qnaEl.appendChild(createDiv(o.qnaTitle, '400px'));
+			        qnaEl.appendChild(createDiv(o.qnaTitle, '450px'));
 			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
+			        qnaEl.appendChild(createDiv(o.solved, '150px'));
 			        outerDiv.appendChild(qnaEl);
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
@@ -716,25 +711,29 @@
 
 			// 사이트 시작할 때 로딩하는 정보
 			window.onload = () => {
-				findAll();
+				findAll(solvedBoolean);
 
 			    // Attach click events to category buttons if they exist in the DOM
 			    const generalButton = document.getElementById('generalButton');
 			    const serviceButton = document.getElementById('serviceButton');
+			    const payButton = document.getElementById('payButton');
 			    const eventButton = document.getElementById('eventButton');
 			    const etcButton = document.getElementById('etcButton');
 
 			    if (generalButton) {
-			        generalButton.addEventListener('click', () => findAll());
+			        generalButton.addEventListener('click', () => findAll(solvedBoolean,1));
 			    }
 			    if (serviceButton) {
-			        serviceButton.addEventListener('click', () => findByCate('service'));
+			        serviceButton.addEventListener('click', () => findByCate('service',solvedBoolean,1));
+			    }
+			    if (payButton) {
+			    	payButton.addEventListener('click', () => findByCate('pay',solvedBoolean,1));
 			    }
 			    if (eventButton) {
-			        eventButton.addEventListener('click', () => findByCate('event'));
+			        eventButton.addEventListener('click', () => findByCate('event',solvedBoolean,1));
 			    }
 			    if (etcButton) {
-			        etcButton.addEventListener('click', () => findByCate('etc'));
+			        etcButton.addEventListener('click', () => findByCate('etc',solvedBoolean,1));
 			    }};
 			    
 			    
@@ -753,14 +752,8 @@
 			                $('#qnaModal #qnaHeader').text(textTitle);
 			                $('#qnaModal #qnaContent').text(qna.qnaContent);
 			                $('#qnaModal #files').empty();
+			                $('#qnaModal #comments').empty();
 			                
-			                
-			                $('#updateModal #qnaNo').val(qnaNo);
-			                $('#updateModal #qnaTitle').val(qna.qnaTitle);
-			                $('#updateModal #qnaContent').val(qna.qnaContent);
-			                $('#updateModal #files').empty();
-			                $('select[name^="qnaCategory"] option:selected').attr("selected",null);
-			                $("select[name=qnaCategory]").val(qna.qnaCategory).prop("selected", true);
 							
 			                // Append file links if files exist
 			                if (qna.files && qna.files.length > 0) {
@@ -773,38 +766,32 @@
 			                        
 			                        $('#qnaModal #files').append(fileLink);
 			                        
-			                        const updatefileLink = $('<div>')
-			                        .append($('<span>').text((index + 1) + '. 현재 업로드된 파일: '))
-			                        
-			                         .append($('<a>').attr('href', `${path0}/` + file.changedName) // Ensure this path is correct
-			                            .attr('download', file.originalName)
-			                            .text(file.originalName))
-			                        .append($('<input>').attr('type', 'file')
-			                            .attr('class', 'form-control-file border')
-			                            .attr('name', 'updatefile'))
-			                        .append($('<button>').attr('type', 'button')
-					                .attr('class', 'fileDelBtn')
-					                .text('삭제')
-					                .data('qnaFileNo', file.qnaFile_NO)
-					                .data('fileName', 'qnaFile_NO_' + index));
 			                    
-			                    $('#updateModal #files').append(updatefileLink);
 			                });
 							
-			                // Append additional input fields if less than 3 files exist
-			                for (let i = qna.files.length; i < 3; i++) {
-			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
-			                } 
-			            } else {
-			                // If no files exist
-			                $('#qnaModal #files').html('<p>파일이 존재하지 않습니다.</p>');
 			                
-			                // Show 3 input fields for new file uploads
-			                for (let i = 0; i < 3; i++) {
-			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
-			                }
-			            }
+				            } else {
+				                // If no files exist
+				                $('#qnaModal #files').html('<p>파일이 존재하지 않습니다.</p>');
+				                
+				                
+				            }
+			                if (qna.comments && qna.comments.length > 0) {
+			                    qna.comments.forEach(comment => {
+			                        const commentDiv = $('<div>')
+			                            .addClass('comment')
+			                            .append($('<div>').addClass('comment-content').text(comment.commentContent))
+			                            .append($('<div>').addClass('comment-details')
+			                                .append($('<span>').addClass('comment-author').text('Author: ' + comment.memberNo))
+			                                .append($('<span>').addClass('comment-date').text('Date: ' + comment.resdate))
+			                            );
 
+			                        $('#qnaModal #comments').append(commentDiv);
+			                    });
+			                } else {
+			                    // If no comments exist
+			                    $('#qnaModal #comments').html('<p>댓글이 없습니다.</p>');
+			                }
 			                document.getElementById('deleteButton').onclick = function() {
 			                    return ConfirmDelete(currentqnaNo);
 			                };
@@ -843,7 +830,58 @@
 
 			      alertPlaceholder.append(wrapper)
 			    }
+			    const renderPagination = (pageInfo) => {
+			        const paginationUl = document.getElementById('paginationUl');
+			        paginationUl.innerHTML = ''; // Clear previous pagination
 
+			        // "Previous" button
+			        const prevLi = document.createElement('li');
+			        prevLi.className = `page-item ${pageInfo.currentPage == 1 ? 'disabled' : ''}`;
+			        const prevLink = document.createElement('a');
+			        prevLink.className = 'page-link';
+			        prevLink.href = `#`;
+			        prevLink.innerText = '이전';
+			        prevLink.onclick = (e) => {
+			            e.preventDefault();
+			            if (pageInfo.currentPage > 1) {
+			                findAll(solvedBoolean,pageInfo.currentPage - 1); // Fetch previous page
+			            }
+			        };
+			        prevLi.appendChild(prevLink);
+			        paginationUl.appendChild(prevLi);
+
+			        // Page numbers
+			        for (let p = pageInfo.startPage; p <= pageInfo.endPage; p++) {
+			            const pageLi = document.createElement('li');
+			            pageLi.className = `page-item ${pageInfo.currentPage == p ? 'active' : ''}`;
+			            const pageLink = document.createElement('a');
+			            pageLink.className = 'page-link';
+			            pageLink.href = `#`;
+			            pageLink.innerText = p;
+			            pageLink.onclick = (e) => {
+			                e.preventDefault();
+			                findAll( solvedBoolean, p); // Fetch specific page
+			            };
+			            pageLi.appendChild(pageLink);
+			            paginationUl.appendChild(pageLi);
+			        }
+
+			        // "Next" button
+			        const nextLi = document.createElement('li');
+			        nextLi.className = `page-item ${pageInfo.currentPage == pageInfo.maxPage ? 'disabled' : ''}`;
+			        const nextLink = document.createElement('a');
+			        nextLink.className = 'page-link';
+			        nextLink.href = `#`;
+			        nextLink.innerText = '다음';
+			        nextLink.onclick = (e) => {
+			            e.preventDefault();
+			            if (pageInfo.currentPage < pageInfo.maxPage) {
+			                findAll(solvedBoolean,pageInfo.currentPage + 1); // Fetch next page
+			            }
+			        };
+			        nextLi.appendChild(nextLink);
+			        paginationUl.appendChild(nextLi);
+			    };
             </script>
 
 	</div>
