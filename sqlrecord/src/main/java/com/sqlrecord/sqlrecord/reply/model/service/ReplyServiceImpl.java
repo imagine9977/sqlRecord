@@ -77,4 +77,9 @@ public class ReplyServiceImpl implements ReplyService {
 		return replyMapper.delChReply(chReplyNo);
 	}
 
+	@Override
+	public int chReplyCount() {
+		return replyMapper.chReplyCount();
+	}
+
 }

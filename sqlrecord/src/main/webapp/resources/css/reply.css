@@ -142,7 +142,7 @@
         .s1favg { overflow: hidden; width: 0%; color: gold; margin: 0; }
         .s1bavg { position: absolute; color: gold; margin: 0;}
 
-        .popup { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; border: 1px solid #333; background: #fff; }
+        .popup { display: none; position: absolute; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; border: 1px solid #333; background: #fff; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); }
     
     	.review-content {

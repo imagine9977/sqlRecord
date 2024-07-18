@@ -12,7 +12,8 @@
 				STAR,
 				WRITE_DATE writeDate,
 				PRODUCT_NO productNo,
-				MEMBER_NO memberNo
+				MEMBER_NO memberNo,
+				STATUS
 		  FROM
 		  		REPLY
 	</sql>
@@ -30,7 +31,18 @@
 		SELECT
 				COUNT(*)
 		  FROM
-		  		REPLY	
+		  		REPLY
+  		 WHERE
+  		 		STATUS = 'Y'	
+	</select>
+	
+	<select id="chReplyCount" resultType="int">
+		SELECT
+		        COUNT(*)
+		  FROM
+		        CHREPLY
+		  WHERE
+		        REPLY_NO = REPLY_NO
 	</select>
 	
 	<select id="getReplyList" resultType="reply">
@@ -42,6 +54,7 @@
 		        r.WRITE_DATE writeDate,
 		        r.PRODUCT_NO productNo,
 		        r.MEMBER_NO memberNo,
+		        r.STATUS,
 		        m.MEMBER_ID memberId
 		  FROM
 		        REPLY r 
@@ -49,6 +62,8 @@
 		  		MEMBER m
 		    ON
 		        r.MEMBER_NO = m.MEMBER_NO
+		 WHERE
+		 		r.STATUS != 'D'      
 		 ORDER
     		BY
         		REPLY_NO
@@ -98,7 +113,8 @@
 						STAR,
 						WRITE_DATE,
 						PRODUCT_NO,
-						MEMBER_NO	
+						MEMBER_NO,
+						STATUS	
 			 			)
  			    VALUES (
  			    		REPLY_SEQ.NEXTVAL,
@@ -107,7 +123,8 @@
  			    		#{star},
  			    		SYSDATE,
  			    		#{productNo},
- 			    		#{memberNo}
+ 			    		#{memberNo},
+ 			    		'Y'
  			    )
 	</insert>
 	
@@ -150,13 +167,24 @@
    		 		CHREPLY_NO = #{chReplyNo}	
 	</update>
 		
-	<delete id="delReply" parameterType="reply">
-		DELETE 
-		  FROM 
-		  		REPLY
-  		 WHERE
-  		 		REPLY_NO = #{replyNo} 
-	</delete>
+	<update id="delReply" parameterType="reply">
+		UPDATE 
+				REPLY R
+		   SET 
+		        R.STATUS = CASE 
+          WHEN 
+                (SELECT COUNT(*) FROM CHREPLY CR WHERE CR.REPLY_NO = R.REPLY_NO) > 0 THEN 'N'
+                ELSE 'D'
+           END,
+                R.CONTENT = CASE 
+          WHEN 
+                (SELECT COUNT(*) FROM CHREPLY CR WHERE CR.REPLY_NO = R.REPLY_NO) > 0 THEN '삭제되었습니다'
+                ELSE R.CONTENT
+           END,
+           		R.STAR = 0
+         WHERE 
+                R.REPLY_NO = #{replyNo}	 
+	</update>
 	
 	<delete id="delChReply" parameterType="chReply">
 		DELETE 
@@ -185,7 +213,8 @@
 		          WHEN star >= 2.0 AND star < 3.0 THEN 4
 		          WHEN star >= 1.0 AND star < 2.0 THEN 5
 		        END AS rating_index
-		      FROM reply
+		      FROM REPLY
+		      WHERE star >= 1.0
 		      GROUP BY
 		        CASE 
 		          WHEN star = 5.0 THEN '5점 MAX'
@@ -203,7 +232,7 @@
 		        END
 		    ),
 		    total AS (
-		      SELECT COUNT(*) AS total_count FROM reply
+		      SELECT COUNT(*) AS total_count FROM REPLY
 		    )
 		    SELECT 
 		      s.rating_range,

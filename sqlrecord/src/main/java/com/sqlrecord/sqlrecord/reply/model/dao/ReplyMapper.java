@@ -23,6 +23,7 @@ public interface ReplyMapper {
 	List<ChReply> getChReplyList();
 	int changeChReply(ChReply chReply);
 	int delChReply(ChReply chReplyNo);
+	int chReplyCount();
 
 
 }

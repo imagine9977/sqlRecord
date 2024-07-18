@@ -20,4 +20,5 @@ public interface ReplyService {
 	public List<ChReply> getChReplyList();
 	public int changeChReply(ChReply chReply);
 	public int delChReply(ChReply chReplyNo);
+	public int chReplyCount();
 }

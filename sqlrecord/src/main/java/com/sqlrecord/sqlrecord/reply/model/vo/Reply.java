@@ -22,5 +22,6 @@ public class Reply {
      private int productNo;       
      private int memberNo;
      private String memberId;
+     private String status;
      
 }

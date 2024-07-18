@@ -1,23 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+<%-- 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri = "http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="java.util.*, java.util.Map" %>
 <c:set var="hpath" value="${pageContext.request.contextPath }" />
-<!DOCTYPE html>
+
 <html>
 <head>
 <script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
 <link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/searchHeader.css"/>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${hpath}/resources/css/reply.css">
+
+
+
 </head>
-<body>
+<body> --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+
+
 	<div class="container">
 	    <div class="review-header" style="text-align: center;">
 	        <h1>REVIEW</h1>
@@ -57,7 +65,6 @@
 	            <option value="24">24</option>
 	        </select>
 	    </div>
-	   
 	    <c:if test="${!empty sessionScope.loginUser}">
 	        <div id="commentForm">
 	            <div class="overlay" id="overlay"></div>
@@ -102,17 +109,14 @@
 	                    <span id="id">${reply.memberId}</span>
 	                    <div class="date">${reply.writeDate}</div>
 	                </div>
+	              
 	                <div class="review-content">
 	                    <span class="yrecon">${reply.content}</span>
-	                    <script>
-						    console.log("reply.status: ${reply.status}");
-						</script>
-						
-	                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
-	                        <div class="align-right">
-	                            <button class="editButton">수정</button>
-	                            <button class="deleteButton" style="margin-left: 10px; margin-right: 10px;">삭제</button>
-	                        </div>
+	                    <c:if test="${sessionScope.loginUser.memberNo eq reply.memberNo and reply.status ne 'N' }">
+		                        <div class="align-right">
+		                            <button class="editButton">수정</button>
+		                            <button class="deleteButton" style="margin-left: 10px; margin-right: 10px;">삭제</button>
+		                        </div>
 	                    </c:if>
 	                    
 	                    <!-- 본 리뷰 수정팝업창 , 답글 수정 팝업창 -->
@@ -156,7 +160,7 @@
 						                    </div>
 				            				<div class="chReplyedit">
 						                        <p class="reply-content">${chReply.chContent}</p>
-							                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
+							                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo }">
 							                        <div class="align-right">
 							                            <button class="editButton2" id="chReplyNo-${chReply.chReplyNo}">수정</button>
 							                            <button class="deleteButton2" id="chReplyNo-${chReply.chReplyNo}" style="margin-left: 10px; margin-right: 10px;">삭제</button>
@@ -180,10 +184,9 @@
 	        <a href="#">&raquo;</a>
 	    </div>
 	</div>
-<script>
-
 	
-
+	
+<script>
 	
 	$(document).ready(function() {
         const avgStar = $(".pavg").text(); 
@@ -601,5 +604,8 @@
        });
 	
 </script>
+
+
+<!-- 
 </body>
-</html>
+</html> -->

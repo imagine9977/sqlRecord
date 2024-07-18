@@ -81,7 +81,7 @@ public class ReplyController {
 	public String delReply(@ModelAttribute Reply replyNo) {
     	//model.addAttribute("rslt", replyService.delReply(replyNo));
     	replyService.delReply(replyNo);
-    	return "redirect:getReplyStarAll.do";
+    	return "redirect:product/detail";
 	}
     
     @PostMapping("delChReply.do")
@@ -123,6 +123,10 @@ public class ReplyController {
     	//리뷰 총 갯수 가져오기
     	int replyCount = replyService.replyCount();
     	model.addAttribute("replyCount", replyCount);
+    	
+    	//답글 총 갯수 가져오기
+    	int chReplyCount = replyService.chReplyCount();
+    	model.addAttribute("chReplyCount", chReplyCount);
 
     	//별점 점수대별 갯수 퍼센트 가져오기
     	List<Map<String, Object>> starAll = replyService.getReplyStarAll();
@@ -135,10 +139,10 @@ public class ReplyController {
         
         //댓글 목록 가져오기
         model.addAttribute("list", replyService.getReplyList());
-        
+        System.out.println(replyService.getReplyList());
         //답글 목록 가져오기
         model.addAttribute("chList", replyService.getChReplyList());
         
-        return "reply/list"; // 별점 분포를 표시할 JSP 페이지
+        return "product/detail"; // 별점 분포를 표시할 JSP 페이지
     }
 }

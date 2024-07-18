@@ -323,7 +323,7 @@
   </div>
 </div>
 
-<%@ include file="/WEB-INF/views/reply/list.jsp" %>
+<%@ include file="/WEB-INF/views/reply/list3.jsp" %>
 
 
  <script>
