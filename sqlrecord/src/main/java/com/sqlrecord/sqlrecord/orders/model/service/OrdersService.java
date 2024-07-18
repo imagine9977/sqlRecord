@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 public interface OrdersService {
@@ -24,6 +25,10 @@ public interface OrdersService {
 	MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum);
 
 	int updateMemberOrdersStatus(String string, int trackingNum);
+
+	int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx);
+
+	List<MemberOrdersEx> getOrdersEx(int memberNo);
 	
 	
 }
