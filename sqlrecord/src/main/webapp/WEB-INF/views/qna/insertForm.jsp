@@ -19,7 +19,14 @@
 				<div class="form-group">
 					<label for="qnaTitle">제목</label> <input type="text"
 						class="form-control" id="qnaTitle" name="qnaTitle" value=""
-						required>
+						required> 
+						<label for="memberId">작성자 아이디</label> <input type="text" id="writer"
+						class="form-control" value="${sessionScope.loginUser.memberId }"
+						name="boardWriter" readonly>
+						<input type="hidden" id="memberNo"
+						class="form-control" value="${sessionScope.loginUser.memberNo }"
+						name="memberNo" >
+
 				</div>
 				<div class="form-group">
 					<label for="qnaCategory">분류</label> <select class="form-control"
@@ -31,8 +38,8 @@
 					</select>
 				</div>
 				<div class="form-group">
-				<label for="secret">비밀글</label>
-				<input type="checkbox" id="secret" name="secret" data-switchval />
+					<label for="secret">비밀글</label> <input type="checkbox" id="secret"
+						name="secret" data-switchval />
 				</div>
 				<div class="form-group">
 					<label for="upfile1">첨부파일1</label> <input type="file" id="upfile1"
@@ -51,8 +58,8 @@
 					<textarea class="form-control" rows="5" id="qnaContent"
 						name="qnaContent" style="resize: none;" required></textarea>
 				</div>
-				<button type="reset" class="btn"
-					style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</button>
+				<a type="reset" class="btn" href="${hpath }/qnas"
+					style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</a>
 				<button type="submit" class="btn"
 					style="background-color: red; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">작성하기</button>
 			</div>

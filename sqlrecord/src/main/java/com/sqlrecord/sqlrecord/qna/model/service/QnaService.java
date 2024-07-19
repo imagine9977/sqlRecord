@@ -27,13 +27,17 @@ public interface QnaService {
 
 	public int insert(Qna qna);
 	
-	public int insertComment(int qnaNo);
+	public int insertComment(Comment newComment);
 	
 	public int delete(int qnaNo);
 
 	public int update(Qna qna);
 
 	public int updateComment(Comment comm);
+
+	public void deleteFile(int delfile);
+
+	public QnaFile findFileById(int delfile);
 	
 	//public int deleteFiles(int qnaNo);
 	

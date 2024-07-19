@@ -30,7 +30,7 @@ public class QnaForwardController {
 	
 	@GetMapping("qnas/update.do/{id}")
 	public ModelAndView updateForm(@PathVariable int id, ModelAndView mv) {
-		mv.addObject("notice", qnaService.findById(id)).setViewName("qna/updateForm");
+		mv.addObject("qna", qnaService.findById(id)).setViewName("qna/updateForm");
 
 		return mv;
 	}

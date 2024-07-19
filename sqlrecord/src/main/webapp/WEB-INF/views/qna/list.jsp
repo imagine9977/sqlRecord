@@ -36,15 +36,72 @@
 	margin: 0;
 	padding: 0;
 	background-color: #f4f4f4;
+	/* Container for the comments section */ 
+	#comments { padding : 15px;
+	background-color: #f9f9f9;
+	border-top: 1px solid #e0e0e0;
+	margin-top: 15px;
 }
 
-#qna-container .container {
+/* Individual comment container */
+.comment {
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+/* Comment content styling */
+.comment-content {
+	font-size: 14px;
+	color: #333;
+	margin-bottom: 5px;
+}
+
+/* Comment details container */
+.comment-details {
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	color: #777;
+}
+
+/* Author and date styling */
+.comment-author, .comment-date {
+	margin-right: 10px;
+}
+
+/* Add comment button styling */
+#addCommentButton {
+	margin-bottom: 10px;
+}
+
+/* Comment form styling */
+#commentForm {
+	margin-bottom: 10px;
+}
+
+#commentForm textarea {
+	width: 100%;
+	height: 80px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+#commentForm button {
+	float: right;
+}
+
+.container {
 	width: 80%;
 	margin: auto;
 	overflow: hidden;
 }
 
-#qna-container header {
+header {
 	background: #161616;
 	color: #ffffff;
 	padding-top: 30px;
@@ -52,14 +109,14 @@
 	border-bottom: #2f4f4f 3px solid;
 }
 
-#qna-container header h1 {
+header h1 {
 	text-align: center;
 	text-transform: uppercase;
 	margin: 0;
 	font-size: 24px;
 }
 
-#qna-container .filter-search-container {
+.filter-search-container {
 	width: 900px;
 	margin: auto;
 	margin-top: 10px;
@@ -68,26 +125,26 @@
 	justify-content: space-between;
 }
 
-#qna-container .filter-buttons {
+.filter-buttons {
 	display: flex;
 	flex: 1;
 	gap: 10px;
 }
 
-#qna-container .search {
+.search {
 	margin-left: 10px;
 }
 
-#qna-container .search form {
+.search form {
 	display: flex;
 }
 
-#qna-container .filter-buttons button:hover {
+.filter-buttons button:hover {
 	background-color: #f0f0f0;
 	color: #000;
 }
 
-#qna-container .filter-buttons button:focus {
+.filter-buttons button:focus {
 	text-decoration-line: underline;
 	text-decoration-thickness: 3px;
 	font-weight: bold;
@@ -95,13 +152,13 @@
 	background-color: #e0e0e0;
 }
 
-#qna-container .search input[type="search"] {
+.search input[type="search"] {
 	padding: 10px;
 	font-size: 16px;
 	width: 200px;
 }
 
-#qna-container .search input[type="submit"] {
+.search input[type="submit"] {
 	padding: 10px;
 	background: #2C2C2C;
 	color: #ffffff;
@@ -110,80 +167,80 @@
 	cursor: pointer;
 }
 
-#qna-container #files {
+#files {
 	background-color: lightgray;
 	width: 300px;
 	height: auto;
 }
 
-#qna-container #content {
+#content {
 	width: 1000px;
 	height: auto;
 	margin: auto;
 }
 
-#qna-container .load-more-container {
+.load-more-container {
 	display: flex;
 	justify-content: center;
 	margin-top: 20px;
 }
 
-#qna-container #outerDiv {
+#outerDiv {
 	width: 1000px;
 	display: block;
 	overflow: auto;
 	padding-top: 20px;
 }
 
-#qna-container .headerRow, #qna-container .qnaEl {
+.headerRow, .qnaEl {
 	display: flex;
 	align-items: center;
 }
 
-#qna-container .headerRow>div, #qna-container .qnaEl>div {
+.headerRow>div, .qnaEl>div {
 	padding: 10px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-#qna-container #qnaModal {
+#qnaModal {
 	top: 100px;
-	min-height: 300px;
-	height: auto;
+	min-height: 900px;
+
 	z-index: 999999;
 }
 
-#qna-container #updateModal {
+#updateModal {
 	top: 100px;
-	min-height: 300px;
+	min-height: 900px;
 	height: auto;
 	z-index: 9999999;
 }
 
-#qna-container .modal-content {
-	height: 60%;
+.modal-content {
+	height: 80%;
 	border: 1rem solid;
 	border-radius: 10;
 }
 
-#qna-container .inline-header {
+.inline-header {
 	display: inline-block;
 	margin-right: 10px;
 }
 
-#qna-container .modal-header {
+.modal-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-#qna-container #title {
+#title {
 	margin-top: 100px;
 	text-align: center;
 }
 
-#qna-container #detail {
+#detail {
 	background-color: #23C293;
 	width: 800px;
 	margin: auto;
@@ -193,13 +250,13 @@
 	display: none;
 }
 
-#qna-container #detail>div {
+#detail>div {
 	height: 50px;
 	line-height: 50px;
 	border: 1px solid rgba(255, 255, 255, 0.656);
 }
 
-#qna-container .button-line {
+.button-line {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -208,14 +265,14 @@
 	margin: 20px 0;
 }
 
-#qna-container .button-line button {
+.button-line button {
 	padding: 10px 20px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
-#qna-container .add-qna-button {
+.add-qna-button {
 	padding: 10px 20px;
 	background: #4CAF50;
 	color: #ffffff;
@@ -224,48 +281,50 @@
 	cursor: pointer;
 }
 
-#qna-container .add-qna-button:hover {
+.add-qna-button:hover {
 	background: #45a049;
 }
 
-#qna-container .col-category {
+.col-category {
 	width: 10%;
 }
 
-#qna-container .col-title {
+.col-title {
 	width: 50%;
 }
 
-#qna-container .col-date {
+.col-date {
 	width: 20%;
 }
 
-#qna-container #liveAlertPlaceholder {
+#liveAlertPlaceholder {
 	z-index: 10;
 }
-#qna-container #pagingArea {
-    text-align: center;
-    margin-top: 20px; /* Optional, to add some space above the pagination */
-    display: inline-block;
-    width:500px;
-    margin-left:500px;
+
+#pagingArea {
+	text-align: center;
+	margin-top: 20px;
+	/* Optional, to add some space above the pagination */
+	display: inline-block;
+	width: 500px;
+	margin-left: 500px;
 }
 
-
-#qna-container .pagination .page-item.active .page-link {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
+.pagination .page-item.active .page-link {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
 }
 
-#qna-container .pagination .page-item .page-link {
-    color: #007bff;
+.pagination .page-item .page-link {
+	color: #007bff;
 }
 
-#qna-container .pagination .page-item .page-link:hover {
-    background-color: #0056b3;
-    color: white;
-    border-color: #0056b3;
+.pagination .page-item .page-link:hover {
+	background-color: #0056b3;
+	color: white;
+	border-color: #0056b3;
+}
 }
 </style>
 </head>
@@ -304,7 +363,7 @@
 			</div>
 			<div class="modal fade" id="qnaModal" tabindex="-1"
 				aria-labelledby="qnaModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
+				<div class="modal-dialog modal-dialog-scrollable modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 id="qnaHeader"></h5>
@@ -325,12 +384,15 @@
 							<hr />
 							<div id="qna-comments">
 								<div id="comments"></div>
-								<button id="addCommentButton" class="btn btn-primary">Add Comment</button>
+								<button id="addCommentButton" class="btn btn-primary">Add
+									Comment</button>
 
 
 								<div id="commentForm" style="display: none;">
-								    <textarea id="newCommentContent" placeholder="Enter your comment"></textarea>
-								    <button id="submitCommentButton" class="btn btn-success">Submit Comment</button>
+									<textarea id="newCommentContent"
+										placeholder="Enter your comment"></textarea>
+									<button id="submitCommentButton" class="btn btn-success">Submit
+										Comment</button>
 								</div>
 							</div>
 						</div>
@@ -338,17 +400,13 @@
 							<div id="qnaActions">
 								<a class="btn btn-warning user-only" id="goToUpdatePage"
 									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
-									수정하기</a>&nbsp;&nbsp; 
-									<a class="btn btn-danger user-only"
+									수정하기</a>&nbsp;&nbsp; <a class="btn btn-danger user-only"
 									id="deleteButton"
 									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
 									삭제하기</a>&nbsp;&nbsp; <a class="btn btn-secondary"
 									data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
-								<button class="btn share-button btn-secondary"
-									title="Share this article">
-									<span>공유하기</span>
-								</button>
+
 							</div>
 						</div>
 					</div>
@@ -432,12 +490,17 @@
 			let currentCategory = 'all'; // 현재 보고 있는 카테고리 추적
 			let qnaFileListGlobal = [];
 			let pageInfoGlobal = {};
-			let currentqnaNo=0;
+			let currentQnaNo=0;
 			
 			var fileNoArry = [];
 			var fileNameArry = [];
 			var userRole = '${sessionScope.loginUser.memberId}';
-
+			
+			
+			document.getElementById("goToUpdatePage").onclick = function () {
+		        location.href = "qnas/update.do/"+currentQnaNo;
+		    };
+			
 		    document.addEventListener('DOMContentLoaded', function() {
 		        if (userRole === 'admin') {
 		            var adminElements = document.querySelectorAll('.admin-only');
@@ -479,8 +542,8 @@
 			    }
 
 			    const newComment = {
-			        qnaNo: currentqnaNo,
-			        memberId: userRole ,
+			        qnaNo: currentQnaNo,
+			        memberNo: ${sessionScope.loginUser.memberNo} ,
 			        commentContent: commentContent, 
 			    };
 
@@ -490,22 +553,21 @@
 			        contentType: 'application/json',
 			        data: JSON.stringify(newComment),
 			        success: response => {
-			            if (response.success) {
+			            
 			                // Add the new comment to the comments section
 			                const commentDiv = $('<div>')
 			                    .addClass('comment')
+			                    .append($('<span>').addClass('comment-author').text('Author: ' + newComment.memberNo))
+			                     .append($('<span>').addClass('comment-date').text('Date: ' + newComment.resdate)) //댓글등록시간이 안나옴
 			                    .append($('<div>').addClass('comment-content').text(newComment.commentContent))
 			                    .append($('<div>').addClass('comment-details')
-			                        .append($('<span>').addClass('comment-author').text('Author: ' + newComment.memberNo))
-			                        .append($('<span>').addClass('comment-date').text('Date: ' + newComment.resdate))
+			                        
 			                    );
 
 			                $('#qnaModal #comments').append(commentDiv);
 			                $('#newCommentContent').val(''); // Clear the comment input
 			                $('#commentForm').hide(); // Hide the comment form
-			            } else {
-			                alert('Failed to add comment');
-			            }
+			            
 			        }
 			    });
 			});
@@ -685,6 +747,7 @@
 			        qnaEl.className = 'qnaEl';
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
+			        if(userRole !=null || userRole!=o.qnaId)
 			        qnaEl.appendChild(createDiv(o.qnaTitle, '450px'));
 			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
 			        qnaEl.appendChild(createDiv(o.solved, '150px'));
@@ -746,7 +809,7 @@
 			            type: 'get',
 			            success: response => {
 			                const qna = response.data;
-			                currentqnaNo = parseInt(qnaNo);
+			                currentQnaNo = parseInt(qnaNo);
 			                // Update modal content with qna details
 			                var textTitle = qnaNo+'. [' +getKoreanqnaCategory(qna.qnaCategory)+'] '+qna.qnaTitle;
 			                $('#qnaModal #qnaHeader').text(textTitle);
@@ -780,10 +843,11 @@
 			                    qna.comments.forEach(comment => {
 			                        const commentDiv = $('<div>')
 			                            .addClass('comment')
+			                            .append($('<span>').addClass('comment-author').text('작성자: ' + comment.memberNo+'  '))
+			                            .append($('<span>').addClass('comment-date').text('날짜: ' + comment.resdate))
 			                            .append($('<div>').addClass('comment-content').text(comment.commentContent))
 			                            .append($('<div>').addClass('comment-details')
-			                                .append($('<span>').addClass('comment-author').text('Author: ' + comment.memberNo))
-			                                .append($('<span>').addClass('comment-date').text('Date: ' + comment.resdate))
+			                                
 			                            );
 
 			                        $('#qnaModal #comments').append(commentDiv);
@@ -793,27 +857,14 @@
 			                    $('#qnaModal #comments').html('<p>댓글이 없습니다.</p>');
 			                }
 			                document.getElementById('deleteButton').onclick = function() {
-			                    return ConfirmDelete(currentqnaNo);
+			                    return ConfirmDelete(currentQnaNo);
 			                };
 
 			                $('#qnaModal').modal('show');
 			            }
 			        });
 			    });
-				//공지사항 공유하기
-			    const shareButton = document.querySelector('.share-button');
-			    shareButton.addEventListener('click', async () => {
-			    	  try {
-			    	    await navigator.share({
-			    	      title: 'SQLRECORD 공지사항',
-			    	      text: 'SQLRECORD 공지사항 공유',
-			    	      url: '',
-			    	    });
-			    	    console.log('공유 성공');
-			    	  } catch (e) {
-			    	    console.log('공유 실패');
-			    	  }
-			    	});
+			
 			    
 			    //공지사항 삭제/오류 시 나오는 에러
 			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')

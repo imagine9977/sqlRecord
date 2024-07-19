@@ -45,7 +45,7 @@ public interface QnaMapper {
 
 	int saveFile(QnaFile file);
 	
-	int insertComment(int qnaNo);
+	int insertComment(Comment newComment);
 	
 	int delete(int qnaNo);
 	

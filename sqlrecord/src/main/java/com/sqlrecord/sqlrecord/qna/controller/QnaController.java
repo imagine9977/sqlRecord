@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sqlrecord.sqlrecord.common.vo.PageInfo;
 import com.sqlrecord.sqlrecord.message.Message;
 import com.sqlrecord.sqlrecord.qna.model.service.QnaService;
+import com.sqlrecord.sqlrecord.qna.model.vo.Comment;
 import com.sqlrecord.sqlrecord.qna.model.vo.PaginationAndList;
 import com.sqlrecord.sqlrecord.qna.model.vo.Qna;
 import com.sqlrecord.sqlrecord.qna.model.vo.QnaFile;
@@ -120,6 +122,17 @@ public class QnaController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 
 	}
+	@PostMapping("/comment/")
+	public ResponseEntity<Message>  insertComment(@RequestBody Comment newComment, HttpSession session) {
+        // Assuming you have a service method to save the comment
+		int qnaNumber =qnaService.insertComment(newComment);
+        if (qnaNumber>0) {
+        	Message responseMsg = Message.builder().data(qnaNumber).message("댓글 등록 성공").build();
+        	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+        } else {
+        	return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("댓글 등록 실패").build());
+        }
+    }
 	
 	@PostMapping("/insert.do")
 	public String insert(@ModelAttribute Qna qna, @RequestParam("upfile") MultipartFile[] upfiles,
@@ -132,15 +145,15 @@ public class QnaController {
 			for (MultipartFile file : upfiles) {
 				if (!file.getOriginalFilename().isEmpty()) {
 					String originName = file.getOriginalFilename();
-					QnaFile nfile = new QnaFile();
-					nfile.setOriginalName(originName);
-					nfile.setChangedName(saveFile(file, session));
-					files.add(nfile);
+					QnaFile QnaFile = new QnaFile();
+					QnaFile.setOriginalName(originName);
+					QnaFile.setChangedName(saveFile(file, session));
+					files.add(QnaFile);
 				}
 			}
 		}
 
-		qna.setFiles(files); // Assuming qna has a List<NFile> attribute named 'files'
+		qna.setFiles(files); // Assuming qna has a List<QnaFile> attribute named 'files'
 
 		if (qnaService.insert(qna) > 0) {
 			session.setAttribute("alertMsg", "게시글 작성 성공");
@@ -160,7 +173,7 @@ public class QnaController {
 		log.info("currentTime: {}", new Date());
 		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
-		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/notice/");
+		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/qna/");
 
 		String changeName = "KH_" + currentTime + "_" + num + ext;
 		File directory = new File(savePath);
@@ -174,8 +187,79 @@ public class QnaController {
 			e.printStackTrace();
 		}
 
-		return "resources/uploadFiles/notice/" + changeName; // 얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
+		return "resources/uploadFiles/qna/" + changeName; // 얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
 	}
+	// 업데이트 페이지용
+		@PostMapping("/update.do")
+		public String updateForm(Qna qna, @RequestParam("updatefile") MultipartFile[] upfiles, HttpSession session,
+				@RequestParam(value = "fileNoDel", required = false) String fileNoDel) {
+			log.info("start");
+			log.info(fileNoDel);
+			List<QnaFile> qnaFiles = new ArrayList<>();
+			String savePath = session.getServletContext().getRealPath("");
+			if (fileNoDel != null && !fileNoDel.isEmpty()) {
+				String[] delFilesArray = fileNoDel.split(",");
+				int[] delfiles = new int[delFilesArray.length];
+				for (int i = 0; i < delFilesArray.length; i++) {
+					delfiles[i] = Integer.parseInt(delFilesArray[i]);
+				}
 
+				for (int delfile : delfiles) {
+					QnaFile tempFile = new QnaFile();
+					tempFile = qnaService.findFileById(delfile);
+		
+					log.info("Deleting file with ID: " + delfile);
+					String filePath = tempFile.getChangedName();
+					File xFile = new File(savePath + filePath);
+					
+					boolean fileDelete = xFile.delete();
+					
+					qnaService.deleteFile(delfile);
+				}
+			} else {
+				log.info("No files to delete.");
+			}
+
+			if (upfiles != null) {
+				log.info(upfiles.toString());
+
+				for (MultipartFile reupfile : upfiles) {
+					log.info(reupfile.toString());
+					if (!reupfile.getOriginalFilename().isEmpty()) {
+
+						QnaFile qnaFile = new QnaFile();
+
+						qnaFile.setOriginalName(reupfile.getOriginalFilename());
+						qnaFile.setChangedName(saveFile(reupfile, session));
+						log.info(qnaFile.toString());
+						qnaFiles.add(qnaFile);
+					}
+
+				}
+			}
+			
+			Qna newqna = new Qna();
+			newqna.setQnaNo(qna.getQnaNo());
+			newqna.setSecret(qna.getSecret());
+			newqna.setQnaCategory(qna.getQnaCategory());
+			newqna.setQnaContent(qna.getQnaContent());
+			newqna.setQnaTitle(qna.getQnaTitle());
+			if (qnaFiles.equals(qna.getFiles())) {
+				newqna.setFiles(qna.getFiles());
+			} else {
+				newqna.setFiles(qnaFiles);
+			}
+			log.info(newqna.toString());
+			log.info("updatef files");
+			int result = qnaService.update(newqna);
+			log.info(" result:{}", result);
+
+			if (result == 0) {
+				session.setAttribute("errorMsg", "게시글 작성 실패");
+				return "redirect:/qnas/update.do/" + newqna.getQnaNo();
+			}
+			session.setAttribute("alertMsg", "게시글 작성 성공");
+			return "redirect:/qnas";
+		}
 	
 }

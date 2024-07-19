@@ -57,6 +57,7 @@ public class QnaServiceImpl implements QnaService{
 			List<QnaFile> qnafiles = qnaMapper.findFiles(qnaNo);
 			if(qnafiles!=null) qna.setFiles(qnafiles);
 			List<Comment> qnaComments = qnaMapper.findComments(qnaNo);
+			log.info(qnaComments.toString());
 			if(qnaComments!=null) qna.setComments(qnaComments);
 		}
 		
@@ -110,8 +111,9 @@ public class QnaServiceImpl implements QnaService{
 		    return result;
 		}
 	@Override
-	public int insertComment(int qnaNo) {
-		return qnaMapper.insertComment(qnaNo);
+	public int insertComment(Comment newComment) {
+		log.info(newComment.toString());
+		return qnaMapper.insertComment(newComment);
 	}
 	@Override
 	public int delete(int qnaNo){
@@ -146,5 +148,17 @@ public class QnaServiceImpl implements QnaService{
 		
 		return qnaMapper.updateComment(comm);
 		
+	}
+
+	@Override
+	public void deleteFile(int delfile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public QnaFile findFileById(int delfile) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

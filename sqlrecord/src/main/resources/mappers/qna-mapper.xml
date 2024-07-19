@@ -42,8 +42,8 @@
 		QNA_NO qnaNo,
 		MEMBER_NO memberNo,
 		COMMENT_CONTENT commentContent,
-		to_char(RESDATE,'yyyy-mm-dd') createDate,
-		STATUS delStatus
+		to_char(RESDATE,'yyyy-mm-dd') resdate,
+		STATUS status
 		FROM
 		COMM
 		WHERE
@@ -235,13 +235,13 @@
 		 AND 
 		 QNA_NO = #{qnaNo}
 	</select>
-	<select id="findComments" resultType="qnaFile">
+	<select id="findComments" resultType="comm">
 		<include refid="selectQnaComments"/>
 		 AND 
 		 QNA_NO = #{qnaNo}
 	</select>
 	
-	<select id="findFiles"  resultType="comm">
+	<select id="findFiles"  resultType="qnaFile">
 	<include refid="selectQnaFiles"/>
 		 WHERE 
 		 QNA_NO = #{qnaNo}</select>
@@ -263,15 +263,15 @@
 		#{originalName}, #{changedName},
 		#{qnaNo})
 	</insert>
-	<insert id="insertComment" parameterType="_int">
+	<insert id="insertComment" parameterType="comm">
 		INSERT INTO COMM
 		VALUES(
-		COMM_SEQ,
+		COMM_SEQ.NEXTVAL,
 		#{qnaNo},
 		#{memberNo},
 		#{commentContent},
 		SYSDATE,
-		'N')
+		'Y')
 		
 	</insert>
 	<update id="delete" parameterType="_int">
