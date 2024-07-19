@@ -367,6 +367,13 @@
 		}
 		#rebtn2:hover {background: #294242;}
 		
-		.chContent {
-			wit
-		}
+		#yimgbox {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            display: none; 
+        }
+        #yimgbox img {
+            max-width: 200px; 
+            max-height: 200px; 
+        }

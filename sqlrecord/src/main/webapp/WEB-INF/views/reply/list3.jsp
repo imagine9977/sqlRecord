@@ -75,7 +75,7 @@
 	            </div>
 	            <div class="review-header">
 	                <p>리뷰 작성하기</p>
-	                <input type="hidden" name="productNo" id="productNo" value="1"> <!-- 상품 번호를 포함 -->
+	                <input type="hidden" name="productNo" id="productNo" value="21"> <!-- 상품 번호를 포함 -->
 	                <input type="hidden" name="depth" id="depth" value="0"> <!-- 기본 댓글이므로 깊이는 0 -->
 	                <div class="stars">
 	                    <div class="score-wrapper">
@@ -86,16 +86,18 @@
 	                        <span class="point" style="font-size: 25px;">평점</span>
 	                    </div>
 	                </div>
-	                <input style="height: 30px;" class="recontent" id="content" name="content" type="text" placeholder="리뷰를 작성해주세요.">
+	                <input style="height: 30px; margin-bottom:10px;" class="recontent" id="content" name="content" type="text" placeholder="리뷰를 작성해주세요.">
 	                <button class="rebtn1" id="rebtn1">
 	                    <img style="width: 30px; height: 30px;" src="${hpath}/resources/imgs/login/move_9743734.png" alt="">
 	                </button>
-	                <input type="file" id="fileInput" multiple="multiple" style="display: none;">
+	                <input type="file" id="fileInput" multiple="multiple" style="display: none;" onchange="loadImg(this)">
 	                <button class="rebtn2" id="rebtn2" onclick="commentWrite()">등록</button>
+	                <div id="yimgbox">
+                    </div>
 	            </div>
 	        </div>
 	    </c:if>
-	    <c:forEach var="reply" items="${list }" varStatus="status" begin="0">
+	    <c:forEach var="reply" items="${list }">
 	        <div class="reviews" id="review-${reply.replyNo}" data-replyNo="${reply.replyNo}">
 	            <div class="review">
 	                <div class="review-title">
@@ -112,6 +114,7 @@
 	              
 	                <div class="review-content">
 	                    <span class="yrecon">${reply.content}</span>
+	                    
 	                    <c:if test="${sessionScope.loginUser.memberNo eq reply.memberNo and reply.status ne 'N' }">
 		                        <div class="align-right">
 		                            <button class="editButton">수정</button>
@@ -578,6 +581,38 @@
            });
        } 
        
+       
+       
+		function loadImg(inputFile) {
+		    	   
+		    	   const yimgbox = document.getElementById('yimgbox');
+		    	   yimgbox.innerHTML=""; // 다시 선택할경우 리셋 필요함
+		    	   
+		    	   
+		   			if(inputFile.files.length) {	//파일이 첨부되었다면
+		   				for(let i=0; i<inputFile.files.length; i++){
+		    				const reader = new FileReader();
+			    			reader.readAsDataURL(inputFile.files[i]);
+		   					
+		    			// reader객체를 가지고 파일을 읽어들이는 메소드를 호출
+		    			// 파일 읽기가 완료되면 실행할 핸들러 정의
+			    			reader.onload = e => {
+			                    const img = document.createElement('img');
+			                    img.src = e.target.result;
+			                    img.id = `img${i}`;
+			                    img.alt = `Image ${i + 1}`;
+			                    img.style.marginRight = '15px';
+		
+			                    yimgbox.appendChild(img);
+			                };
+		    			};
+		    			yimgbox.style.display = "flex"; // 이미지 박스 표시
+		   		    } else {
+		   		        yimgbox.style.display = "none"; // 파일이 선택되지 않은 경우 숨김
+		   		    }
+		   		} 
+      		 
+       
        /*
        function reloadComments() {
            $.ajax({
@@ -593,16 +628,17 @@
            });
        }  
       */
+      	  document.getElementById("rebtn1").addEventListener("click", function() {
+          document.getElementById("fileInput").click();
+          });
 
-       document.getElementById("rebtn1").addEventListener("click", function() {
-       document.getElementById("fileInput").click();
-       });
+          document.getElementById("fileInput").addEventListener("change", function() {
+              const selectedFile = this.files[0];
+              console.log("선택된 파일:", selectedFile);
+          });
+      
 
-       document.getElementById("fileInput").addEventListener("change", function() {
-           const selectedFile = this.files[0];
-           console.log("선택된 파일:", selectedFile);
-       });
-	
+       
 </script>
 
 
