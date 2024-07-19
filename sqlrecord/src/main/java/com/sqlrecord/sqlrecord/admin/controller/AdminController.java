@@ -129,15 +129,8 @@ public class AdminController {
             formattedMember.put("memberNo", member.getMemberNo());
             formattedMember.put("memberId", member.getMemberId());
             formattedMember.put("name", member.getName());
-            formattedMember.put("birth", member.getBirth());
-            formattedMember.put("email", member.getEmail());
-            formattedMember.put("addr1", member.getAddr1());
-            formattedMember.put("addr2", member.getAddr2());
-            formattedMember.put("tell", member.getTell());
-            formattedMember.put("postcode", member.getPostcode());
             formattedMember.put("resdate", member.getResDate());
-            formattedMember.put("status", member.getStatus());
-            formattedMember.put("pointAmount", member.getPointAmount());
+            formattedMember.put("point", member.getPoint());
             formattedMemberList.add(formattedMember);
         }
         

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="hpath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +7,208 @@
 <title>관리자 페이지</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="${hpath }/resources/css/admin.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .tab-bar {
+        width: 100%;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        background-color: white;
+        border-bottom: 1px solid #2f4f4f;
+    }
+    .tab-btnBox {
+        width: 80%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tab-btnItem {
+        width: 10%;
+        height: 100%;
+        min-width: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        border-right: 1px solid #929292;
+        border-left: 1px solid #929292;
+    }
+    .tab-btnItem:not(:last-child) { border-right: none; }
+    .tab-btnItem:first-child { border-left: 1px solid #929292; }
+    .tab-btnItem:last-child { border-right: 1px solid #929292; }
+    .tab-btnItem a {
+        color: black;
+        text-decoration: none;
+    }
+    .mainBox {
+        width: 1500px;
+        min-width: 1200px;
+        height: auto;
+        border: 1px solid black;
+        margin: 0 auto;
+        padding: 10px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .active {
+        background-color: #2f4f4f;
+    }
+    .tab-btnItem.active a {
+        color: white;
+    }
+    .sidebar_area {
+        display: block;
+        width: 18%;
+        height: auto;
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .sidebar-element a {
+        text-decoration: none;
+        color: inherit;
+    }
+    .sidebar-element a:hover {
+        text-decoration: underline;
+    }
+    .sidebar h2 {
+        font-weight: bold;
+        margin: 30px 0px;
+    }
+    .content-area {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+    .accordion-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    .accordion-table th, .accordion-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .accordion-table th {
+        background-color: #f2f2f2;
+    }
+    .accordion-table .accordion-content {
+        display: none;
+    }
+    .accordion-table .accordion-content.active {
+        display: table-row;
+    }
+    .accordion-table .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+    .accordion-table .pagination {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .accordion-table .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #333;
+    }
+    .accordion-table .pagination a.active {
+        font-weight: bold;
+    }
+    .accordion-table .record-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+    .accordion-table .record-actions button {
+        margin-left: 5px;
+    }
+    .accordion-table .table-footer {
+        text-align: right;
+        margin: 20px 0;
+    }
+    .accordion-table .table-footer button {
+        margin-left: 5px;
+    }
+    .no-data {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 18px;
+        color: #666;
+    }
+    .sidebar-element {
+        font-size: 18px;
+        padding: 1rem 0px;
+    }
+    .sidebar h2 {
+        padding: 1rem 0px;
+    }
+    .pagination-custom {
+    margin-top: 20px;
+    text-align: center;
+	}
+	
+	.pagination-custom a {
+	    display: inline-block;
+	    padding: 5px 10px;
+	    margin: 0 10px;
+	    text-decoration: none;
+	    color: #333;
+	    font-size: 12px;
+	    border: 1px solid #ddd;
+	    border-radius: 3px;
+	}
+	
+	.pagination-custom a.active {
+	    background-color: #2f4f4f;
+	    color: white;
+	    border-color: #2f4f4f;
+	}
+	
+	.pagination-custom a:hover:not(.active) {
+	    background-color: #ddd;
+	}
+	.accordion-table .accordion-content {
+        display: none;
+    }
+
+    .accordion-table .member-details {
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .toggle-details {
+        cursor: pointer;
+    }
+    .member-details {
+	    position: relative;
+	    padding: 10px;
+	    background-color: #f9f9f9;
+	    min-height: 150px;  /* 필요에 따라 조정 */
+	}
+	
+	.details-content {
+	    margin-right: 100px;  /* 버튼 영역을 위한 여백 */
+	}
+	
+	.record-actions {
+	    position: absolute;
+	    bottom: 10px;
+	    right: 10px;
+	}
+	
+	.record-actions button {
+	    margin-left: 5px;
+	}
+</style>
 </head>
 <body>
 <!-- 헤더 -->
@@ -345,23 +545,18 @@ $(document).ready(function() {
 	                        '<td>' + member.memberId + '</td>' +
 	                        '<td>' + member.name + '</td>' +
 	                        '<td>' + member.resdate + '</td>' +
-	                        '<td>' + member.pointAmount + '</td>' +
+	                        '<td>' + member.point + '</td>' +
 	                        '<td><button class="btn btn-sm btn-secondary toggle-details">상세보기</button></td>' +
 	                    '</tr>' +
 	                    '<tr class="accordion-content">' +
 		                    '<td colspan="7">' +
 		                        '<div class="member-details">' +
 		                            '<div class="details-content">' +
-		                                '<h3>회원 상세 정보</h3><br/>' +
-		                                '<p><b>아이디:</b> ' + member.memberId + '</p>' +
-		                                '<p><b>이름:</b> ' + member.name + '</p>' +
-		                                '<p><b>생년월일:</b> ' + member.birth + '</p>' +
-		                                '<p><b>이메일:</b> ' + member.email + '</p>' +
-		                                '<p><b>연락처:</b> ' + member.tell + '</p>' +
-		                                '<p><b>주소:</b> ' + member.addr1 + member.addr2  + '(' + member.postcode + ')' + '</p>' +
-		                                '<p><b>가입일:</b> ' + member.resdate + '</p>' +
-		                                '<p><b>회원상태:</b> ' + member.status + '</p>' +
-		                                '<p><b>보유 포인트:</b> ' + member.pointAmount + '</p>' +
+		                                '<p>회원 상세 정보</p>' +
+		                                '<p>아이디: ' + member.memberId + '</p>' +
+		                                '<p>이름: ' + member.name + '</p>' +
+		                                '<p>가입일: ' + member.resdate + '</p>' +
+		                                '<p>보유 포인트: ' + member.point + '</p>' +
 		                            '</div>' +
 		                            '<div class="record-actions">' +
 		                                '<button class="btn btn-sm btn-secondary" onclick="editMember(' + member.memberNo + ')" type="button">수정</button>' +

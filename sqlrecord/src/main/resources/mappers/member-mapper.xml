@@ -27,13 +27,8 @@
 				M.MEMBER_NO memberNo,
 	            M.MEMBER_ID memberId,
 	            M.NAME name,
-	            M.TELL tell,
-	            M.ADDR1 addr1,
-	            M.ADDR2 addr2,
-	            M.POSTCODE postcode,
-	            M.STATUS status,
 	            M.RESDATE resdate,
-	            SUM(PO.POINT_AMOUNT) CURRENT_POINT AS currentPoint
+	            SUM(PO.POINT_AMOUNT) CURRENT_POINT
 	      FROM
 	            MEMBER M
 	      LEFT
@@ -167,15 +162,8 @@
 		        M.MEMBER_NO memberNo,
 		        M.MEMBER_ID memberId,
 		        M.NAME name,
-		        M.TELL tell,
-		        M.ADDR1 addr1,
-		        M.ADDR2 addr2,
-		        M.POSTCODE postcode,
-		        M.STATUS status,
-		        M.BIRTH birth,
-		        M.EMAIL email,
 		        M.RESDATE resdate,
-		        SUM(PO.POINT_AMOUNT) pointAmount
+		        SUM(PO.POINT_AMOUNT) CURRENT_POINT
 		  FROM
 		        MEMBER M
 		  LEFT
@@ -184,10 +172,10 @@
 		 WHERE
 		        M.MEMBER_ID != 'admin'
 		 GROUP
-			BY
-				M.MEMBER_NO, M.MEMBER_ID, M.NAME, M.TELL, M.ADDR1, M.ADDR2, M.POSTCODE, M.STATUS, M.RESDATE, M.BIRTH, M.EMAIL
+		    BY
+		        M.MEMBER_ID, M.NAME, M.RESDATE, M.MEMBER_NO
 		 ORDER
-			BY
+		    BY
 		        M.MEMBER_NO ASC
 	</select>
 
