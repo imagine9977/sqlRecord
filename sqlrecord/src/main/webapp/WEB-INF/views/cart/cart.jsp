@@ -128,39 +128,27 @@ input[class="check"]:checked + label:after {
       <div>가격</div>
       <div>수량</div>
       
-      
-      <c:choose>
-      <c:when test="${not empty list }">
-	      <c:forEach var="item" items="${list }" varStatus="status">
-	      
-	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
-	      <label for="check${status.count }"></label>
-	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.productPhotosList.get(0).productPhotosPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
-	      </div>
-	      <div>${ item.product.productName }</div>
-	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
-	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cartAmount}></div>
-	      <input type="text" name="member_no" value="${ item.member.memberNo }" hidden="hidden">
-	      </c:forEach>
-      </c:when>
-      
-      <c:otherwise>
-      	  <c:forEach var="item" items="${glist }" varStatus="status">
-	      
-	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
-	      <label for="check${status.count }"></label>
-	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.productPhotosList.get(0).productPhotosPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
-	      </div>
-	      <div>${ item.product.productName }</div>
-	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
-	      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="guest_cart_amount" value=${ item.guestCartAmount}></div>
-	      <input type="text" name="guest_no" value="${ item.guestNo }" hidden="hidden">
-	      </c:forEach>
-      
-      </c:otherwise>
-      </c:choose>
+
+	      <c:choose>
+		      <c:when test="${not empty list }">
+			      <c:forEach var="item" items="${list }" varStatus="status">
+			      
+			      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
+			      <label for="check${status.count }"></label>
+			      <div style="width: 100%; height: 100%;">
+			        <img src="${item.product.productPhotosList.get(0).productPhotosPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+			      </div>
+			      <div>${ item.product.productName }</div>
+			      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
+			      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cart_amount" value=${ item.cartAmount}></div>
+			      <input type="text" name="member_no" value="${ item.member.memberNo }" hidden="hidden">
+			      </c:forEach>
+		      </c:when>
+		      <c:otherwise>
+		      	<h2>장바구니가 비어있습니다.</h2>
+		      </c:otherwise>
+	      </c:choose>
+     
   
       
       

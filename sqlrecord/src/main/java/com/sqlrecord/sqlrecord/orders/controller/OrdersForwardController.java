@@ -54,6 +54,7 @@ public class OrdersForwardController {
 		String[] guest_amountArr = request.getParameterValues("guest_amount");
 		String[] product_priceArr = request.getParameterValues("product_price");
 		String[] product_noArr = request.getParameterValues("product_no");
+		
 		if(cart_amountArr.length != 0) {
 			
 			
@@ -91,24 +92,16 @@ public class OrdersForwardController {
 				odList.add(ordersDetail);
 			}
 			
-			
 			// 디테일 인서트 성공 시 디테일로 리다이렉트
 			if(ordersService.insertOrdersDetail(odList) > 0) {
 				
 				return "redirect:/orders/member/detail";
 			}
 			
-			
-			
-		} else {
-			
-			log.info("게스트임");
-			log.info("{}" , product_price);
-			log.info("{}" , product_no);
-		}
+		} 
 		
+		return "redirect:/sqlrecord/error";
 		
-		return "redirect:/sqlrecord/orders/member/detail";
 	}
 	
 	@GetMapping("/member/detail")

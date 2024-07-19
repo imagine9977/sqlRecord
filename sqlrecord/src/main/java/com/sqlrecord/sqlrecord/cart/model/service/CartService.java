@@ -8,6 +8,7 @@ public interface CartService {
 
 	List<Cart> getCartList(int userid);
 
-	List<Cart> getGuestCartList(int userid);
+
+	int insert(Cart cart);
 	
 }

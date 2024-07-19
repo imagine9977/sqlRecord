@@ -11,7 +11,6 @@
  		<!-- typeAlias 양식 -->
  	  	<!-- <typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member"/> -->
  	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.Cart" alias="cart"/>
- 	  	<typeAlias type="com.sqlrecord.sqlrecord.cart.model.vo.GuestCart" alias="guestCart"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.Product" alias="product"/>
  	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos" alias="productPhotos"/>
 	
@@ -45,10 +44,9 @@
 
  	  	<mapper resource="/mappers/notice-mapper.xml" />
  	  	<mapper resource="/mappers/qna-mapper.xml" />
-		<!--<mapper resource="/mappers/product-mapper.xml" /> -->
 		<mapper resource="/mappers/memberOrders-mapper.xml" />
 		<mapper resource="/mappers/tracking-mapper.xml" />
-		
+		<mapper resource="/mappers/product-mapper.xml" />
  	</mappers>
  	
  </configuration>

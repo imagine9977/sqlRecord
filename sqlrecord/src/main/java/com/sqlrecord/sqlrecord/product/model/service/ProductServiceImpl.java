@@ -15,17 +15,25 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 
-public class ProductServiceImpl implements ProductService {@Override
+public class ProductServiceImpl implements ProductService {
+	
+	
+	private final ProductMapper productMapper;
+	
+	
+	
+	@Override
 	public int productCount() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public List<Product> findAll(Map<String, Integer> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Product> findAll(String productCate) {
+		return productMapper.findAll(productCate);
 	}
+	
+	
 
 	@Override
 	public int searchCount(Map<String, String> map) {
@@ -38,6 +46,12 @@ public class ProductServiceImpl implements ProductService {@Override
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Product findOne(int productNo) {
+		return productMapper.findOne(productNo);
+	}
+	
 	
 
 	/*
