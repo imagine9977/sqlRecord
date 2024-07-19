@@ -136,7 +136,7 @@ input[class="check"]:checked + label:after {
 	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
 	      <label for="check${status.count }"></label>
 	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.productPhotos.photoPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+	        <img src="${item.product.productPhotosList.get(0).productPhotosPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 	      </div>
 	      <div>${ item.product.productName }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
@@ -151,7 +151,7 @@ input[class="check"]:checked + label:after {
 	      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
 	      <label for="check${status.count }"></label>
 	      <div style="width: 100%; height: 100%;">
-	        <img src="${item.product.productPhotos.photoPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
+	        <img src="${item.product.productPhotosList.get(0).productPhotosPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 	      </div>
 	      <div>${ item.product.productName }</div>
 	      <div class="price check${status.count }"><input type="text" readonly="readonly" name="product_price" value=${item.product.productPrice }></div>
