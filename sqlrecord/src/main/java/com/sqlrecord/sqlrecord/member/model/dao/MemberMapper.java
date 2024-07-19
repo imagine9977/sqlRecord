@@ -30,5 +30,6 @@ public interface MemberMapper {
 	List<Member> findAllMemberN();	// 탈퇴회원 전체조회
 	Member getOneMember();			// 회원 1인 조회
 	List<Member> memberFindAll();
+	int memberCount();
 	
 }

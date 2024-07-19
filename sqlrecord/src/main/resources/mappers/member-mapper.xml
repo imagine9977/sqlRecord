@@ -157,8 +157,9 @@
 	</select>
 	
 	<!-- 관리자 페이지 : 회원 전체 조회(조건X) -->
-	<select id="memberFindAll" resultType="member">
+	<select id="memberFindAll" parameterType="map" resultType="member">
 		SELECT
+<<<<<<< Updated upstream
 		        M.MEMBER_NO memberNo,
 		        M.MEMBER_ID memberId,
 		        M.NAME name,
@@ -177,6 +178,52 @@
 		 ORDER
 		    BY
 		        M.MEMBER_NO ASC
+=======
+			    MEMBER_NO memberNo,
+			    MEMBER_ID memberId,
+			    NAME name,
+			    TELL tell,
+			    ADDR1 addr1,
+			    ADDR2 addr2,
+			    POSTCODE postcode,
+			    STATUS status,
+			    BIRTH birth,
+			    EMAIL email,
+			    RESDATE resdate,
+			    pointAmount
+			FROM
+			    (SELECT
+			        M.MEMBER_NO,
+			        M.MEMBER_ID,
+			        M.NAME,
+			        M.TELL,
+			        M.ADDR1,
+			        M.ADDR2,
+			        M.POSTCODE,
+			        M.STATUS,
+			        M.BIRTH,
+			        M.EMAIL,
+			        M.RESDATE,
+			        NVL(SUM(PO.POINT_AMOUNT), 0) pointAmount,
+			        ROW_NUMBER() OVER (ORDER BY M.MEMBER_NO ASC) AS RNUM
+			    FROM
+			        MEMBER M
+			    LEFT JOIN
+			        POINT PO ON M.MEMBER_NO = PO.MEMBER_NO
+			    WHERE
+			        M.MEMBER_ID != 'admin'
+			    GROUP BY
+			        M.MEMBER_NO, M.MEMBER_ID, M.NAME, M.TELL, M.ADDR1, M.ADDR2, M.POSTCODE, M.STATUS, M.BIRTH, M.EMAIL, M.RESDATE)
+			WHERE
+			    RNUM BETWEEN #{startValue} AND #{endValue}
+	</select>
+	
+	<select id="memberCount" resultType="_int">
+		SELECT
+				COUNT(MEMBER_NO)
+		  FROM
+		  		MEMBER
+>>>>>>> Stashed changes
 	</select>
 
 </mapper>

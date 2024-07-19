@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService{
 
 
+
 	private final MemberMapper memberMapper;
 	
 	@Override
@@ -69,5 +70,9 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.memberFindAll();
 	}
 
+	@Override
+	public int memberCount() {
+		return memberMapper.memberCount();
+	}
 
 }

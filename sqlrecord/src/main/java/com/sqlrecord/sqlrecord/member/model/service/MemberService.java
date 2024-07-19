@@ -18,7 +18,9 @@ public interface MemberService {
 	// 관리자페이지용 회원 전체조회
 	List<Member> findAllMemberY();
 	List<Member> findAllMemberN();
+	
 	Member getOneMember(String memberNo);
 	List<Member> memberFindAll(Map<String, Integer> map);
+	int memberCount();
 
 }
