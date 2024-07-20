@@ -132,7 +132,7 @@ input[class="check"]:checked + label:after {
 	      <c:choose>
 		      <c:when test="${not empty list }">
 			      <c:forEach var="item" items="${list }" varStatus="status">
-			      
+			      <input class="cartNo" type="text" name="cartNo" value="${ cartNo }" hidden="hidden">
 			      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
 			      <label for="check${status.count }"></label>
 			      <div style="width: 100%; height: 100%;">
@@ -181,6 +181,7 @@ input[class="check"]:checked + label:after {
 let isChecked = 0;
 let checkList = document.querySelectorAll(".check");
 let amountList = document.querySelectorAll(".amount input");
+let cartNoList = document.querySelectorAll(".cartNo");
 let priceList = document.querySelectorAll(".price input");
 let totalInput = document.querySelector("#totalPrice");
 let totalPrice = 0;
@@ -191,9 +192,18 @@ function onClickCount(f) {
 	isChecked = 0;
 	for(var i = 0; i < amountList.length; i++) {
 		if(checkList[i].checked) {
+			amountList[i].name = "cart_amount";
+			priceList[i].name = "product_price";
+			cartNoList[i].name = "cartNo";
+			checkList[i].name = "product_no";
 			totalPrice += parseInt(amountList[i].value) * parseInt(priceList[i].value);
 			isChecked += 1;
-		} 
+		} else {
+			amountList[i].name = "x";
+			cartNoList[i].name = "x";
+			priceList[i].name = "x";
+			checkList[i].name = "x";
+		}
 	}
 	if(isChecked == 0) {
 		document.querySelector(".submitBtn").style.display = "none";
@@ -207,10 +217,7 @@ function onClickCount(f) {
 if("${sessionScope.loginUser.memberNo}" != 0 && "${ list.size()}" == 0) {
 	document.querySelector(".submitBtn").style.display = "none";
 }
-//회원인데 장바구니가 없으면 결제 버튼 가림
-if("${sessionScope.guestUser.guest_no}" != 0 && "${ glist.size()}" == 0) {
-	document.querySelector(".submitBtn").style.display = "none";
-}
+
 
 // 초기 계산 값 호출.
 function getTotalPrice() {

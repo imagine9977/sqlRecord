@@ -56,14 +56,15 @@ public class CartForwardController {
 		
 		cartService.insert(cart);
 		
+		
 		log.info("cart : {}" , cart.getCartAmount());
 		log.info("cart : {}"  , cart.getMember().getMemberNo());
 		log.info("cart : {}"  , cart.getProduct().getProductNo());
 		
-		String redirect = "redirect:/member/";
+		String redirect = "redirect:/member/" + cart.getMember().getMemberNo();
 		
 		
-		return "";
+		return redirect;
 	}
 	
 }

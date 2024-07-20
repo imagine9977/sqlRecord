@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sqlrecord.sqlrecord.cart.model.vo.Cart;
-import com.sqlrecord.sqlrecord.cart.model.vo.GuestCart;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
@@ -45,15 +44,19 @@ public class OrdersForwardController {
 	public String userOrdersPage( 
 								 int product_price , 
 								 int product_no ,
+								 int cartNo ,
 								 HttpServletRequest request
 								 ) {
 		HttpSession session = request.getSession();
 		
 		// 각 카트의 갯수 배열로 하나하나 받기
 		String[] cart_amountArr = request.getParameterValues("cart_amount");
-		String[] guest_amountArr = request.getParameterValues("guest_amount");
 		String[] product_priceArr = request.getParameterValues("product_price");
 		String[] product_noArr = request.getParameterValues("product_no");
+		
+		
+		String[] cartNo_Arr = request.getParameterValues("cartNo");
+		
 		
 		if(cart_amountArr.length != 0) {
 			
