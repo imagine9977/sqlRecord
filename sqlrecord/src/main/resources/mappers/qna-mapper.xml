@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper
+	namespace="com.sqlrecord.sqlrecord.qna.model.dao.QnaMapper">
+	<sql id="selectQna">
+		SELECT
+		QNA_NO qnaNo,
+		SECRET secret,
+		QNA_TITLE qnaTitle,
+		CATEGORY qnaCategory,
+		QNA_CONTENT qnaContent,
+		SOLVED solved,
+		COUNT count,
+		to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
+		to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
+		DELSTATUS delStatus,
+		QNA_WRITER_NO memberNo
+		FROM
+		QNA
+		WHERE
+			DELSTATUS='Y'
+	</sql>
+	
+	<sql id="selectQnaFiles">
+		SELECT
+		QNAFILE_NO qnaNo,
+		QNAFILE_ORIGINAL originalName,
+		QNAFILE_CHANGED changedName,
+		QNA_NO  qnaNo
+		FROM
+		QNAFILE
+		
+	</sql>
+	
+	<sql id="selectQnaComments">
+		SELECT
+		COMMENT_NO commentNo,
+		QNA_NO qnaNo,
+		MEMBER_NO memberNo,
+		COMMENT_CONTENT commentContent,
+		to_char(RESDATE,'yyyy-mm-dd') resdate,
+		STATUS status
+		FROM
+		COMM
+		WHERE
+			STATUS='Y'
+	</sql>
+	<select id="findAll" resultType="qna">
+    WITH OrderedQNA AS (
+        SELECT
+            QNA_NO,
+            SECRET,
+            QNA_TITLE,
+            CATEGORY,
+            QNA_CONTENT,
+            SOLVED,
+            COUNT,
+            CREATE_DATE,
+            CHANGE_DATE,
+            DELSTATUS,
+            QNA_WRITER_NO,
+            ROW_NUMBER() OVER (ORDER BY QNA_NO DESC) AS RNUM
+        FROM
+            QNA
+        WHERE
+            DELSTATUS = 'Y'
+            
+    )
+    SELECT
+        QNA_NO qnaNo,
+		SECRET secret,
+		QNA_TITLE qnaTitle,
+		CATEGORY qnaCategory,
+		QNA_CONTENT qnaContent,
+		SOLVED solved,
+		COUNT count,
+		to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
+		to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
+		DELSTATUS delStatus,
+		QNA_WRITER_NO memberNo
+    FROM
+        OrderedQNA
+    WHERE
+        RNUM BETWEEN #{startValue} AND #{endValue}
+</select>
+<select id="findAllUnsolved" resultType="qna">
+    WITH OrderedQNA AS (
+        SELECT
+            QNA_NO,
+            SECRET,
+            QNA_TITLE,
+            CATEGORY,
+            QNA_CONTENT,
+            SOLVED,
+            COUNT,
+            CREATE_DATE,
+            CHANGE_DATE,
+            DELSTATUS,
+            QNA_WRITER_NO,
+            ROW_NUMBER() OVER (ORDER BY QNA_NO DESC) AS RNUM
+        FROM
+            QNA
+        WHERE
+            DELSTATUS = 'Y'
+            AND
+            SOLVED='N'
+    )
+    SELECT
+        QNA_NO qnaNo,
+		SECRET secret,
+		QNA_TITLE qnaTitle,
+		CATEGORY qnaCategory,
+		QNA_CONTENT qnaContent,
+		SOLVED solved,
+		COUNT count,
+		to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
+		to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
+		DELSTATUS delStatus,
+		QNA_WRITER_NO memberNo
+    FROM
+        OrderedQNA
+    WHERE
+        RNUM BETWEEN #{startValue} AND #{endValue}
+</select>
+	<select id="findByCate" 
+		resultType="qna">
+	WITH OrderedQNA AS (
+	        SELECT
+	            QNA_NO,
+	            SECRET,
+	            QNA_TITLE,
+	            CATEGORY,
+	            QNA_CONTENT,
+	            SOLVED,
+	            COUNT,
+	            CREATE_DATE,
+	            CHANGE_DATE,
+	            DELSTATUS,
+	            QNA_WRITER_NO,
+	            ROW_NUMBER() OVER (ORDER BY QNA_NO DESC) AS RNUM
+	        FROM
+	            QNA
+	        WHERE
+	            DELSTATUS = 'Y'
+	           AND CATEGORY =#{cate}
+	    )
+	    SELECT
+	        QNA_NO qnaNo,
+			SECRET secret,
+			QNA_TITLE qnaTitle,
+			CATEGORY qnaCategory,
+			QNA_CONTENT qnaContent,
+			SOLVED solved,
+			COUNT count,
+			to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
+			to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
+			DELSTATUS delStatus,
+			QNA_WRITER_NO memberNo
+	    FROM
+	        OrderedQNA
+	    WHERE
+	
+			ROWNUM BETWEEN #{startValue} AND #{endValue}
+			
+	</select>
+	<select id="findByCateUnsolved" 
+		resultType="qna">
+	WITH OrderedQNA AS (
+	        SELECT
+	            QNA_NO,
+	            SECRET,
+	            QNA_TITLE,
+	            CATEGORY,
+	            QNA_CONTENT,
+	            SOLVED,
+	            COUNT,
+	            CREATE_DATE,
+	            CHANGE_DATE,
+	            DELSTATUS,
+	            QNA_WRITER_NO,
+	            ROW_NUMBER() OVER (ORDER BY QNA_NO DESC) AS RNUM
+	        FROM
+	            QNA
+	        WHERE
+	            DELSTATUS = 'Y'
+	            AND SOLVED = 'N'
+	           AND CATEGORY =#{cate}
+	    )
+	    SELECT
+	        QNA_NO qnaNo,
+			SECRET secret,
+			QNA_TITLE qnaTitle,
+			CATEGORY qnaCategory,
+			QNA_CONTENT qnaContent,
+			SOLVED solved,
+			COUNT count,
+			to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
+			to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
+			DELSTATUS delStatus,
+			QNA_WRITER_NO memberNo
+	    FROM
+	        OrderedQNA
+	    WHERE
+	
+			ROWNUM BETWEEN #{startValue} AND #{endValue}
+			
+	</select>
+	<select id="qnaCount" resultType="_int">
+		SELECT
+		COUNT(QNA_NO)
+		FROM
+		QNA
+		WHERE
+		DELSTATUS='Y'
+
+	</select>
+	<select id="qnaCountCate" resultType="_int">
+		SELECT
+		COUNT(QNA_NO)
+		FROM
+		QNA
+		WHERE
+		DELSTATUS='Y'
+		AND
+		CATEGORY=#{cate}
+
+	</select>
+	
+	<select id="findById" parameterType="_int" resultType="qna">
+		<include refid="selectQna"/>
+		 AND 
+		 QNA_NO = #{qnaNo}
+	</select>
+	<select id="findComments" resultType="comm">
+		<include refid="selectQnaComments"/>
+		 AND 
+		 QNA_NO = #{qnaNo}
+	</select>
+	
+	<select id="findFiles"  resultType="qnaFile">
+	<include refid="selectQnaFiles"/>
+		 WHERE 
+		 QNA_NO = #{qnaNo}</select>
+		 
+	<select id="getQnaNo" resultType="int">
+		SELECT QNA_SEQ.CURRVAL FROM DUAL
+	</select>	 
+	<insert id="insert" parameterType="qna" >
+		INSERT INTO QNA(QNA_NO,QNA_TITLE,SECRET,CATEGORY,QNA_CONTENT,CREATE_DATE
+		,SOLVED,COUNT,CHANGE_DATE,DELSTATUS,QNA_WRITER_NO) 
+		VALUES
+		(QNA_SEQ.NEXTVAL, #{qnaTitle},#{secret} #{qnaCategory},
+		#{qnaContent}, SYSDATE, 'N', 0, SYSDATE,'Y',#{memberNo})
+	</insert>
+	<insert id="saveFile"
+		parameterType="qnaFile">
+		INSERT INTO QNAFILE
+		VALUES (QNAFILE_SEQ.NEXTVAL,
+		#{originalName}, #{changedName},
+		#{qnaNo})
+	</insert>
+	<insert id="insertComment" parameterType="comm">
+		INSERT INTO COMM
+		VALUES(
+		COMM_SEQ.NEXTVAL,
+		#{qnaNo},
+		#{memberNo},
+		#{commentContent},
+		SYSDATE,
+		'Y')
+		
+	</insert>
+	<update id="delete" parameterType="_int">
+		UPDATE QNA
+		SET
+		STATUS='N'
+		WHERE
+		QNA_NO =
+		#{qnaNo}
+	</update>
+	<delete id="deleteFiles" parameterType="_int">
+		DELETE QNAFILE
+		WHERE
+		QNA_NO =
+		#{qnaNo}
+	</delete>
+	<update id="deleteComments" parameterType="_int">
+		UPDATE COMM
+		SET
+		STATUS='N'
+		WHERE
+		QNA_NO =
+		#{qnaNo}
+	</update>
+	<update id="update" parameterType="qna">
+		UPDATE
+		QNA
+		SET
+		QNA_TITLE=#{qnaTitle},
+		QNA_CONTENT= #{qnaContent},
+		QNA_CATE=#{qnaCategory},
+		SECRET=#{secret},
+		CHANGE_DATE= SYSDATE,
+		QNA_CATE=#{qnaCategory},
+		SOLVED=#{solved}
+		WHERE
+		QNA_NO = #{qnaNo}
+		
+	</update>
+	<update id="updateFile"
+		parameterType="qnaFile">
+		UPDATE QNAFILE
+		SET
+		QNAFILE_ORIGINAL = #{originalName},QNAFILE_CHANGED #{changedName}
+	</update>
+	<update id="updateComment" parameterType="comm">
+		UPDATE COMM
+		SET
+		COMMENT_CONTENT=#{commentContent}
+		WHERE 
+		COMMENT_NO = #{qnaNo}
+	</update>
+	</mapper>

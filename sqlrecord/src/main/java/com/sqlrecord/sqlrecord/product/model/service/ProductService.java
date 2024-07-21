@@ -8,18 +8,21 @@ import org.apache.ibatis.session.RowBounds;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 public interface ProductService {
-	
+
 	// 전체 상품 수 조회(페이징)
 	int productCount();
 
-	// 전체 상품 조회
-	List<Product> findAll(Map<String, Integer> map);
+	
+	List<Product> findAll(String productCate);
 
 	// 검색 결과 수
 	int searchCount(Map<String, String> map);
 	
 	// 상품 검색 결과
 	List<Product> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds);
+
+
+	Product findOne(int productNo);
 
 
 	
@@ -35,5 +38,5 @@ public interface ProductService {
 	
 	// 상품 삭제 (update status 'Y'->'N')
 	
-	
+
 }

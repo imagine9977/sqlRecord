@@ -21,9 +21,22 @@ public class CartServiceImpl implements CartService {
 		return cartMapper.cartListSelect(userid);
 	}
 
+
 	@Override
-	public List<Cart> getGuestCartList(int userid) {
-		return cartMapper.guestCartListSelect(userid);
+	public int insert(Cart cart) {
+		return cartMapper.insert(cart);
+	}
+
+
+	@Override
+	public int deleteCart(List<Integer> cartNoList) {
+		
+		int result = 0;
+		for(Integer item : cartNoList) {
+			result += cartMapper.deleteCart(item);
+		}
+		
+		return result;
 	}
 	
 	

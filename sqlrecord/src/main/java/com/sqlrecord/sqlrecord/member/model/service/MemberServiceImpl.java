@@ -3,6 +3,7 @@ package com.sqlrecord.sqlrecord.member.model.service;
 import java.util.List;
 import java.util.Map;
 
+
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.member.model.dao.MemberMapper;
@@ -49,7 +50,32 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.pwChange(member);
 	}
 
-	// 관리자 페이지
+	@Override
+	public List<Integer> genre(MemberGenre memberGenre) {
+		return memberMapper.genre(memberGenre);
+	}
+
+	@Override
+	public int update(Member member) {
+		return memberMapper.update(member);
+	}
+
+	@Override
+	public int deleteGenre(int memberNo) {
+		return memberMapper.deleteGenre(memberNo);
+	}
+
+	@Override
+	public void insUpdateGenre(MemberGenre memberGenre) {
+		memberMapper.insUpdateGenre(memberGenre);
+	}
+
+	@Override
+	public int delete(Member member) {
+		return memberMapper.delete(member);
+
+  
+  // 관리자 페이지
 	@Override
 	public Member getOneMember(String memberNo) {
 		return memberMapper.getOneMember();
@@ -68,6 +94,5 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int memberCount() {
 		return memberMapper.memberCount();
-	}
 
 }

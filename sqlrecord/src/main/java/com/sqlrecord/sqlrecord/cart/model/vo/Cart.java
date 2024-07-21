@@ -1,7 +1,7 @@
 package com.sqlrecord.sqlrecord.cart.model.vo;
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
-import com.sqlrecord.sqlrecord.orders.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

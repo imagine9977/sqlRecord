@@ -22,7 +22,7 @@
 		    <result property="status" column="STATUS"/>
 		    <result property="resDate" column="RES_DATE"/>
     	</association>  
-    	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
+    	<association property="product" javaType="product">
 	        <result property="productNo" column="PRODUCT_NO"/>
 	        <result property="productName" column="PRODUCT_NAME"/>
 	        <result property="productPrice" column="PRODUCT_PRICE"/>
@@ -31,95 +31,80 @@
 	        <result property="tagNo" column="tag_no"/>
 	        <result property="productDetail" column="product_detail"/>
 	        <result property="productCate" column="product_cate"/>
-	        <result property="color" column="color"/>
-	        <association property="productPhotos" javaType="productPhotos">
-	        	<result property="photoNo" column="PHOTO_NO"/>
+	        <collection column="product_no" property="productPhotosList" javaType="List" select="getPhotos">
+	        	<result property="productPhotosNo" column="PHOTO_NO"/>
+			    <result property="productPhotosName" column="PHOTO_NAME"/>
+			    <result property="productPhotosPath" column="PHOTO_PATH"/>
 			    <result property="productNo" column="PRODUCT_NO"/>
-			    <result property="photoName" column="PHOTO_NAME"/>
-			    <result property="photoPath" column="PHOTO_PATH"/>
-	        </association>
+		</collection>
 	    </association>
 	</resultMap>
 
-	<resultMap type="guestCart" id="guestCartRM">
-    	<id property="guestCartNum" column="cart_num"/>
-    	<result property="guestNo" column="guest_no"/>  
-	    <result property="guestCartAmount" column="guest_cart_amount" jdbcType="INTEGER"/>
-    	<association property="product" javaType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
-	        <result property="productNo" column="product_no"/>
-	        <result property="productName" column="product_name"/>
-	        <result property="productPrice" column="product_price"/>
-	        <result property="productStatus" column="product_status"/>
-	        <result property="productDate" column="product_date"/>
-			
-
-	        <result property="tagNo" column="tag_no"/>
-	        <result property="productDetail" column="product_detail"/>
-	        <result property="productCate" column="product_cate"/>
-	        <result property="color" column="color"/>
-	    </association>
-	</resultMap>
 
 	<select id="cartListSelect" parameterType="_int" resultMap="cartRM">
-	 WITH RankedCart AS (
-	    SELECT
-	        c.CART_NUM,
-	        c.PRODUCT_NO,
-	        c.MEMBER_NO,
-	        c.CART_AMOUNT,
-	        p.PRODUCT_NAME,
-	        p.PRODUCT_PRICE,
-	        ps.PHOTO_PATH,
-	        ROW_NUMBER() OVER (PARTITION BY c.PRODUCT_NO ORDER BY c.CART_NUM DESC) AS rn
-	    FROM
-	        MEMBER_CART c
-	    JOIN
-	        PRODUCT p ON c.PRODUCT_NO = p.PRODUCT_NO
-	    LEFT JOIN
-	        PRODUCT_PHOTOS ps ON c.PRODUCT_NO = ps.PRODUCT_NO
-	    WHERE
-	        c.MEMBER_NO = #{member_no}
-		)
+	 
 		SELECT
-		    CART_NUM,
-		    PRODUCT_NO,
-		    MEMBER_NO,
-		    CART_AMOUNT,
-		    PRODUCT_NAME,
-		    PRODUCT_PRICE,
-		    PHOTO_PATH
+		    m.CART_NUM,
+		    m.PRODUCT_NO,
+		    m.MEMBER_NO,
+		    m.CART_AMOUNT,
+		    p.PRODUCT_NAME,
+		    p.PRODUCT_PRICE
 		FROM
-		    RankedCart
-		WHERE
-		    rn = 1
-		ORDER BY
-		    CART_NUM DESC
-	
-	
-	</select>
-	
-	<select id="guestCartListSelect" parameterType="_int" resultMap="guestCartRM">
-	 SELECT
-			c.PRODUCT_NO,
-			c.GUEST_NO,
-			c.GUEST_CART_AMOUNT,
-			p.PRODUCT_PRICE,
-			p.PRODUCT_PHOTO1,
-			p.PRODUCT_NAME
-	   FROM
-			GUEST_CART c
-	   JOIN
+		     MEMBER_CART m
+		JOIN
 			PRODUCT p
-		 ON
-			c.PRODUCT_NO = p.PRODUCT_NO
-	  WHERE
-			c.GUEST_NO = #{GUEST_no}
-	  ORDER
-		 BY
- 			c.GUEST_CART_NUM
-	   DESC
+		ON
+			m.PRODUCT_NO = p.PRODUCT_NO
+		WHERE
+		    m.MEMBER_NO = #{memberNo}
+		   
+		ORDER BY
+		    m.CART_NUM DESC
 	
 	
 	</select>
+	
+	
+	<delete id="deleteCart" parameterType="_int">
+		DELETE
+		FROM
+				MEMBER_CART
+		WHERE
+				CART_NUM
+				=
+				#{cartNum}
+	
+	</delete>
+
+	
+	
+	<select id="getPhotos" parameterType="int" resultType="productPhotos">
+		SELECT
+				PHOTO_NO productPhotosNo,         
+				PRODUCT_NO productNo,         
+				PHOTO_NAME productPhotosName,
+				PHOTO_PATH productPhotosPath
+		FROM
+				PRODUCT_PHOTOS
+		WHERE
+				product_no = #{product_no}
+	</select>
+	
+	
+	<insert id="insert" parameterType="cart">
+		INSERT
+		INTO
+				MEMBER_CART
+		VALUES
+				(
+				MEMBER_CART_SEQ.NEXTVAL,
+				#{product.productNo},
+				#{member.memberNo},
+				#{cartAmount}
+				)
+	</insert>
+	
+	
 
 </mapper>

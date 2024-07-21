@@ -20,13 +20,15 @@ public interface NoticeMapper {
 
 	int delete(int NoticeNo);
 	List<NFile> findFiles(int id);
+	NFile findFileById(int nfileId);
 	int saveFile(NFile file);
 	Integer getNoticeNo();
 	int deleteFiles(int noticeNo);
 	int updateFile(NFile file);
 	int deleteFileByPosition(int noticeNo);
-	
-	// 관리자 페이지
+	int deleteFileByPosition(int nFileNo);
+
+  
+  // 관리자 페이지
 	int noticeCount();	// 전체 글 수 조회
 	List<Notice> noticeFindAll(Map<String, Integer> map);	// 페이징 적용 전체 글 조회
-}

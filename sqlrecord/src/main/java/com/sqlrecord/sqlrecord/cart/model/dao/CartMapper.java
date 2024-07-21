@@ -11,6 +11,10 @@ public interface CartMapper {
 
 	List<Cart> cartListSelect(int userid);
 
-	List<Cart> guestCartListSelect(int userid);
+
+	int insert(Cart cart);
+
+
+	int deleteCart(Integer item);
 
 }
