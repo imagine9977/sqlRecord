@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.notice.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -24,5 +25,10 @@ public interface NoticeMapper {
 	Integer getNoticeNo();
 	int deleteFiles(int noticeNo);
 	int updateFile(NFile file);
+	int deleteFileByPosition(int noticeNo);
 	int deleteFileByPosition(int nFileNo);
-}
+
+  
+  // 관리자 페이지
+	int noticeCount();	// 전체 글 수 조회
+	List<Notice> noticeFindAll(Map<String, Integer> map);	// 페이징 적용 전체 글 조회

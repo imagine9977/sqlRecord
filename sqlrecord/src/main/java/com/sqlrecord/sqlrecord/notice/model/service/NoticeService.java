@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.notice.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,5 +22,8 @@ public interface NoticeService {
 	List<NFile> findFiles(int id);
 	int update(Notice notice);
 	int deleteFile(int nfileNo);
-	 
+
+  // 관리자페이지 페이징용 Count
+	int noticeCount();
+	List<Notice> noticeFindAll(Map<String, Integer> map);	// 페이징 적용 전체 조회
 }

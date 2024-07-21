@@ -586,7 +586,7 @@
 
 	
  </script>
-<script src="${ hpath}/resources/js/forHeader.js?after1"></script>
+<script src="${hpath}/resources/js/forHeader.js?after1"></script>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

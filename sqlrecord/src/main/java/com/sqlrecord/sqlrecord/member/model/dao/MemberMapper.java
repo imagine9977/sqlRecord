@@ -1,6 +1,8 @@
 package com.sqlrecord.sqlrecord.member.model.dao;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -27,5 +29,13 @@ public interface MemberMapper {
 	int deleteGenre(int memberNo);
 	void insUpdateGenre(MemberGenre memberGenre);
 	int delete(Member member);
+	
+	
+	
+	// 관리자 페이지 메서드
+	Member getOneMember();			// 회원 1인 조회
+	List<Member> findAllMembers(Map<String, Integer> map);			//활동 회원 조회
+	List<Member> findWithdrawnMembers(Map<String, Integer> map);	//탈퇴 회원 조회
+	int memberCount();
 	
 }
