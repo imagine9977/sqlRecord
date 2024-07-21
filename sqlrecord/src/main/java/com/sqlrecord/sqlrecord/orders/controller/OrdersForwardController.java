@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sqlrecord.sqlrecord.cart.model.service.CartService;
 import com.sqlrecord.sqlrecord.cart.model.vo.Cart;
-import com.sqlrecord.sqlrecord.cart.model.vo.GuestCart;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
@@ -38,22 +38,25 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/orders")
 public class OrdersForwardController {
 	
-	
+	private final CartService cartService;
 	private final OrdersService ordersService;
 	
 	@PostMapping("/order")
 	public String userOrdersPage( 
 								 int product_price , 
 								 int product_no ,
+								 int cartNum ,
 								 HttpServletRequest request
 								 ) {
 		HttpSession session = request.getSession();
 		
 		// 각 카트의 갯수 배열로 하나하나 받기
 		String[] cart_amountArr = request.getParameterValues("cart_amount");
-		String[] guest_amountArr = request.getParameterValues("guest_amount");
 		String[] product_priceArr = request.getParameterValues("product_price");
 		String[] product_noArr = request.getParameterValues("product_no");
+		String[] cartNo_Arr = request.getParameterValues("cartNum");
+		
+		log.info("카트번호 개수 몇개? : {}" , cartNo_Arr.length);
 		if(cart_amountArr.length != 0) {
 			
 			
@@ -68,6 +71,17 @@ public class OrdersForwardController {
 			memberOrders.setMemberOrdersAddress2(member.getAddr2());
 			memberOrders.setMemberOrdersPostcode(member.getPostcode());
 			memberOrders.setMemberNo(member.getMemberNo());
+			
+			
+			List<Integer> cartNoList = new ArrayList<Integer>();
+			
+			for(String item : cartNo_Arr) {
+				cartNoList.add(Integer.parseInt(item));
+			}
+			
+			
+			cartService.deleteCart(cartNoList);
+			
 			
 			
 			// 멤버 오더 디테일에 넣을 값을 객체에 담기
@@ -91,24 +105,16 @@ public class OrdersForwardController {
 				odList.add(ordersDetail);
 			}
 			
-			
 			// 디테일 인서트 성공 시 디테일로 리다이렉트
 			if(ordersService.insertOrdersDetail(odList) > 0) {
 				
 				return "redirect:/orders/member/detail";
 			}
 			
-			
-			
-		} else {
-			
-			log.info("게스트임");
-			log.info("{}" , product_price);
-			log.info("{}" , product_no);
-		}
+		} 
 		
+		return "redirect:/sqlrecord/error";
 		
-		return "redirect:/sqlrecord/orders/member/detail";
 	}
 	
 	@GetMapping("/member/detail")
