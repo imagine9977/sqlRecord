@@ -73,7 +73,7 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int delete(Member member) {
 		return memberMapper.delete(member);
-
+	}
   
   // 관리자 페이지
 	@Override
@@ -94,5 +94,5 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int memberCount() {
 		return memberMapper.memberCount();
-
+	}
 }
