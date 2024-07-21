@@ -1,9 +1,12 @@
-    // 회원 테이블 생성
-    function loadMemberTable(contentType, page = 1) {
+	// 회원 테이블 생성
+	function loadMemberTable(contentType, page = 1) {
 	    $.ajax({
 	        url: '/sqlrecord/admin/ajaxMemberManagement',
 	        type: 'GET',
-	        data: { page: page, type: contentType },
+	        data: {
+	        	page: page,
+	        	type: contentType
+	        },
 	        success: function(response) {
 	            if (response.data && response.data.length > 0) {
 	                var table = '<table class="accordion-table">' +
@@ -27,31 +30,31 @@
 	                        '<td>' + member.memberId + '</td>' +
 	                        '<td>' + member.name + '</td>' +
 	                        '<td>' + member.resdate + '</td>' +
-	                        '<td>' + member.pointAmount + '</td>' +
-	                        '<td><button class="btn btn-sm btn-secondary toggle-details">상세보기</button></td>' +
-	                        '<td><button class="btn btn-sm btn-secondary toggle-details">삭제</button></td>' +
+	                        '<td>' + member.point + '</td>' +
+	                        '<td><button class="btn btn-sm btn-secondary toggle-details">상세보기</button>' +
+	                        '<button class="btn btn-sm btn-secondary toggle-details">삭제</button></td>' +
 	                    '</tr>' +
 	                    '<tr class="accordion-content">' +
-		                    '<td colspan="7">' +
-		                        '<div class="member-details">' +
-		                            '<div class="details-content">' +
-		                                '<h3>회원 상세 정보</h3><br/>' +
-		                                '<p><b>아이디:</b> ' + member.memberId + '</p>' +
-		                                '<p><b>이름:</b> ' + member.name + '</p>' +
-		                                '<p><b>생년월일:</b> ' + member.birth + '</p>' +
-		                                '<p><b>이메일:</b> ' + member.email + '</p>' +
-		                                '<p><b>연락처:</b> ' + member.tell + '</p>' +
-		                                '<p><b>주소:</b> ' + member.addr1 + member.addr2  + '(' + member.postcode + ')' + '</p>' +
-		                                '<p><b>가입일:</b> ' + member.resdate + '</p>' +
-		                                '<p><b>회원상태:</b> ' + member.status + '</p>' +
-		                                '<p><b>보유 포인트:</b> ' + member.pointAmount + '</p>' +
-		                            '</div>' +
-		                            '<div class="record-actions">' +
-		                                '<button class="btn btn-sm btn-secondary" onclick="deleteMember(' + member.memberNo + ')" type="button">삭제</button>' +
-		                            '</div>' +
-		                        '</div>' +
-		                    '</td>' +
-		                '</tr>';
+	                        '<td colspan="7">' +
+	                            '<div class="member-details">' +
+	                                '<div class="details-content">' +
+	                                    '<h3>회원 상세 정보</h3><br/>' +
+	                                    '<p><b>아이디:</b> ' + member.memberId + '</p>' +
+	                                    '<p><b>이름:</b> ' + member.name + '</p>' +
+	                                    '<p><b>생년월일:</b> ' + member.birth + '</p>' +
+	                                    '<p><b>이메일:</b> ' + member.email + '</p>' +
+	                                    '<p><b>연락처:</b> ' + member.tell + '</p>' +
+	                                    '<p><b>주소:</b> ' + member.addr1 + member.addr2  + '(' + member.postcode + ')' + '</p>' +
+	                                    '<p><b>가입일:</b> ' + member.resdate + '</p>' +
+	                                    '<p><b>회원상태:</b> ' + member.status + '</p>' +
+	                                    '<p><b>보유 포인트:</b> ' + member.point + '</p>' +
+	                                '</div>' +
+	                                '<div class="record-actions">' +
+	                                    '<button class="btn btn-sm btn-secondary" onclick="deleteMember(' + member.memberNo + ')" type="button">삭제</button>' +
+	                                '</div>' +
+	                            '</div>' +
+	                        '</td>' +
+	                    '</tr>';
 	                });
 	
 	                table += '</tbody></table>';
@@ -63,7 +66,6 @@
 	                var pagingHtml = createPagination(pageInfo, 'member');
 	                $('#content-area').append(pagingHtml);
 	                
-	                setupPaginationHandlers();
 	
 	                // slideToggle 기능 추가
 	                $('.toggle-details').click(function() {
@@ -79,9 +81,9 @@
 	        }
 	    });
 	}
-	
-	//페이지네이션 생성
-    function createPagination(pageInfo, contentType) {
+
+	// 페이지네이션 생성
+	function createPagination(pageInfo, contentType) {
 	    var html = '<div class="pagination-custom" data-content-type="' + contentType + '">';
 	    if (pageInfo.startPage > 1) {
 	        html += '<a href="#" data-page="' + (pageInfo.startPage - 1) + '">이전</a>';

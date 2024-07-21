@@ -15,12 +15,10 @@ public interface MemberService {
 	Member infoId(Member member);
 	int pwChange(Member member);
 	
-	// 관리자페이지용 회원 전체조회
-	List<Member> findAllMemberY();
-	List<Member> findAllMemberN();
-	
+	// 관리자페이지
 	Member getOneMember(String memberNo);
-	List<Member> memberFindAll(Map<String, Integer> map);
+	List<Member> findAllMembers(Map<String, Integer> map);			//회원(Y)조회
+	List<Member> findWithdrawnMembers(Map<String, Integer> map);	//회원(N)조회
 	int memberCount();
 
 }

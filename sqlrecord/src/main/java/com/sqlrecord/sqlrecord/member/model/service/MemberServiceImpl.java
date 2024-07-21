@@ -51,23 +51,18 @@ public class MemberServiceImpl implements MemberService{
 
 	// 관리자 페이지
 	@Override
-	public List<Member> findAllMemberY() {
-		return memberMapper.findAllMemberY();
-	}
-
-	@Override
-	public List<Member> findAllMemberN() {
-		return memberMapper.findAllMemberN();
-	}
-
-	@Override
 	public Member getOneMember(String memberNo) {
 		return memberMapper.getOneMember();
 	}
 
 	@Override
-	public List<Member> memberFindAll(Map<String, Integer> map) {
-		return memberMapper.memberFindAll();
+	public List<Member> findAllMembers(Map<String, Integer> map) {
+		return memberMapper.findAllMembers(map);
+	}
+	
+	@Override
+	public List<Member> findWithdrawnMembers(Map<String, Integer> map) {
+		return memberMapper.findWithdrawnMembers(map);
 	}
 
 	@Override

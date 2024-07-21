@@ -184,11 +184,11 @@
 	    position: relative;
 	    padding: 10px;
 	    background-color: #f9f9f9;
-	    min-height: 150px;  /* 필요에 따라 조정 */
+	    min-height: 150px;
 	}
 	
 	.details-content {
-	    margin-right: 100px;  /* 버튼 영역을 위한 여백 */
+	    margin-right: 100px;
 	}
 	
 	.record-actions {

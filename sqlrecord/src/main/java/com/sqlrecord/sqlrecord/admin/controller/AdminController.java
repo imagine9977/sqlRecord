@@ -121,11 +121,13 @@ public class AdminController {
 	// Member 리스트 + 페이징
 	@ResponseBody
 	@GetMapping("/ajaxMemberManagement")
-	public ResponseEntity<Map<String, Object>> getMemberListAjax(@RequestParam(value="page", defaultValue="1") int page) {
+	public ResponseEntity<Map<String, Object>> getMemberListAjax(
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="type", defaultValue="all") String type) {
 		int listCount = memberService.memberCount();
         int currentPage = page;
         int pageLimit = 5;
-        int boardLimit = 20;
+        int boardLimit = 15;
 
         int maxPage = (int) Math.ceil((double) listCount / boardLimit);
         int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
@@ -153,7 +155,16 @@ public class AdminController {
         map.put("startValue", startValue);
         map.put("endValue", endValue);
 
-        List<Member> memberList = memberService.memberFindAll(map);
+        // 조회
+        List<Member> memberList = "withdrawn".equals(type)
+        		? memberService.findWithdrawnMembers(map)
+        		: memberService.findAllMembers(map);
+        
+        for (Member member : memberList) {
+            System.out.println("memberNo: " + member.getMemberNo());
+            System.out.println("memberId: " + member.getMemberId());
+            System.out.println("pointAmount: " + member.getPoint());
+        }
 
         List<Map<String, Object>> formattedMemberList = new ArrayList<>();
         
