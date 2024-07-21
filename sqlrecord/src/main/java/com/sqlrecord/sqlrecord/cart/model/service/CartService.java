@@ -10,5 +10,8 @@ public interface CartService {
 
 
 	int insert(Cart cart);
+
+
+	int deleteCart(List<Integer> cartNoList);
 	
 }

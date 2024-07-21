@@ -57,7 +57,7 @@
 		ON
 			m.PRODUCT_NO = p.PRODUCT_NO
 		WHERE
-		    m.MEMBER_NO = #{member_no}
+		    m.MEMBER_NO = #{memberNo}
 		   
 		ORDER BY
 		    m.CART_NUM DESC
@@ -65,6 +65,17 @@
 	
 	</select>
 	
+	
+	<delete id="deleteCart" parameterType="_int">
+		DELETE
+		FROM
+				MEMBER_CART
+		WHERE
+				CART_NUM
+				=
+				#{cartNum}
+	
+	</delete>
 
 	
 	

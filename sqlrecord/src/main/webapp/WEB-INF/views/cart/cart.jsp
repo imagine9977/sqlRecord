@@ -132,7 +132,7 @@ input[class="check"]:checked + label:after {
 	      <c:choose>
 		      <c:when test="${not empty list }">
 			      <c:forEach var="item" items="${list }" varStatus="status">
-			      <input class="cartNo" type="text" name="cartNo" value="${ cartNo }" hidden="hidden">
+			      <input class="cartNo" type="text" name="cartNum" value="${ item.cartNum }" hidden="hidden">
 			      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="product_no" id="check${status.count }" value="${item.product.productNo }">
 			      <label for="check${status.count }"></label>
 			      <div style="width: 100%; height: 100%;">
@@ -194,7 +194,7 @@ function onClickCount(f) {
 		if(checkList[i].checked) {
 			amountList[i].name = "cart_amount";
 			priceList[i].name = "product_price";
-			cartNoList[i].name = "cartNo";
+			cartNoList[i].name = "cartNum";
 			checkList[i].name = "product_no";
 			totalPrice += parseInt(amountList[i].value) * parseInt(priceList[i].value);
 			isChecked += 1;

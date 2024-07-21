@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sqlrecord.sqlrecord.cart.model.service.CartService;
 import com.sqlrecord.sqlrecord.cart.model.vo.Cart;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
@@ -37,14 +38,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/orders")
 public class OrdersForwardController {
 	
-	
+	private final CartService cartService;
 	private final OrdersService ordersService;
 	
 	@PostMapping("/order")
 	public String userOrdersPage( 
 								 int product_price , 
 								 int product_no ,
-								 int cartNo ,
+								 int cartNum ,
 								 HttpServletRequest request
 								 ) {
 		HttpSession session = request.getSession();
@@ -53,11 +54,9 @@ public class OrdersForwardController {
 		String[] cart_amountArr = request.getParameterValues("cart_amount");
 		String[] product_priceArr = request.getParameterValues("product_price");
 		String[] product_noArr = request.getParameterValues("product_no");
+		String[] cartNo_Arr = request.getParameterValues("cartNum");
 		
-		
-		String[] cartNo_Arr = request.getParameterValues("cartNo");
-		
-		
+		log.info("카트번호 개수 몇개? : {}" , cartNo_Arr.length);
 		if(cart_amountArr.length != 0) {
 			
 			
@@ -72,6 +71,17 @@ public class OrdersForwardController {
 			memberOrders.setMemberOrdersAddress2(member.getAddr2());
 			memberOrders.setMemberOrdersPostcode(member.getPostcode());
 			memberOrders.setMemberNo(member.getMemberNo());
+			
+			
+			List<Integer> cartNoList = new ArrayList<Integer>();
+			
+			for(String item : cartNo_Arr) {
+				cartNoList.add(Integer.parseInt(item));
+			}
+			
+			
+			cartService.deleteCart(cartNoList);
+			
 			
 			
 			// 멤버 오더 디테일에 넣을 값을 객체에 담기
