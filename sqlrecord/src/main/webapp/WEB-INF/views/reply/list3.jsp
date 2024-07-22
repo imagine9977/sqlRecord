@@ -1,23 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+<%-- 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri = "http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="java.util.*, java.util.Map" %>
 <c:set var="hpath" value="${pageContext.request.contextPath }" />
-<!DOCTYPE html>
+
 <html>
 <head>
 <script src="${hpath }/resources/js/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <link rel="stylesheet" href="${hpath }/resources/css/common.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/header.css?after1"/>
 <link rel="stylesheet" href="${hpath }/resources/css/breadCrumb.css"/>
 <link rel="stylesheet" href="${hpath }/resources/css/searchHeader.css"/>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${hpath}/resources/css/reply.css">
+
+
+
 </head>
-<body>
+<body> --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+
+
 	<div class="container">
 	    <div class="review-header" style="text-align: center;">
 	        <h1>REVIEW</h1>
@@ -57,7 +65,6 @@
 	            <option value="24">24</option>
 	        </select>
 	    </div>
-	   
 	    <c:if test="${!empty sessionScope.loginUser}">
 	        <div id="commentForm">
 	            <div class="overlay" id="overlay"></div>
@@ -68,7 +75,7 @@
 	            </div>
 	            <div class="review-header">
 	                <p>리뷰 작성하기</p>
-	                <input type="hidden" name="productNo" id="productNo" value="1"> <!-- 상품 번호를 포함 -->
+	                <input type="hidden" name="productNo" id="productNo" value="21"> <!-- 상품 번호를 포함 -->
 	                <input type="hidden" name="depth" id="depth" value="0"> <!-- 기본 댓글이므로 깊이는 0 -->
 	                <div class="stars">
 	                    <div class="score-wrapper">
@@ -79,16 +86,18 @@
 	                        <span class="point" style="font-size: 25px;">평점</span>
 	                    </div>
 	                </div>
-	                <input style="height: 30px;" class="recontent" id="content" name="content" type="text" placeholder="리뷰를 작성해주세요.">
+	                <input style="height: 30px; margin-bottom:10px;" class="recontent" id="content" name="content" type="text" placeholder="리뷰를 작성해주세요.">
 	                <button class="rebtn1" id="rebtn1">
 	                    <img style="width: 30px; height: 30px;" src="${hpath}/resources/imgs/login/move_9743734.png" alt="">
 	                </button>
-	                <input type="file" id="fileInput" multiple="multiple" style="display: none;">
+	                <input type="file" id="fileInput" multiple="multiple" style="display: none;" onchange="loadImg(this)">
 	                <button class="rebtn2" id="rebtn2" onclick="commentWrite()">등록</button>
+	                <div id="yimgbox">
+                    </div>
 	            </div>
 	        </div>
 	    </c:if>
-	    <c:forEach var="reply" items="${list }" varStatus="status" begin="0">
+	    <c:forEach var="reply" items="${list }">
 	        <div class="reviews" id="review-${reply.replyNo}" data-replyNo="${reply.replyNo}">
 	            <div class="review">
 	                <div class="review-title">
@@ -102,17 +111,15 @@
 	                    <span id="id">${reply.memberId}</span>
 	                    <div class="date">${reply.writeDate}</div>
 	                </div>
+	              
 	                <div class="review-content">
 	                    <span class="yrecon">${reply.content}</span>
-	                    <script>
-						    console.log("reply.status: ${reply.status}");
-						</script>
-						
-	                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
-	                        <div class="align-right">
-	                            <button class="editButton">수정</button>
-	                            <button class="deleteButton" style="margin-left: 10px; margin-right: 10px;">삭제</button>
-	                        </div>
+	                    
+	                    <c:if test="${sessionScope.loginUser.memberNo eq reply.memberNo and reply.status ne 'N' }">
+		                        <div class="align-right">
+		                            <button class="editButton">수정</button>
+		                            <button class="deleteButton" style="margin-left: 10px; margin-right: 10px;">삭제</button>
+		                        </div>
 	                    </c:if>
 	                    
 	                    <!-- 본 리뷰 수정팝업창 , 답글 수정 팝업창 -->
@@ -156,7 +163,7 @@
 						                    </div>
 				            				<div class="chReplyedit">
 						                        <p class="reply-content">${chReply.chContent}</p>
-							                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
+							                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo }">
 							                        <div class="align-right">
 							                            <button class="editButton2" id="chReplyNo-${chReply.chReplyNo}">수정</button>
 							                            <button class="deleteButton2" id="chReplyNo-${chReply.chReplyNo}" style="margin-left: 10px; margin-right: 10px;">삭제</button>
@@ -180,10 +187,9 @@
 	        <a href="#">&raquo;</a>
 	    </div>
 	</div>
-<script>
-
 	
-
+	
+<script>
 	
 	$(document).ready(function() {
         const avgStar = $(".pavg").text(); 
@@ -575,6 +581,46 @@
            });
        } 
        
+       
+       
+		function loadImg(inputFile) {
+		    	   
+		    	   const yimgbox = document.getElementById('yimgbox');
+		    	   yimgbox.innerHTML=""; // 다시 선택할경우 리셋 필요함
+		    	   const formData = new FormData();
+		    	   
+		   			if(inputFile.files.length) {	//파일이 첨부되었다면
+		   				for(let i=0; i<inputFile.files.length; i++){
+		    				const reader = new FileReader();
+			    			reader.readAsDataURL(inputFile.files[i]);
+		   					
+		    			// reader객체를 가지고 파일을 읽어들이는 메소드를 호출
+		    			// 파일 읽기가 완료되면 실행할 핸들러 정의
+			    			reader.onload = e => {
+			                    const img = document.createElement('img');
+			                    img.src = e.target.result;
+			                    img.id = `img${i}`;
+			                    img.alt = `Image ${i + 1}`;
+			                    img.style.marginRight = '15px';
+		
+			                    yimgbox.appendChild(img);
+			                    
+			                    formData.append('files', file);
+			                    loadedFilesCount++;
+
+			                    // 모든 파일이 로드되었을 때 AJAX 요청 보내기
+			                    if (inputFile.files.length>0) {
+			                        sendFilesToServer(formData);
+			                    }
+			                };
+		    			};
+		    			yimgbox.style.display = "flex"; // 이미지 박스 표시
+		   		    } else {
+		   		        yimgbox.style.display = "none"; // 파일이 선택되지 않은 경우 숨김
+		   		    }
+		   		} 
+      		 
+       
        /*
        function reloadComments() {
            $.ajax({
@@ -590,16 +636,20 @@
            });
        }  
       */
+      	  document.getElementById("rebtn1").addEventListener("click", function() {
+          document.getElementById("fileInput").click();
+          });
 
-       document.getElementById("rebtn1").addEventListener("click", function() {
-       document.getElementById("fileInput").click();
-       });
+          document.getElementById("fileInput").addEventListener("change", function() {
+              const selectedFile = this.files[0];
+              console.log("선택된 파일:", selectedFile);
+          });
+      
 
-       document.getElementById("fileInput").addEventListener("change", function() {
-           const selectedFile = this.files[0];
-           console.log("선택된 파일:", selectedFile);
-       });
-	
+       
 </script>
+
+
+<!-- 
 </body>
-</html>
+</html> -->

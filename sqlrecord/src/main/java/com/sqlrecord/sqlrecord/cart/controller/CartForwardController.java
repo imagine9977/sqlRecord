@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sqlrecord.sqlrecord.cart.model.service.CartService;
@@ -48,14 +49,22 @@ public class CartForwardController {
 		return "cart/cart";
 	}
 	
-	@GetMapping("/guest/{userid}")
-	public String getGuestCartListPage(@PathVariable int userid , Model model) {
+	
+	
+	@PostMapping("/insert")
+	public String insertCart(Cart cart) {
 		
-
-		List<Cart> cartList = cartService.getGuestCartList(userid);
-		model.addAttribute("glist",cartList);
-		log.info("{}" , cartList);
-		return "cart/cart";
+		cartService.insert(cart);
+		
+		
+		log.info("cart : {}" , cart.getCartAmount());
+		log.info("cart : {}"  , cart.getMember().getMemberNo());
+		log.info("cart : {}"  , cart.getProduct().getProductNo());
+		
+		String redirect = "redirect:/member/" + cart.getMember().getMemberNo();
+		
+		
+		return redirect;
 	}
 	
 }

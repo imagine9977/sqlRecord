@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.reply.model.dao.ReplyMapper;
+import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
 
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,31 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public float avgStar() {
 		return replyMapper.avgStar();
+	}
+
+	@Override
+	public int chInsReply(ChReply chReply) {
+		return replyMapper.chInsReply(chReply);
+	}
+
+	@Override
+	public List<ChReply> getChReplyList() {
+		return replyMapper.getChReplyList();
+	}
+
+	@Override
+	public int changeChReply(ChReply chReply) {
+		return replyMapper.changeChReply(chReply);
+	}
+
+	@Override
+	public int delChReply(ChReply chReplyNo) {
+		return replyMapper.delChReply(chReplyNo);
+	}
+
+	@Override
+	public int chReplyCount() {
+		return replyMapper.chReplyCount();
 	}
 
 }

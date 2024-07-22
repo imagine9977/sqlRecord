@@ -1,30 +1,31 @@
 package com.sqlrecord.sqlrecord.admin.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.sqlrecord.sqlrecord.common.vo.PageInfo;
+import com.sqlrecord.sqlrecord.member.model.service.MemberService;
+import com.sqlrecord.sqlrecord.member.model.vo.Member;
+import com.sqlrecord.sqlrecord.notice.model.service.NoticeService;
+import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/adminRest")
+@RequestMapping("/admin")
+@Slf4j
 public class AdminController {
-	
-	// admin.jsp 내 sidebar 삽입
-	@GetMapping("/sidebar")
-	public String getSidebar(@RequestParam String tab, Model model) {
-		model.addAttribute("tab",tab);
-		return "admin/sidebar";
-	}
-	
-	// admin.jsp 내 content(테이블) 삽입
-	@GetMapping("/content")
-	public String getContent(@RequestParam String tab, @RequestParam String type, Model model) {
-		model.addAttribute("tab", tab);
-		model.addAttribute("type", type);
-		return "admin/content";
-	}
-	
+
 //	// Service 생성자 주입
 //	@Autowired
 //	private ProductService productService;
@@ -47,101 +48,154 @@ public class AdminController {
 //	@Autowired
 //	private GuestOrdersExchangeService guestOrdersExchangeService;
 //	
-//	@Autowired
-//	private MemberService memberService;
-//	
+	@Autowired
+	private MemberService memberService;
+	
 //	@Autowired
 //	private ReplyService replyService;
-//	
-//	@Autowired
-//	private NoticeService noticeService;
+	
+	@Autowired
+	private NoticeService noticeService;
 //	
 //	@Autowired
 //	private QnaService qnaService;
-//	
-//
-//	// 사이드바 불러오기
-//	@GetMapping("/sidebar")
-//	@ResponseBody
-//	public String getAdminSidebar(@RequestParam String tab,
-//								  Model model) {
-//		
-//		model.addAttribute("tab", tab);
-//		
-//		switch (tab) {
-//			
-//			case "product" : 
-//		}
-//		
-//		
-//		//반환
-//		return "admin/sidebar";
-//	}
-//	
-//	// 내용(테이블, Chart.js) 불러오기
-//	@GetMapping("/content")
-//	@ResponseBody
-//	public String getAdminContent(@RequestParam String tab,
-//								  @RequestParam (defaultValue = "all") String type,
-//								  Model model) {
-//		
-//		model.addAttribute("tab", tab);
-//		model.addAttribute("type", type);
-//		
-//		switch (tab) {
-//			
-//			case "product" : if("all".equals(type)) {
-//				List<Product> productList = productService.getAllProducts();
-//				model.addAttribute("productList", productList);
-//			}
-//			
-//			case "order" :
-//				// 주문건 전체
-//				if("all".equals(type)) {
-//					List<MemberOrders> memberOrdersList = memberOrdersService.getAllOrders();
-//					List<OrdersDetail> ordersDetailList = ordersDetailService.getAllOrdersDetail();
-//					List<GuestOrders> guestOrdersList = guestOrdersService.getAllOrders();
-//					List<GuestOrdersDetail> guestOrdersDetailList = guestOrdersDetailService.getAllOrdersDetail();
-//					model.addAttribute("memberOrdersList", memberOrdersList);
-//					model.addAttribute("ordersDetailList", ordersDetailList);
-//					model.addAttribute("guestOrdersList", guestOrdersList);
-//					model.addAttribute("guestOrdersDetailList", guestOrdersDetailList);
-//				}
-//				// 교환/환불
-//				else {	
-//					List<OrdersExchange> ordersExchangeList = ordersExchangeService.getAllExchanges();
-//					List<GuestOrdersExchange> guestOrdersExchangeList = guestOrdersExchangeService.getAllExchanges();
-//					model.addAttribute("ordersExchangeList", ordersExchangeList);
-//					model.addAttribute("guestOrdersExchangeList", guestOrdersExchangeList);
-//				}
-//			
-//			case "member" : if("all".equals(type)) {	// 추후 Vo 클래스 AdminMember로 바꿀 수도 있음
-//				List<Member> memberList = memberService.getAllMembers();
-//				model.addAttribute("memberList", memberList);
-//			}
-//			
-//			case "review" : if("all".equals(type)) {
-//				List<Reply> replyList = replyService.getAllReplys();
-//				model.addAttribute("replyList", replyList);
-//			}
-//			
-//			case "analytics" : if("all".equals(type)) {
-//
-//			}
-//			
-//			case "notice" : if("all".equals(type)) {
-//				List<Notice> noticeList = noticeService.getAllNotices();
-//				model.addAttribute("noticeList", noticeList);
-//			}
-//			
-//			case "qna" : if("all".equals(type)) {
-//				List<Qna> qnaList = qnaService.getAllQnas();
-//				model.addAttribute("qnaList", qnaList);
-//			}
-//		}
-//		
-//		// 페이지 반환
-//		return "admin/content";
-//	}
 	
+	
+	// Notice 리스트 + 페이징
+	@ResponseBody
+	@GetMapping("/ajaxNoticeManagement")
+	public ResponseEntity<Map<String, Object>> getNoticeListAjax(@RequestParam(value="page", defaultValue="1") int page) {
+		int listCount = noticeService.noticeCount();
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 15;
+
+        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+        int endPage = startPage + pageLimit - 1;
+
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+
+        PageInfo pageInfo = PageInfo.builder()
+                .listCount(listCount)
+                .currentPage(currentPage)
+                .pageLimit(pageLimit)
+                .boardLimit(boardLimit)
+                .maxPage(maxPage)
+                .startPage(startPage)
+                .endPage(endPage)
+                .build();
+        
+        Map<String, Integer> map = new HashMap<>();
+
+        int startValue = (currentPage - 1) * boardLimit + 1;
+        int endValue = startValue + boardLimit - 1;
+
+        map.put("startValue", startValue);
+        map.put("endValue", endValue);
+
+        List<Notice> noticeList = noticeService.noticeFindAll(map);
+
+        List<Map<String, Object>> formattedNoticeList = new ArrayList<>();
+        
+        for (Notice notice : noticeList) {
+            Map<String, Object> formattedNotice = new HashMap<>();
+            formattedNotice.put("noticeNo", notice.getNoticeNo());
+            formattedNotice.put("noticeCategory", notice.getNoticeCategory());
+            formattedNotice.put("noticeTitle", notice.getNoticeTitle());
+            formattedNotice.put("resdate", notice.getResdate());
+            formattedNoticeList.add(formattedNotice);
+        }
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", formattedNoticeList);
+        response.put("pageInfo", pageInfo);
+        
+        log.info("공지값내놔 : {}", response);
+        
+        return ResponseEntity.ok(response);
+	}
+	
+	// Member 리스트 + 페이징
+	@ResponseBody
+	@GetMapping("/ajaxMemberManagement")
+	public ResponseEntity<Map<String, Object>> getMemberListAjax(
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="type", defaultValue="all") String type) {
+		int listCount = memberService.memberCount();
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 15;
+
+        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+        int endPage = startPage + pageLimit - 1;
+
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+
+        PageInfo pageInfo = PageInfo.builder()
+                .listCount(listCount)
+                .currentPage(currentPage)
+                .pageLimit(pageLimit)
+                .boardLimit(boardLimit)
+                .maxPage(maxPage)
+                .startPage(startPage)
+                .endPage(endPage)
+                .build();
+        
+        Map<String, Integer> map = new HashMap<>();
+
+        int startValue = (currentPage - 1) * boardLimit + 1;
+        int endValue = startValue + boardLimit - 1;
+
+        map.put("startValue", startValue);
+        map.put("endValue", endValue);
+
+        // 조회
+        List<Member> memberList = "withdrawn".equals(type)
+        		? memberService.findWithdrawnMembers(map)
+        		: memberService.findAllMembers(map);
+        
+        for (Member member : memberList) {
+            System.out.println("memberNo: " + member.getMemberNo());
+            System.out.println("memberId: " + member.getMemberId());
+            System.out.println("pointAmount: " + member.getPoint());
+        }
+
+        List<Map<String, Object>> formattedMemberList = new ArrayList<>();
+        
+        for (Member member : memberList) {
+            Map<String, Object> formattedMember = new HashMap<>();
+            formattedMember.put("memberNo", member.getMemberNo());
+            formattedMember.put("memberId", member.getMemberId());
+            formattedMember.put("name", member.getName());
+            formattedMember.put("resdate", member.getResDate());
+            formattedMember.put("point", member.getPoint());
+            formattedMemberList.add(formattedMember);
+        }
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", formattedMemberList);
+        response.put("pageInfo", pageInfo);
+        
+        log.info("회원값내놔 : {}", response);
+        
+        return ResponseEntity.ok(response);
+	}
+	
+	
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/* 상품 바인딩
+	@GetMapping("/productData")
+	public ResponseEntity<Message> getProductList() {
+		List<Notice> productList = productService.findAll();
+	}
+	*/
 }

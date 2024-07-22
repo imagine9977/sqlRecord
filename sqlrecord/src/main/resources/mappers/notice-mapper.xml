@@ -104,4 +104,50 @@
 		SET
 		NFILE_ORIGINAL = #{originalName},NFILE_CHANGD #{changedName}
 	</update>
+	
+	
+	
+	
+	
+	
+	<!-- ======================================= 관리자 페이지 ======================================= -->
+	<!-- 전체 글 수 조회 -->
+	<select id="noticeCount" resultType="_int">
+		SELECT
+		        COUNT(NOTICE_NO)
+		  FROM
+		        NOTICE
+	</select>
+	
+	<!-- 페이징 적용 전체 리스트 조회 -->
+	<select id="noticeFindAll" parameterType="map" resultType="notice">
+		SELECT
+				NOTICE_NO noticeNo,
+	            NOTICE_TITLE noticeTitle,
+	            NOTICE_CONTENT noticeContent,
+	            NOTICE_CATE noticeCategory,
+				RESDATE
+		  FROM
+            	(SELECT 
+	                    NOTICE_NO,
+	                    NOTICE_TITLE,
+	                  	NOTICE_CONTENT,
+	                    NOTICE_CATE,
+	                 	RESDATE,
+	                    ROWNUM RNUM 
+              	   FROM
+                   	 	(SELECT 
+	                             NOTICE_NO,
+	                             NOTICE_TITLE,
+	                             NOTICE_CONTENT,
+	                             NOTICE_CATE,
+	                             RESDATE
+                           FROM
+                             	 NOTICE                            
+                       	  ORDER
+                          	 BY
+                             	NOTICE_NO DESC))               
+	  	  WHERE
+      		 	RNUM BETWEEN #{startValue} AND #{endValue} 
+	</select>
 </mapper>

@@ -21,6 +21,57 @@
 	      FROM
 	    		MEMBER
 	</sql>
+	<sql id="selectAdminMember">
+	SELECT
+            	MEMBER_NO memberNo,
+            	MEMBER_ID memberId,
+            	NAME name,
+            	TELL tell,
+            	ADDR1 addr1,
+           		ADDR2 addr2,
+            	POSTCODE postcode,
+            	STATUS status,
+            	BIRTH birth,
+            	EMAIL email,
+            	RESDATE,
+            	POINT
+          FROM
+            	(SELECT 
+                		MEMBER_NO,
+		                MEMBER_ID,
+		                NAME,
+		                TELL,
+		                ADDR1,
+		                ADDR2,
+		                POSTCODE,
+		                STATUS,
+		                BIRTH,
+		                EMAIL,
+		                RESDATE,
+		                POINT,
+		                ROWNUM RNUM
+            	  FROM
+               			(SELECT 
+			                    M.MEMBER_NO,
+			                    M.MEMBER_ID,
+			                    M.NAME,
+			                    M.TELL,
+			                    M.ADDR1,
+			                    M.ADDR2,
+			                    M.POSTCODE,
+			                    M.STATUS,
+			                    M.BIRTH,
+			                    M.EMAIL,
+			                    M.RESDATE,
+			                    NVL(SUM(PO.POINT_AMOUNT), 0) AS point
+                		  FROM
+                    			MEMBER M
+                		  LEFT
+                		  JOIN
+                    			POINT PO ON M.MEMBER_NO = PO.MEMBER_NO
+                		 WHERE
+                    			M.MEMBER_ID != 'admin'
+	</sql>
 	
 	<select id="login" parameterType="member" resultType="member">
 		<include refid="selectMember"/>
@@ -146,4 +197,56 @@
 			WHERE
 				 MEMBER_ID = #{memberId} 
 	</update>
+
+  
+  
+  <!-- 관리자 페이지 : 회원 1명 상세정보 조회 -->
+	<select id="getOneMember" parameterType="String" resultType="member">
+		<include refid="selectMember"/>
+		WHERE
+				MEMBER_NO = #{memberNo}
+	</select>
+	
+    <!-- 관리자 페이지 : 전체회원 조회(페이징 적용) -->
+    <select id="findAllMembers" parameterType="map" resultType="member">
+        <include refid="selectAdminMember" />
+                    	   AND
+                    	   		M.STATUS = 'Y'
+                		 GROUP
+                		 	BY
+                    			M.MEMBER_NO, M.MEMBER_ID, M.NAME, M.TELL, M.ADDR1, M.ADDR2, M.POSTCODE, M.STATUS, M.BIRTH, M.EMAIL, M.RESDATE
+                		 ORDER
+                		 	BY
+                    			M.MEMBER_NO ASC)
+            			 )
+        		 WHERE
+            			RNUM BETWEEN #{startValue} AND #{endValue}
+    </select>
+    
+    <!-- 관리자 페이지 : 탈퇴회원 조회(페이징 적용) -->
+    <select id="findWithdrawnMembers" parameterType="map" resultType="member">
+        <include refid="selectAdminMember" />
+                    	   AND
+                    	   		M.STATUS = 'N'
+                		 GROUP
+                		 	BY
+                    			M.MEMBER_NO, M.MEMBER_ID, M.NAME, M.TELL, M.ADDR1, M.ADDR2, M.POSTCODE, M.STATUS, M.BIRTH, M.EMAIL, M.RESDATE
+                		 ORDER
+                		 	BY
+                    			M.MEMBER_NO ASC)
+            			 )
+        		 WHERE
+            			RNUM BETWEEN #{startValue} AND #{endValue}
+    </select>
+
+    <!-- 회원 수 카운트 쿼리 -->
+    <select id="memberCount" resultType="int">
+        SELECT
+            COUNT(M.MEMBER_NO)
+        FROM
+            MEMBER M
+        WHERE
+            M.MEMBER_ID != 'admin'
+    </select>
+
 </mapper>

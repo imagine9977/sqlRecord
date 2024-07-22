@@ -4,22 +4,195 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sqlrecord.sqlrecord.reply.model.dao.ReplyMapper">
 	
-	<sql id="">
-		
+	<sql id="replySelect">
+		SELECT 
+				REPLY_NO replyNo,
+				DEPTH,
+				CONTENT,
+				STAR,
+				WRITE_DATE writeDate,
+				PRODUCT_NO productNo,
+				MEMBER_NO memberNo,
+				STATUS
+		  FROM
+		  		REPLY
 	</sql>
-	<select id="getReplyList" resultType="reply">
-		select * from reply order by reply_No desc
-	</select>	
-	<select id="getReply" parameterType="int" resultType="reply">
-		select * from reply where reply_No=#{replyNo}
+	<!--  
+	<select id="replyCount">
+		SELECT 
+				 COUNT(*)
+			FROM
+				  REPLY
+		   WHERE
+		   		  PRODUCT_NO = #{productNo} 			
 	</select>
+	-->
 	<select id="replyCount" resultType="int">
-		select count(*) from reply
-	</select>
-	<select id="avgStar" resultType="float">
-		select round(AVG(star), 1) AS avgStar from Reply
+		SELECT
+				COUNT(*)
+		  FROM
+		  		REPLY
+  		 WHERE
+  		 		STATUS = 'Y'	
 	</select>
 	
+	<select id="chReplyCount" resultType="int">
+		SELECT
+		        COUNT(*)
+		  FROM
+		        CHREPLY
+		  WHERE
+		        REPLY_NO = REPLY_NO
+	</select>
+	
+	<select id="getReplyList" resultType="reply">
+		SELECT 
+		        r.REPLY_NO replyNo,
+		        r.DEPTH,
+		        r.CONTENT,
+		        r.STAR,
+		        r.WRITE_DATE writeDate,
+		        r.PRODUCT_NO productNo,
+		        r.MEMBER_NO memberNo,
+		        r.STATUS,
+		        m.MEMBER_ID memberId
+		  FROM
+		        REPLY r 
+		  JOIN 
+		  		MEMBER m
+		    ON
+		        r.MEMBER_NO = m.MEMBER_NO
+		 WHERE
+		 		r.STATUS != 'D'      
+		 ORDER
+    		BY
+        		REPLY_NO
+  		  DESC      	
+	</select>	
+	
+	<select id="getChReplyList" resultType="chReply">
+		SELECT 
+		        r.CHREPLY_NO chReplyNo,
+		        r.DEPTH,
+		        r.CHCONTENT,
+		        r.WRITE_DATE writeDate,
+		        r.MEMBER_NO memberNo,
+                r.REPLY_NO replyNo,
+		        m.MEMBER_ID memberId
+		  FROM
+		        CHREPLY r 
+		  JOIN 
+		  		MEMBER m
+		    ON
+		        r.MEMBER_NO = m.MEMBER_NO
+		 ORDER
+    		BY
+        		CHREPLY_NO
+  		  DESC
+	</select>
+	
+	<select id="getReply" parameterType="reply" resultType="reply">
+		<include refid="replySelect"/>
+	  	 WHERE
+	  	 		REPLY_NO = #{replyNo}	
+	</select>
+	
+	<select id="avgStar" resultType="float">
+		SELECT 
+				ROUND(AVG(STAR), 1) AS avgStar 
+		  FROM
+		  		REPLY
+	</select>
+	
+	<insert id="insReply" parameterType="reply">
+		INSERT
+			INTO REPLY (
+						REPLY_NO,
+						DEPTH,
+						CONTENT,
+						STAR,
+						WRITE_DATE,
+						PRODUCT_NO,
+						MEMBER_NO,
+						STATUS	
+			 			)
+ 			    VALUES (
+ 			    		REPLY_SEQ.NEXTVAL,
+ 			    		#{depth},
+ 			    		#{content},
+ 			    		#{star},
+ 			    		SYSDATE,
+ 			    		#{productNo},
+ 			    		#{memberNo},
+ 			    		'Y'
+ 			    )
+	</insert>
+	
+	<insert id="chInsReply" parameterType="chReply">
+		INSERT
+			INTO CHREPLY (
+						  CHREPLY_NO,
+						  CHCONTENT,
+						  REPLY_NO,
+						  MEMBER_NO,
+						  WRITE_DATE,
+						  DEPTH	
+						  )
+				  VALUES (
+				  		  REPLY_SEQ1.NEXTVAL,
+				  		  #{chContent},
+				  		  #{replyNo},
+				  		  #{memberNo},
+				  		  SYSDATE,
+				  		  #{depth} 
+				  )
+	</insert>
+	
+	<update id="changeReply" parameterType="reply">
+		UPDATE 
+				REPLY
+		   SET
+		   		STAR = #{star},
+		   		CONTENT = #{content}
+	   	 WHERE
+	   	 		REPLY_NO = #{replyNo}	 		
+	</update>
+	
+	<update id="changeChReply" parameterType="chReply">
+		UPDATE
+				CHREPLY
+		   SET
+		   		CHCONTENT =#{chContent}
+   		 WHERE
+   		 		CHREPLY_NO = #{chReplyNo}	
+	</update>
+		
+	<update id="delReply" parameterType="reply">
+		UPDATE 
+				REPLY R
+		   SET 
+		        R.STATUS = CASE 
+          WHEN 
+                (SELECT COUNT(*) FROM CHREPLY CR WHERE CR.REPLY_NO = R.REPLY_NO) > 0 THEN 'N'
+                ELSE 'D'
+           END,
+                R.CONTENT = CASE 
+          WHEN 
+                (SELECT COUNT(*) FROM CHREPLY CR WHERE CR.REPLY_NO = R.REPLY_NO) > 0 THEN '삭제되었습니다'
+                ELSE R.CONTENT
+           END,
+           		R.STAR = 0
+         WHERE 
+                R.REPLY_NO = #{replyNo}	 
+	</update>
+	
+	<delete id="delChReply" parameterType="chReply">
+		DELETE 
+		  FROM 
+		  		CHREPLY
+  		 WHERE
+  		 		CHREPLY_NO = #{chReplyNo}
+	</delete>
 	
 	<select id="getReplyStarAll" resultMap="StarMap">
     <![CDATA[ 
@@ -40,7 +213,8 @@
 		          WHEN star >= 2.0 AND star < 3.0 THEN 4
 		          WHEN star >= 1.0 AND star < 2.0 THEN 5
 		        END AS rating_index
-		      FROM reply
+		      FROM REPLY
+		      WHERE star >= 1.0
 		      GROUP BY
 		        CASE 
 		          WHEN star = 5.0 THEN '5점 MAX'
@@ -58,7 +232,7 @@
 		        END
 		    ),
 		    total AS (
-		      SELECT COUNT(*) AS total_count FROM reply
+		      SELECT COUNT(*) AS total_count FROM REPLY
 		    )
 		    SELECT 
 		      s.rating_range,
