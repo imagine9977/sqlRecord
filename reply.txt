@@ -57,7 +57,6 @@
 	            <option value="24">24</option>
 	        </select>
 	    </div>
-	   
 	    <c:if test="${!empty sessionScope.loginUser}">
 	        <div id="commentForm">
 	            <div class="overlay" id="overlay"></div>
@@ -104,11 +103,7 @@
 	                </div>
 	                <div class="review-content">
 	                    <span class="yrecon">${reply.content}</span>
-	                    <script>
-						    console.log("reply.status: ${reply.status}");
-						</script>
-						
-	                    <c:if test="${sessionScope.loginUser.memberNo == chReply.memberNo}">
+	                    <c:if test="${sessionScope.loginUser.memberNo == reply.memberNo}">
 	                        <div class="align-right">
 	                            <button class="editButton">수정</button>
 	                            <button class="deleteButton" style="margin-left: 10px; margin-right: 10px;">삭제</button>
@@ -181,9 +176,6 @@
 	    </div>
 	</div>
 <script>
-
-	
-
 	
 	$(document).ready(function() {
         const avgStar = $(".pavg").text(); 

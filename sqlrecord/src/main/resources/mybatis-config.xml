@@ -24,6 +24,7 @@
 
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.Reply" alias="reply" />
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.ChReply" alias="chReply" />
 
 
 
