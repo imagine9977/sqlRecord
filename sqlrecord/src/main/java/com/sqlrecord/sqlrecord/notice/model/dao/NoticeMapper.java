@@ -31,3 +31,4 @@ public interface NoticeMapper {
   // 관리자 페이지
 	int noticeCount();	// 전체 글 수 조회
 	List<Notice> noticeFindAll(Map<String, Integer> map);	// 페이징 적용 전체 글 조회
+}
