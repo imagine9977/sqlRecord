@@ -132,7 +132,9 @@
 	                            <div id="editimgbox">
 				                	<c:forEach var="img" items="${imgList}">
 				                		<c:if test="${reply.replyNo eq img.replyNo}">
-				                			<img src="" alt="img" data-reply-no="${img.replyNo}" data-image-path="${hpath}/resources/uploadFiles/reply/${img.changeName}">
+				                			<img src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img"
+				                			data-reply-no="${reply.replyNo}" 
+				                			data-image-path="${hpath}/resources/uploadFiles/reply/${img.changeName}">
 				                		</c:if>
 				                	</c:forEach>
 				                </div>
@@ -152,7 +154,7 @@
 	                <div id="yimgbox1">
 	                	<c:forEach var="img" items="${imgList}">
 	                		<c:if test="${reply.replyNo eq img.replyNo}">
-	                			<img  src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img">
+	                			<img  src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img" class="imgFiles" id="imgFile-${reply.replyNo}"">
 	                		</c:if>
 	                	</c:forEach>
 	                </div>
@@ -310,19 +312,25 @@
         
      // 수정 버튼 클릭 시 해당 댓글의 내용과 별점을 가져와 수정 팝업을 열도록 설정
 		$(".editButton").click(function() {
-			/*
-			// 해당 수정 버튼이 속한 댓글 요소를 찾습니다.
-		    const reviewElement = $(this).closest('.reviews');
-		    // 댓글 요소에서 replyNo 값을 가져옵니다.
-		    const replyNo = reviewElement.data('replyNo');
-		    */
 		    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
 		    console.log(replyNo); // 댓글 번호 출력
 		    const currentContent = $(this).closest('.review-content').find('.yrecon').text();
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
+		   // const imgReply = $(this).closest('.imgFiles').arrt('id').split('-')[1];
 		    
+		    //해당 replyNo에 첨부파일한 img태그 src 속성값을 저장
+		    /*
+		    const imgIds = [];
+			$('#').each(function() {
+			    imgIds.push($(this).attr('src'));
+			});
+			console.log("Image IDs:", imgIds);
+			console.log(`"${replyNo}:", ${replyNo}`);
+		    */
 		    if(`#editimgbox img[data-reply-no="${replyNo}"][src!=""]`){
-		    	//$('#editimgbox').css("display", "block");
+		    	$('#editimgbox').css("display", "block");
+		    	
+		    	
 		    	// 이미지 src 설정
 		        $(`#editimgbox img[data-reply-no="${replyNo}"]`).each(function() {
 		            const imagePath = $(this).data('image-path');
