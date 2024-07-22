@@ -33,7 +33,7 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="memberOrdersDetail" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx" alias="memberOrdersEx" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo" alias="trackingInfo" />
-
+ 
  	</typeAliases>
  	
  	<mappers>
