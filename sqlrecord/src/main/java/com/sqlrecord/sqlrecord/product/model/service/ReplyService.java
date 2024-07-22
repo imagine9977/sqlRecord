@@ -1,10 +1,11 @@
-package com.sqlrecord.sqlrecord.reply.model.service;
+package com.sqlrecord.sqlrecord.product.model.service;
 
 import java.util.List;
 import java.util.Map;
 
 import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
+import com.sqlrecord.sqlrecord.reply.model.vo.ReplyFile;
 
 public interface ReplyService {
 
@@ -21,4 +22,6 @@ public interface ReplyService {
 	public int changeChReply(ChReply chReply);
 	public int delChReply(ChReply chReplyNo);
 	public int chReplyCount();
+	public int insFile(ReplyFile replyFile);
+	public List<ReplyFile> getImgList();
 }

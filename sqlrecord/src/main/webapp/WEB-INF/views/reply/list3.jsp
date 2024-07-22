@@ -75,7 +75,7 @@
 	            </div>
 	            <div class="review-header">
 	                <p>리뷰 작성하기</p>
-	                <input type="hidden" name="productNo" id="productNo" value="21"> <!-- 상품 번호를 포함 -->
+	                <input type="hidden" name="productNo" id="productNo" value="${product.productNo}"> <!-- 상품 번호를 포함 -->
 	                <input type="hidden" name="depth" id="depth" value="0"> <!-- 기본 댓글이므로 깊이는 0 -->
 	                <div class="stars">
 	                    <div class="score-wrapper">
@@ -92,8 +92,7 @@
 	                </button>
 	                <input type="file" id="fileInput" multiple="multiple" style="display: none;" onchange="loadImg(this)">
 	                <button class="rebtn2" id="rebtn2" onclick="commentWrite()">등록</button>
-	                <div id="yimgbox">
-                    </div>
+	                <div id="yimgbox"></div>
 	            </div>
 	        </div>
 	    </c:if>
@@ -130,6 +129,14 @@
 	                            <p>댓글 수정하기</p>
 	                            <input type="number" id="editRatingInput" name="star" min="0" max="5" step="0.1" placeholder="별점 입력">
 	                            <textarea id="editContent" name="content" rows="4" placeholder="내용 수정"></textarea>
+	                            <div id="editimgbox">
+				                	<c:forEach var="img" items="${imgList}">
+				                		<c:if test="${reply.replyNo eq img.replyNo}">
+				                			<img src="" alt="img" data-reply-no="${img.replyNo}" data-image-path="${hpath}/resources/uploadFiles/reply/${img.changeName}">
+				                		</c:if>
+				                	</c:forEach>
+				                </div>
+				                <br>
 	                            <button class="submitButton" type="button">수정 완료</button>
 	                        </div>
 	                    </div>
@@ -141,6 +148,13 @@
 	                            <button class="submitButton2" type="button">수정 완료</button>
 	                        </div>
 	                    </div>
+	                </div>
+	                <div id="yimgbox1">
+	                	<c:forEach var="img" items="${imgList}">
+	                		<c:if test="${reply.replyNo eq img.replyNo}">
+	                			<img  src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img">
+	                		</c:if>
+	                	</c:forEach>
 	                </div>
 	                <div class="reply-section">
 					    <button class="reply-toggle">답글 보기</button>
@@ -237,6 +251,7 @@
             const percent = (avgStar1 / max) * 100;
             $(this).find(".s1favg").css("width", percent + "%");
         });
+        
     });
     
   /*  이거는 모든 요소를 다 반복하면서 처리해서 오류 발생함 ㅗ fuck 
@@ -256,7 +271,7 @@
             if (confirm('댓글을 삭제하시겠습니까?')) {
                 $.ajax({
                     type: 'POST',
-                    url: '${hpath}/reply/delReply.do',
+                    url: '${hpath}/productFor/delReply.do',
                     data: { "replyNo" : replyNo },
                     success: function(response) {
                         console.log('삭제 성공:', response);
@@ -278,7 +293,7 @@
             if (confirm('댓글을 삭제하시겠습니까?')) {
                 $.ajax({
                     type: 'POST',
-                    url: '${hpath}/reply/delChReply.do',
+                    url: '${hpath}/productFor/delChReply.do',
                     data: { "chReplyNo" : chReplyNo },
                     success: function(response) {
                         console.log('삭제 성공:', response);
@@ -305,6 +320,15 @@
 		    console.log(replyNo); // 댓글 번호 출력
 		    const currentContent = $(this).closest('.review-content').find('.yrecon').text();
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
+		    
+		    if(`#editimgbox img[data-reply-no="${replyNo}"][src!=""]`){
+		    	//$('#editimgbox').css("display", "block");
+		    	// 이미지 src 설정
+		        $(`#editimgbox img[data-reply-no="${replyNo}"]`).each(function() {
+		            const imagePath = $(this).data('image-path');
+		            $(this).attr('src', imagePath);
+		        });
+		    }
 		    openEditPopup(currentContent, currentRating,replyNo);
 		});
      
@@ -328,7 +352,7 @@
 		     
 		    $.ajax({
 		        type: 'POST',
-		        url: '${hpath}/reply/upReply.do',
+		        url: '${hpath}/productFor/upReply.do',
 		        data: {
 		            replyNo: replyNo,
 		            content: updatedContent,
@@ -364,7 +388,7 @@
 			
 		     $.ajax({
 			        type: 'POST',
-			        url: '${hpath}/reply/upChReply.do',
+			        url: '${hpath}/productFor/upChReply.do',
 			        data: {
 			        	chReplyNo: chReplyNo,
 			        	chContent: updatedContent
@@ -408,7 +432,7 @@
 
 	         $.ajax({
 	             type: "POST",
-	             url: "${hpath}/reply/chInsReply.do",
+	             url: "${hpath}/productFor/chInsReply.do",
 	             data: formData,
 	             contentType: false,
 	             processData: false,
@@ -467,7 +491,7 @@
 		    // AJAX 요청 예시
 		    $.ajax({
 		        type: 'POST',
-		        url: '${hpath}/reply/upReply.do',
+		        url: '${hpath}/productFor/upReply.do',
 		        data: {
 		            replyNo: replyNo,
 		            content: updatedContent,
@@ -556,7 +580,7 @@
            }
            $.ajax({
                type: "POST",
-               url: "${hpath}/reply/insReply.do",
+               url: "${hpath}/productFor/insReply.do",
                data: formData,
                contentType: false,
                processData: false,
@@ -600,18 +624,11 @@
 			                    const img = document.createElement('img');
 			                    img.src = e.target.result;
 			                    img.id = `img${i}`;
-			                    img.alt = `Image ${i + 1}`;
-			                    img.style.marginRight = '15px';
-		
 			                    yimgbox.appendChild(img);
 			                    
 			                    formData.append('files', file);
 			                    loadedFilesCount++;
 
-			                    // 모든 파일이 로드되었을 때 AJAX 요청 보내기
-			                    if (inputFile.files.length>0) {
-			                        sendFilesToServer(formData);
-			                    }
 			                };
 		    			};
 		    			yimgbox.style.display = "flex"; // 이미지 박스 표시

@@ -377,3 +377,26 @@
             max-width: 200px; 
             max-height: 200px; 
         }
+        
+        #yimgbox1 {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        #yimgbox1 img {
+            max-width: 200px; 
+            max-height: 200px; 
+        }
+        
+        #editimgbox {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            display: none;
+        }
+        #editimgbox img {
+            max-width: 100px; 
+            max-height: 100px; 
+        }
+        
+        

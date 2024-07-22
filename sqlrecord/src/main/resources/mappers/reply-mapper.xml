@@ -45,6 +45,19 @@
 		        REPLY_NO = REPLY_NO
 	</select>
 	
+	<select id="getImgList" resultType="replyFile">
+		SELECT
+				FILE_NO fileNo,
+				ORIGINNAME,
+				CHANGENAME,
+				REPLY_NO replyNo,
+				MEMBER_NO memberNo
+		  FROM
+		  		REPLY_FILE
+  		 WHERE
+  		 		REPLY_NO = REPLY_NO
+	</select>
+	
 	<select id="getReplyList" resultType="reply">
 		SELECT 
 		        r.REPLY_NO replyNo,
@@ -104,6 +117,24 @@
 		  		REPLY
 	</select>
 	
+	<insert id="insFile" parameterType="replyFile">
+		INSERT
+			INTO Reply_File (
+							 FILE_NO,
+							 ORIGINNAME,
+							 CHANGENAME,
+							 REPLY_NO,
+							 MEMBER_NO
+							 )
+				  VALUES	(
+				  			 FILE_SEQ.NEXTVAL,
+				  			 #{originName},
+				  			 #{changeName},
+				  			 REPLY_SEQ.CURRVAL,
+				  			 #{memberNo}
+				  			 )
+	</insert>
+	
 	<insert id="insReply" parameterType="reply">
 		INSERT
 			INTO REPLY (
@@ -153,7 +184,8 @@
 				REPLY
 		   SET
 		   		STAR = #{star},
-		   		CONTENT = #{content}
+		   		CONTENT = #{content},
+		   		WRITE_DATE = SYSDATE
 	   	 WHERE
 	   	 		REPLY_NO = #{replyNo}	 		
 	</update>
@@ -162,7 +194,8 @@
 		UPDATE
 				CHREPLY
 		   SET
-		   		CHCONTENT =#{chContent}
+		   		CHCONTENT =#{chContent},
+		   		WRITE_DATE = SYSDATE
    		 WHERE
    		 		CHREPLY_NO = #{chReplyNo}	
 	</update>
@@ -181,7 +214,8 @@
                 (SELECT COUNT(*) FROM CHREPLY CR WHERE CR.REPLY_NO = R.REPLY_NO) > 0 THEN '삭제되었습니다'
                 ELSE R.CONTENT
            END,
-           		R.STAR = 0
+           		R.STAR = 0,
+           		R.WRITE_DATE = SYSDATE
          WHERE 
                 R.REPLY_NO = #{replyNo}	 
 	</update>

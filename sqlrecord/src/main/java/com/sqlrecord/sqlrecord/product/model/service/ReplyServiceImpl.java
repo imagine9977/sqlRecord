@@ -1,4 +1,4 @@
-package com.sqlrecord.sqlrecord.reply.model.service;
+package com.sqlrecord.sqlrecord.product.model.service;
 
 import java.util.List;
 import java.util.Map;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sqlrecord.sqlrecord.reply.model.dao.ReplyMapper;
 import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
+import com.sqlrecord.sqlrecord.reply.model.vo.ReplyFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -81,5 +82,16 @@ public class ReplyServiceImpl implements ReplyService {
 	public int chReplyCount() {
 		return replyMapper.chReplyCount();
 	}
+
+	@Override
+	public int insFile(ReplyFile replyFile) {
+		return replyMapper.insFile(replyFile);
+	}
+
+	@Override
+	public List<ReplyFile> getImgList() {
+		return replyMapper.getImgList();
+	}
+
 
 }

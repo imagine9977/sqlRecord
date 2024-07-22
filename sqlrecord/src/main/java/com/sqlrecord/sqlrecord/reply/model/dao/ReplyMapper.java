@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
+import com.sqlrecord.sqlrecord.reply.model.vo.ReplyFile;
 
 @Mapper
 public interface ReplyMapper {
@@ -24,6 +25,8 @@ public interface ReplyMapper {
 	int changeChReply(ChReply chReply);
 	int delChReply(ChReply chReplyNo);
 	int chReplyCount();
+	int insFile(ReplyFile replyFile);
+	List<ReplyFile> getImgList();
 
 
 }
