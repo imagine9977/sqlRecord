@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -134,11 +135,33 @@ public class QnaController {
         }
     }
 	
+	@PutMapping("/commentEdit.do")
+	public ResponseEntity<Message>  updateComment(@RequestBody Comment newComment, HttpSession session) {
+        // Assuming you have a service method to save the comment
+		log.info(newComment.toString());
+		int qnaNumber =0; //qnaService.updateComment(newComment);
+        if (qnaNumber>0) {
+        	Message responseMsg = Message.builder().data(qnaNumber).message("댓글 수정 성공").build();
+        	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+        } else {
+        	return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("댓글 수정 실패").build());
+        }
+    }
+	@PostMapping("/commentDelete.do")
+	public ResponseEntity<Message> deleteComment(@RequestBody Map<String, Integer> requestBody, HttpSession session) {
+	    int commentNo = requestBody.get("commentNo");
+	    int success = qnaService.deleteComment(commentNo);// Use the service method to delete the comment
+	    if (success>0) {
+	        return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("댓글 삭제 성공").build());
+	    } else {
+	        return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("댓글 삭제 실패").build());
+	    }
+	}
+	
 	@PostMapping("/insert.do")
 	public String insert(@ModelAttribute Qna qna, @RequestParam("upfile") MultipartFile[] upfiles,
 			HttpSession session) {
-		log.info("게시글 정보: {}", qna);
-		log.info("파일 정보: {}", upfiles);
+		
 		List<QnaFile> files = new ArrayList<>();
 
 		if (upfiles != null) {
@@ -152,9 +175,14 @@ public class QnaController {
 				}
 			}
 		}
-
+		log.info("hirez: {}", qna.getQnaNo());
+		if(qna.getSecret() !=  "Y") {
+			qna.setSecret("N");
+			log.info("hir");
+		}
 		qna.setFiles(files); // Assuming qna has a List<QnaFile> attribute named 'files'
-
+		log.info("게시글 정보1: {}", qna);
+		log.info("파일 정보1: {}", upfiles);
 		if (qnaService.insert(qna) > 0) {
 			session.setAttribute("alertMsg", "게시글 작성 성공");
 			return "redirect:/qnas";

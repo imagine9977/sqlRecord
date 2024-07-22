@@ -38,4 +38,6 @@ public interface MemberMapper {
 	List<Member> findWithdrawnMembers(Map<String, Integer> map);	//탈퇴 회원 조회
 	int memberCount();
 	
+	// QNA용 
+	String memberIdFindByNo(int memberNo);
 }

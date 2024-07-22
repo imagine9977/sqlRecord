@@ -248,5 +248,14 @@
         WHERE
             M.MEMBER_ID != 'admin'
     </select>
-
+	
+	
+	<select id="memberIdFindByNo" parameterType="_int" resultType="String">
+		SELECT
+			MEMBER_ID
+		FROM
+			MEMBER
+		WHERE
+			MEMBER_NO = #{memberNo}
+	</select>
 </mapper>

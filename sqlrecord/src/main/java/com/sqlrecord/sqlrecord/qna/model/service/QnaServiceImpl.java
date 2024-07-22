@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.sqlrecord.sqlrecord.member.model.dao.MemberMapper;
 import com.sqlrecord.sqlrecord.qna.model.dao.QnaMapper;
 import com.sqlrecord.sqlrecord.qna.model.vo.Comment;
 import com.sqlrecord.sqlrecord.qna.model.vo.Qna;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class QnaServiceImpl implements QnaService{
 	private final QnaMapper qnaMapper;
+	private final MemberMapper memberMapper;
 	@Override
 	public int qnaCount() {
 		// TODO Auto-generated method stub
@@ -54,6 +56,7 @@ public class QnaServiceImpl implements QnaService{
 		// TODO Auto-generated method stub
 		Qna qna= qnaMapper.findById(qnaNo);
 		if(qna != null ) {
+			qna.setMemberId(memberMapper.memberIdFindByNo(qna.getMemberNo()));
 			List<QnaFile> qnafiles = qnaMapper.findFiles(qnaNo);
 			if(qnafiles!=null) qna.setFiles(qnafiles);
 			List<Comment> qnaComments = qnaMapper.findComments(qnaNo);
@@ -86,8 +89,9 @@ public class QnaServiceImpl implements QnaService{
 	@Override
 	public int insert(Qna qna) {
 		// TODO Auto-generated method stub
-		 int result =  qnaMapper.insert( qna);
 		 System.out.println("sql 저장");
+		 int result =  qnaMapper.insert( qna);
+		
 
 		    if (result > 0) {
 		        // Retrieve the generated qnaNo
@@ -160,5 +164,12 @@ public class QnaServiceImpl implements QnaService{
 	public QnaFile findFileById(int delfile) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public int deleteComment(int commentNo) {
+		
+		
+		return qnaMapper.deleteSingleComment(int commentNo);
 	}
 }

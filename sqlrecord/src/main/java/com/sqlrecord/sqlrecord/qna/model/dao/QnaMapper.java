@@ -60,4 +60,7 @@ public interface QnaMapper {
 
 
 	int updateComment(Comment comm);
+
+
+	int deleteSingleComment(int commentNo);
 }

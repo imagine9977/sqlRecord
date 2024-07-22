@@ -38,6 +38,8 @@ public interface QnaService {
 	public void deleteFile(int delfile);
 
 	public QnaFile findFileById(int delfile);
+
+	public int deleteComment(int commentNo);
 	
 	//public int deleteFiles(int qnaNo);
 	

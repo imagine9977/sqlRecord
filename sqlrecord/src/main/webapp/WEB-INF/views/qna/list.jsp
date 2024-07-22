@@ -6,9 +6,9 @@
 <%@ page import="java.util.*, java.lang.*"%>
 <%@ page import="java.text.*, java.net.InetAddress"%>
 <c:set var="path0" value="<%=request.getContextPath()%>" />
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="ko">
-<html>
+
 <head>
 <%@ include file="../head.jsp"%>
 <meta charset="UTF-8">
@@ -33,11 +33,10 @@
 /* Scoped styles for qna.jsp content */
 #qna-container {
 	font-family: Arial, sans-serif;
-	margin: 0;
 	padding: 0;
 	background-color: #f4f4f4;
-	/* Container for the comments section */ 
-	#comments { padding : 15px;
+	margin-bottom: 15px;
+	} # comments { padding : 15px;
 	background-color: #f9f9f9;
 	border-top: 1px solid #e0e0e0;
 	margin-top: 15px;
@@ -96,7 +95,9 @@
 }
 
 .container {
-	width: 80%;
+	width: 90%;
+	margin-left: 5%;
+	margin-right: 5%;
 	margin: auto;
 	overflow: hidden;
 }
@@ -207,7 +208,6 @@ header h1 {
 #qnaModal {
 	top: 100px;
 	min-height: 900px;
-
 	z-index: 999999;
 }
 
@@ -258,22 +258,22 @@ header h1 {
 
 .button-line {
 	display: flex;
-	justify-content: space-between;
+	justify-content: end;
 	align-items: center;
-	width: 100%;
+	width: 90%;
 	text-align: center;
-	margin: 20px 0;
+	margin: 5%, 20px;
 }
 
-.button-line button {
-	padding: 10px 20px;
+.button-line a {
+	padding: 5px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+	display: block;
 }
 
 .add-qna-button {
-	padding: 10px 20px;
 	background: #4CAF50;
 	color: #ffffff;
 	border: none;
@@ -282,6 +282,19 @@ header h1 {
 }
 
 .add-qna-button:hover {
+	background: #45a049;
+}
+
+.admin-button {
+	background: #4CAF50;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	paddint-right: 20px;
+}
+
+.admin-button:hover {
 	background: #45a049;
 }
 
@@ -325,6 +338,22 @@ header h1 {
 	color: white;
 	border-color: #0056b3;
 }
+
+.comment-change {
+	background: #4CAF50;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.comment-delete {
+	background: red;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+
 }
 </style>
 </head>
@@ -367,6 +396,8 @@ header h1 {
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 id="qnaHeader"></h5>
+							<label for="qnaId">작성자: </label>
+							<div id="qnaId"></div>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
@@ -383,17 +414,23 @@ header h1 {
 							</div>
 							<hr />
 							<div id="qna-comments">
-								<div id="comments"></div>
-								<button id="addCommentButton" class="btn btn-primary">Add
-									Comment</button>
-
-
-								<div id="commentForm" style="display: none;">
+							<div id="comments"></div>
+							<c:choose>
+							<c:when test="${sessionScope.loginUser.memberId} eq 'admin'
+									|| ${sessionScope.loginUser.memberId}==qnaId">
+								
+								<div><button id="addCommentButton admin-only"
+									class="btn btn-primary">Add Comment</button></div>
+								
+									<div id="commentForm" style="display: none;">
 									<textarea id="newCommentContent"
 										placeholder="Enter your comment"></textarea>
 									<button id="submitCommentButton" class="btn btn-success">Submit
 										Comment</button>
-								</div>
+									</div>
+								</c:when>
+
+								</c:choose>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -415,55 +452,6 @@ header h1 {
 			</div>
 		</div>
 
-		<div class="modal fade" id="updateModal" tabindex="-1"
-			aria-labelledby="updateModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<form method="POST" enctype="multipart/form-data"
-						id="fileUploadForm">
-						<input type="hidden" id="fileNoDel" name="fileNoDel" value="">
-						<input type="hidden" id="fileNameDel" name="fileNameDel" value="">
-						<div class="modal-header">
-							<h5 id="qnaNo" class="inline-header"></h5>
-							<input type="hidden" name="qnaNo" value="${qna.qnaNo }" /> <label
-								for="qnaTitle">제목</label> <input type="text"
-								class="form-control" id='qnaTitle' name='qnaTitle' value="">
-							<button type="button" class="btn-close" data-bs-dismiss="modal"
-								aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div class="form-group">
-								<label for="qnaCategory">분류</label> <select class="form-control"
-									id="qnaCategory" name="qnaCategory">
-									<option value="general">일반</option>
-									<option value="pay">결제</option>
-									<option value="service">서비스</option>
-									<option value="etc">기타</option>
-								</select>
-							</div>
-							<div id="qna-detail">
-								<h4>파일 내려받기</h4>
-								<div id="files"></div>
-								<hr />
-								<div class="form-group">
-									<label for="qnaContent">내용</label>
-									<textarea class="form-control" rows="5" id='qnaContent'
-										style="resize: none;"></textarea>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<div id="qnaActions">
-								<button class="btn" type="button" id="btnSubmit"
-									style="background-color: orange; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">수정하기</button>
-								&nbsp;&nbsp; <a class="btn" data-bs-dismiss="modal"
-									style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</a>&nbsp;&nbsp;
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
 
 		<div id="liveAlertPlaceholder"></div>
 
@@ -473,11 +461,19 @@ header h1 {
 		</div>
 
 		<div class="button-line">
-			<div class="see-more">
-				<!--  <span class="get-more-list" onclick="loadMoreqnas()">더 보기</span> -->
-			</div>
+
+			<c:choose>
+				<c:when test="${ sessionScope.loginUser.memberId == 'admin' }">
+					<div class="admin-button">
+						<a class=" admin-button btn" href="${hpath }/adminFor">관리페이지로
+							가기</a>
+					</div>
+				</c:when>
+			</c:choose>
+			<br />
+
 			<div class="add">
-				<a class="add-qna-button" href="qnas/insert.do">공지 추가하기</a>
+				<a class="add-qna-button" href="qnas/insert.do">질문 추가하기</a>
 			</div>
 		</div>
 
@@ -496,28 +492,11 @@ header h1 {
 			var fileNameArry = [];
 			var userRole = '${sessionScope.loginUser.memberId}';
 			
-			
 			document.getElementById("goToUpdatePage").onclick = function () {
 		        location.href = "qnas/update.do/"+currentQnaNo;
 		    };
 			
-		    document.addEventListener('DOMContentLoaded', function() {
-		        if (userRole === 'admin') {
-		            var adminElements = document.querySelectorAll('.admin-only');
-		            adminElements.forEach(function(element) {
-		                element.style.display = 'inline-block';
-		            });
-		            var userElements = document.querySelectorAll('.user-only');
-		        	userElements.forEach(function(element) {
-		                element.style.display = 'inline-block';
-		            });
-		        }else if(userRole!=null){
-		        	var userElements = document.querySelectorAll('.user-only');
-		        	userElements.forEach(function(element) {
-		                element.style.display = 'inline-block';
-		            });
-		        }
-		    });
+		    
 			$(document).on('click', '.fileDelBtn', function() {
 			    var fileNo = $(this).data('fileNo');
 			    var fileName = $(this).data('fileName');
@@ -543,7 +522,7 @@ header h1 {
 
 			    const newComment = {
 			        qnaNo: currentQnaNo,
-			        memberNo: ${sessionScope.loginUser.memberNo} ,
+			        memberNo: userRole,
 			        commentContent: commentContent, 
 			    };
 
@@ -606,6 +585,8 @@ header h1 {
 			    }
 			    return false;
 			}
+			
+			
 			//공지 삭제하기
 			 function deleteById(qnaNo) {
                  $.ajax({
@@ -747,7 +728,7 @@ header h1 {
 			        qnaEl.className = 'qnaEl';
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
-			        if(userRole !=null || userRole!=o.qnaId)
+			        //if(userRole !=null || userRole!=o.qnaId)
 			        qnaEl.appendChild(createDiv(o.qnaTitle, '450px'));
 			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
 			        qnaEl.appendChild(createDiv(o.solved, '150px'));
@@ -775,7 +756,7 @@ header h1 {
 			// 사이트 시작할 때 로딩하는 정보
 			window.onload = () => {
 				findAll(solvedBoolean);
-
+				
 			    // Attach click events to category buttons if they exist in the DOM
 			    const generalButton = document.getElementById('generalButton');
 			    const serviceButton = document.getElementById('serviceButton');
@@ -814,6 +795,7 @@ header h1 {
 			                var textTitle = qnaNo+'. [' +getKoreanqnaCategory(qna.qnaCategory)+'] '+qna.qnaTitle;
 			                $('#qnaModal #qnaHeader').text(textTitle);
 			                $('#qnaModal #qnaContent').text(qna.qnaContent);
+			                $('#qnaModal #qnaId').text(qna.memberId);
 			                $('#qnaModal #files').empty();
 			                $('#qnaModal #comments').empty();
 			                
@@ -841,21 +823,37 @@ header h1 {
 				            }
 			                if (qna.comments && qna.comments.length > 0) {
 			                    qna.comments.forEach(comment => {
-			                        const commentDiv = $('<div>')
-			                            .addClass('comment')
-			                            .append($('<span>').addClass('comment-author').text('작성자: ' + comment.memberNo+'  '))
-			                            .append($('<span>').addClass('comment-date').text('날짜: ' + comment.resdate))
-			                            .append($('<div>').addClass('comment-content').text(comment.commentContent))
-			                            .append($('<div>').addClass('comment-details')
-			                                
-			                            );
+			                    	const commentDiv = $('<div>')
+			                        .addClass('comment')
+			                        .append($('<span>').addClass('comment-author').text('작성자: ' + comment.memberNo + '  '))
+			                        .append($('<span>').addClass('comment-date').text('날짜: ' + comment.resdate))
+			                        .append($('<div>').addClass('comment-content').text(comment.commentContent));
+			                    
+			                    // Check if the user is logged in and append Edit/Delete buttons
+			                    if (${sessionScope.loginUser != null}) {
+			                    	const changeBtn = $('<div>').addClass('comment-change btn').text('수정');
+			                        const deleteBtn = $('<div>').addClass('comment-delete btn').text('삭제');
 
-			                        $('#qnaModal #comments').append(commentDiv);
+			                        changeBtn.click(() => {
+			                            editComment(commentDiv, comment);
+			                        });
+			                        deleteBtn.click(() => {
+			                        	if (confirm('정말로 삭제하시겠습니까?')) {
+			                            deleteComment(commentDiv, comment);
+			                        	}
+			                        });
+			                        commentDiv.append(changeBtn).append(deleteBtn);
+			                    }
+
+			                    $('#qnaModal #comments').append(commentDiv);
 			                    });
 			                } else {
 			                    // If no comments exist
 			                    $('#qnaModal #comments').html('<p>댓글이 없습니다.</p>');
 			                }
+			                
+			                
+			                
 			                document.getElementById('deleteButton').onclick = function() {
 			                    return ConfirmDelete(currentQnaNo);
 			                };
@@ -865,6 +863,80 @@ header h1 {
 			        });
 			    });
 			
+			    function editComment(commentDiv, comment) {
+			    	const originalContent = comment.commentContent;
+			        const contentDiv = commentDiv.find('.comment-content');
+			        const editInput = $('<input>').attr('type', 'text').val(originalContent);
+			        const saveBtn = $('<div>').addClass('btn').text('저장');
+			        const closeBtn = $('<div>').addClass('btn').text('닫기');
+
+			        // Replace comment content with input field
+			        contentDiv.empty().append(editInput);
+
+			        // Add save and close buttons
+			        contentDiv.append(saveBtn).append(closeBtn);
+
+                    // Save button click event
+                    saveBtn.click(() => {
+                        const newContent = editInput.val();
+                        comment.commentContent = newContent;
+                        const updatedComment = {
+                                commentNo: comment.commentNo,
+                                qnaNo: comment.qnaNo,
+                                memberNo: comment.memberNo,
+                                commentContent: newContent
+                            };
+                        console.log(updatedComment);
+                        $.ajax({
+                        	 url: 'qna/commentEdit.do',
+                             type: 'Put',
+                             traditional: true,
+                             contentType: 'application/json',
+                             data: JSON.stringify(updatedComment),
+                             success: response => {
+                                 if (response.message === '댓글 수정 성공') {
+                                     contentDiv.text(newContent);
+                                 } else {
+                                     contentDiv.text(originalContent);
+                                     alert('댓글 수정 실패');
+                                 }
+                             },
+                             error: () => {
+                                 contentDiv.text(originalContent);
+                                 alert('댓글 수정 중 오류 발생');
+                             }
+    			          
+                        });
+                    });
+
+                    // Close button click event
+                    closeBtn.click(() => {
+                        contentDiv.text(originalContent);
+                    });
+                }
+			    function deleteComment(commentDiv, comment) {
+			        // Show confirmation dialog
+			        if (confirm('정말로 삭제하시겠습니까?')) {
+			            // Send AJAX request to delete the comment
+			            $.ajax({
+			                url: 'qna/commentDelete.do', // Ensure this matches the backend endpoint
+			                type: 'POST', // Use POST for deletion, not PUT
+			                contentType: 'application/json',
+			                data: JSON.stringify({ commentNo: comment.commentNo }), // Send only commentNo
+			                success: response => {
+			                    if (response.message === '댓글 삭제 성공') {
+			                        // Remove the comment from the UI
+			                        commentDiv.remove();
+			                    } else {
+			                        alert('댓글 삭제 실패');
+			                    }
+			                },
+			                error: () => {
+			                    alert('댓글 삭제 중 오류 발생');
+			                }
+			            });
+			        }
+			    }
 			    
 			    //공지사항 삭제/오류 시 나오는 에러
 			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
@@ -940,4 +1012,3 @@ header h1 {
 	<%@ include file="../footer.jsp"%>
 </body>
 
-</html>

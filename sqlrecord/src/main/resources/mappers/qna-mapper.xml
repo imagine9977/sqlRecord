@@ -324,4 +324,12 @@
 		WHERE 
 		COMMENT_NO = #{qnaNo}
 	</update>
+	
+	<update id="deleteSingleComment" parameterType="_int">
+		UPDATE COMM
+		SET
+		STATUS='N'
+		WHERE
+		COMMENT_NO = #{commentNo}
+	</update>
 	</mapper>
