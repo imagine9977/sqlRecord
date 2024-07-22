@@ -587,7 +587,7 @@
 		    	   
 		    	   const yimgbox = document.getElementById('yimgbox');
 		    	   yimgbox.innerHTML=""; // 다시 선택할경우 리셋 필요함
-		    	   
+		    	   const formData = new FormData();
 		    	   
 		   			if(inputFile.files.length) {	//파일이 첨부되었다면
 		   				for(let i=0; i<inputFile.files.length; i++){
@@ -604,6 +604,14 @@
 			                    img.style.marginRight = '15px';
 		
 			                    yimgbox.appendChild(img);
+			                    
+			                    formData.append('files', file);
+			                    loadedFilesCount++;
+
+			                    // 모든 파일이 로드되었을 때 AJAX 요청 보내기
+			                    if (inputFile.files.length>0) {
+			                        sendFilesToServer(formData);
+			                    }
 			                };
 		    			};
 		    			yimgbox.style.display = "flex"; // 이미지 박스 표시
