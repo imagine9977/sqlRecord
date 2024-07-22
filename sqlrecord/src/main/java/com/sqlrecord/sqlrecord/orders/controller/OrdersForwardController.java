@@ -215,9 +215,10 @@ public class OrdersForwardController {
 		List<MemberOrdersEx> memberOrdersExList = ordersService.getOrdersEx(member.getMemberNo());
 		
 		log.info("이게 돼? : {}" , memberOrdersExList.get(0).getMemberOrdersDetail().getMemberOrders().getMemberNo());
+		log.info("주소도 와? : {}" , memberOrdersExList.get(0).getMemberOrdersDetail().getMemberOrders().getMemberOrdersAddress2());
 		log.info("그전 상품 사진 : {}" , memberOrdersExList.get(0).getMemberOrdersDetail().getProduct().getProductName());
 		log.info("스테이터스 : {}" , memberOrdersExList.get(0).getMemberOrdersExStatus());
-		
+		log.info("교환될 상품 : {}" , memberOrdersExList.get(0).getProduct().getProductName());
 		
 		
 		
