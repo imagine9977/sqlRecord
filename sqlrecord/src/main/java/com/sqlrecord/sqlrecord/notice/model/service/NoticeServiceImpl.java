@@ -3,6 +3,7 @@ package com.sqlrecord.sqlrecord.notice.model.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
+
+
 	private final NoticeMapper noticeMapper;
 	@Override
 	public List<Notice> findAll() {
@@ -65,39 +68,21 @@ public class NoticeServiceImpl implements NoticeService {
 	    return result;
 	}
 
-
+	
 
 
 	@Override
 	public int update(Notice notice) {
 		int result = noticeMapper.update(notice);
 		if (result > 0) {
-	        
-			List<NFile> newFiles = notice.getFiles();
-			List<NFile> oldFiles = noticeMapper.findFiles(notice.getNoticeNo());
-	        // Save files associated with the notice
-	        if (newFiles!= null) {
-	        	
-	        	for (NFile file :newFiles) {
+			if (notice.getFiles() != null) {
+	            for (NFile file : notice.getFiles()) {
 	                file.setNoticeNo(notice.getNoticeNo()); // Set noticeNo in each file object
-	                if (file.getNfileNo() >0) {
-	                    // Existing file, perform update
-	                    result = noticeMapper.updateFile(file);
-	                } else {
-	                    // New file, perform insert
-	                    result = noticeMapper.saveFile(file);
-	                }
+	                result = noticeMapper.saveFile(file); // Execute INSERT INTO NFILE
 	                if (result <= 0) {
-	                    // Handle failure to update or insert file
+	                    // Handle failure to save file
 	                    return result;
 	                }
-	            }
-	        }
-	        if (newFiles.size() < oldFiles.size()) {
-	            // Handle case where there were previously 3 files but now less than 3
-	            // In this case, ensure that any existing file beyond the current size is deleted
-	            for(int i = newFiles.size(); i< oldFiles.size(); i++) {
-	            	result = noticeMapper.deleteFileByPosition(newFiles.get(i).getNfileNo());
 	            }
 	        }
 	    }
@@ -125,4 +110,28 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeMapper.findFiles(noticeNo);
 	}
 
+	@Override
+	public int deleteFile(int nfileNo) {
+		// TODO Auto-generated method stub
+		return noticeMapper.deleteFileByPosition(nfileNo);
+	}
+
+	@Override
+	public NFile findFileById(int nfileId) {
+		// TODO Auto-generated method stub
+		return noticeMapper.findFileById(nfileId);
+	}
+
+  //////////////////////////////////////////////////////////////// 관리자 페이지 ////////////////////////////////////////////////////////////////
+	// 전체 글 수 조회
+	@Override
+	public int noticeCount() {
+		return noticeMapper.noticeCount();
+	}
+
+	// 페이징 적용 전체 리스트 조회
+	@Override
+	public List<Notice> noticeFindAll(Map<String, Integer> map) {
+		return noticeMapper.noticeFindAll(map);
+	}
 }

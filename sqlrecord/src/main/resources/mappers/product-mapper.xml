@@ -14,26 +14,72 @@
 		        PRODUCT_STATUS='Y'
 	</select>
 	
-	<select id="findAll" resultType="product" parameterType="map">
+	
+	
+	<resultMap id="prm" type="product">
+	        <id property="productNo" column="product_no"/>
+	        <result property="productName" column="product_name"/>
+	        <result property="productPrice" column="product_price"/>
+	        <result property="productStatus" column="product_status"/>
+	        <result property="productDate" column="product_date"/>
+	        <result property="tagNo" column="tag_no"/>
+	        <result property="productDetail" column="product_detail"/>
+	        <result property="productCate" column="product_cate"/>
+	<collection property="productPhotosList" column="product_no" javaType="List" select="getPhotos">
+	        	<result property="productPhotosNo" column="PHOTO_NO"/>
+			    <result property="productPhotosName" column="PHOTO_NAME"/>
+			    <result property="productPhotosPath" column="PHOTO_PATH"/>
+			    <result property="productNo" column="PRODUCT_NO"/>
+	</collection>	
+	</resultMap>
+	
+	<select id="getPhotos" parameterType="_int" resultType="productPhotos">
 		SELECT
-		        P.PRODUCT_NO productNo,
-		        P.PRODUCT_NAME productName,
-		        P.PRODUCT_PRICE productPrice,
-		        P.PRODUCT_STATUS productStatus,
-		        P.PRODUCT_DATE productDate,
-		        P.TAG_NO tagNo,
-		        P.PRODUCT_DETAIL productDetail,
-		        P.PRODUCT_CATE productCate,
-		        PH.PHOTO_NO photoNo,
-		        PH.PHOTO_NAME photoName,
-		        PH.PHOTO_PATH photoPath
+				PHOTO_NO productPhotosNo,         
+				PRODUCT_NO productNo,         
+				PHOTO_NAME productPhotosName,
+				PHOTO_PATH productPhotosPath
+		FROM
+				PRODUCT_PHOTOS
+		WHERE
+				product_no = #{product_no}
+	</select>
+	
+	<select id="findOne" resultMap="prm">
+		SELECT
+		        PRODUCT_NO ,
+		        PRODUCT_NAME ,
+		        PRODUCT_PRICE ,
+                PRODUCT_CATE ,
+		        PRODUCT_STATUS ,
+		        PRODUCT_DATE ,
+		        PRODUCT_DETAIL,
+		        TAG_NO tagNo
+	    FROM
+	        	PRODUCT
+	    WHERE
+	    		PRODUCT_NO = #{productNo}
+        ORDER
+        BY
+                PRODUCT_NO
+        DESC	
+	</select>
+	
+	
+	
+	
+	<select id="findAll" resultType="product" resultMap="prm">
+		SELECT
+		        P.PRODUCT_NO ,
+		        P.PRODUCT_NAME ,
+		        P.PRODUCT_PRICE ,
+		        P.PRODUCT_STATUS ,
+		        P.PRODUCT_DATE ,
+		        P.TAG_NO ,
+		        P.PRODUCT_DETAIL ,
+		        P.PRODUCT_CATE 
 		  FROM
 		        PRODUCT P
-		  LEFT
-		  JOIN
-		        PRODUCT_PHOTOS PH
-		    ON
-		        P.PRODUCT_NO = PH.PRODUCT_NO
 		 WHERE
 		        PRODUCT_CATE = #{productCate}
 		   AND

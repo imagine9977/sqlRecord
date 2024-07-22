@@ -1,6 +1,8 @@
 package com.sqlrecord.sqlrecord.member.model.service;
 
 import java.util.List;
+import java.util.Map;
+
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
@@ -13,10 +15,17 @@ public interface MemberService {
 	int insGenre(MemberGenre memberGenre);
 	Member infoId(Member member);
 	int pwChange(Member member);
+  
 	List<Integer> genre(MemberGenre memberGenre);
 	int update(Member member);
 	int deleteGenre(int memberNo);
 	void insUpdateGenre(MemberGenre memberGenre);
 	int delete(Member member);
-
+	
+  
+	// 관리자페이지
+	Member getOneMember(String memberNo);
+	List<Member> findAllMembers(Map<String, Integer> map);			//회원(Y)조회
+	List<Member> findWithdrawnMembers(Map<String, Integer> map);	//회원(N)조회
+	int memberCount();
 }

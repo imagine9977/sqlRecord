@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="com.sqlrecord.sqlrecord.member.model.vo.Member"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -113,7 +114,7 @@
 #notice-container #files {
 	background-color: lightgray;
 	width: 300px;
-	 height: auto;
+	height: auto;
 }
 
 #notice-container #content {
@@ -158,7 +159,7 @@
 	top: 100px;
 	min-height: 300px;
 	height: auto;
-		z-index: 9999999;
+	z-index: 9999999;
 }
 
 #notice-container .modal-content {
@@ -241,7 +242,7 @@
 }
 
 #notice-container #liveAlertPlaceholder {
-	z-index: 10;
+	height:auto;
 }
 </style>
 </head>
@@ -281,6 +282,7 @@
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
+							<input type="hidden" id="noticeNo" name="noticeNo" value="" />
 							<h5 id="noticeHeader"></h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
@@ -297,13 +299,20 @@
 								</div>
 							</div>
 						</div>
+
+
 						<div class="modal-footer">
 							<div id="noticeActions">
-								<a class="btn btn-warning" onclick="toggleUpdateModal();"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp;
-								<a class="btn btn-danger" id="deleteButton"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">삭제하기</a>&nbsp;&nbsp;
-								<a class="btn btn-secondary" data-bs-dismiss="modal"
+							<!-- <a class="btn btn-warning" onclick="toggleUpdateModal();"
+										style="height: 40px; color: white; border:	 0px solid #388E3C;">수정하기</a>&nbsp;&nbsp; -->
+								<a class="btn btn-warning admin-only" id="goToUpdatePage"
+									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
+									수정하기</a>&nbsp;&nbsp; 
+									<a class="btn btn-danger admin-only"
+									id="deleteButton"
+									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
+									삭제하기</a>&nbsp;&nbsp; <a class="btn btn-secondary"
+									data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
 								<button class="btn share-button btn-secondary"
 									title="Share this article">
@@ -320,52 +329,48 @@
 		<div class="modal fade" id="updateModal" tabindex="-1"
 			aria-labelledby="updateModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<form method="POST" enctype="multipart/form-data"
-						id="fileUploadForm">
-						<input type="hidden" id="fileNoDel" name="fileNoDel" value="">
-						<input type="hidden" id="fileNameDel" name="fileNameDel" value="">
-						<div class="modal-header">
-							<h5 id="noticeNo" class="inline-header"></h5>
-							<input type="hidden" name="noticeNo" value="${notice.noticeNo }" />
-							<label for="noticeTitle">제목</label> <input type="text"
-								class="form-control" id='noticeTitle' name='noticeTitle'
-								value="">
-							<button type="button" class="btn-close" data-bs-dismiss="modal"
-								aria-label="Close"></button>
+				<div class="modal-content" id="fileUploadForm">
+					<input type="hidden" id="fileNoDel" name="fileNoDel" value="">
+					<div class="modal-header">
+						<h5 id="updateNumber" class="inline-header"></h5>
+						<input type="hidden" id="updateNo" name="updateNo" value="" /> <label
+							for="updateTitle">제목</label> <input type="text"
+							class="form-control" id='updateTitle' name='updateTitle' value="">
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="updateCategory">분류</label> <select
+								class="form-control" id="updateCategory" name="updateCategory">
+								<option value="general">일반</option>
+								<option value="event">이벤트</option>
+								<option value="service">서비스</option>
+								<option value="etc">기타</option>
+							</select>
 						</div>
-						<div class="modal-body">
+						<div id="notice-detail">
+							<h4>파일 내려받기</h4>
+							<div id="upfiles"></div>
+							<hr />
 							<div class="form-group">
-								<label for="noticeCategory">분류</label> <select
-									class="form-control" id="noticeCategory" name="noticeCategory">
-									<option value="general">일반</option>
-									<option value="event">이벤트</option>
-									<option value="service">서비스</option>
-									<option value="etc">기타</option>
-								</select>
-							</div>
-							<div id="notice-detail">
-								<h4>파일 내려받기</h4>
-								<div id="files"></div>
-								<hr />
-								<div class="form-group">
-									<label for="noticeContent">내용</label>
-									<textarea class="form-control" rows="5" id='noticeContent'
-										style="resize: none;"></textarea>
-								</div>
+								<label for="updateContent">내용</label>
+								<textarea class="form-control" rows="5" id='updateContent'
+									style="resize: none;"></textarea>
 							</div>
 						</div>
-						<div class="modal-footer">
-							<div id="noticeActions">
-								<button class="btn" type="button" id="btnSubmit"
-									style="background-color: orange; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">수정하기</button>
-								&nbsp;&nbsp; <a class="btn" data-bs-dismiss="modal"
-									style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</a>&nbsp;&nbsp;
-							</div>
+					</div>
+					<div class="modal-footer">
+						<div id="noticeActions">
+							<button class="btn" type="button" id="btnSubmit"
+								style="background-color: orange; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">수정하기</button>
+							&nbsp;&nbsp; <a class="btn" data-bs-dismiss="modal"
+								style="background-color: #ff52a0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">닫기</a>&nbsp;&nbsp;
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
+			
 		</div>
 
 		<div id="liveAlertPlaceholder"></div>
@@ -377,9 +382,13 @@
 			<div class="see-more">
 				<!--  <span class="get-more-list" onclick="loadMoreNotices()">더 보기</span> -->
 			</div>
-			<div class="add">
-				<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
-			</div>
+			<c:if test="${ sessionScope.loginUser.memberId eq 'admin'}">
+				<div class="add">
+
+					<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
+
+				</div>
+			</c:if>
 		</div>
 
 		<script>
@@ -393,16 +402,26 @@
 			
 			var fileNoArry = [];
 			var fileNameArry = [];
+			
+			document.getElementById("goToUpdatePage").onclick = function () {
+		        location.href = "notices/update.do/"+currentNoticeNo;
+		    };
+			
+			var userRole = '${sessionScope.loginUser.memberId}';
 
+		    document.addEventListener('DOMContentLoaded', function() {
+		        if (userRole === 'admin') {
+		            var adminElements = document.querySelectorAll('.admin-only');
+		            adminElements.forEach(function(element) {
+		                element.style.display = 'inline-block';
+		            });
+		        }
+		    });
 			$(document).on('click', '.fileDelBtn', function() {
-			    var fileNo = $(this).data('fileNo');
-			    var fileName = $(this).data('fileName');
+			    var fileNo = $(this).data('nfileNo');
 			    
 			    fileNoArry.push(fileNo);
-			    fileNameArry.push(fileName);
-			    
 			    $('#fileNoDel').attr('value', fileNoArry);
-			    $('#fileNameDel').attr('value', fileNameArry);
 			    $(this).parent().remove();
 			});
 			
@@ -420,36 +439,64 @@
 			}
 			// 공지사항 업데이트 
 			$("#btnSubmit").click(function (event) {         
-			    //event.preventDefault();  // 기본 폼 제출 방지
-			    console.log("Try");
-			    var form = $('#fileUploadForm')[0];  // 폼 요소 가져오기
-			    
-			    var data = new FormData(form);  // FormData 객체 생성
-			    console.log("Sending data: ",data);
-			 	// 필요한 경우 추가 파일을 FormData 객체에 추가 가능
-			    // 예를 들어, 'fileInput2', 'fileInput3' 등의 ID를 가진 추가 파일 입력이 있는 경우
-			   	 //data.append('updateFile2', $('#fileInput2')[0].files[0]);
-			     //data.append('updateFile3', $('#fileInput3')[0].files[0]);
-			   
-			    
+				event.preventDefault();  // Prevent default form submission
+
+		        var formData = new FormData();
+
+		        // Retrieve and append form data
+		        var intupdateNo = parseInt(document.getElementById('updateNo').value);
+			    formData.append('updateNo', intupdateNo);
+		        formData.append('updateTitle', document.getElementById('updateTitle').value);
+		        formData.append('updateCategory', document.getElementById('updateCategory').value);
+		        formData.append('updateContent', document.getElementById('updateContent').value);
+				
+				const fileNoDel = [];
+				$('#updateModal .fileDelBtn').each(function() {
+				    if ($(this).data('nfileNo')) {
+				        fileNoDel.push($(this).data('nfileNo'));
+				    }
+				});
+				if (fileNoDel.length > 0) {
+				    fileNoDel.forEach((fileNo, index) => {
+				        formData.append('fileNoDel[]', fileNo);
+				    });
+				}
+				 // Append multiple files
+		        var fileInputs = document.querySelectorAll('input[name="updatefile"]');
+		        fileInputs.forEach(input => {
+		            if (input.files.length > 0) {
+		                for (var i = 0; i < input.files.length; i++) {
+		                    formData.append('updatefile', input.files[i]);
+		                }
+		            }
+		        });
+		        for (var key of formData.entries()) {
+		            console.log(key[0] + ', ' + key[1]);
+		        }
 			    $.ajax({             
 			        type: "put",  
-			        url: "notice/update",
-			        data: data,  // Pass FormData object JSON.stringify(data)
-			    	/* 
-			        headers: { 
-				        Accept : "text/javascript; charset=utf-8",
-				        "Content-Type": "text/javascript; charset=utf-8"
-				    },
-				    */
+			        url: "notice/update/"+intupdateNo,
+			        data :JSON.stringify(formData),
+			       
+			        cache: false,
+			 		/*
+			        headers: {
+		                'Accept': 'application/json',
+		                'Content-Type': 'application/json'
+		            },
+		            */
+		            encType: 'multipart/form-data',
+		            processData: false,
+		            contentType: 'application/json',
 				  
-			        processData: false,  // Important: Do not process the data
-			        contentType: false, 
+			       
 			        success: function (result) {
 			            if (result.data === 1) {
 			                document.getElementById('outerDiv').remove();
 			                findAll();
 			                $('#detail').slideUp(300);
+			            }else {
+			                alert("업데이트 실패. 다시 시도해주세요.");
 			            }
 			        },
 			        error: function (e) {  
@@ -486,47 +533,18 @@
             }
 			
 			//공지 수정하기를 누르면 조회 모달을 숨기고 수정 모달로 변경
+			/*
 			function toggleUpdateModal() {
 	            $('#noticeModal').modal('hide'); // Hide the main notice modal
 	            $('#updateModal').modal('show'); // Show the update modal
 	        }
-			
+			*/
 			//공지 수정하기가 종료/성공하면 조회 모달로 변경
 			$('#updateModal').on('hidden.bs.modal', function () {
 	            $('#noticeModal').modal('show');
 	        });
 			
-			/*
-			var data = new FormData();
-			jQuery.each(jQuery('#files')[0].files, function(i, file) {
-			    data.append('file-'+i, file);
-			});
-			function update() {
-                const updateData = {
-                		"noticeNo" : $('noticeNo').val(),
-    					"noticeTitle" : $('noticeTitle').val(),
-    					"noticeWriter" : $('updateWriter').val(),
-    					"noticeContent" : $('noticeContent').val(),
-    					"noticeCategory" : $('noticeCategory').val(),	
-    					"List<Nfile>" :data
-                };
-                $.ajax({
-                    url: "notice",
-                    type: "put",
-                    enctype: 'multipart/form-data',  
-                    data: JSON.stringify(updateData),
-                    contentType: 'application/json',
-                    success: result => {
-                        if (result.data === 1) {
-                            document.getElementById('outerDiv').remove();
-                            findAll();
-                            $('#detail').slideUp(300);
-                        }
-                    }
-                });
-            }
 			
-			*/
 			
 			//공지 삭제하기 확인 프롬프트
 			function ConfirmDelete(noticeNo) {
@@ -793,17 +811,19 @@
 			                currentNoticeNo = parseInt(noticeNo);
 			                // Update modal content with notice details
 			                var textTitle = noticeNo+'. [' +getKoreanNoticeCategory(notice.noticeCategory)+'] '+notice.noticeTitle;
+			                $('#noticeModal #noticeNo').val(noticeNo);
 			                $('#noticeModal #noticeHeader').text(textTitle);
 			                $('#noticeModal #noticeContent').text(notice.noticeContent);
 			                $('#noticeModal #files').empty();
 			                
 			                
-			                $('#updateModal #noticeNo').val(noticeNo);
-			                $('#updateModal #noticeTitle').val(notice.noticeTitle);
-			                $('#updateModal #noticeContent').val(notice.noticeContent);
-			                $('#updateModal #files').empty();
-			                $('select[name^="noticeCategory"] option:selected').attr("selected",null);
-			                $("select[name=noticeCategory]").val(notice.noticeCategory).prop("selected", true);
+			                $('#updateModal #updateNumber').text(noticeNo);
+			                $('#updateModal #updateNo').val(noticeNo);
+			                $('#updateModal #updateTitle').val(notice.noticeTitle);
+			                $('#updateModal #updateContent').val(notice.noticeContent);
+			                $('#updateModal #upfiles').empty();
+			                $('select[name^="updateCategory"] option:selected').attr("selected",null);
+			                $("select[name=updateCategory]").val(notice.noticeCategory).prop("selected", true);
 							
 			                // Append file links if files exist
 			                if (notice.files && notice.files.length > 0) {
@@ -822,21 +842,17 @@
 			                         .append($('<a>').attr('href', `${path0}/` + file.changedName) // Ensure this path is correct
 			                            .attr('download', file.originalName)
 			                            .text(file.originalName))
-			                        .append($('<input>').attr('type', 'file')
-			                            .attr('class', 'form-control-file border')
-			                            .attr('name', 'updatefile'))
 			                        .append($('<button>').attr('type', 'button')
 					                .attr('class', 'fileDelBtn')
 					                .text('삭제')
-					                .data('nfileNo', file.NFILE_NO)
-					                .data('fileName', 'NFILE_NO_' + index));
+					                .data('nfileNo', file.nfileNo) );
 			                    
-			                    $('#updateModal #files').append(updatefileLink);
+			                    $('#updateModal #upfiles').append(updatefileLink);
 			                });
 							
 			                // Append additional input fields if less than 3 files exist
 			                for (let i = notice.files.length; i < 3; i++) {
-			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
+			                    $('#updateModal #upfiles').append('<input type="file" class="form-control-file border" name="updatefile">');
 			                } 
 			            } else {
 			                // If no files exist
@@ -844,7 +860,7 @@
 			                
 			                // Show 3 input fields for new file uploads
 			                for (let i = 0; i < 3; i++) {
-			                    $('#updateModal #files').append('<input type="file" class="form-control-file border" name="updatefile">');
+			                    $('#updateModal #upfiles').append('<input type="file" class="form-control-file border" name="updatefile">');
 			                }
 			            }
 
@@ -872,21 +888,21 @@
 			    	});
 			    
 			    //공지사항 삭제/오류 시 나오는 에러
-			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
+				  // 공지사항 에러 출력하기
+				  const alert = (message) => {
+				    const wrapper = document.createElement('div');
+				    wrapper.innerHTML = `
+				      <div class="alert alert-warning alert-dismissible" role="alert">
+				        ${message}
+				        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				      </div>
+				    `;
 				
-			 	//공지사항 에러 출력하기
-			    const alert = (message) => {
-			      const wrapper = document.createElement('div')
-			      wrapper.innerHTML = [
-			        '<div class="alert alert-warning alert-dismissible" role="alert">',
-			        '   <div>${message}</div>',
-			        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-			        '</div>'
-			      ].join('')
-
-			      alertPlaceholder.append(wrapper)
-			    }
-
+				    alertPlaceholder.append(wrapper);
+				  };
+				  
             </script>
 
 	</div>

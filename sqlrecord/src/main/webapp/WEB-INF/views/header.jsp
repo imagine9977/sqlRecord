@@ -72,7 +72,7 @@
     <div class="navleft">
         <div class="navbar-start">
             <div class="navbar-item">
-                <a href="${hpath}/qna/getQnaList.do">
+                <a href="${hpath}/qnas">
                     고객지원
                 </a>
             </div>
@@ -81,6 +81,7 @@
                     공지사항
                 </a>
             </div>
+           
         </div>
     </div>
 
@@ -92,7 +93,7 @@
                 <c:choose>
 				    <c:when test="${ sessionScope.loginUser.memberId eq 'admin'}">
 				        <div class="navbar-item">
-				            <a href="${hpath}/admin">
+				            <a href="${hpath}/adminFor">
 				                관리자페이지
 				            </a>
 				        </div>

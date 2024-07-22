@@ -14,6 +14,7 @@ import lombok.ToString;
 public class ProductPhotos {
 
 	private int productPhotosNo;	// 상품사진번호(시퀀스 : product_photos_seq)
-	private int productPhotosPath;	// 상품사진번호(시퀀스 : product_photos_seq)
+	private String productPhotosName;	// 상품사진번호(시퀀스 : product_photos_seq)
+	private String productPhotosPath;	// 상품사진번호(시퀀스 : product_photos_seq)
 	private int productNo;	// 상품사진번호(시퀀스 : product_seq)
 }

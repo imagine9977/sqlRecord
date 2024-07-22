@@ -2,7 +2,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/head.jsp" %>
-<title>Home</title>
+<title>Tracking</title>
 <style>
 </style>
 </head>
@@ -11,30 +11,30 @@
 <div id="main_content">
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 
-<table class="table">
+<h2>민식 택배 - <strong id="what">배송중</strong></h2>
+	<button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('배송요청')">배송 요청된 운송장</button>
+    <button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('배송중')">배송중 운송장</button>
+    <button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('배송완료')">배송 완료 운송장</button>
+    <br><br>
+
+    <label for="inputPassword5" class="form-label">운송장 관리</label>
+    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="운송장 번호를 입력하세요">
+    <button type="button" class="btn btn-primary">운송장 검색</button>
+
+
+
+	<table class="table">
         <thead>
           <tr>
             <th class="table-secondary" scope="col">운송장 번호</th>
-            <th class="table-secondary" scope="col">위치</th>
-            <th class="table-secondary" scope="col">배송 상태</th>
-            <th class="table-secondary" scope="col">시간</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="trackTable">
+        <c:forEach var="item" items="${ newMoList }">
           <tr>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+            <td><a href="${ hpath }/tracking/${ item.trackingNum}"><c:out value="${item.trackingNum}"></c:out></a></td>
+          </tr>        
+        </c:forEach>
         </tbody>
       </table>
 
@@ -43,6 +43,28 @@
 
 
 
+<script>
+	const trackTable = document.querySelector("#trackTable");
+	const what = document.querySelector("#what");
+	function onClick(param) {
+		what.innerText = param;
+		let str = "";
+		$.ajax({
+			url: "${hpath}/trackingRest/divide",
+			type: "get",
+			data: {param } ,
+			success: (result) => {
+				result.forEach((item) => str += "<tr><td><a href='${hpath}/tracking/"+ item.trackingNum +"'>"+item.trackingNum+"</a></td></tr>");
+				trackTable.innerHTML = "";
+				trackTable.innerHTML = str;
+				console.log(result);
+				console.log(trackTable.innerHTML);
+			}
+		})
+	}
+		
+
+</script>
 
 </div>
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>

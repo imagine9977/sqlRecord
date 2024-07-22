@@ -10,20 +10,6 @@
     font-weight: normal;
     font-style: normal;
 }
-@font-face {
-    font-family: 'Gibstone Trial Medium';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Gibstone Trial Medium'), url('GibstoneTrial-Medium.woff') format('woff');
-}
-
-
-body {
-	width: 100%;
-    height: 100vh;
-    overflow-x: hidden;
-    font-family: 'Gibstone Trial Medium', sans-serif;
-}
 
 a { text-decoration: none; outline: none; } 
 a:hover, a:active {text-decoration: none; }

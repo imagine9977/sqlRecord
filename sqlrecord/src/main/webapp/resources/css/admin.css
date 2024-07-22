@@ -1,0 +1,201 @@
+@charset "UTF-8";
+
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .tab-bar {
+        width: 100%;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        background-color: white;
+        border-bottom: 1px solid #2f4f4f;
+    }
+    .tab-btnBox {
+        width: 80%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tab-btnItem {
+        width: 10%;
+        height: 100%;
+        min-width: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        border-right: 1px solid #929292;
+        border-left: 1px solid #929292;
+    }
+    .tab-btnItem:not(:last-child) { border-right: none; }
+    .tab-btnItem:first-child { border-left: 1px solid #929292; }
+    .tab-btnItem:last-child { border-right: 1px solid #929292; }
+    .tab-btnItem a {
+        color: black;
+        text-decoration: none;
+    }
+    .mainBox {
+        width: 1500px;
+        min-width: 1200px;
+        height: auto;
+        border: 1px solid black;
+        margin: 0 auto;
+        padding: 10px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .active {
+        background-color: #2f4f4f;
+    }
+    .tab-btnItem.active a {
+        color: white;
+    }
+    .sidebar_area {
+        display: block;
+        width: 18%;
+        height: auto;
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .sidebar-element a {
+        text-decoration: none;
+        color: inherit;
+    }
+    .sidebar-element a:hover {
+        text-decoration: underline;
+    }
+    .sidebar h2 {
+        font-weight: bold;
+        margin: 30px 0px;
+    }
+    .content-area {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+    .accordion-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    .accordion-table th, .accordion-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .accordion-table th {
+        background-color: #f2f2f2;
+    }
+    .accordion-table .accordion-content {
+        display: none;
+    }
+    .accordion-table .accordion-content.active {
+        display: table-row;
+    }
+    .accordion-table .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+    .accordion-table .pagination {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .accordion-table .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #333;
+    }
+    .accordion-table .pagination a.active {
+        font-weight: bold;
+    }
+    .accordion-table .record-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+    .accordion-table .record-actions button {
+        margin-left: 5px;
+    }
+    .accordion-table .table-footer {
+        text-align: right;
+        margin: 20px 0;
+    }
+    .accordion-table .table-footer button {
+        margin-left: 5px;
+    }
+    .no-data {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 18px;
+        color: #666;
+    }
+    .sidebar-element {
+        font-size: 18px;
+        padding: 1rem 0px;
+    }
+    .sidebar h2 {
+        padding: 1rem 0px;
+    }
+    .pagination-custom {
+    margin-top: 20px;
+    text-align: center;
+	}
+	
+	.pagination-custom a {
+	    display: inline-block;
+	    padding: 5px 10px;
+	    margin: 0 10px;
+	    text-decoration: none;
+	    color: #333;
+	    font-size: 12px;
+	    border: 1px solid #ddd;
+	    border-radius: 3px;
+	}
+	
+	.pagination-custom a.active {
+	    background-color: #2f4f4f;
+	    color: white;
+	    border-color: #2f4f4f;
+	}
+	
+	.pagination-custom a:hover:not(.active) {
+	    background-color: #ddd;
+	}
+	.accordion-table .accordion-content {
+        display: none;
+    }
+
+    .accordion-table .member-details {
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .toggle-details {
+        cursor: pointer;
+    }
+    .member-details {
+	    position: relative;
+	    padding: 10px;
+	    background-color: #f9f9f9;
+	    min-height: 150px;
+	}
+	
+	.details-content {
+	    margin-right: 100px;
+	}
+	
+	.record-actions {
+	    bottom: 10px;
+	    right: 10px;
+	}
+	
+	.record-actions button {
+	    margin-left: 5px;
+	}

@@ -39,12 +39,12 @@
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.member.model.dao"/>
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.reply.model.dao"/>
 
-
+		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.qna.model.dao"/>
 		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.notice.model.dao"/>
 		
-		<!-- <mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.product.model.dao"/>  -->
+		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.product.model.dao"/> 
 
-		
+		<mybatis-spring:scan base-package="com.sqlrecord.sqlrecord.tracking.model.dao"/>
 		<!-- 메일 전송 도구 등록(기능 한 번에 묶기) -->    <!-- 나중에 의존성 주입 받을 수 있음!!! -->
            <bean class="org.springframework.mail.javamail.JavaMailSenderImpl"
                  id="sender">

@@ -13,25 +13,27 @@
       	  </a>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/reply/getReplyStarAll.do">TURNTABLES</a></p>
+
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/productFor/list/TURNTABLES">TURNTABLES</a></p>
+
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='speakers'">SPEAKERS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/productFor/list/SPEAKERS">SPEAKERS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='radios'">RADIOS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/productFor/list/RADIOS">RADIOS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='cd-players'">CD&nbspPLAYERS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="#">CD&nbspPLAYERS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='cassette-players'">CASSETTE&nbspPLAYERS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="#">CASSETTE&nbspPLAYERS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='media-stands'">MEDIA&nbspSTANDS</a></p>
+      	  <p class="section_serch_item_textBox"><a href="#">MEDIA&nbspSTANDS</a></p>
       	</div>
       	<div class="section_serch_item_box">
-      	  <p class="section_serch_item_textBox"><a href="${hpath }/product/list?productCate='vynyl'">VINYL</a></p>
+      	  <p class="section_serch_item_textBox"><a href="${hpath }/productFor/list/VINYL">VINYL</a></p>
       	</div>
       </div>
       

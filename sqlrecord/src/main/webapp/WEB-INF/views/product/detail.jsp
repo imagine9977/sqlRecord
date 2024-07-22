@@ -217,42 +217,32 @@
   <div id="section_main_box">
     <div class="sld-wrp">
 	 <div class="slider-for">
-		<div class="slide-container">
-		  <div style="width: 100%; height: 100%;">
-		   <img src="${hpath }/resources/imgs/homepageLogo/turnTable.png" style="width: 100%; height: 100%; object-fit: cover;">
-		  </div>
-		</div>
-		<div class="slide-container">
-		  <div style="width: 100%; height: 100%;">
-         	<img src="${hpath }/resources/imgs/homepageLogo/mediaStands.webp">
-      	  </div>
-		</div>
-		<div class="slide-container">go 3</div>
-		<div class="slide-container">go 4</div>
-		<div class="slide-container">go 5</div>
-		<div class="slide-container">go 6</div>
+		<c:forEach var="item" items="${ product.productPhotosList }">
+	 		<div class="slide-container">
+		  		<div style="width: 100%; height: 100%;">
+		   			<img src="${ item.productPhotosPath}" style="width: 100%; height: 100%; object-fit: cover;">
+		  		</div>
+			</div>
+
+	 	</c:forEach>
+
   </div>
   <div class="slider-nav">
-    <div class="slide-btn">
-      <div style="width: 100%; height: 100%;">
-		 <img src="${hpath }/resources/imgs/homepageLogo/turnTable.png" style="width: 100%; height: 100%; object-fit: cover;">
-	  </div></div>
-    <div class="slide-btn">
-      <div style="width: 100%; height: 100%;">
-         <img src="${hpath }/resources/imgs/homepageLogo/mediaStands.webp" style="width: 100%; height: 100%; object-fit: cover;"">
-      </div>
-	</div>
-    <div class="slide-btn">go 3</div>
-    <div class="slide-btn">go 4</div>
-    <div class="slide-btn">go 5</div>
-    <div class="slide-btn">go 6</div>
+  		<c:forEach var="item" items="${ product.productPhotosList }">
+	 		<div class="slide-btn">
+		  		<div style="width: 100%; height: 100%;">
+		   			<img src="${ item.productPhotosPath}" style="width: 100%; height: 100%; object-fit: cover;">
+		  		</div>
+			</div>
+			
+	 	</c:forEach>
   </div>
 
 </div>
     <div style="padding: 9rem 2rem; font-size: 1.1rem;">
-      <h2>이름</h2>
+      <h2>${ product.productName }</h2>
       <br>
-      <h2>￦가격</h2>
+      <h2>￦ ${ product.productPrice }</h2>
       <br>
       <div style="display: flex; gap: 10px;">
         <fieldset class="star-rating">
@@ -274,13 +264,16 @@
       <br>
       <div style="width: 100%; display: flex; justify-content: space-between;"><p>적립 포인트(5%)</p><p>포인트 원</p></div>
       <br>
-      <p>구매량 :</p>
       <br>
       <div style="display: flex; gap: 10px; justify-content: space-between;">
-        <input type="number" min="100" max="1000" step="100">
-        <div style="width: 25rem; height: 3rem; cursor: pointer; font-size:20px; color: white; text-align: center; height: 3rem; line-height: 3rem; background-color: #2F4F4F">
+      <form action="${ hpath }/cart/insert" method="post">
+        구매량 : <input type="number" name="cartAmount" min="1" max="5" step="1" >
+        <input type="text" hidden="hidden" name="product.productNo" value="${ product.productNo }" />
+        <input type="text" hidden="hidden" name="member.memberNo" value="${ loginUser.memberNo }" />
+        <button type="submit" style="width: 25rem; height: 3rem; cursor: pointer; font-size:20px; color: white; text-align: center; height: 3rem; line-height: 3rem; background-color: #2F4F4F">
           장바구니에 담기
-        </div>
+        </button>
+       </form>
       </div>
     </div>
   </div>
@@ -292,11 +285,11 @@
   <div style="background-color: #DEDEDE; text-align: center; color: black; line-height: 50px; height: 50px;">리뷰</div>
 </div>
 
-<h2 style="font-size: 5rem; text-align: center;">상품 설명1</h2>
+<h2 style="font-size: 5rem; text-align: center;">${ product.productName }</h2>
 <br><br><br>
 <div id="section_img" style="width: 100%; display: flex; justify-content: center;">
   <div style="width: 800px; height: 800px; display: flex; justify-content: center;">
-   <img src="${hpath }/resources/imgs/homepageLogo/mediaStands.webp" style="width: 100%; height: 100%; object-fit: cover;">
+   <img src="${product.productPhotosList.get(1).productPhotosPath}" style="width: 100%; height: 100%; object-fit: cover;">
   </div>
 </div>
 
@@ -304,7 +297,7 @@
 
 
 
-
+<h4>${ product.productDetail }</h4>
 
 
 
@@ -319,7 +312,7 @@
 <!-- 리뷰 코드 시작 -->
 <div id="section_detail" class="hidden"  style="width: 100%; display: flex; justify-content: center;">
   <div style="width: 1500px; height: auto; padding: 200px;">
-    자세한 설명
+    
   </div>
 </div>
 
@@ -459,7 +452,9 @@
 
 	
  </script>
+
 <script src="${hpath }/resources/js/forHeader.js?after1"></script>
+
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

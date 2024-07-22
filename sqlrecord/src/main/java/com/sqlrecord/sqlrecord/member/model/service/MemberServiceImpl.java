@@ -1,6 +1,8 @@
 package com.sqlrecord.sqlrecord.member.model.service;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
+
+
 
 	private final MemberMapper memberMapper;
 	
@@ -70,5 +74,25 @@ public class MemberServiceImpl implements MemberService{
 	public int delete(Member member) {
 		return memberMapper.delete(member);
 	}
+  
+  // 관리자 페이지
+	@Override
+	public Member getOneMember(String memberNo) {
+		return memberMapper.getOneMember();
+	}
 
+	@Override
+	public List<Member> findAllMembers(Map<String, Integer> map) {
+		return memberMapper.findAllMembers(map);
+	}
+	
+	@Override
+	public List<Member> findWithdrawnMembers(Map<String, Integer> map) {
+		return memberMapper.findWithdrawnMembers(map);
+	}
+
+	@Override
+	public int memberCount() {
+		return memberMapper.memberCount();
+	}
 }
