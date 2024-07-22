@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
@@ -29,6 +30,22 @@ public interface OrdersService {
 	int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx);
 
 	List<MemberOrdersEx> getOrdersEx(int memberNo);
+
+	// 관리자
+	// 주문건 수
+	int orderCount();
+	// 전체 주문건 리스트 조회
+	List<MemberOrders> findAllOrders(Map<String, Integer> map);
+	// 교환요청건수
+	int exchangeCount();
+	// 전체 교환건 조회
+	List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map);
+	// 환불 요청 건수
+	int refundCount();
+	// 전체 환불건 조회
+	List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map);
+
+
 	
 	
 }

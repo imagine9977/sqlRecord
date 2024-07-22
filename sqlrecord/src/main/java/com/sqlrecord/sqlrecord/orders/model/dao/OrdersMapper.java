@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.orders.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,6 +37,19 @@ public interface OrdersMapper {
 	int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx);
 
 	List<MemberOrdersEx> getOrdersEx(int memberNo);
+
+	// 관리자
+	int orderCount();
+
+	List<MemberOrders> findAllOrders(Map<String, Integer> map);
+
+	int exchangeCount();
+
+	List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map);
+
+	int refundCount();
+
+	List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map);
 
 	
 

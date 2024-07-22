@@ -18,4 +18,10 @@ public class MemberOrders {
 	private String memberOrdersPostcode;
 	private String memberOrdersDate;
 	private int memberNo;
+	
+	private String memberId;
+	private int price;
+	private int productCount;
+	private String productName;
+	private int productNo;
 }

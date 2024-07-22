@@ -5,6 +5,8 @@ import java.util.Map;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
@@ -37,5 +39,8 @@ public interface MemberMapper {
 	List<Member> findAllMembers(Map<String, Integer> map);			//활동 회원 조회
 	List<Member> findWithdrawnMembers(Map<String, Integer> map);	//탈퇴 회원 조회
 	int memberCount();
+	void updateMemberStatus(int memberNo, String status);	// 회원 상태 업데이트
+	int searchMemberCount(SqlSessionTemplate sqlSession, Map<String, String> map);	// 검색 수
+	List<Member> findByConditionAndKeyword(SqlSessionTemplate sqlSession, Map<String, String> map, RowBounds rowBounds);	//검색 결과
 	
 }

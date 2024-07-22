@@ -28,5 +28,8 @@ public class MemberOrdersEx {
     private Product product;		//교환 하려는 상품
     private MemberOrdersDetail memberOrdersDetail;
     
-    
+    // 관리자
+    private String memberId;
+    private int memberOrdersQuantity;
+    private int price;
 }

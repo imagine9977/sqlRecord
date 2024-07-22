@@ -1,6 +1,7 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -91,7 +92,39 @@ public class OrderServiceImpl implements OrdersService {
 	public List<MemberOrdersEx> getOrdersEx(int memberNo) {
 		return ordersMapper.getOrdersEx(memberNo);
 	}
+
 	
+	//관리자
+	
+	@Override
+	public int orderCount() {
+		return ordersMapper.orderCount();
+	}
+	
+	@Override
+	public List<MemberOrders> findAllOrders(Map<String, Integer> map) {
+		return ordersMapper.findAllOrders(map);
+	}
+
+	@Override
+	public int exchangeCount() {
+		return ordersMapper.exchangeCount();
+	}
+
+	@Override
+	public List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map) {
+		return ordersMapper.findAllExchanges(map);
+	}
+
+	@Override
+	public int refundCount() {
+		return ordersMapper.refundCount();
+	}
+
+	@Override
+	public List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map) {
+		return ordersMapper.findAllRefunds(map);
+	}
 	
 	
 	
