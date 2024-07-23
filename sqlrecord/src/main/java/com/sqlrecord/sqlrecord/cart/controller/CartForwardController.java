@@ -33,19 +33,13 @@ public class CartForwardController {
 	public String getMemberCartListPage(@PathVariable int userid , Model model , HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
-		
 		if(session.getAttribute("loginUser") == null) {
 			return "redirect:/member/login.do";
 		}
-		log.info("이게?{}" , userid);
 		
 		List<Cart> cartList = cartService.getCartList(userid);
 		model.addAttribute("list",cartList);
-		for(Cart a : cartList) {
-			log.info("카드 하나 : {}" , a.getCartAmount());
-			log.info("상품 이름 : {}" , a.getProduct().getProductName());
-		}
-		log.info("{}" , cartList.get(0).getProduct().getProductPhotosList());
+		
 		return "cart/cart";
 	}
 	
