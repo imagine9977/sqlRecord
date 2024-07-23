@@ -112,46 +112,30 @@ public class OrdersForwardController {
 		
 		HttpSession session = request.getSession();
 		
-		
-		
 		Member member =  (Member) session.getAttribute("loginUser");
 		if(member == null) {
 			return "redirect:/member/login.do";
 		}
 		
-		
-		// 유저의 OrderDetail을 리스트로 담기
 		List<MemberOrdersDetail> odList  = ordersService.getOrdersDetail(member.getMemberNo());
-		
-		// set에 OrderDetail의 Orders_no의 값을 넣어서 중복되지 않는 HashSet을 만듬 
+
 		Set<Integer> hs = new LinkedHashSet<Integer>();
 		
-		// HashSet에 add
 		for(MemberOrdersDetail item : odList) {
 			hs.add(item.getMemberOrders().getMemberOrdersNo());
-			log.info("odList : {}" , odList.size());
-			log.info("odList안의 하나 포토들 : {}" , odList.get(0).getProduct().getProductPhotosList().size());
 		}
 		
-		// 2중 리스트를 만들기 위해서 준비
 		List<List<MemberOrdersDetail>> newOdList = new ArrayList<List<MemberOrdersDetail>>();
 		
-		
-		
-		// HashSet의 Orders_no의 값과 같은 것들만 묶은 List를 2중리스트에 하나씩 add
 		for(Integer hsItem : hs) {
 			List<MemberOrdersDetail> od = (List<MemberOrdersDetail>)odList.stream().filter((item) -> item.getMemberOrders().getMemberOrdersNo() == hsItem).collect(Collectors.toList());
 			
 			newOdList.add(od);
 		}
 		
-		
-		
-		
+
 		model.addAttribute("newOdList",newOdList);
-	
-		
-		
+
 		return "orders/detail";
 	}
 	
