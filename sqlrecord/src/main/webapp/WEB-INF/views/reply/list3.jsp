@@ -155,6 +155,7 @@
 	                	<c:forEach var="img" items="${imgList}">
 	                		<c:if test="${reply.replyNo eq img.replyNo}">
 	                			<img  src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img" class="imgFiles" id="imgFile-${reply.replyNo}"">
+	                			<input type="hidden" class="hiddenReplyNo" value="${reply.replyNo }">
 	                		</c:if>
 	                	</c:forEach>
 	                </div>
@@ -316,28 +317,18 @@
 		    console.log(replyNo); // 댓글 번호 출력
 		    const currentContent = $(this).closest('.review-content').find('.yrecon').text();
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
-		   // const imgReply = $(this).closest('.imgFiles').arrt('id').split('-')[1];
+		    const imgSrc = [];
 		    
-		    //해당 replyNo에 첨부파일한 img태그 src 속성값을 저장
-		    /*
-		    const imgIds = [];
-			$('#').each(function() {
-			    imgIds.push($(this).attr('src'));
-			});
-			console.log("Image IDs:", imgIds);
-			console.log(`"${replyNo}:", ${replyNo}`);
-		    */
-		    if(`#editimgbox img[data-reply-no="${replyNo}"][src!=""]`){
-		    	$('#editimgbox').css("display", "block");
-		    	
-		    	
-		    	// 이미지 src 설정
-		        $(`#editimgbox img[data-reply-no="${replyNo}"]`).each(function() {
-		            const imagePath = $(this).data('image-path');
-		            $(this).attr('src', imagePath);
-		        });
-		    }
-		    openEditPopup(currentContent, currentRating,replyNo);
+			 // isEmpty() 비어있으면 true
+			 if ($('.imgFiles').length > 0) {
+			     $('.imgFiles').each(function(){
+			         imgSrc.push($(this).attr('src'));
+			         $('#editimgbox').css("display", "block");
+			     });
+			 }
+		    console.log(imgSrc);
+		    
+		    openEditPopup(currentContent, currentRating, replyNo, imgSrc);
 		});
      
      	//답글 수정
@@ -461,7 +452,7 @@
     
     
 	 // 수정 창 열기 함수
-	    function openEditPopup(currentContent, currentRating,replyNo) {
+	    function openEditPopup(currentContent, currentRating, replyNo, imgSrc) {
 		    // 수정 창을 열 때 가져온 내용과 별점을 해당 입력 필드에 설정합니다.
 		    //currentreplyNo = replyNo;
 		    console.log(replyNo); // 댓글 번호 출력
