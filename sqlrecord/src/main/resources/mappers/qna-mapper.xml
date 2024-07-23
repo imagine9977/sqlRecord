@@ -86,6 +86,7 @@
         OrderedQNA
     WHERE
         RNUM BETWEEN #{startValue} AND #{endValue}
+        ORDER BY QNA_NO DESC
 </select>
 <select id="findAllUnsolved" resultType="qna">
     WITH OrderedQNA AS (
@@ -125,6 +126,7 @@
         OrderedQNA
     WHERE
         RNUM BETWEEN #{startValue} AND #{endValue}
+        ORDER BY QNA_NO DESC
 </select>
 	<select id="findByCate" 
 		resultType="qna">
@@ -165,6 +167,7 @@
 	    WHERE
 	
 			ROWNUM BETWEEN #{startValue} AND #{endValue}
+			ORDER BY QNA_NO DESC
 			
 	</select>
 	<select id="findByCateUnsolved" 
@@ -207,6 +210,7 @@
 	    WHERE
 	
 			ROWNUM BETWEEN #{startValue} AND #{endValue}
+			ORDER BY QNA_NO DESC
 			
 	</select>
 	<select id="qnaCount" resultType="_int">
@@ -253,7 +257,7 @@
 		INSERT INTO QNA(QNA_NO,QNA_TITLE,SECRET,CATEGORY,QNA_CONTENT,CREATE_DATE
 		,SOLVED,COUNT,CHANGE_DATE,DELSTATUS,QNA_WRITER_NO) 
 		VALUES
-		(QNA_SEQ.NEXTVAL, #{qnaTitle},#{secret} #{qnaCategory},
+		(QNA_SEQ.NEXTVAL, #{qnaTitle},#{secret}, #{qnaCategory},
 		#{qnaContent}, SYSDATE, 'N', 0, SYSDATE,'Y',#{memberNo})
 	</insert>
 	<insert id="saveFile"
@@ -322,7 +326,7 @@
 		SET
 		COMMENT_CONTENT=#{commentContent}
 		WHERE 
-		COMMENT_NO = #{qnaNo}
+		COMMENT_NO = #{commentNo}
 	</update>
 	
 	<update id="deleteSingleComment" parameterType="_int">

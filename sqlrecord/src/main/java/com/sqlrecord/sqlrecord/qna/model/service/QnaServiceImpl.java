@@ -170,6 +170,6 @@ public class QnaServiceImpl implements QnaService{
 	public int deleteComment(int commentNo) {
 		
 		
-		return qnaMapper.deleteSingleComment(int commentNo);
+		return qnaMapper.deleteSingleComment( commentNo);
 	}
 }

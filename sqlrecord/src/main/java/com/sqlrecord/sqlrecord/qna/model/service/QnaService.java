@@ -33,7 +33,7 @@ public interface QnaService {
 
 	public int update(Qna qna);
 
-	public int updateComment(Comment comm);
+	public int updateComment(Comment newComment);
 
 	public void deleteFile(int delfile);
 

@@ -36,14 +36,18 @@
 	padding: 0;
 	background-color: #f4f4f4;
 	margin-bottom: 15px;
-	} # comments { padding : 15px;
+}
+
+#
+comments {
+	padding: 15px;
 	background-color: #f9f9f9;
 	border-top: 1px solid #e0e0e0;
 	margin-top: 15px;
 }
 
 /* Individual comment container */
-.comment {
+#qna-container .comment {
 	padding: 10px;
 	margin-bottom: 10px;
 	border: 1px solid #ddd;
@@ -52,14 +56,14 @@
 }
 
 /* Comment content styling */
-.comment-content {
+#qna-container .comment-content {
 	font-size: 14px;
 	color: #333;
 	margin-bottom: 5px;
 }
 
 /* Comment details container */
-.comment-details {
+#qna-container .comment-details {
 	display: flex;
 	justify-content: space-between;
 	font-size: 12px;
@@ -67,21 +71,21 @@
 }
 
 /* Author and date styling */
-.comment-author, .comment-date {
+#qna-container .comment-author, .comment-date {
 	margin-right: 10px;
 }
 
 /* Add comment button styling */
-#addCommentButton {
+#qna-container #addCommentButton {
 	margin-bottom: 10px;
 }
 
 /* Comment form styling */
-#commentForm {
+#qna-container #commentForm {
 	margin-bottom: 10px;
 }
 
-#commentForm textarea {
+#qna-container #commentForm textarea {
 	width: 100%;
 	height: 80px;
 	padding: 10px;
@@ -90,11 +94,11 @@
 	margin-bottom: 10px;
 }
 
-#commentForm button {
+#qna-container #commentForm button {
 	float: right;
 }
 
-.container {
+#qna-container .container {
 	width: 90%;
 	margin-left: 5%;
 	margin-right: 5%;
@@ -102,7 +106,7 @@
 	overflow: hidden;
 }
 
-header {
+#qna-container header {
 	background: #161616;
 	color: #ffffff;
 	padding-top: 30px;
@@ -110,14 +114,14 @@ header {
 	border-bottom: #2f4f4f 3px solid;
 }
 
-header h1 {
+#qna-container header h1 {
 	text-align: center;
 	text-transform: uppercase;
 	margin: 0;
 	font-size: 24px;
 }
 
-.filter-search-container {
+#qna-container .filter-search-container {
 	width: 900px;
 	margin: auto;
 	margin-top: 10px;
@@ -126,26 +130,26 @@ header h1 {
 	justify-content: space-between;
 }
 
-.filter-buttons {
+#qna-container .filter-buttons {
 	display: flex;
 	flex: 1;
 	gap: 10px;
 }
 
-.search {
+#qna-container .search {
 	margin-left: 10px;
 }
 
-.search form {
+#qna-container .search form {
 	display: flex;
 }
 
-.filter-buttons button:hover {
+#qna-container .filter-buttons button:hover {
 	background-color: #f0f0f0;
 	color: #000;
 }
 
-.filter-buttons button:focus {
+#qna-container .filter-buttons button:focus {
 	text-decoration-line: underline;
 	text-decoration-thickness: 3px;
 	font-weight: bold;
@@ -153,13 +157,13 @@ header h1 {
 	background-color: #e0e0e0;
 }
 
-.search input[type="search"] {
+#qna-container .search input[type="search"] {
 	padding: 10px;
 	font-size: 16px;
 	width: 200px;
 }
 
-.search input[type="submit"] {
+#qna-container .search input[type="submit"] {
 	padding: 10px;
 	background: #2C2C2C;
 	color: #ffffff;
@@ -168,79 +172,79 @@ header h1 {
 	cursor: pointer;
 }
 
-#files {
+#qna-container #files {
 	background-color: lightgray;
 	width: 300px;
 	height: auto;
 }
 
-#content {
+#qna-container #content {
 	width: 1000px;
 	height: auto;
 	margin: auto;
 }
 
-.load-more-container {
+#qna-container .load-more-container {
 	display: flex;
 	justify-content: center;
 	margin-top: 20px;
 }
 
-#outerDiv {
+#qna-container #outerDiv {
 	width: 1000px;
 	display: block;
 	overflow: auto;
 	padding-top: 20px;
 }
 
-.headerRow, .qnaEl {
+#qna-container .headerRow, .qnaEl {
 	display: flex;
 	align-items: center;
 }
 
-.headerRow>div, .qnaEl>div {
+#qna-container .headerRow>div, .qnaEl>div {
 	padding: 10px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-#qnaModal {
+#qna-container #qnaModal {
 	top: 100px;
 	min-height: 900px;
 	z-index: 999999;
 }
 
-#updateModal {
+#qna-container #updateModal {
 	top: 100px;
 	min-height: 900px;
 	height: auto;
 	z-index: 9999999;
 }
 
-.modal-content {
+#qna-container .modal-content {
 	height: 80%;
 	border: 1rem solid;
 	border-radius: 10;
 }
 
-.inline-header {
+#qna-container .inline-header {
 	display: inline-block;
 	margin-right: 10px;
 }
 
-.modal-header {
+#qna-container .modal-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-#title {
+#qna-container #title {
 	margin-top: 100px;
 	text-align: center;
 }
 
-#detail {
+#qna-container #detail {
 	background-color: #23C293;
 	width: 800px;
 	margin: auto;
@@ -250,13 +254,13 @@ header h1 {
 	display: none;
 }
 
-#detail>div {
+#qna-container #detail>div {
 	height: 50px;
 	line-height: 50px;
 	border: 1px solid rgba(255, 255, 255, 0.656);
 }
 
-.button-line {
+#qna-container .button-line {
 	display: flex;
 	justify-content: end;
 	align-items: center;
@@ -265,7 +269,7 @@ header h1 {
 	margin: 5%, 20px;
 }
 
-.button-line a {
+#qna-container .button-line a {
 	padding: 5px;
 	border: none;
 	border-radius: 5px;
@@ -273,7 +277,7 @@ header h1 {
 	display: block;
 }
 
-.add-qna-button {
+#qna-container .add-qna-button {
 	background: #4CAF50;
 	color: #ffffff;
 	border: none;
@@ -281,11 +285,11 @@ header h1 {
 	cursor: pointer;
 }
 
-.add-qna-button:hover {
+#qna-container .add-qna-button:hover {
 	background: #45a049;
 }
 
-.admin-button {
+#qna-container .admin-button {
 	background: #4CAF50;
 	color: #ffffff;
 	border: none;
@@ -294,27 +298,27 @@ header h1 {
 	paddint-right: 20px;
 }
 
-.admin-button:hover {
+#qna-container .admin-button:hover {
 	background: #45a049;
 }
 
-.col-category {
+#qna-container .col-category {
 	width: 10%;
 }
 
-.col-title {
+#qna-container .col-title {
 	width: 50%;
 }
 
-.col-date {
+#qna-container .col-date {
 	width: 20%;
 }
 
-#liveAlertPlaceholder {
+#qna-container #liveAlertPlaceholder {
 	z-index: 10;
 }
 
-#pagingArea {
+#qna-container #pagingArea {
 	text-align: center;
 	margin-top: 20px;
 	/* Optional, to add some space above the pagination */
@@ -323,23 +327,23 @@ header h1 {
 	margin-left: 500px;
 }
 
-.pagination .page-item.active .page-link {
+#qna-container .pagination .page-item.active .page-link {
 	background-color: #007bff;
 	color: white;
 	border-color: #007bff;
 }
 
-.pagination .page-item .page-link {
+#qna-container .pagination .page-item .page-link {
 	color: #007bff;
 }
 
-.pagination .page-item .page-link:hover {
+#qna-container .pagination .page-item .page-link:hover {
 	background-color: #0056b3;
 	color: white;
 	border-color: #0056b3;
 }
 
-.comment-change {
+#qna-container .comment-change {
 	background: #4CAF50;
 	color: #ffffff;
 	border: none;
@@ -347,13 +351,12 @@ header h1 {
 	cursor: pointer;
 }
 
-.comment-delete {
+#qna-container .comment-delete {
 	background: red;
 	color: #ffffff;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-
 }
 </style>
 </head>
@@ -361,6 +364,8 @@ header h1 {
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../searchHeader.jsp"%>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<div id="qna-container">
 
 		<header>
@@ -414,33 +419,35 @@ header h1 {
 							</div>
 							<hr />
 							<div id="qna-comments">
-							<div id="comments"></div>
-							<c:choose>
-							<c:when test="${sessionScope.loginUser.memberId} eq 'admin'
-									|| ${sessionScope.loginUser.memberId}==qnaId">
-								
-								<div><button id="addCommentButton admin-only"
-									class="btn btn-primary">Add Comment</button></div>
-								
-									<div id="commentForm" style="display: none;">
-									<textarea id="newCommentContent"
-										placeholder="Enter your comment"></textarea>
-									<button id="submitCommentButton" class="btn btn-success">Submit
-										Comment</button>
-									</div>
-								</c:when>
-
+								<div id="comments"></div>
+								<c:choose>
+									<c:when
+										test="${sessionScope.loginUser.memberId eq 'admin' || sessionScope.loginUser.memberId == qnaId}">
+										<div>
+											<button id="addCommentButton" class="btn btn-primary">Add
+												Comment</button>
+										</div>
+										<div id="commentForm" style="display: none;">
+											<textarea id="newCommentContent"
+												placeholder="Enter your comment"></textarea>
+											<button id="submitCommentButton" class="btn btn-success">Submit
+												Comment</button>
+										</div>
+									</c:when>
 								</c:choose>
+
 							</div>
 						</div>
 						<div class="modal-footer">
 							<div id="qnaActions">
-								<a class="btn btn-warning user-only" id="goToUpdatePage"
-									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
-									수정하기</a>&nbsp;&nbsp; <a class="btn btn-danger user-only"
+								<a class="btn btn-warning " id="goToUpdatePage"
+									style="height: 40px; color: white; border: 0px solid #388E3C;">
+									수정하기</a>&nbsp;&nbsp;
+									 <a class="btn btn-danger"
 									id="deleteButton"
-									style="height: 40px; color: white; border: 0px solid #388E3C; display: none;">
-									삭제하기</a>&nbsp;&nbsp; <a class="btn btn-secondary"
+									style="height: 40px; color: white; border: 0px solid #388E3C; ">
+									삭제하기</a>&nbsp;&nbsp; 
+									<a class="btn btn-secondary"
 									data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
 
@@ -473,7 +480,11 @@ header h1 {
 			<br />
 
 			<div class="add">
-				<a class="add-qna-button" href="qnas/insert.do">질문 추가하기</a>
+				<c:choose>
+					<c:when test="${ not empty sessionScope.loginUser.memberId }">
+						<a class="add-qna-button" href="qnas/insert.do">질문 추가하기</a>
+					</c:when>
+				</c:choose>
 			</div>
 		</div>
 
@@ -522,12 +533,12 @@ header h1 {
 
 			    const newComment = {
 			        qnaNo: currentQnaNo,
-			        memberNo: userRole,
+			        memberNo: '${sessionScope.loginUser.memberNo}',
 			        commentContent: commentContent, 
 			    };
 
 			    $.ajax({
-			        url: 'qna/comment/',
+			        url: 'qna/comment/insert',
 			        type: 'post',
 			        contentType: 'application/json',
 			        data: JSON.stringify(newComment),
@@ -591,7 +602,7 @@ header h1 {
 			 function deleteById(qnaNo) {
                  $.ajax({
                 	
-                     url: 'qna/' + qnaNo,
+                     url: 'qna/qnaNotice/' + qnaNo,
                      type: 'delete',
                      success: response => {
                          if (response.message === '게시글 삭제 성공') {
@@ -610,7 +621,7 @@ header h1 {
 			    currentCategory = 'all';
 			    currentPage = 0; // 페이지 갯수 초기화
 			    $.ajax({
-			        url: 'qna/' + currentCategory+'/'+solvedBoolean+'/'+page,
+			        url: 'qna/list/' + currentCategory+'/'+solvedBoolean+'/'+page,
 			        type: 'get',
 			        success: function(response)  {
 			        	qnaListGlobal = response.data.qnaList; // Access qnaList
@@ -631,7 +642,7 @@ header h1 {
 			    currentCategory = cate;
 			    currentPageCate[cate] = 0; // Initialize page count for this category
 			    $.ajax({
-			        url: 'qna/' + cate+'/'+solvedBoolean+'/'+page,
+			        url: 'qna/list/' + cate+'/'+solvedBoolean+'/'+page,
 			        type: 'get',
 			        success: response => {
 			            qnaListGlobal = response.data.qnaList; // Store initial qna list globally
@@ -886,11 +897,13 @@ header h1 {
                                 memberNo: comment.memberNo,
                                 commentContent: newContent
                             };
-                        console.log(updatedComment);
+                        
+                        console.log(JSON.stringify(updatedComment));
+                        
                         $.ajax({
-                        	 url: 'qna/commentEdit.do',
-                             type: 'Put',
-                             traditional: true,
+                        	 url: 'qna/comment/edit',
+                             type: 'put',
+                            // traditional: true,
                              contentType: 'application/json',
                              data: JSON.stringify(updatedComment),
                              success: response => {
@@ -916,7 +929,7 @@ header h1 {
                 }
 			    function deleteComment(commentDiv, comment) {
 			        // Show confirmation dialog
-			        if (confirm('정말로 삭제하시겠습니까?')) {
+			        
 			            // Send AJAX request to delete the comment
 			            $.ajax({
 			                url: 'qna/commentDelete.do', // Ensure this matches the backend endpoint
@@ -935,7 +948,7 @@ header h1 {
 			                    alert('댓글 삭제 중 오류 발생');
 			                }
 			            });
-			        }
+			        
 			    }
 			    
 			    //공지사항 삭제/오류 시 나오는 에러
@@ -1011,4 +1024,3 @@ header h1 {
 	<script src="${hpath }/resources/js/forHeader.js?after1"></script>
 	<%@ include file="../footer.jsp"%>
 </body>
-
