@@ -276,11 +276,10 @@
 	    ]]>
 	</select>
 
-<resultMap id="StarMap" type="java.util.HashMap">
-    <result property="ratingRange" column="rating_range"/>
-    <result property="count" column="count"/>
-    <result property="percentage" column="percentage"/>
-    <result property="ratingIndex" column="rating_index"/>
-</resultMap>
+	<resultMap id="StarMap" type="java.util.HashMap">
+	    <result property="ratingRange" column="rating_range"/>
+	    <result property="count" column="count"/>
+	    <result property="percentage" column="percentage"/>
+	</resultMap>
 	
 </mapper>
