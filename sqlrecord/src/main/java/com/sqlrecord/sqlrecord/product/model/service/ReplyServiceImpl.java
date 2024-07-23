@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
 import com.sqlrecord.sqlrecord.reply.model.dao.ReplyMapper;
 import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
@@ -19,8 +20,8 @@ public class ReplyServiceImpl implements ReplyService {
 	private final ReplyMapper replyMapper;	
 	
 	@Override
-	public List<Reply> getReplyList() {
-		return replyMapper.getReplyList();
+	public List<Reply> getReplyList(int productNo) {
+		return replyMapper.getReplyList(productNo);
 	}
 
 	@Override
@@ -29,8 +30,8 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public int replyCount() {
-		return replyMapper.replyCount();
+	public int replyCount(int productNo) {
+		return replyMapper.replyCount(productNo);
 	}
 
 	@Override
@@ -49,13 +50,13 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getReplyStarAll() {
-		return replyMapper.getReplyStarAll();
+	public List<Map<String, Object>> getReplyStarAll(int productNo) {
+		return replyMapper.getReplyStarAll(productNo);
 	}
 
 	@Override
-	public float avgStar() {
-		return replyMapper.avgStar();
+	public float avgStar(int productNo) {
+		return replyMapper.avgStar(productNo);
 	}
 
 	@Override
@@ -91,6 +92,11 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public List<ReplyFile> getImgList() {
 		return replyMapper.getImgList();
+	}
+
+	@Override
+	public int delFile(Reply replyNo) {
+		return replyMapper.delFile(replyNo);
 	}
 
 

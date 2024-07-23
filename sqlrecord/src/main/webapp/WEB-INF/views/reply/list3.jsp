@@ -274,7 +274,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '${hpath}/productFor/delReply.do',
-                    data: { "replyNo" : replyNo },
+                    data: { "replyNo" : replyNo},
                     success: function(response) {
                         console.log('삭제 성공:', response);
                         // 삭제 후 페이지 리로드 또는 다른 동작 수행

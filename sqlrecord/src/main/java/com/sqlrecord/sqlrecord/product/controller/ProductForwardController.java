@@ -56,12 +56,14 @@ public class ProductForwardController {
 		return "product/detail";
 	}
 	
+	/*
 	@GetMapping("count.do")
     public String getReplyCount(Model model) {
         int replyCount = replyService.replyCount();
         model.addAttribute("replyCount", replyCount);
         return "reply/list3"; 
     }
+	*/
 	
 	@PostMapping("chInsReply.do")
 	@ResponseBody
@@ -129,6 +131,7 @@ public class ProductForwardController {
 	public String delReply(@ModelAttribute Reply replyNo) {
     	//model.addAttribute("rslt", replyService.delReply(replyNo));
     	replyService.delReply(replyNo);
+    	replyService.delFile(replyNo);
     	return "redirect:product/detail";
 	}
     
@@ -142,7 +145,9 @@ public class ProductForwardController {
     @PostMapping("upReply.do")
     @ResponseBody
     public String upReply(@ModelAttribute Reply reply,
-    					  Member member, Model model, 
+    					  Member member, 
+    					  Model model, 
+    					  ReplyFile replyFile,
     					  HttpSession session) {
     	Member loginUser = (Member) session.getAttribute("loginUser");
     	reply.setMemberNo(loginUser.getMemberNo());
@@ -169,7 +174,7 @@ public class ProductForwardController {
 	public String getProductOne(@PathVariable int productNo , Model model) {
 		
 		//리뷰 총 갯수 가져오기
-    	int replyCount = replyService.replyCount();
+    	int replyCount = replyService.replyCount(productNo);
     	model.addAttribute("replyCount", replyCount);
     	
     	//답글 총 갯수 가져오기
@@ -177,16 +182,16 @@ public class ProductForwardController {
     	model.addAttribute("chReplyCount", chReplyCount);
 
     	//별점 점수대별 갯수 퍼센트 가져오기
-    	List<Map<String, Object>> starAll = replyService.getReplyStarAll();
+    	List<Map<String, Object>> starAll = replyService.getReplyStarAll(productNo);
         model.addAttribute("starAll", starAll);
         
         
         //총 리뷰 평점 가져오기
-        float avgStar = replyService.avgStar();
+        float avgStar = replyService.avgStar(productNo);
         model.addAttribute("avgStar", avgStar);
         
         //댓글 목록 가져오기
-        model.addAttribute("list", replyService.getReplyList());
+        model.addAttribute("list", replyService.getReplyList(productNo));
         //System.out.println(replyService.getReplyList());
         
         //답글 목록 가져오기

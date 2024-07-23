@@ -33,7 +33,9 @@
 		  FROM
 		  		REPLY
   		 WHERE
-  		 		STATUS = 'Y'	
+  		 		STATUS = 'Y'
+		   AND		
+  		 		PRODUCT_NO = #{productNo}	
 	</select>
 	
 	<select id="chReplyCount" resultType="int">
@@ -76,7 +78,9 @@
 		    ON
 		        r.MEMBER_NO = m.MEMBER_NO
 		 WHERE
-		 		r.STATUS != 'D'      
+		 		r.STATUS != 'D'
+	 	   AND
+	 	   		PRODUCT_NO = #{productNo}	      
 		 ORDER
     		BY
         		REPLY_NO
@@ -115,6 +119,8 @@
 				ROUND(AVG(STAR), 1) AS avgStar 
 		  FROM
 		  		REPLY
+	  	 WHERE
+	  	 		PRODUCT_NO = #{productNo}	
 	</select>
 	
 	<insert id="insFile" parameterType="replyFile">
@@ -220,6 +226,14 @@
                 R.REPLY_NO = #{replyNo}	 
 	</update>
 	
+	<delete id="delFile" parameterType="replyFile">
+		DELETE 
+		  FROM 
+		  		REPLY_FILE
+  		 WHERE
+  		 		REPLY_NO = #{replyNo}
+	</delete>
+	
 	<delete id="delChReply" parameterType="chReply">
 		DELETE 
 		  FROM 
@@ -249,6 +263,7 @@
 		        END AS rating_index
 		      FROM REPLY
 		      WHERE star >= 1.0
+		      AND PRODUCT_NO = #{productNo}
 		      GROUP BY
 		        CASE 
 		          WHEN star = 5.0 THEN '5점 MAX'
@@ -266,7 +281,9 @@
 		        END
 		    ),
 		    total AS (
-		      SELECT COUNT(*) AS total_count FROM REPLY
+		      SELECT COUNT(*) AS total_count 
+		      FROM REPLY
+		      WHERE PRODUCT_NO = #{productNo}
 		    )
 		    SELECT 
 		      s.rating_range,
