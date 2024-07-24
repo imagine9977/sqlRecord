@@ -17,16 +17,7 @@
 		  FROM
 		  		REPLY
 	</sql>
-	<!--  
-	<select id="replyCount">
-		SELECT 
-				 COUNT(*)
-			FROM
-				  REPLY
-		   WHERE
-		   		  PRODUCT_NO = #{productNo} 			
-	</select>
-	-->
+
 	<select id="replyCount" resultType="int">
 		SELECT
 				COUNT(*)
