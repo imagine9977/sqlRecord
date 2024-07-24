@@ -35,7 +35,7 @@ public interface QnaService {
 
 	public int updateComment(Comment newComment);
 
-	public void deleteFile(int delfile);
+	public int deleteFile(int delfile);
 
 	public QnaFile findFileById(int delfile);
 

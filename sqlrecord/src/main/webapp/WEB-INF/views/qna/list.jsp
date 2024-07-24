@@ -28,6 +28,8 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 	crossorigin="anonymous"></script>
+	
+	
 
 <style>
 /* Scoped styles for qna.jsp content */
@@ -38,7 +40,7 @@
 	margin-bottom: 15px;
 }
 
-#
+#qna-container #
 comments {
 	padding: 15px;
 	background-color: #f9f9f9;
@@ -314,9 +316,6 @@ comments {
 	width: 20%;
 }
 
-#qna-container #liveAlertPlaceholder {
-	z-index: 10;
-}
 
 #qna-container #pagingArea {
 	text-align: center;
@@ -400,14 +399,15 @@ comments {
 				<div class="modal-dialog modal-dialog-scrollable modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 id="qnaHeader"></h5>
+							<h4 id="qnaHeader"></h4>
 							<label for="qnaId">작성자: </label>
 							<div id="qnaId"></div>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-
+						<label for="qnaSolved" style="display: inline"><h4>해결상태:</h4> </label>
+							<h5 id="qnaSolved"></h5>
 							<div id="qna-detail">
 								<h4>파일 내려받기</h4>
 								<div id="files"></div>
@@ -806,6 +806,7 @@ comments {
 			                var textTitle = qnaNo+'. [' +getKoreanqnaCategory(qna.qnaCategory)+'] '+qna.qnaTitle;
 			                $('#qnaModal #qnaHeader').text(textTitle);
 			                $('#qnaModal #qnaContent').text(qna.qnaContent);
+			                $('#qnaModal #qnaSolved').text(qna.solved);
 			                $('#qnaModal #qnaId').text(qna.memberId);
 			                $('#qnaModal #files').empty();
 			                $('#qnaModal #comments').empty();
@@ -951,21 +952,17 @@ comments {
 			        
 			    }
 			    
-			    //공지사항 삭제/오류 시 나오는 에러
-			    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
 				
-			 	//공지사항 에러 출력하기
-			    const alert = (message) => {
-			      const wrapper = document.createElement('div')
-			      wrapper.innerHTML = [
-			        '<div class="alert alert-warning alert-dismissible" role="alert">',
-			        '   <div>${message}</div>',
-			        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-			        '</div>'
-			      ].join('')
+				// 공지사항 에러 출력하기
+				const alert = (message) => {
+				document.getElementById('liveAlertPlaceholder').innerHTML=`
+				    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+				      <strong>\${message}</strong>
+				      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				    </div> `;
+				}
+				
 
-			      alertPlaceholder.append(wrapper)
-			    }
 			    const renderPagination = (pageInfo) => {
 			        const paginationUl = document.getElementById('paginationUl');
 			        paginationUl.innerHTML = ''; // Clear previous pagination
@@ -1021,6 +1018,7 @@ comments {
             </script>
 
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 	<script src="${hpath }/resources/js/forHeader.js?after1"></script>
 	<%@ include file="../footer.jsp"%>
 </body>

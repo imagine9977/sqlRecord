@@ -63,4 +63,7 @@ public interface QnaMapper {
 
 
 	int deleteSingleComment(int commentNo);
+
+
+	int deleteFileByPosition(int delfile);
 }

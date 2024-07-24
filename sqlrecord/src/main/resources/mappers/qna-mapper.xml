@@ -281,7 +281,7 @@
 	<update id="delete" parameterType="_int">
 		UPDATE QNA
 		SET
-		STATUS='N'
+		DELSTATUS='N'
 		WHERE
 		QNA_NO =
 		#{qnaNo}
@@ -291,6 +291,10 @@
 		WHERE
 		QNA_NO =
 		#{qnaNo}
+	</delete>
+	<delete id="deleteFileByPosition" parameterType="_int">
+    DELETE FROM QNAFILE
+    WHERE QNAFILE_NO = #{qnafileNo}
 	</delete>
 	<update id="deleteComments" parameterType="_int">
 		UPDATE COMM
@@ -306,10 +310,9 @@
 		SET
 		QNA_TITLE=#{qnaTitle},
 		QNA_CONTENT= #{qnaContent},
-		QNA_CATE=#{qnaCategory},
+		CATEGORY=#{qnaCategory},
 		SECRET=#{secret},
 		CHANGE_DATE= SYSDATE,
-		QNA_CATE=#{qnaCategory},
 		SOLVED=#{solved}
 		WHERE
 		QNA_NO = #{qnaNo}
@@ -319,7 +322,7 @@
 		parameterType="qnaFile">
 		UPDATE QNAFILE
 		SET
-		QNAFILE_ORIGINAL = #{originalName},QNAFILE_CHANGED #{changedName}
+		QNAFILE_ORIGINAL = #{originalName},QNAFILE_CHANGED = #{changedName}
 	</update>
 	<update id="updateComment" parameterType="comm">
 		UPDATE COMM

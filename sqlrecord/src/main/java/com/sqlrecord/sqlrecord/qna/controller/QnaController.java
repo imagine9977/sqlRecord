@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sqlrecord.sqlrecord.common.vo.PageInfo;
 import com.sqlrecord.sqlrecord.message.Message;
+import com.sqlrecord.sqlrecord.notice.model.vo.NFile;
+import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
 import com.sqlrecord.sqlrecord.qna.model.service.QnaService;
 import com.sqlrecord.sqlrecord.qna.model.vo.Comment;
 import com.sqlrecord.sqlrecord.qna.model.vo.PaginationAndList;
@@ -267,6 +270,7 @@ public class QnaController {
 			Qna newqna = new Qna();
 			newqna.setQnaNo(qna.getQnaNo());
 			newqna.setSecret(qna.getSecret());
+			newqna.setSolved(qna.getSolved());
 			newqna.setQnaCategory(qna.getQnaCategory());
 			newqna.setQnaContent(qna.getQnaContent());
 			newqna.setQnaTitle(qna.getQnaTitle());
@@ -287,5 +291,23 @@ public class QnaController {
 			session.setAttribute("alertMsg", "게시글 작성 성공");
 			return "redirect:/qnas";
 		}
+		@DeleteMapping("qnaNotice/{id}")
+		public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
+			Qna qna = qnaService.findById(id);
+			int result = qnaService.delete(id);
+			String savePath = session.getServletContext().getRealPath("");
 
+			if (result == 0) {
+				return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("게시글이  존재하지 않음").build());
+			}
+
+		for (QnaFile file : qna.getFiles()) {
+				String filePath = file.getChangedName();
+				File xFile = new File(savePath + filePath);
+
+				boolean fileDelete = xFile.delete();
+			}
+			Message responseMsg = Message.builder().data("삭제성공!").message("게시글 삭제 성공").build();
+			return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+		}
 }

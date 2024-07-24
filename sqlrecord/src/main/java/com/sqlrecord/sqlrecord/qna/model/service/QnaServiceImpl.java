@@ -155,9 +155,9 @@ public class QnaServiceImpl implements QnaService{
 	}
 
 	@Override
-	public void deleteFile(int delfile) {
+	public int deleteFile(int delfile) {
 		// TODO Auto-generated method stub
-		
+		return qnaMapper.deleteFileByPosition(delfile);
 	}
 
 	@Override
