@@ -57,14 +57,6 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class="dropdown">
-	        <label for="itemsPerPage">한 번에 보기&nbsp;:&nbsp;</label>
-	        <select id="itemsPerPage" name="itemsPerPage">
-	            <option value="12">12</option>
-	            <option value="18">18</option>
-	            <option value="24">24</option>
-	        </select>
-	    </div>
 	    <c:if test="${!empty sessionScope.loginUser}">
 	        <div id="commentForm">
 	            <div class="overlay" id="overlay"></div>
