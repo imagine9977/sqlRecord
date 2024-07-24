@@ -263,7 +263,7 @@
 	            s.count,
 	            ROUND(s.count * 100.0 / t.total_count, 1) AS percentage
 	        FROM stats s
-	        JOIN total t
+	        CROSS JOIN total t
 			ORDER BY s.rating_range DESC
 	    ]]>
 	</select>
