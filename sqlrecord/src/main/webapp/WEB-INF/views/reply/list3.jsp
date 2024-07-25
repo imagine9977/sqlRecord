@@ -587,7 +587,6 @@
                    
                    // 파일 입력 초기화
                    fileInput.value = '';
-
                },
                error: function(xhr, status, error) {
                	alert("댓글 등록에 실패했습니다.");
