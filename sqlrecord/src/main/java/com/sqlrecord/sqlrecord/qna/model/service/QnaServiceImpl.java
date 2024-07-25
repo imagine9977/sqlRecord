@@ -21,10 +21,23 @@ public class QnaServiceImpl implements QnaService{
 	private final QnaMapper qnaMapper;
 	private final MemberMapper memberMapper;
 	@Override
-	public int qnaCount() {
+	public int qnaCount(String bool) {
 		// TODO Auto-generated method stub
-		return qnaMapper.qnaCount();
+		if(bool.equals("N")) {
+			return qnaMapper.qnaCountUnsolved();
+		}return qnaMapper.qnaCount();
+		
 	}
+
+	@Override
+	public int qnaCountCate(String cate, String bool) {
+		// TODO Auto-generated method stub
+		if(bool.equals("N")) {
+			return qnaMapper.qnaCountCateUnsolved(cate);
+		}return qnaMapper.qnaCountCate(cate);
+	
+	}
+
 
 	@Override
 	public List<Qna> findAll(Map<String, Integer> map, String bool){
@@ -67,12 +80,6 @@ public class QnaServiceImpl implements QnaService{
 		return qna;
 	}
 
-
-	@Override
-	public int qnaCountCate(String cate) {
-		// TODO Auto-generated method stub
-		return qnaMapper.qnaCountCate(cate);
-	}
 
 	@Override
 	public List<QnaFile> findFiles(int id) {

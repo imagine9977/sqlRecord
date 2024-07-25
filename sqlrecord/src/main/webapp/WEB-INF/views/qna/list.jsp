@@ -28,8 +28,8 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 	crossorigin="anonymous"></script>
-	
-	
+
+
 
 <style>
 /* Scoped styles for qna.jsp content */
@@ -40,8 +40,7 @@
 	margin-bottom: 15px;
 }
 
-#qna-container #
-comments {
+#qna-container # comments {
 	padding: 15px;
 	background-color: #f9f9f9;
 	border-top: 1px solid #e0e0e0;
@@ -316,7 +315,6 @@ comments {
 	width: 20%;
 }
 
-
 #qna-container #pagingArea {
 	text-align: center;
 	margin-top: 20px;
@@ -406,7 +404,8 @@ comments {
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-						<label for="qnaSolved" style="display: inline"><h4>해결상태:</h4> </label>
+							<label for="qnaSolved" style="display: inline"><h4>해결상태:</h4>
+							</label>
 							<h5 id="qnaSolved"></h5>
 							<div id="qna-detail">
 								<h4>파일 내려받기</h4>
@@ -422,7 +421,8 @@ comments {
 								<div id="comments"></div>
 								<c:choose>
 									<c:when
-										test="${sessionScope.loginUser.memberId eq 'admin' || sessionScope.loginUser.memberId == qnaId}">
+										test="${not empty sessionScope.loginUser.memberId &&
+										 (sessionScope.loginUser.memberId eq 'admin' || sessionScope.loginUser.memberId eq qnaId)}">
 										<div>
 											<button id="addCommentButton" class="btn btn-primary">Add
 												Comment</button>
@@ -440,15 +440,19 @@ comments {
 						</div>
 						<div class="modal-footer">
 							<div id="qnaActions">
-								<a class="btn btn-warning " id="goToUpdatePage"
-									style="height: 40px; color: white; border: 0px solid #388E3C;">
-									수정하기</a>&nbsp;&nbsp;
-									 <a class="btn btn-danger"
-									id="deleteButton"
-									style="height: 40px; color: white; border: 0px solid #388E3C; ">
-									삭제하기</a>&nbsp;&nbsp; 
-									<a class="btn btn-secondary"
-									data-bs-dismiss="modal"
+								<c:choose>
+									<c:when
+										test="${not empty sessionScope.loginUser.memberId &&
+										 (sessionScope.loginUser.memberId eq 'admin' || sessionScope.loginUser.memberId eq qnaId)}">
+										<a class="btn btn-warning " id="goToUpdatePage"
+											style="height: 40px; color: white; border: 0px solid #388E3C;">
+											수정하기</a>&nbsp;&nbsp;
+									 <a class="btn btn-danger" id="deleteButton"
+											style="height: 40px; color: white; border: 0px solid #388E3C;">
+											삭제하기</a>&nbsp;&nbsp; 
+									</c:when>
+								</c:choose>
+								<a class="btn btn-secondary" data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
 
 							</div>
@@ -503,10 +507,13 @@ comments {
 			var fileNameArry = [];
 			var userRole = '${sessionScope.loginUser.memberId}';
 			
-			document.getElementById("goToUpdatePage").onclick = function () {
-		        location.href = "qnas/update.do/"+currentQnaNo;
-		    };
-			
+			// Check if the "goToUpdatePage" element exists before setting the onclick property
+		    const goToUpdatePageButton = document.getElementById("goToUpdatePage");
+		    if (goToUpdatePageButton) {
+		        goToUpdatePageButton.onclick = function () {
+		            location.href = "qnas/update.do/"+currentQnaNo;
+		        };
+		    }
 		    
 			$(document).on('click', '.fileDelBtn', function() {
 			    var fileNo = $(this).data('fileNo');
@@ -708,7 +715,22 @@ comments {
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
-			        qnaEl.appendChild(createDiv(o.qnaTitle, '450px'));
+			        let newTitle = o.qnaTitle;
+			        if (o.secret === 'Y') {
+						const currentUser = '${sessionScope.loginUser.memberId}';
+						console.log(currentUser === o.memberId);
+					    if (currentUser === 'admin' || currentUser === o.memberId) {
+					                newTitle = '🔑' + o.qnaTitle;
+					    } else {
+					                newTitle = '🔒' + o.qnaTitle;
+					    }
+					}else {
+						const currentUser = '${sessionScope.loginUser.memberId}';
+						if ( currentUser === o.memberId) {
+			                newTitle = '✏️' + o.qnaTitle;
+			    		}
+					}
+			        qnaEl.appendChild(createDiv(newTitle, '450px'));
 			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
 			        qnaEl.appendChild(createDiv(o.solved, '150px'));
 			        outerDiv.appendChild(qnaEl);
@@ -739,8 +761,23 @@ comments {
 			        qnaEl.className = 'qnaEl';
 			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
 			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
-			        //if(userRole !=null || userRole!=o.qnaId)
-			        qnaEl.appendChild(createDiv(o.qnaTitle, '450px'));
+			       
+			        let newTitle = o.qnaTitle;
+					if (o.secret === 'Y') {
+						const currentUser = '${sessionScope.loginUser.memberId}';
+						console.log(o.memberId);
+					    if (currentUser === 'admin' || currentUser === o.memberId) {
+					                newTitle = '🔑' + o.qnaTitle;
+					    } else {
+					                newTitle = '🔒' + o.qnaTitle;
+					    }
+					}else {
+						const currentUser = '${sessionScope.loginUser.memberId}';
+						if ( currentUser === o.memberId) {
+			                newTitle = '✏️' + o.qnaTitle;
+			    		}
+					}
+			        qnaEl.appendChild(createDiv(newTitle, '450px'));
 			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
 			        qnaEl.appendChild(createDiv(o.solved, '150px'));
 			        outerDiv.appendChild(qnaEl);
@@ -800,10 +837,31 @@ comments {
 			            url: 'qna/' + qnaNo,
 			            type: 'get',
 			            success: response => {
-			                const qna = response.data;
+			            	 const qna = response.data;
+			                 const currentUserId = '${sessionScope.loginUser.memberId}';
+			                 const isAdmin = currentUserId === 'admin';
+			                 const isAuthor = currentUserId === qna.memberId;
+			                 
+			                 // Check if the Q&A is secret and if the user is authorized to view it
+			                 if ((qna.secret ==='Y'  )&& !isAdmin && !isAuthor) {
+			                     alert('비밀글은 작성자 또는 관리자만 확인할 수 있습니다.');
+			                     return;
+			                 }
+			                 
+			                 
 			                currentQnaNo = parseInt(qnaNo);
 			                // Update modal content with qna details
-			                var textTitle = qnaNo+'. [' +getKoreanqnaCategory(qna.qnaCategory)+'] '+qna.qnaTitle;
+			               
+			                let newTitle ='';
+					        if (qna.secret === 'Y') {
+					            const currentUser = '${sessionScope.loginUser.memberId}';
+					            if (currentUser === 'admin' || currentUser === qna.memberId) {
+					                newTitle = '🔑' ;
+					            } else {
+					                newTitle = '🔒' ;
+					            }
+					        }
+			                var textTitle = qnaNo+'. [' +getKoreanqnaCategory(qna.qnaCategory)+'] '+newTitle+qna.qnaTitle;
 			                $('#qnaModal #qnaHeader').text(textTitle);
 			                $('#qnaModal #qnaContent').text(qna.qnaContent);
 			                $('#qnaModal #qnaSolved').text(qna.solved);
@@ -865,10 +923,11 @@ comments {
 			                }
 			                
 			                
-			                
-			                document.getElementById('deleteButton').onclick = function() {
+			                const goToDeleteButton = document.getElementById('deleteButton');
+			               if(goToDeleteButton){ goToDeleteButton.onclick = function() {
 			                    return ConfirmDelete(currentQnaNo);
-			                };
+			                };}
+			               
 
 			                $('#qnaModal').modal('show');
 			            }
@@ -1018,7 +1077,8 @@ comments {
             </script>
 
 	</div>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 	<script src="${hpath }/resources/js/forHeader.js?after1"></script>
 	<%@ include file="../footer.jsp"%>
 </body>

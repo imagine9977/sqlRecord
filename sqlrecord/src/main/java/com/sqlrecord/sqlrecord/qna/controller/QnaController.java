@@ -60,9 +60,9 @@ public class QnaController {
 		pageLimit = 10;
 		qnaLimit = 10;
 		if(cate.equals("all")) {
-			listCount = qnaService.qnaCount();
+			listCount = qnaService.qnaCount(bool);
 		}else {
-			listCount = qnaService.qnaCountCate(cate);
+			listCount = qnaService.qnaCountCate(cate,bool);
 		}
 		
 		log.info("조회된 게시글의 개수: {}", listCount);

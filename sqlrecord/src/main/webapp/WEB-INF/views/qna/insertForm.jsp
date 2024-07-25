@@ -36,7 +36,9 @@
 						<option value="etc">기타</option>
 					</select>
 				</div>
+				<label>비밀글 여부</label>
 				<div class="form-check">
+				
 					<input class="form-check-input" type="radio"
 						name="secret" id="secret1" value="Y"> <label
 						class="form-check-label" for="secret1"> 네 </label>

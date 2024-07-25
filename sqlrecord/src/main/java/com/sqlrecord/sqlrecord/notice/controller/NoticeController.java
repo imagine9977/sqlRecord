@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeController {
 	private final NoticeService noticeService;
 
-	@GetMapping
+	@GetMapping("/list")
 	public ResponseEntity<Message> findAll() {
 
 		List<Notice> noticeList = noticeService.findAll();
@@ -53,7 +53,7 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 
-	@GetMapping("/category/{cate}")
+	@GetMapping("/list/cate/{cate}")
 	public ResponseEntity<Message> findByCate(@PathVariable String cate) {
 
 		List<Notice> noticeList = noticeService.findByCate(cate);
@@ -165,7 +165,7 @@ public class NoticeController {
 	 * Message.builder().data(result).message("서비스 요청 성공").build(); return
 	 * ResponseEntity.status(HttpStatus.OK).body(responseMsg); }
 	 */
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/notice/{id}")
 	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
 		Notice notice = noticeService.findById(id);
 		int result = noticeService.delete(id);

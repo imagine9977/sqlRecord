@@ -12,7 +12,7 @@ import com.sqlrecord.sqlrecord.qna.model.vo.Comment;
 
 public interface QnaService {
 	
-	public int qnaCount();
+	public int qnaCount( String bool);
 
 	public List<Qna> findAll(Map<String, Integer> map, String bool);
 
@@ -20,7 +20,7 @@ public interface QnaService {
 
 	public Qna findById(int qnaNo);
 
-	public int qnaCountCate(String cate);
+	public int qnaCountCate(String cate, String bool);
 
 	public List<QnaFile> findFiles(int id);
 	public List<Comment> findComments(int id);
