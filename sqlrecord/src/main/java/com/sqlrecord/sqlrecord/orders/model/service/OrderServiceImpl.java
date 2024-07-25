@@ -34,13 +34,9 @@ public class OrderServiceImpl implements OrdersService {
 	@Override
 	public int insertOrdersDetail(List<MemberOrdersDetail> odList) {
 		
-		int success = 0;
-		for(MemberOrdersDetail item : odList) {
-			ordersMapper.insertOrdersDetail(item);
-			success += 1;
-		}
-		
-		
+
+		int success = ordersMapper.insertOrdersDetail(odList);
+
 		return success;
 	}
 

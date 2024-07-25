@@ -53,7 +53,9 @@ public class OrdersForwardController {
 		String[] product_noArr = request.getParameterValues("productNo");
 		String[] cartNo_Arr = request.getParameterValues("cartNum");
 		
-		if(cart_amountArr.length == cartNo_Arr.length &&  product_noArr.length == product_priceArr.length) {
+		int value = cart_amountArr.length;
+		
+		if(product_priceArr.length == value && product_noArr.length == value && cartNo_Arr.length == value) {
 			
 			Member member =  (Member) session.getAttribute("loginUser");
 			
