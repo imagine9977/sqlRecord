@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -126,13 +127,18 @@ public class ProductForwardController {
 	
     //Reply 클래스의 필드명과 폼의 입력 필드명(name 속성)이 일치해야함
     
-    @PostMapping("delReply.do")
-    @ResponseBody
-	public String delReply(@ModelAttribute Reply replyNo) {
-    	//model.addAttribute("rslt", replyService.delReply(replyNo));
-    	replyService.delReply(replyNo);
-    	replyService.delFile(replyNo);
-    	return "redirect:product/detail";
+	@PostMapping("delReply.do")
+	@ResponseBody
+	public Map<String, String> delReply(@RequestParam("replyNo") int replyNo) {
+	    Map<String, String> result = new HashMap<>();
+	    try {
+	        replyService.delReply(replyNo);
+	        replyService.delFile(replyNo);
+	        result.put("status", "success");
+	    } catch (Exception e) {
+	        result.put("status", "error");
+	    }
+	    return result;
 	}
     
     @PostMapping("delChReply.do")

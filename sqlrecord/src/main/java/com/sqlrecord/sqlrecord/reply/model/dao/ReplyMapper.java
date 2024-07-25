@@ -18,7 +18,7 @@ public interface ReplyMapper {
 	int replyCount(int productNo);
 	int insReply(Reply reply);
 	int changeReply(Reply reply);
-	int delReply(Reply replyNo);
+	int delReply(int replyNo);
 	List<Map<String, Object>> getReplyStarAll(int productNo);
 	float avgStar(int productNo);
 	int chInsReply(ChReply chReply);
@@ -28,7 +28,7 @@ public interface ReplyMapper {
 	int chReplyCount();
 	int insFile(ReplyFile replyFile);
 	List<ReplyFile> getImgList();
-	int delFile(Reply replyNo);
+	int delFile(int replyNo);
 
 
 }

@@ -15,7 +15,7 @@ public interface ReplyService {
 	public int replyCount(int productNo);
 	public int insReply(Reply reply);
 	public int changeReply(Reply reply);
-	public int delReply(Reply replyNo);
+	public int delReply(int replyNo);
 	public List<Map<String, Object>> getReplyStarAll(int productNo);
 	public float avgStar(int productNo);
 	public int chInsReply(ChReply chReply);
@@ -25,5 +25,5 @@ public interface ReplyService {
 	public int chReplyCount();
 	public int insFile(ReplyFile replyFile);
 	public List<ReplyFile> getImgList();
-	public int delFile(Reply replyNo);
+	public int delFile(int replyNo);
 }

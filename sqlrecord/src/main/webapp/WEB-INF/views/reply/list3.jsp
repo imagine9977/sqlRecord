@@ -258,27 +258,31 @@
     }); */
 
     $(document).ready(function() {
-        $('.deleteButton').on('click', function() {
-            //const replyNo = $(this).closest('.reviews').data('replyNo');
-			const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
-			console.log(replyNo); // 댓글 번호 출력
-            
-            if (confirm('댓글을 삭제하시겠습니까?')) {
-                $.ajax({
-                    type: 'POST',
-                    url: '${hpath}/productFor/delReply.do',
-                    data: { "replyNo" : replyNo},
-                    success: function(response) {
-                        console.log('삭제 성공:', response);
-                        // 삭제 후 페이지 리로드 또는 다른 동작 수행
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('삭제 실패:', error);
-                    }
-                });
-            }
-        });
+    	$('.deleteButton').on('click', function() {
+    	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
+    	    console.log(replyNo); // 댓글 번호 출력
+    	    
+    	    if (confirm('댓글을 삭제하시겠습니까?')) {
+    	        $.ajax({
+    	            type: 'POST',
+    	            url: '${hpath}/productFor/delReply.do',
+    	            data: { "replyNo": replyNo },
+    	            success: function(response) {
+    	                console.log('삭제 성공:', response);
+    	                console.log('status:', response.status); // 상태를 직접 출력
+    	                if (response.status === 'success') {
+    	                    alert('댓글 삭제에 성공했습니다.');
+    	                } else {
+    	                    alert('댓글 삭제에 실패했습니다.');
+    	                }
+    	            },
+    	            error: function(xhr, status, error) {
+    	                console.error('삭제 실패:', error);
+    	                alert('오류 발생');
+    	            }
+    	        });
+    	    }
+    	});
         
         
         $('.deleteButton2').on('click', function() {
