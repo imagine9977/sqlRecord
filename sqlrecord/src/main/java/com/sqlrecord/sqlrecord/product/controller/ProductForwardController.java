@@ -79,49 +79,49 @@ public class ProductForwardController {
 	
 	@RequestMapping("insReply.do")
 	@ResponseBody
-    public String insReply(@ModelAttribute Reply reply, 
-    					   @ModelAttribute ReplyFile replyFile,
-    					   @RequestParam("files") MultipartFile[] files,
-    					   Member member, 
-    					   Model model,
-    					   HttpSession session) {
-    	Member loginUser = (Member) session.getAttribute("loginUser");
-    	reply.setMemberNo(loginUser.getMemberNo());
-    	replyService.insReply(reply);
-    	
-    	//파일 업로드
-    	for (MultipartFile upfile : files) {
-            if (!upfile.isEmpty()) {
-                // 파일 처리
-                String originName = upfile.getOriginalFilename();
-                String ext = originName.substring(originName.lastIndexOf("."));
-                int num = (int) (Math.random() * 900) + 100;
+	public String insReply(@ModelAttribute Reply reply, 
+	                       @ModelAttribute ReplyFile replyFile,
+	                       @RequestParam(value = "files", required = false) MultipartFile[] files,
+	                       Member member, 
+	                       Model model,
+	                       HttpSession session) {
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    reply.setMemberNo(loginUser.getMemberNo());
+	    replyService.insReply(reply);
+	    
+	    // 파일이 있을 경우에만 파일 업로드 처리
+	    if (files != null) {
+	        for (MultipartFile upfile : files) {
+	                // 파일 처리
+	                String originName = upfile.getOriginalFilename();
+	                String ext = originName.substring(originName.lastIndexOf("."));
+	                int num = (int) (Math.random() * 900) + 100;
 
-                String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/reply/");
-                String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-                String changeName = "KH_" + currentTime + "_" + num + ext;
-                File directory = new File(savePath);
+	                String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/reply/");
+	                String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+	                String changeName = "KH_" + currentTime + "_" + num + ext;
+	                File directory = new File(savePath);
 
-                if (!directory.exists()) { // 디렉토리 존재 유무 확인
-                    directory.mkdirs(); // 없다면 상위 디렉토리부터 생성
-                }
+	                if (!directory.exists()) { // 디렉토리 존재 유무 확인
+	                    directory.mkdirs(); // 없다면 상위 디렉토리부터 생성
+	                }
 
-                try {
-                    upfile.transferTo(new File(savePath + changeName));
-                } catch (IllegalStateException | IOException e) {
-                    e.printStackTrace();
-                }
-                
-                replyFile.setMemberNo(loginUser.getMemberNo());
-                replyFile.setOriginName(originName);
-                replyFile.setChangeName(changeName);
-                replyService.insFile(replyFile);
-            }
-    	}
+	                try {
+	                    upfile.transferTo(new File(savePath + changeName));
+	                } catch (IllegalStateException | IOException e) {
+	                    e.printStackTrace();
+	                }
+
+	                replyFile.setMemberNo(loginUser.getMemberNo());
+	                replyFile.setOriginName(originName);
+	                replyFile.setChangeName(changeName);
+	                replyService.insFile(replyFile);
+	        }
+	    }
+	    
+	    return "redirect:/detail/{productNo}";
+	}
 		
-    	//model.addAttribute("rslt", replyService.insReply(reply));
-    	return "redirect:/detail/{productNo}";
-    }
 	
 	
     //Reply 클래스의 필드명과 폼의 입력 필드명(name 속성)이 일치해야함
