@@ -36,20 +36,24 @@
 	
 	
 	<insert id="insertOrdersDetail" parameterType="list">
-		<foreach open="INSERT ALL" collection="list" item="item" separator="," close="SELECT * FROM DUAL">
+		
+		
+		<foreach open="INSERT ALL" index="index" collection="list" item="item" separator=" " close="SELECT * FROM DUAL">
+			
 		INTO
-				MEMBER_ORDERS_DETAIL
+						MEMBER_ORDERS_DETAIL
 		VALUES
-				(
-				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
-				#{item.product.productNo},
-				#{item.memberOrders.memberOrdersNo},
-				#{item.memberOrdersDetailAmount},
-				#{item.memberOrdersDetailPrice},
-				DEFAULT,
-				DEFAULT,
-				DEFAULT
-				)
+						(
+						MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL + #{index} + 1,
+						#{item.product.productNo},
+						#{item.memberOrders.memberOrdersNo},
+						#{item.memberOrdersDetailAmount},
+						#{item.memberOrdersDetailPrice},
+						DEFAULT,
+						DEFAULT,
+						DEFAULT
+						)
+						
 		</foreach>
 	</insert>
 	

@@ -52,7 +52,7 @@ public class OrdersForwardController {
 		String[] product_priceArr = request.getParameterValues("productPrice");
 		String[] product_noArr = request.getParameterValues("productNo");
 		String[] cartNo_Arr = request.getParameterValues("cartNum");
-		
+		log.info("? : {}" , cart_amountArr[0] );
 		int value = cart_amountArr.length;
 		
 		if(product_priceArr.length == value && product_noArr.length == value && cartNo_Arr.length == value) {
