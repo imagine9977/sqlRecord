@@ -9,8 +9,9 @@
 </head>
 <body>
 	<%@ include file="../header.jsp"%>
+	<%@ include file="../searchHeader.jsp"%>
 	<div id="main_content">
-		<%@ include file="../searchHeader.jsp"%>
+		
 
 		<form id="updateForm" method="post"
 			action="${hpath }/notice/update.do" enctype="multipart/form-data">

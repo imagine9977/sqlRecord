@@ -577,7 +577,7 @@
 			    currentCategory = 'all';
 			    currentPage = 0; // 페이지 갯수 초기화
 			    $.ajax({
-			        url: 'notice',
+			        url: 'notice/list',
 			        type: 'get',
 			        success: response => {
 			        	noticeListGlobal = response.data; // Store initial notice list globally
@@ -597,7 +597,7 @@
 			    currentCategory = cate;
 			    currentPageCate[cate] = 0; // Initialize page count for this category
 			    $.ajax({
-			        url: 'notice/category/' + cate,
+			        url: 'notice/list/cate/' + cate,
 			        type: 'get',
 			        success: response => {
 			            noticeListGlobal = response.data; // Store initial notice list globally
@@ -895,7 +895,7 @@
 				    const wrapper = document.createElement('div');
 				    wrapper.innerHTML = `
 				      <div class="alert alert-warning alert-dismissible" role="alert">
-				        ${message}
+				        \${message}
 				        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				      </div>
 				    `;

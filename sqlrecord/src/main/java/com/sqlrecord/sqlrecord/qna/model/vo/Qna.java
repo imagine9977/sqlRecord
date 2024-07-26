@@ -25,6 +25,7 @@ public class Qna {
 	private String changeDate;
 	private String delStatus;
 	private int memberNo;
+	private String memberId;
 	private List<QnaFile> files;
 	private List<Comment> comments;
 	

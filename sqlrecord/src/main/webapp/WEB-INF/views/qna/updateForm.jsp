@@ -142,9 +142,34 @@ textarea.form-control {
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="secret">비밀글</label> <input type="checkbox" id="secret"
-						name="secret" data-switchval
-						<c:if test="${qna.secret == 'Y'}">checked</c:if> />
+					<label for="secret">비밀글</label>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="secret"
+							id="secret1" value="Y"
+							<c:if test="${qna.secret == 'Y'}">checked</c:if>> <label
+							class="form-check-label" for="secret1"> 네 </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="secret"
+							id="secret2" value="N"
+							<c:if test="${qna.secret == 'N'}">checked</c:if>> <label
+							class="form-check-label" for="secret2">아니요 </label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label >해결상태</label>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="solved"
+							id="solved1" value="Y"
+							<c:if test="${qna.solved == 'Y'}">checked</c:if>> <label
+							class="form-check-label" for="solved1">해결완료 </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="solved"
+							id="solved2" value="N"
+							<c:if test="${qna.solved == 'N'}">checked</c:if>> <label
+							class="form-check-label" for="solved2">해결안됨 </label>
+					</div>
 				</div>
 				<label for="files">파일 변경하기</label>
 				<div id="files" class="file-list">
@@ -158,7 +183,7 @@ textarea.form-control {
 										download="${file.originalName}">
 										${fn:escapeXml(file.originalName)} </a>
 									<button type="button" class="fileDelBtn"
-										value="${file.nfileNo}">삭제</button>
+										value="${file.qnafileNo}">삭제</button>
 								</div>
 							</c:forEach>
 							<c:if test="${fn:length(qna.files) < 3}">
@@ -195,10 +220,14 @@ textarea.form-control {
 	</div>
 
 	<script>
+	
+
 		var fileNoArry = [];
 
 		$(document).on('click', '.fileDelBtn', function() {
+			console.log($(this).val());
 			var fileNo = $(this).val();
+			
 			fileNoArry.push(fileNo);
 			$('#fileNoDel').val(fileNoArry.join(',')); // Join array as comma-separated string
 			$(this).parent().remove();

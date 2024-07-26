@@ -19,13 +19,12 @@
 				<div class="form-group">
 					<label for="qnaTitle">제목</label> <input type="text"
 						class="form-control" id="qnaTitle" name="qnaTitle" value=""
-						required> 
-						<label for="memberId">작성자 아이디</label> <input type="text" id="writer"
-						class="form-control" value="${sessionScope.loginUser.memberId }"
-						name="boardWriter" readonly>
-						<input type="hidden" id="memberNo"
+						required> <label for="memberId">작성자 아이디</label> <input
+						type="text" id="writer" class="form-control"
+						value="${sessionScope.loginUser.memberId }" name="boardWriter"
+						readonly> <input type="hidden" id="memberNo"
 						class="form-control" value="${sessionScope.loginUser.memberNo }"
-						name="memberNo" >
+						name="memberNo">
 
 				</div>
 				<div class="form-group">
@@ -37,9 +36,17 @@
 						<option value="etc">기타</option>
 					</select>
 				</div>
-				<div class="form-group">
-					<label for="secret">비밀글</label> <input type="checkbox" id="secret"
-						name="secret" data-switchval />
+				<label>비밀글 여부</label>
+				<div class="form-check">
+				
+					<input class="form-check-input" type="radio"
+						name="secret" id="secret1" value="Y"> <label
+						class="form-check-label" for="secret1"> 네 </label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio"
+						name="secret" id="secret2" value="N" checked> <label
+						class="form-check-label" for="secret2">아니요 </label>
 				</div>
 				<div class="form-group">
 					<label for="upfile1">첨부파일1</label> <input type="file" id="upfile1"

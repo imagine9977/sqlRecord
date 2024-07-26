@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.sqlrecord.sqlrecord.member.model.dao.MemberMapper;
 import com.sqlrecord.sqlrecord.qna.model.dao.QnaMapper;
 import com.sqlrecord.sqlrecord.qna.model.vo.Comment;
 import com.sqlrecord.sqlrecord.qna.model.vo.Qna;
@@ -18,11 +19,25 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class QnaServiceImpl implements QnaService{
 	private final QnaMapper qnaMapper;
+	private final MemberMapper memberMapper;
 	@Override
-	public int qnaCount() {
+	public int qnaCount(String bool) {
 		// TODO Auto-generated method stub
-		return qnaMapper.qnaCount();
+		if(bool.equals("N")||bool.equals("Y")) {
+			return qnaMapper.qnaCountUnsolved(bool);
+		}return qnaMapper.qnaCount();
+		
 	}
+
+	@Override
+	public int qnaCountCate(String cate, String bool) {
+		// TODO Auto-generated method stub
+		if(bool.equals("N")) {
+			return qnaMapper.qnaCountCateUnsolved(cate, bool);
+		}return qnaMapper.qnaCountCate(cate);
+	
+	}
+
 
 	@Override
 	public List<Qna> findAll(Map<String, Integer> map, String bool){
@@ -32,8 +47,8 @@ public class QnaServiceImpl implements QnaService{
 		log.info("조회된 start: {}", startValue);
 		log.info("조회된 end: {}", endValue);
 		log.info("조회된 bool: {}", bool);
-		if(bool.equals("N")) {
-			return qnaMapper.findAllUnsolved(startValue, endValue);
+		if(bool.equals("N")||bool.equals("Y")) {
+			return qnaMapper.findAllUnsolved(startValue, endValue,bool);
 		}
 		return qnaMapper.findAll(startValue, endValue);
 	}
@@ -43,8 +58,8 @@ public class QnaServiceImpl implements QnaService{
 		// TODO Auto-generated method stub
 		int startValue= 	map.get("startValue");
 		int endValue= 	map.get("endValue");
-		if(bool.equals("N")) {
-			return qnaMapper.findByCateUnsolved(startValue, endValue,cate);
+		if(bool.equals("N")||bool.equals("Y")) {
+			return qnaMapper.findByCateUnsolved(startValue, endValue,cate, bool);
 		}
 		return qnaMapper.findByCate(startValue, endValue,cate);
 	}
@@ -54,6 +69,7 @@ public class QnaServiceImpl implements QnaService{
 		// TODO Auto-generated method stub
 		Qna qna= qnaMapper.findById(qnaNo);
 		if(qna != null ) {
+			qna.setMemberId(memberMapper.memberIdFindByNo(qna.getMemberNo()));
 			List<QnaFile> qnafiles = qnaMapper.findFiles(qnaNo);
 			if(qnafiles!=null) qna.setFiles(qnafiles);
 			List<Comment> qnaComments = qnaMapper.findComments(qnaNo);
@@ -64,12 +80,6 @@ public class QnaServiceImpl implements QnaService{
 		return qna;
 	}
 
-
-	@Override
-	public int qnaCountCate(String cate) {
-		// TODO Auto-generated method stub
-		return qnaMapper.qnaCountCate(cate);
-	}
 
 	@Override
 	public List<QnaFile> findFiles(int id) {
@@ -86,8 +96,9 @@ public class QnaServiceImpl implements QnaService{
 	@Override
 	public int insert(Qna qna) {
 		// TODO Auto-generated method stub
-		 int result =  qnaMapper.insert( qna);
 		 System.out.println("sql 저장");
+		 int result =  qnaMapper.insert( qna);
+		
 
 		    if (result > 0) {
 		        // Retrieve the generated qnaNo
@@ -151,14 +162,21 @@ public class QnaServiceImpl implements QnaService{
 	}
 
 	@Override
-	public void deleteFile(int delfile) {
+	public int deleteFile(int delfile) {
 		// TODO Auto-generated method stub
-		
+		return qnaMapper.deleteFileByPosition(delfile);
 	}
 
 	@Override
 	public QnaFile findFileById(int delfile) {
 		// TODO Auto-generated method stub
-		return null;
+		return qnaMapper.findFileById(delfile);
+	}
+	
+	@Override
+	public int deleteComment(int commentNo) {
+		
+		
+		return qnaMapper.deleteSingleComment( commentNo);
 	}
 }
