@@ -33,11 +33,7 @@ public class OrderServiceImpl implements OrdersService {
 
 	@Override
 	public int insertOrdersDetail(List<MemberOrdersDetail> odList) {
-		
-
-		int success = ordersMapper.insertOrdersDetail(odList);
-
-		return success;
+		return ordersMapper.insertOrdersDetail(odList);
 	}
 
 	@Override
@@ -45,9 +41,6 @@ public class OrderServiceImpl implements OrdersService {
 		return ordersMapper.getOrdersDetail(memberNo);
 	}
 	
-	
-	
-
 	@Override
 	public MemberOrdersDetail getOrdersDetailOne(int memberOrdersDetailNo) {
 		return ordersMapper.getOrdersDetailOne(memberOrdersDetailNo);

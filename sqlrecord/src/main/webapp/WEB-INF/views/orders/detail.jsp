@@ -71,16 +71,9 @@
 		            	<c:when test="${item.memberOrdersDetailStatus eq '배송완료' }">
 		            		<td><button class="btn btn-secondary" id="checkTracking" onclick="onClick(${ item.trackingNum})">배송 현황</button></td>
 		            	</c:when>
-		            	<c:otherwise>
-		            	
-		            	</c:otherwise>
+		            	<c:otherwise></c:otherwise>
 		            </c:choose>
-		            
 		          </tr>
-    				
-    			  
-		        
-		          
 		 </c:forEach>
     			</tbody>
       		</table>

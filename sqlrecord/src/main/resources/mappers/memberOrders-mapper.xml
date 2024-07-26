@@ -32,7 +32,6 @@
 		BY
 				MEMBER_ORDERS_NO
 		DESC
-				
 	</select>
 	
 	
