@@ -17,7 +17,7 @@ public interface OrdersMapper {
 
 	int selectOneMemberOrdersNo(int memberNo);
 
-	int insertOrdersDetail(MemberOrdersDetail item);
+	int insertOrdersDetail(List<MemberOrdersDetail> odList);
 
 	List<MemberOrdersDetail> getOrdersDetail(int memberNo);
 

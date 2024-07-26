@@ -25,6 +25,6 @@ public class MemberOrdersDetail {
 	private String memberOrdersDetailExd;  
 	private int trackingNum;  
 	private String memberOrdersDetailStatus;
-	private Product Product;
+	private Product product;
 	private MemberOrders memberOrders; 
 }

@@ -275,7 +275,6 @@ swiper-slide img {
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
   
 
-  
   <!-- 최상위 메인 슬라이드 -->
   <div id="section_video">
    <div id="section_video_box">
