@@ -68,7 +68,7 @@ public class QnaController {
 		log.info("조회된 게시글의 개수: {}", listCount);
 		log.info("조회된 카테고리: {}", cate);
 		maxPage = (int) Math.ceil((double) listCount / qnaLimit);
-
+		log.info("조회된 maxpage: {}", maxPage);
 		currentPage = page;
 		startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
 		endPage = startPage + maxPage - 1;
@@ -220,7 +220,7 @@ public class QnaController {
 	}
 	// 업데이트 페이지용
 		@PostMapping("update.do")
-		public String updateForm(Qna qna, @RequestParam("updatefile") MultipartFile[] upfiles, HttpSession session,
+		public String updateForm(Qna qna, @RequestParam(value = "updatefile", required = false) MultipartFile[] upfiles, HttpSession session,
 				@RequestParam(value = "fileNoDel", required = false) String fileNoDel) {
 			log.info("start");
 			log.info(fileNoDel);

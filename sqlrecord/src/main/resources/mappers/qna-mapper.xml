@@ -30,7 +30,7 @@
 	
 	<sql id="selectQnaFiles">
 		SELECT
-		QNAFILE_NO qnaNo,
+		QNAFILE_NO qnafileNo,
 		QNAFILE_ORIGINAL originalName,
 		QNAFILE_CHANGED changedName,
 		QNA_NO  qnaNo
@@ -53,7 +53,7 @@
 			STATUS='Y'
 	</sql>
 	<select id="findAll" resultType="qna">
-    WITH OrderedQNA AS (
+   WITH OrderedQNA AS (
         SELECT
             Q.QNA_NO,
             Q.SECRET,
@@ -64,15 +64,15 @@
             Q.COUNT,
             Q.CREATE_DATE,
             Q.CHANGE_DATE,
-            Q.DELSTATUS AS delStatus,
-	 	    Q.QNA_WRITER_NO AS memberNo,
-	   		M.MEMBER_ID AS memberId,
-            ROW_NUMBER() OVER (ORDER BY QNA_NO DESC) AS RNUM
+            Q.DELSTATUS,
+            Q.QNA_WRITER_NO,
+            M.MEMBER_ID AS memberId,
+            ROW_NUMBER() OVER (ORDER BY Q.QNA_NO DESC) AS RNUM
         FROM
-            QNA Q, MEMBER M
+            QNA Q
+            INNER JOIN MEMBER M ON Q.QNA_WRITER_NO = M.MEMBER_NO
         WHERE
             Q.DELSTATUS = 'Y'
-            
     )
     SELECT
         QNA_NO qnaNo,
@@ -92,7 +92,7 @@
         RNUM BETWEEN #{startValue} AND #{endValue}
         ORDER BY QNA_NO DESC
 </select>
-<select id="findAllUnsolved" resultType="qna">
+<select id="findAllUnsolved" resultType="qna" >
     WITH OrderedQNA AS (
         SELECT
             Q.QNA_NO,
@@ -113,7 +113,8 @@
             INNER JOIN MEMBER M ON Q.QNA_WRITER_NO = M.MEMBER_NO
         WHERE
             Q.DELSTATUS = 'Y'
-            AND Q.SOLVED = 'N'
+            AND Q.SOLVED = #{bool}
+          
     )
     SELECT
         QNA_NO AS qnaNo,
@@ -202,7 +203,7 @@
             Q.DELSTATUS = 'Y'
           AND CATEGORY =#{cate}
 	    
-	            AND SOLVED = 'N'
+	            AND SOLVED = #{bool}
 	    )
 	    SELECT
 	        QNA_NO qnaNo,
@@ -251,7 +252,7 @@
 		QNA
 		WHERE
 		DELSTATUS='Y'
-		AND SOLVED = 'N'
+		AND SOLVED = #{bool}
 	</select>
 	<select id="qnaCountCateUnsolved" resultType="_int">
 		SELECT
@@ -262,7 +263,7 @@
 		DELSTATUS='Y'
 		AND
 		CATEGORY=#{cate}
-		AND SOLVED = 'N'
+		AND  SOLVED = #{bool}
 	</select>
 	<select id="findById" parameterType="_int" resultType="qna">
 		<include refid="selectQna"/>  
@@ -372,4 +373,10 @@
 		WHERE
 		COMMENT_NO = #{commentNo}
 	</update>
+	<select id="findFileById" resultType="qnaFile" parameterType="_int">
+		<include refid="selectQnaFiles" />
+		WHERE
+		QNAFILE_NO = #{qnafileNo}
+	</select>
+	
 	</mapper>

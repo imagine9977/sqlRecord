@@ -225,7 +225,9 @@ textarea.form-control {
 		var fileNoArry = [];
 
 		$(document).on('click', '.fileDelBtn', function() {
+			console.log($(this).val());
 			var fileNo = $(this).val();
+			
 			fileNoArry.push(fileNo);
 			$('#fileNoDel').val(fileNoArry.join(',')); // Join array as comma-separated string
 			$(this).parent().remove();

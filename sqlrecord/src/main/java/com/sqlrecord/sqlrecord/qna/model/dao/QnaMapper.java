@@ -13,17 +13,17 @@ import com.sqlrecord.sqlrecord.qna.model.vo.QnaFile;
 @Mapper
 public interface QnaMapper {
 	int qnaCount();
-	int qnaCountUnsolved();
+	int qnaCountUnsolved(@Param( "bool")  String bool);
 
 	int qnaCountCate(String cate);
-	int qnaCountCateUnsolved(String cate);
+	int qnaCountCateUnsolved(@Param( "cate") String cate,@Param( "bool")  String bool);
 	
 
 	List<Qna> findByCate(@Param("startValue") int startValue, 
 			@Param("endValue") int endValue, @Param("cate") String cate
 			);
 	List<Qna> findByCateUnsolved(@Param("startValue") int startValue, 
-			@Param("endValue") int endValue, @Param("cate") String cate
+			@Param("endValue") int endValue, @Param("cate") String cate,  @Param( "bool")  String bool
 			);
 
 	
@@ -32,7 +32,7 @@ public interface QnaMapper {
 		);
 	
 	List<Qna> findAllUnsolved(@Param("startValue") int startValue, @Param("endValue") int endValue
-		);
+			,  @Param( "bool")  String bool);
 	
 	public Qna findById(int qnaNo);
 
@@ -72,6 +72,7 @@ public interface QnaMapper {
 
 
 	int deleteFileByPosition(int delfile);
+	QnaFile findFileById(int delfile);
 
 
 }

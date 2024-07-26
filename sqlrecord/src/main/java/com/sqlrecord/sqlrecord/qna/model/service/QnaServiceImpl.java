@@ -23,8 +23,8 @@ public class QnaServiceImpl implements QnaService{
 	@Override
 	public int qnaCount(String bool) {
 		// TODO Auto-generated method stub
-		if(bool.equals("N")) {
-			return qnaMapper.qnaCountUnsolved();
+		if(bool.equals("N")||bool.equals("Y")) {
+			return qnaMapper.qnaCountUnsolved(bool);
 		}return qnaMapper.qnaCount();
 		
 	}
@@ -33,7 +33,7 @@ public class QnaServiceImpl implements QnaService{
 	public int qnaCountCate(String cate, String bool) {
 		// TODO Auto-generated method stub
 		if(bool.equals("N")) {
-			return qnaMapper.qnaCountCateUnsolved(cate);
+			return qnaMapper.qnaCountCateUnsolved(cate, bool);
 		}return qnaMapper.qnaCountCate(cate);
 	
 	}
@@ -47,8 +47,8 @@ public class QnaServiceImpl implements QnaService{
 		log.info("조회된 start: {}", startValue);
 		log.info("조회된 end: {}", endValue);
 		log.info("조회된 bool: {}", bool);
-		if(bool.equals("N")) {
-			return qnaMapper.findAllUnsolved(startValue, endValue);
+		if(bool.equals("N")||bool.equals("Y")) {
+			return qnaMapper.findAllUnsolved(startValue, endValue,bool);
 		}
 		return qnaMapper.findAll(startValue, endValue);
 	}
@@ -58,8 +58,8 @@ public class QnaServiceImpl implements QnaService{
 		// TODO Auto-generated method stub
 		int startValue= 	map.get("startValue");
 		int endValue= 	map.get("endValue");
-		if(bool.equals("N")) {
-			return qnaMapper.findByCateUnsolved(startValue, endValue,cate);
+		if(bool.equals("N")||bool.equals("Y")) {
+			return qnaMapper.findByCateUnsolved(startValue, endValue,cate, bool);
 		}
 		return qnaMapper.findByCate(startValue, endValue,cate);
 	}
@@ -170,7 +170,7 @@ public class QnaServiceImpl implements QnaService{
 	@Override
 	public QnaFile findFileById(int delfile) {
 		// TODO Auto-generated method stub
-		return null;
+		return qnaMapper.findFileById(delfile);
 	}
 	
 	@Override

@@ -324,20 +324,18 @@
 	margin-left: 500px;
 }
 
-#qna-container .pagination .page-item.active .page-link {
-	background-color: #007bff;
-	color: white;
-	border-color: #007bff;
+#qna-container .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
-#qna-container .pagination .page-item .page-link {
-	color: #007bff;
+#qna-container .page-item.active .page-link {
+    color: white; /* Change color of the active page */
 }
 
-#qna-container .pagination .page-item .page-link:hover {
-	background-color: #0056b3;
-	color: white;
-	border-color: #0056b3;
+#qna-container .page-link {
+    cursor: pointer;
 }
 
 #qna-container .comment-change {
@@ -384,6 +382,7 @@
 					<button type="button" class="btn btn-outline-secondary"
 						id="toggleSolved" onclick="turnQnaSolved()">미해결만 보기</button>
 				</div>
+				<!-- 
 				<div class="search">
 					<form action="/" method="get">
 						<input type="search" name="s" placeholder="검색어를 입력하세요." /> <input
@@ -391,6 +390,7 @@
 							type="submit" value="검색" />
 					</form>
 				</div>
+				 -->
 			</div>
 			<div class="modal fade" id="qnaModal" tabindex="-1"
 				aria-labelledby="qnaModalLabel" aria-hidden="true">
@@ -419,10 +419,7 @@
 							<hr />
 							<div id="qna-comments">
 								<div id="comments"></div>
-								<c:choose>
-									<c:when
-										test="${not empty sessionScope.loginUser.memberId &&
-										 (sessionScope.loginUser.memberId eq 'admin' || sessionScope.loginUser.memberId eq qnaId)}">
+								
 										<div>
 											<button id="addCommentButton" class="btn btn-primary">Add
 												Comment</button>
@@ -433,25 +430,21 @@
 											<button id="submitCommentButton" class="btn btn-success">Submit
 												Comment</button>
 										</div>
-									</c:when>
-								</c:choose>
+								
 
 							</div>
 						</div>
 						<div class="modal-footer">
 							<div id="qnaActions">
-								<c:choose>
-									<c:when
-										test="${not empty sessionScope.loginUser.memberId &&
-										 (sessionScope.loginUser.memberId eq 'admin' || sessionScope.loginUser.memberId eq qnaId)}">
+							
+								
 										<a class="btn btn-warning " id="goToUpdatePage"
 											style="height: 40px; color: white; border: 0px solid #388E3C;">
 											수정하기</a>&nbsp;&nbsp;
 									 <a class="btn btn-danger" id="deleteButton"
 											style="height: 40px; color: white; border: 0px solid #388E3C;">
 											삭제하기</a>&nbsp;&nbsp; 
-									</c:when>
-								</c:choose>
+									
 								<a class="btn btn-secondary" data-bs-dismiss="modal"
 									style="height: 40px; color: white; border: 0px solid #388E3C;">닫기</a>&nbsp;&nbsp;
 
@@ -571,11 +564,15 @@
 			function turnQnaSolved() {
 	            if(solvedBoolean=='N'){
 	            	solvedBoolean='Y';
-	            	 document.getElementById('toggleSolved').textContent = "미해결/해결 보기";
+	            	 document.getElementById('toggleSolved').textContent = "해결만 보기";
+	            }else if(solvedBoolean=='Y'){
+	            	solvedBoolean='both';
+	            	document.getElementById('toggleSolved').textContent = "미해결/해결 보기";
 	            }else{
 	            	solvedBoolean='N';
 	            	document.getElementById('toggleSolved').textContent = "미해결 보기";
 	            }
+	            
 	            if(currentCategory=='all'){
 	            	findAll(solvedBoolean,1);
 	            }else{
@@ -639,7 +636,18 @@
 			            
 			        },
 			        error: err => {
-			            console.error('Error fetching data:', err);
+			        	
+			        	console.error('Error fetching data:', err);
+			        	 try {
+			                 qnaListGlobal = response.data.qnaList; // Access qnaList
+			                 const pageInfo = response.data.pageInfo; // Access pageInfo
+			                 renderqnas(qnaListGlobal.slice(0, qnasPerPage));
+			                 renderPagination(pageInfo);
+			             } catch (parseErr) {
+			                 console.error('Error parsing error response:', parseErr);
+			                 qnaListGlobal = [];
+			                 renderqnas(qnaListGlobal);
+			             }
 			        }
 			    });
 			};
@@ -660,7 +668,18 @@
 			           
 			        },
 			        error: err => {
+			        	
 			            console.error('Error fetching data:', err);
+			            try {
+			                qnaListGlobal = response.data.qnaList; // Access qnaList
+			                const pageInfo = response.data.pageInfo; // Access pageInfo
+			                renderqnas(qnaListGlobal.slice(0, qnasPerPage));
+			                renderPagination(pageInfo);
+			            } catch (parseErr) {
+			                console.error('Error parsing error response:', parseErr);
+			                qnaListGlobal = [];
+			                renderqnas(qnaListGlobal);
+			            }
 			        }
 			    });
 			};
@@ -697,57 +716,66 @@
 			}
 			// Function to render qnas in the UI for findAll
 			const renderqnas = (qnaList) => {
-			    clearqnaList(); // Clear existing qnas
-			    const outerDiv = document.createElement('div');
-			    outerDiv.id = 'outerDiv';
-			    const headerRow = document.createElement('div');
-			    headerRow.className = 'headerRow';
-			    headerRow.appendChild(createDiv('번호', '70px'));
-			    headerRow.appendChild(createDiv('분류', '130px'));
-			    headerRow.appendChild(createDiv('제목', '450px'));
-			    headerRow.appendChild(createDiv('날짜', '200px'));
-			    headerRow.appendChild(createDiv('해결', '150px'));
-			    outerDiv.appendChild(headerRow);
+    clearqnaList(); // Clear existing qnas
+    const outerDiv = document.createElement('div');
+    outerDiv.id = 'outerDiv';
 
-			    qnaList.forEach(o => {
-			        const qnaEl = document.createElement('div');
-			        qnaEl.className = 'qnaEl';
-			        qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
-			        
-			        qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
-			        let newTitle = o.qnaTitle;
-			        if (o.secret === 'Y') {
-						const currentUser = '${sessionScope.loginUser.memberId}';
-						console.log(currentUser === o.memberId);
-					    if (currentUser === 'admin' || currentUser === o.memberId) {
-					                newTitle = '🔑' + o.qnaTitle;
-					    } else {
-					                newTitle = '🔒' + o.qnaTitle;
-					    }
-					}else {
-						const currentUser = '${sessionScope.loginUser.memberId}';
-						if ( currentUser === o.memberId) {
-			                newTitle = '✏️' + o.qnaTitle;
-			    		}
-					}
-			        qnaEl.appendChild(createDiv(newTitle, '450px'));
-			        qnaEl.appendChild(createDiv(o.createDate, '200px'));
-			        qnaEl.appendChild(createDiv(o.solved, '150px'));
-			        outerDiv.appendChild(qnaEl);
-			    });
-			    document.getElementById('content').appendChild(outerDiv);
+    if (qnaList.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'emptyMessage';
+        emptyMessage.textContent = '글이 없습니다';
+        outerDiv.appendChild(emptyMessage);
+    } else {
+        const headerRow = document.createElement('div');
+        headerRow.className = 'headerRow';
+        headerRow.appendChild(createDiv('번호', '70px'));
+        headerRow.appendChild(createDiv('분류', '130px'));
+        headerRow.appendChild(createDiv('제목', '450px'));
+        headerRow.appendChild(createDiv('날짜', '200px'));
+        headerRow.appendChild(createDiv('해결', '150px'));
+        outerDiv.appendChild(headerRow);
 
-			    // Add "Load More" button for findAll if there are more qnas to load
-			    if (currentPage * qnasPerPage < qnaListGlobal.length) {
-			       
-			    }
-			};
+        qnaList.forEach(o => {
+            const qnaEl = document.createElement('div');
+            qnaEl.className = 'qnaEl';
+            qnaEl.appendChild(createDiv(o.qnaNo, '70px'));
+            qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
+            
+            let newTitle = o.qnaTitle;
+            const currentUser = '${sessionScope.loginUser.memberId}';
+            if (o.secret === 'Y') {
+                if (currentUser === 'admin' || currentUser === o.memberId) {
+                    newTitle = '🔑' + o.qnaTitle;
+                } else {
+                    newTitle = '🔒' + o.qnaTitle;
+                }
+            } else {
+                if (currentUser === o.memberId) {
+                    newTitle = '✏️' + o.qnaTitle;
+                }
+            }
+            qnaEl.appendChild(createDiv(newTitle, '450px'));
+            qnaEl.appendChild(createDiv(o.createDate, '200px'));
+            qnaEl.appendChild(createDiv(o.solved, '150px'));
+            outerDiv.appendChild(qnaEl);
+        });
+
+    }
+    document.getElementById('content').appendChild(outerDiv);
+};
+
 			
 			// Function to render qnas by category in the UI for findByCate
 			const renderqnasCate = (cate, qnaList) => {
 			    clearqnaList(); // Clear existing qnas
 			    const outerDiv = document.createElement('div');
 			    outerDiv.id = 'outerDiv';
+			    if (qnaList.length === 0) {
+			        const emptyMessage = document.createElement('div');
+			        emptyMessage.className = 'emptyMessage';
+			        emptyMessage.textContent = '글이 없습니다';
+			        outerDiv.appendChild(emptyMessage);
+			    }else{
 			    const headerRow = document.createElement('div');
 			    headerRow.className = 'headerRow';
 			    headerRow.appendChild(createDiv('번호', '70px'));
@@ -782,6 +810,7 @@
 			        qnaEl.appendChild(createDiv(o.solved, '150px'));
 			        outerDiv.appendChild(qnaEl);
 			    });
+			    }
 			    document.getElementById('content').appendChild(outerDiv);
 
 			    // Add "Load More" button for this category if there are more qnas to load
@@ -848,7 +877,9 @@
 			                     return;
 			                 }
 			                 
-			                 
+			                 console.log(currentUserId);
+			                 console.log(qna.memberId);
+			                 console.log(isAuthor);
 			                currentQnaNo = parseInt(qnaNo);
 			                // Update modal content with qna details
 			               
@@ -900,17 +931,17 @@
 			                        .append($('<div>').addClass('comment-content').text(comment.commentContent));
 			                    
 			                    // Check if the user is logged in and append Edit/Delete buttons
-			                    if (${sessionScope.loginUser != null}) {
-			                    	const changeBtn = $('<div>').addClass('comment-change btn').text('수정');
+			                  if (${sessionScope.loginUser != null && (sessionScope.loginUser.memberId == 'admin' || sessionScope.loginUser.memberNo == comment.memberNo)}) {
+			                        const changeBtn = $('<div>').addClass('comment-change btn').text('수정');
 			                        const deleteBtn = $('<div>').addClass('comment-delete btn').text('삭제');
-
+			
 			                        changeBtn.click(() => {
 			                            editComment(commentDiv, comment);
 			                        });
 			                        deleteBtn.click(() => {
-			                        	if (confirm('정말로 삭제하시겠습니까?')) {
-			                            deleteComment(commentDiv, comment);
-			                        	}
+			                            if (confirm('정말로 삭제하시겠습니까?')) {
+			                                deleteComment(commentDiv, comment);
+			                            }
 			                        });
 			                        commentDiv.append(changeBtn).append(deleteBtn);
 			                    }
@@ -921,7 +952,15 @@
 			                    // If no comments exist
 			                    $('#qnaModal #comments').html('<p>댓글이 없습니다.</p>');
 			                }
-			                
+			                if (isAdmin || isAuthor) {
+			                    $('#goToUpdatePage').show();
+			                    $('#deleteButton').show();
+			                    $('#addCommentButton').show();
+			                } else {
+			                    $('#goToUpdatePage').hide();
+			                    $('#deleteButton').hide();
+			                    $('#addCommentButton').hide();
+			                }
 			                
 			                const goToDeleteButton = document.getElementById('deleteButton');
 			               if(goToDeleteButton){ goToDeleteButton.onclick = function() {
@@ -1022,58 +1061,61 @@
 				}
 				
 
-			    const renderPagination = (pageInfo) => {
-			        const paginationUl = document.getElementById('paginationUl');
-			        paginationUl.innerHTML = ''; // Clear previous pagination
+				const renderPagination = (pageInfo) => {
+				    const paginationUl = document.getElementById('paginationUl');
+				    paginationUl.innerHTML = ''; // Clear previous pagination
 
-			        // "Previous" button
-			        const prevLi = document.createElement('li');
-			        prevLi.className = `page-item ${pageInfo.currentPage == 1 ? 'disabled' : ''}`;
-			        const prevLink = document.createElement('a');
-			        prevLink.className = 'page-link';
-			        prevLink.href = `#`;
-			        prevLink.innerText = '이전';
-			        prevLink.onclick = (e) => {
-			            e.preventDefault();
-			            if (pageInfo.currentPage > 1) {
-			                findAll(solvedBoolean,pageInfo.currentPage - 1); // Fetch previous page
-			            }
-			        };
-			        prevLi.appendChild(prevLink);
-			        paginationUl.appendChild(prevLi);
+				    // "Previous" button
+				    const prevLi = document.createElement('li');
+				    prevLi.className = `page-item ${pageInfo.currentPage == 1 ? 'disabled' : ''}`;
+				    const prevLink = document.createElement('a');
+				    prevLink.className = 'page-link';
+				    prevLink.href = `#`;
+				    prevLink.innerText = '이전';
+				    prevLink.onclick = (e) => {
+				        e.preventDefault();
+				        if (pageInfo.currentPage > 1) {
+				            findAll(solvedBoolean, pageInfo.currentPage - 1); // Fetch previous page
+				        }
+				    };
+				    prevLi.appendChild(prevLink);
+				    paginationUl.appendChild(prevLi);
 
-			        // Page numbers
-			        for (let p = pageInfo.startPage; p <= pageInfo.endPage; p++) {
-			            const pageLi = document.createElement('li');
-			            pageLi.className = `page-item ${pageInfo.currentPage == p ? 'active' : ''}`;
-			            const pageLink = document.createElement('a');
-			            pageLink.className = 'page-link';
-			            pageLink.href = `#`;
-			            pageLink.innerText = p;
-			            pageLink.onclick = (e) => {
-			                e.preventDefault();
-			                findAll( solvedBoolean, p); // Fetch specific page
-			            };
-			            pageLi.appendChild(pageLink);
-			            paginationUl.appendChild(pageLi);
-			        }
+				    // Page numbers
+				    for (let p = pageInfo.startPage; p <= pageInfo.endPage; p++) {
+				        const pageLi = document.createElement('li');
+				        pageLi.className = `page-item ${pageInfo.currentPage == p ? 'active' : ''}`;
+				        const pageLink = document.createElement('a');
+				        pageLink.className = 'page-link';
+				        pageLink.href = `#`;
+				        pageLink.innerText = p;
+				        pageLink.style.color = pageInfo.currentPage == p ? 'red' : ''; // Change color of current page
+				        pageLink.onclick = (e) => {
+				            e.preventDefault();
+				            findAll(solvedBoolean, p); // Fetch specific page
+				        };
+				        pageLi.appendChild(pageLink);
+				        paginationUl.appendChild(pageLi);
+				    }
+				 // "Next" button
+				    const nextLi = document.createElement('li');
+				 	console.log(pageInfo.currentPage);
+				 	console.log(pageInfo.maxPage);
+				    nextLi.className = `page-item `;
+				    const nextLink = document.createElement('a');
+				    nextLink.className = 'page-link';
+				    nextLink.href = `#`;
+				    nextLink.innerText = '다음';
+				    nextLink.onclick = (e) => {
+				        e.preventDefault();
+				        if (pageInfo.currentPage < pageInfo.maxPage) {
+				            findAll(solvedBoolean, pageInfo.currentPage + 1); // Fetch next page
+				        }
+				    };
+				    nextLi.appendChild(nextLink);
+				    paginationUl.appendChild(nextLi);
+				};
 
-			        // "Next" button
-			        const nextLi = document.createElement('li');
-			        nextLi.className = `page-item ${pageInfo.currentPage == pageInfo.maxPage ? 'disabled' : ''}`;
-			        const nextLink = document.createElement('a');
-			        nextLink.className = 'page-link';
-			        nextLink.href = `#`;
-			        nextLink.innerText = '다음';
-			        nextLink.onclick = (e) => {
-			            e.preventDefault();
-			            if (pageInfo.currentPage < pageInfo.maxPage) {
-			                findAll(solvedBoolean,pageInfo.currentPage + 1); // Fetch next page
-			            }
-			        };
-			        nextLi.appendChild(nextLink);
-			        paginationUl.appendChild(nextLi);
-			    };
             </script>
 
 	</div>
