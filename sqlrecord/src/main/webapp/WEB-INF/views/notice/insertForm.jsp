@@ -5,7 +5,7 @@
 <%@ include file="../head.jsp"%>
 <title>Home</title>
 <style>
-#notice-insert-container {
+#insert-container {
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
@@ -80,7 +80,7 @@ textarea.form-control {
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../searchHeader.jsp"%>
-	<div id="notice-insert-container">
+	<div id="insert-container">
 	
 
 		<!-- 여기에 작성 -->
