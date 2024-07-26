@@ -55,7 +55,7 @@ public class CartForwardController {
 		log.info("cart : {}"  , cart.getMember().getMemberNo());
 		log.info("cart : {}"  , cart.getProduct().getProductNo());
 		
-		String redirect = "redirect:/member/" + cart.getMember().getMemberNo();
+		String redirect = "redirect:member/" + cart.getMember().getMemberNo();
 		
 		
 		return redirect;
