@@ -5,6 +5,7 @@
 <mapper namespace="com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper">
 
 	
+	
 	<insert id="insertMemberOrders">
 		INSERT
 		INTO
@@ -31,28 +32,28 @@
 		BY
 				MEMBER_ORDERS_NO
 		DESC
-				
 	</select>
 	
 	
-	<insert id="insertOrdersDetail" parameterType="memberOrdersDetail">
-
-		INSERT
+	<insert id="insertOrdersDetail" parameterType="list">
+		<foreach open="INSERT ALL" collection="list" item="item" separator="," close="SELECT * FROM DUAL">
 		INTO
 				MEMBER_ORDERS_DETAIL
 		VALUES
 				(
 				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
-				#{product.productNo},
-				#{memberOrders.memberOrdersNo},
-				#{memberOrdersDetailAmount},
-				#{memberOrdersDetailPrice},
+				#{item.product.productNo},
+				#{item.memberOrders.memberOrdersNo},
+				#{item.memberOrdersDetailAmount},
+				#{item.memberOrdersDetailPrice},
 				DEFAULT,
 				DEFAULT,
 				DEFAULT
 				)
-
+		</foreach>
 	</insert>
+	
+	
 	
 	<resultMap type="memberOrdersDetail" id="odRM">
     	<id property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
@@ -61,22 +62,7 @@
 	    <result property="trackingNum" column="TRACKING_NUM"/>
 	    <result property="memberOrdersDetailExd" column="MEMBER_ORDERS_DETAIL_EXD"/>
 	    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
-	    <association property="product" javaType="product">
-	        <result property="productNo" column="product_no"/>
-	        <result property="productName" column="product_name"/>
-	        <result property="productPrice" column="product_price"/>
-	        <result property="productStatus" column="product_status"/>
-	        <result property="productDate" column="product_date"/>
-	        <result property="tagNo" column="tag_no"/>
-	        <result property="productDetail" column="product_detail"/>
-	        <result property="productCate" column="product_cate"/>
-		<collection property="productPhotosList" column="product_no" javaType="List" select="getPhotos">
-	        	<result property="productPhotosNo" column="PHOTO_NO"/>
-			    <result property="productPhotosName" column="PHOTO_NAME"/>
-			    <result property="productPhotosPath" column="PHOTO_PATH"/>
-			    <result property="productNo" column="PRODUCT_NO"/>
-		</collection>	
-	    </association>
+	    <association property="product" resultMap="com.sqlrecord.sqlrecord.product.model.dao.ProductMapper.prm" />
 	    <association property="memberOrders" javaType="memberOrders">
 	    	<result property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
 	        <result property="memberOrdersAddress" column="MEMBER_ORDERS_ADDRESS"/>
@@ -253,10 +239,6 @@
 				TRACKING_NUM
 				=
 				#{trackingNum}
-				
-	
-	
-	
 	</update>
 	
 	
@@ -277,17 +259,6 @@
         DESC			
 	</select>
 	
-	<select id="getPhotos" parameterType="_int" resultType="productPhotos">
-		SELECT
-				PHOTO_NO productPhotosNo,         
-				PRODUCT_NO productNo,         
-				PHOTO_NAME productPhotosName,
-				PHOTO_PATH productPhotosPath
-		FROM
-				PRODUCT_PHOTOS
-		WHERE
-				product_no = #{product_no}
-	</select>
 	
 	
 	<update id="updateMemberOrdersExd" parameterType="memberOrdersEx">
@@ -345,54 +316,8 @@
 		<result property="memberOrdersExPostcode" column="MEMBER_ORDERS_EX_POSTCODE"/>
 		<result property="memberOrdersExStatus" column="MEMBER_ORDERS_EX_STATUS"/>
 		<result property="memberOrdersExReason" column="MEMBER_ORDERS_EX_REASON"/>
-		<association property="product" javaType="product">
-	        <result property="productNo" column="product_no"/>
-	        <result property="productName" column="product_name"/>
-	        <result property="productPrice" column="product_price"/>
-	        <result property="productStatus" column="product_status"/>
-	        <result property="productDate" column="product_date"/>
-	        <result property="tagNo" column="tag_no"/>
-	        <result property="productDetail" column="product_detail"/>
-	        <result property="productCate" column="product_cate"/>
-		<collection property="productPhotosList" column="product_no" javaType="List" select="getPhotos">
-	        	<result property="productPhotosNo" column="PHOTO_NO"/>
-			    <result property="productPhotosName" column="PHOTO_NAME"/>
-			    <result property="productPhotosPath" column="PHOTO_PATH"/>
-			    <result property="productNo" column="PRODUCT_NO"/>
-		</collection>
-		</association>
-		<association property="memberOrdersDetail" resultMap="odRM">
-			<result property="memberOrdersDetailNo" column="MEMBER_orders_detail_no"/>
-	    	<result property="memberOrdersDetailAmount" column="MEMBER_orders_detail_amount"/>  
-		    <result property="memberOrdersDetailPrice" column="MEMBER_orders_detail_price"/>
-		    <result property="trackingNum" column="TRACKING_NUM"/>
-		    <result property="memberOrdersDetailExd" column="MEMBER_ORDERS_DETAIL_EXD"/>
-		    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
-		    <association property="product" javaType="product">
-		        <result property="productNo" column="product_no"/>
-		        <result property="productName" column="product_name"/>
-		        <result property="productPrice" column="product_price"/>
-		        <result property="productStatus" column="product_status"/>
-		        <result property="productDate" column="product_date"/>
-		        <result property="tagNo" column="tag_no"/>
-		        <result property="productDetail" column="product_detail"/>
-		        <result property="productCate" column="product_cate"/>
-			<collection property="productPhotosList" column="product_no" javaType="List" select="getPhotos">
-		        	<result property="productPhotosNo" column="PHOTO_NO"/>
-				    <result property="productPhotosName" column="PHOTO_NAME"/>
-				    <result property="productPhotosPath" column="PHOTO_PATH"/>
-				    <result property="productNo" column="PRODUCT_NO"/>
-			</collection>
-			</association>
-			<association property="memberOrders" javaType="memberOrders">
-		    	<result property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
-		        <result property="memberOrdersAddress" column="MEMBER_ORDERS_ADDRESS"/>
-		        <result property="memberOrdersAddress2" column="MEMBER_ORDERS_ADDRESS2"/>
-		        <result property="memberOrdersPostcode" column="MEMBER_ORDERS_POSTCODE"/>
-		        <result property="memberOrdersDate" column="MEMBER_ORDERS_DATE"/>
-		        <result property="memberNo" column="MEMBER_NO"/>
-		    </association>
-		</association>
+		<association property="product" resultMap="com.sqlrecord.sqlrecord.product.model.dao.ProductMapper.prm" />
+		<association property="memberOrdersDetail" resultMap="odRM"/>
 	</resultMap>
 
 	<select id="getOrdersEx" resultMap="oeRM">
