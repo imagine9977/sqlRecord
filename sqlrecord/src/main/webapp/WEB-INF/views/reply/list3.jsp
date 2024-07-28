@@ -26,7 +26,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 
 
-	<div class="container">
+	<div class="container" id="container">
 	    <div class="review-header" style="text-align: center;">
 	        <h1>REVIEW</h1>
 	    </div>
@@ -259,8 +259,9 @@
 
     $(document).ready(function() {
     	$('.deleteButton').on('click', function() {
+    		const productNo = $('#productNo').val();
     	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
-    	    console.log(replyNo); // 댓글 번호 출력
+    	    console.log(productNo); // 댓글 번호 출력
     	    
     	    if (confirm('댓글을 삭제하시겠습니까?')) {
     	        $.ajax({
@@ -269,8 +270,10 @@
     	            data: { "replyNo": replyNo },
     	            success: function(response) {
     	                console.log('삭제 성공:', response);
-    	                console.log('status:', response.status); // 상태를 직접 출력
+    	                //console.log('status:', response.status); // 상태를 직접 출력
     	                if (response.status === 'success') {
+    	                	//reloadContent(productNo);
+    	                	location.reload();
     	                    alert('댓글 삭제에 성공했습니다.');
     	                } else {
     	                    alert('댓글 삭제에 실패했습니다.');
@@ -283,7 +286,6 @@
     	        });
     	    }
     	});
-        
         
         $('.deleteButton2').on('click', function() {
         	const chReplyNo = $(this).closest('.deleteButton2').attr('id').split('-')[1];
@@ -443,9 +445,59 @@
 	     });
     });
     
-    
-    
-    
+    /* 기능 실행후에 화면 리로드를 하면 기능들 안되는 문제 발생 -> 이벤트 핸들러 재바인딩.. 해봐도 문제해결 안됨
+    function bindEventHandlers() {
+    	$('.deleteButton').on('click', function() {
+    		const productNo = $('#productNo').val();
+    	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
+    	    console.log(productNo); // 댓글 번호 출력
+    	    
+    	    if (confirm('댓글을 삭제하시겠습니까?')) {
+    	        $.ajax({
+    	            type: 'POST',
+    	            url: '${hpath}/productFor/delReply.do',
+    	            data: { "replyNo": replyNo },
+    	            success: function(response) {
+    	                console.log('삭제 성공:', response);
+    	                console.log('status:', response.status); // 상태를 직접 출력
+    	                if (response.status === 'success') {
+    	                	reloadContent(productNo);
+    	                    alert('댓글 삭제에 성공했습니다.');
+    	                } else {
+    	                    alert('댓글 삭제에 실패했습니다.');
+    	                }
+    	            },
+    	            error: function(xhr, status, error) {
+    	                console.error('삭제 실패:', error);
+    	                alert('오류 발생');
+    	            }
+    	        });
+    	    }
+    	});
+        
+        
+        $('.deleteButton2').on('click', function() {
+        	const chReplyNo = $(this).closest('.deleteButton2').attr('id').split('-')[1];
+			console.log(chReplyNo); // 댓글 번호 출력
+            
+            if (confirm('댓글을 삭제하시겠습니까?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: '${hpath}/productFor/delChReply.do',
+                    data: { "chReplyNo" : chReplyNo },
+                    success: function(response) {
+                        console.log('삭제 성공:', response);
+                        // 삭제 후 페이지 리로드 또는 다른 동작 수행
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('삭제 실패:', error);
+                    }
+                });
+            }
+        });
+    }
+    */
     
 	 // 수정 창 열기 함수
 	    function openEditPopup(currentContent, currentRating, replyNo, imgSrc) {
@@ -631,7 +683,23 @@
 		   		    }
 		   		} 
       		 
-       
+        //ajax 작업 성공후 화면 리로드
+		function reloadContent(productNo) {
+			console.log('Reloading content for productNo:', productNo);
+		    $.ajax({
+		        type: 'GET',
+		        url: `${hpath}/productFor/detail2/${productNo}`,
+		        success: function(data) {
+		            $('#container').html(data); // 전체 컨텐츠 부분 갱신
+		            bindEventHandlers();
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('컨텐츠 로드 실패:', error);
+		            alert('컨텐츠를 로드하는 중 오류가 발생했습니다.');
+		        }
+		    });
+		}
+		
        /*
        function reloadComments() {
            $.ajax({
