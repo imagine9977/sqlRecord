@@ -123,11 +123,7 @@ public class ProductForwardController {
 	    	e.printStackTrace();
 	    	result.put("status", "error");
 	    }
-<<<<<<< HEAD
 	    return result;
-=======
-	    return "redirect:/detail/{productNo}";
->>>>>>> dcca2c891b26a9333af5f4b32996c7a8a56a098b
 	}
 		
 	
