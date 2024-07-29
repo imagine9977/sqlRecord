@@ -582,7 +582,7 @@
                success: function(response) {
                	alert("댓글 등록에 성공했습니다.");
                    console.log("파일 등록 성공:", response);
-                   location.reload();
+                   //location.reload();
                    // 폼 초기화
                    document.getElementById('commentForm').reset();
                    
