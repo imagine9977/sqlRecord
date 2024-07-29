@@ -133,15 +133,18 @@ input[class="check"]:checked + label:after {
 		      <c:when test="${not empty list }">
 			      <c:forEach var="item" items="${list }" varStatus="status">
 			      <input class="cartNo" type="text" name="cartNum" value="${ item.cartNum }" hidden="hidden">
-			      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="productNo" id="check${status.count }" value="${item.product.productNo }">
+			      <input onclick="onClickCount(this)" checked="checked" class="check" type="checkbox" name="cartList[${ status.index }].product.productNo" id="check${status.count }" value="${item.product.productNo }">
 			      <label for="check${status.count }"></label>
 			      <div style="width: 100%; height: 100%;">
 			        <img src="${item.product.productPhotosList.get(0).productPhotosPath }" style="width: 50%; height: 80%; padding: 10px; object-fit: cover;">
 			      </div>
 			      <div>${ item.product.productName }</div>
-			      <div class="price check${status.count }"><input type="text" readonly="readonly" name="productPrice" value=${item.product.productPrice }></div>
-			      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cartAmount" value=${ item.cartAmount}></div>
-			      <input type="text" name="memberNo" value="${ item.member.memberNo }" hidden="hidden">
+			      <div class="price check${status.count }"><input type="text" readonly="readonly" name="cartList[${ status.index }].product.productPrice" value=${item.product.productPrice }></div>
+			      <div class="amount check${status.count }"><input type="text" readonly="readonly" name="cartList[${ status.index }].cartAmount" value=${ item.cartAmount}></div>
+			      <input type="text" name="cartList[${ status.index }].member.memberNo" value="${ item.member.memberNo }" hidden="hidden">
+			      <input type="text" name="cartList[${ status.index }].member.addr1" value="${ item.member.addr1 }" hidden="hidden">
+			      <input type="text" name="cartList[${ status.index }].member.addr2" value="${ item.member.addr2 }" hidden="hidden">
+			      <input type="text" name="cartList[${ status.index }].member.postcode" value="${ item.member.postcode }" hidden="hidden">
 			      </c:forEach>
 		      </c:when>
 		      <c:otherwise>

@@ -8,7 +8,7 @@
     	<id property="cartNum" column="cart_num"/>
 	    <result property="cartAmount" column="cart_amount" jdbcType="INTEGER"/>
 	    <association property="member" javaType="member">
-	    	<id property="memberNo" column="MEMBER_ID"/>
+	    	<id property="memberNo" column="MEMBER_NO"/>
 		    <result property="memberId" column="MEMBER_ID"/>
 		    <result property="memberPw" column="MEMBER_PW"/>
 		    <result property="name" column="NAME"/>
