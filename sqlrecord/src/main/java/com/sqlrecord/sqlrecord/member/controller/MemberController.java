@@ -169,14 +169,14 @@ at Object.jQueryDetection"
 							   Mail mail) throws MessagingException {
 										 
 		
-		//log.info("name1 : {}", name);
-		//log.info("email1 : {}", email);
+		log.info("name1 : {}", name);
+		log.info("email1 : {}", email);
 		// 아이디 찾기 입력받은 값을 조회
-		member = memberService.infoId(member);
 		member.setName(name);
 		member.setEmail(email);
+		member = memberService.infoId(member);
 		member.getMemberId();
-		//log.info("name : {}", name);
+		log.info("member : {}", member.getMemberId());
 		//log.info("email : {}", email);
 		
 		// 인증번호 생성
@@ -332,10 +332,7 @@ at Object.jQueryDetection"
 						HttpSession session,
 						Model model) {
 		log.info("수정 요청 실패 :{}",member);
-		//String encPwd = bCryptPasswordEncoder.encode(member.getUserPwd());
-		//member.setUserPwd(encPwd);
 		Member currentUser = (Member) session.getAttribute("loginUser");
-		
 		memberService.deleteGenre(currentUser.getMemberNo());
 		
 		for (Integer tagNo : tagNos) {

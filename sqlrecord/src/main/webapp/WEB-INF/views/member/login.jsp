@@ -96,7 +96,6 @@
                             <p style="text-align: center;">
                                 <input class="loginp" type="password" name="memberPw" id="loginPw" placeholder="PW를 입력 해주세요.">
                             </p>
-                    </form>
                             <div class="infofound">
                                 <p><a href="${hpath}/member/findIdPw">ID 찾기 / PW 찾기</a></p>
                                 <input type="checkbox" name="remember" id="remember">
@@ -122,7 +121,8 @@
                                구글 로그인
                            </button>
                        </div>  
-           	</div>
+		          	</div>
+                  </form>
         </div>
             <div class="sub-cont">
 			    <div class="img">
@@ -318,6 +318,7 @@
                 return;
             }
         });
+	    
         function protocol(){
             ck_item1.checked = true;
             ck_item2.checked = true;
