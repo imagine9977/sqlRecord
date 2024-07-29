@@ -169,14 +169,14 @@ at Object.jQueryDetection"
 							   Mail mail) throws MessagingException {
 										 
 		
-		log.info("name1 : {}", name);
-		log.info("email1 : {}", email);
+		//log.info("name1 : {}", name);
+		//log.info("email1 : {}", email);
 		// 아이디 찾기 입력받은 값을 조회
 		member.setName(name);
 		member.setEmail(email);
 		member = memberService.infoId(member);
 		member.getMemberId();
-		log.info("member : {}", member.getMemberId());
+		//log.info("member : {}", member.getMemberId());
 		//log.info("email : {}", email);
 		
 		// 인증번호 생성

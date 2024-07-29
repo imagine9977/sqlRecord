@@ -124,7 +124,7 @@
 	                            <div id="editimgbox">
 				                	<c:forEach var="img" items="${imgList}">
 				                		<c:if test="${reply.replyNo eq img.replyNo}">
-				                			<img src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img"
+				                			<img class="editImg" src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img"
 				                			data-reply-no="${reply.replyNo}" 
 				                			data-image-path="${hpath}/resources/uploadFiles/reply/${img.changeName}">
 				                		</c:if>
@@ -272,8 +272,8 @@
     	                console.log('삭제 성공:', response);
     	                //console.log('status:', response.status); // 상태를 직접 출력
     	                if (response.status === 'success') {
-    	                	//reloadContent(productNo);
-    	                	location.reload();
+    	                	reloadContent(productNo);
+    	                	//location.reload();
     	                    alert('댓글 삭제에 성공했습니다.');
     	                } else {
     	                    alert('댓글 삭제에 실패했습니다.');
@@ -317,13 +317,21 @@
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
 		    const imgSrc = [];
 		    
-			 // isEmpty() 비어있으면 true
-			 if ($('.imgFiles').length > 0) {
-			     $('.imgFiles').each(function(){
-			         imgSrc.push($(this).attr('src'));
-			         $('#editimgbox').css("display", "block");
-			     });
-			 }
+		 // imgFiles 클래스가 있는 이미지가 있는지 확인합니다.
+		    if ($('.imgFiles').length > 0) {
+		        // 각 imgFiles 요소를 순회하며 src를 배열에 추가합니다.
+		        $('.imgFiles').each(function() {
+		            const imgElement = $(this);
+
+		            // replyNo에 해당하는 이미지만 처리합니다.
+		            if (imgElement.attr('id').split('-')[1] === replyNo) {
+		                imgSrc.push(imgElement.attr('src'));
+		                $('#editimgbox').css("display", "block");
+		            }
+		        });
+		    }
+
+		    // 이미지 소스를 콘솔에 출력합니다.
 		    console.log(imgSrc);
 		    
 		    openEditPopup(currentContent, currentRating, replyNo, imgSrc);
@@ -445,7 +453,7 @@
 	     });
     });
     
-    /* 기능 실행후에 화면 리로드를 하면 기능들 안되는 문제 발생 -> 이벤트 핸들러 재바인딩.. 해봐도 문제해결 안됨
+    // 기능 실행후에 화면 리로드를 하면 기능들 안되는 문제 발생 -> 이벤트 핸들러 재바인딩.. 해봐도 문제해결 안됨
     function bindEventHandlers() {
     	$('.deleteButton').on('click', function() {
     		const productNo = $('#productNo').val();
@@ -497,17 +505,26 @@
             }
         });
     }
-    */
+    
     
 	 // 수정 창 열기 함수
 	    function openEditPopup(currentContent, currentRating, replyNo, imgSrc) {
 		    // 수정 창을 열 때 가져온 내용과 별점을 해당 입력 필드에 설정합니다.
 		    //currentreplyNo = replyNo;
-		    console.log(replyNo); // 댓글 번호 출력
+		    console.log(imgSrc); // 댓글 번호 출력
 		    $('.submitButton').data('replyNo', replyNo);
 		    document.getElementById('editPopup').style.display = 'block';
 		    document.getElementById('editContent').value = currentContent;
 		    document.getElementById('editRatingInput').value = currentRating;
+		 	// editImg 클래스를 가진 이미지 요소들 선택
+	        const editImages = document.getElementsByClassName('editImg');
+
+	        // imgSrc 배열의 길이만큼 반복문을 돌려 각 이미지의 src를 설정
+	        for (let i = 0; i < imgSrc.length;  i++) {
+	            const imgElement = editImages[i];
+	            imgElement.src = imgSrc[i];
+	        }
+		    
 		}
 	 
 	 // 답글
