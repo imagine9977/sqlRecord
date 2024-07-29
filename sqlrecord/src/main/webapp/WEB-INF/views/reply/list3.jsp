@@ -259,9 +259,14 @@
 
     $(document).ready(function() {
     	$('.deleteButton').on('click', function() {
+<<<<<<< Updated upstream
     		const productNo = $('#productNo').val();
     	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
     	    console.log(productNo); // 댓글 번호 출력
+=======
+    	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
+    	    console.log(replyNo); // 댓글 번호 출력
+>>>>>>> Stashed changes
     	    
     	    if (confirm('댓글을 삭제하시겠습니까?')) {
     	        $.ajax({
@@ -270,10 +275,15 @@
     	            data: { "replyNo": replyNo },
     	            success: function(response) {
     	                console.log('삭제 성공:', response);
+<<<<<<< Updated upstream
     	                //console.log('status:', response.status); // 상태를 직접 출력
     	                if (response.status === 'success') {
     	                	//reloadContent(productNo);
     	                	location.reload();
+=======
+    	                console.log('status:', response.status); // 상태를 직접 출력
+    	                if (response.status === 'success') {
+>>>>>>> Stashed changes
     	                    alert('댓글 삭제에 성공했습니다.');
     	                } else {
     	                    alert('댓글 삭제에 실패했습니다.');
@@ -286,6 +296,10 @@
     	        });
     	    }
     	});
+<<<<<<< Updated upstream
+=======
+        
+>>>>>>> Stashed changes
         
         $('.deleteButton2').on('click', function() {
         	const chReplyNo = $(this).closest('.deleteButton2').attr('id').split('-')[1];
