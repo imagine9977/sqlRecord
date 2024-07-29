@@ -111,7 +111,8 @@ at Object.jQueryDetection"
 
 	
 	@GetMapping("idCheck.do")
-	public void idCheck(@RequestParam("memberId") String memberId, HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
+	public void idCheck(@RequestParam("memberId") String memberId, 
+			            HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
 		
 		Member cus = memberService.getMember(memberId);
 		
@@ -140,19 +141,13 @@ at Object.jQueryDetection"
 								ModelAndView mv) {
 	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
 	    memberService.insMember(member);
-	    //memberGenre.setMemberNo(member.getMemberNo());
-	    //memberService.insGenre(memberGenre);
-	    //log.info("회원이 입력한 값 : {} ", member);
-	    
-	    //log.info("태그?? : {}" , tagNos.size());
+
 	    for (Integer tagNo : tagNos) {
 	        MemberGenre memberGenre = new MemberGenre();
 	        memberGenre.setTagNo(tagNo);
 	        memberGenre.setMemberNo(member.getMemberNo());
 	        memberService.insGenre(memberGenre);
 	    }
-	    
-	    
 	    
 	    mv.addObject("msg", "회원가입을 축하합니다.");
 	    mv.setViewName("redirect:/");

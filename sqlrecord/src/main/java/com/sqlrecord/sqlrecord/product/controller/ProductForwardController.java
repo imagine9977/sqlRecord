@@ -123,7 +123,11 @@ public class ProductForwardController {
 	    	e.printStackTrace();
 	    	result.put("status", "error");
 	    }
+<<<<<<< HEAD
 	    return result;
+=======
+	    return "redirect:/detail/{productNo}";
+>>>>>>> dcca2c891b26a9333af5f4b32996c7a8a56a098b
 	}
 		
 	
@@ -209,7 +213,7 @@ public class ProductForwardController {
         
         //리뷰 이미지 가져오기
         model.addAttribute("imgList",replyService.getImgList());
-		log.info("imgList : {}" , replyService.getImgList());
+		//log.info("imgList : {}" , replyService.getImgList());
         
 		//상품------------------------------------------------------------
 		Product product = productService.findOne(productNo);
@@ -219,6 +223,40 @@ public class ProductForwardController {
 		model.addAttribute("product",product);
 		
 		return "product/detail";
+	}
+	
+	//화면 리로드
+	@RequestMapping("/detail2/{productNo}")
+	public String getProductOne2(@PathVariable int productNo , Model model) {
+		
+		//리뷰 총 갯수 가져오기
+    	int replyCount = replyService.replyCount(productNo);
+    	model.addAttribute("replyCount", replyCount);
+    	
+    	//답글 총 갯수 가져오기
+    	int chReplyCount = replyService.chReplyCount();
+    	model.addAttribute("chReplyCount", chReplyCount);
+
+    	//별점 점수대별 갯수 퍼센트 가져오기
+    	List<Map<String, Object>> starAll = replyService.getReplyStarAll(productNo);
+        model.addAttribute("starAll", starAll);
+        
+        //총 리뷰 평점 가져오기
+        float avgStar = replyService.avgStar(productNo);
+        model.addAttribute("avgStar", avgStar);
+        
+        //댓글 목록 가져오기
+        model.addAttribute("list", replyService.getReplyList(productNo));
+        //System.out.println(replyService.getReplyList());
+        
+        //답글 목록 가져오기
+        model.addAttribute("chList", replyService.getChReplyList());
+        
+        //리뷰 이미지 가져오기
+        model.addAttribute("imgList",replyService.getImgList());
+		log.info("productNo : {}" , productNo);
+        
+        return "reply/list3";
 	}
 	
 	// 상품 추가 페이지로 이동

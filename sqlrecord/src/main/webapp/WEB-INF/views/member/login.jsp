@@ -96,7 +96,6 @@
                             <p style="text-align: center;">
                                 <input class="loginp" type="password" name="memberPw" id="loginPw" placeholder="PW를 입력 해주세요.">
                             </p>
-                         
                     </form>
                             <div class="infofound">
                                 <p><a href="${hpath}/member/findIdPw">ID 찾기 / PW 찾기</a></p>
