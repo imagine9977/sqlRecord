@@ -46,17 +46,16 @@ import lombok.extern.slf4j.Slf4j;
 public class QnaController {
 	
 	private final QnaService qnaService;
+	
 	@GetMapping("list/{cate}/{bool}/{page}")
 	public ResponseEntity<Message>  forwarding(@PathVariable String cate,@PathVariable String bool,@PathVariable int page) {
 		int listCount;
 		int currentPage;
 		int pageLimit;
 		int qnaLimit;
-
 		int maxPage;
 		int startPage;
 		int endPage; // 마지막 페이지
-
 		pageLimit = 10;
 		qnaLimit = 10;
 		if(cate.equals("all")) {
@@ -64,20 +63,14 @@ public class QnaController {
 		}else {
 			listCount = qnaService.qnaCountCate(cate,bool);
 		}
-		
-		log.info("조회된 게시글의 개수: {}", listCount);
-		log.info("조회된 카테고리: {}", cate);
 		maxPage = (int) Math.ceil((double) listCount / qnaLimit);
-		log.info("조회된 maxpage: {}", maxPage);
 		currentPage = page;
 		startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
 		endPage = startPage + maxPage - 1;
-
 		if (endPage > maxPage)
 			endPage = maxPage;
 		PageInfo pageInfo = PageInfo.builder().maxPage(maxPage)
 				.endPage(endPage).listCount(listCount).pageLimit(pageLimit).startPage(startPage).boardLimit(qnaLimit).currentPage(currentPage).build();
-
 		Map<String, Integer> map = new HashMap<String, Integer>();
 	
 
@@ -89,27 +82,16 @@ public class QnaController {
 		log.info("조회된 end: {}", endValue);
 		List<Qna> qnaList = new ArrayList<>();
 		if(cate.equals("all")) {
-			log.info("조회된 전체: {}", cate);
 			qnaList = qnaService.findAll(map, bool);
 		}else {
-			log.info("조회된 카테고리 일부: {}", cate);
 			qnaList = qnaService.findByCate(map,cate, bool);
 		}
-		
-
-		
-		log.info("---------------");
-		log.info("조회된 공지사항 목록 : {}", qnaList);
 		if (qnaList.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Message.builder().message("조회결과가 없습니다.").build());
 		}
 		PaginationAndList PAList = new PaginationAndList(qnaList, pageInfo);
 		Message responseMsg = Message.builder().data(PAList).message("조회 요청 성공").build();
-
-		
-
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
-
 	}
 	
 
@@ -220,10 +202,8 @@ public class QnaController {
 	}
 	// 업데이트 페이지용
 		@PostMapping("update.do")
-		public String updateForm(Qna qna, @RequestParam(value = "updatefile", required = false) MultipartFile[] upfiles, HttpSession session,
-				@RequestParam(value = "fileNoDel", required = false) String fileNoDel) {
-			log.info("start");
-			log.info(fileNoDel);
+		public String updateForm(Qna qna, @RequestParam(value = "updatefile", required = false) MultipartFile[] upfiles, 
+				HttpSession session, @RequestParam(value = "fileNoDel", required = false) String fileNoDel) {
 			List<QnaFile> qnaFiles = new ArrayList<>();
 			String savePath = session.getServletContext().getRealPath("");
 			if (fileNoDel != null && !fileNoDel.isEmpty()) {
@@ -232,41 +212,27 @@ public class QnaController {
 				for (int i = 0; i < delFilesArray.length; i++) {
 					delfiles[i] = Integer.parseInt(delFilesArray[i]);
 				}
-
 				for (int delfile : delfiles) {
 					QnaFile tempFile = new QnaFile();
 					tempFile = qnaService.findFileById(delfile);
-		
-					log.info("Deleting file with ID: " + delfile);
 					String filePath = tempFile.getChangedName();
 					File xFile = new File(savePath + filePath);
-					
-					boolean fileDelete = xFile.delete();
-					
+					boolean fileDelete = xFile.delete();		
 					qnaService.deleteFile(delfile);
 				}
 			} else {
 				log.info("No files to delete.");
 			}
-
 			if (upfiles != null) {
-				log.info(upfiles.toString());
-
-				for (MultipartFile reupfile : upfiles) {
-					log.info(reupfile.toString());
+				for (MultipartFile reupfile : upfiles) {	
 					if (!reupfile.getOriginalFilename().isEmpty()) {
-
 						QnaFile qnaFile = new QnaFile();
-
 						qnaFile.setOriginalName(reupfile.getOriginalFilename());
 						qnaFile.setChangedName(saveFile(reupfile, session));
-						log.info(qnaFile.toString());
 						qnaFiles.add(qnaFile);
 					}
-
 				}
-			}
-			
+			}			
 			Qna newqna = new Qna();
 			newqna.setQnaNo(qna.getQnaNo());
 			newqna.setSecret(qna.getSecret());
@@ -279,11 +245,7 @@ public class QnaController {
 			} else {
 				newqna.setFiles(qnaFiles);
 			}
-			log.info(newqna.toString());
-			log.info("updatef files");
 			int result = qnaService.update(newqna);
-			log.info(" result:{}", result);
-
 			if (result == 0) {
 				session.setAttribute("errorMsg", "게시글 작성 실패");
 				return "redirect:/qnas/update.do/" + newqna.getQnaNo();

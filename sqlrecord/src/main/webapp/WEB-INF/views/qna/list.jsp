@@ -423,14 +423,12 @@
 								<div id="comments"></div>
 								
 										<div>
-											<button id="addCommentButton" class="btn btn-primary">Add
-												Comment</button>
+											<button id="addCommentButton" class="btn btn-primary">댓글 작성</button>
 										</div>
 										<div id="commentForm" style="display: none;">
 											<textarea id="newCommentContent"
-												placeholder="Enter your comment"></textarea>
-											<button id="submitCommentButton" class="btn btn-success">Submit
-												Comment</button>
+												placeholder="댓글을 작성하세요"></textarea>
+											<button id="submitCommentButton" class="btn btn-success">댓글 추가</button>
 										</div>
 								
 
@@ -654,27 +652,27 @@
 		    });
 		};
 
-		// Function to load qnas by category
+		
 		const findByCate = (cate,solvedBoolean,page=1) => {
 		    currentCategory = cate;
-		    currentPageCate[cate] = 0; // Initialize page count for this category
+		    currentPageCate[cate] = 0; 
 		    $.ajax({
 		        url: 'qna/list/' + cate+'/'+solvedBoolean+'/'+page,
 		        type: 'get',
 		        success: response => {
-		            qnaListGlobal = response.data.qnaList; // Store initial qna list globally
-		            const pageInfo = response.data.pageInfo; // Access pageInfo
+		            qnaListGlobal = response.data.qnaList; 
+		            const pageInfo = response.data.pageInfo;
 		            renderqnasCate(cate, qnaListGlobal.slice(0, qnasPerPage));
 		            renderPagination(pageInfo);
-		            currentPageCate[cate]++; // Increment page after loading initial data
+		            currentPageCate[cate]++; 
 		           
 		        },
 		        error: err => {
 		        	
 		            console.error('Error fetching data:', err);
 		            try {
-		                qnaListGlobal = response.data.qnaList; // Access qnaList
-		                const pageInfo = response.data.pageInfo; // Access pageInfo
+		                qnaListGlobal = response.data.qnaList; 
+		                const pageInfo = response.data.pageInfo;
 		                renderqnas(qnaListGlobal.slice(0, qnasPerPage));
 		                renderPagination(pageInfo);
 		            } catch (parseErr) {
