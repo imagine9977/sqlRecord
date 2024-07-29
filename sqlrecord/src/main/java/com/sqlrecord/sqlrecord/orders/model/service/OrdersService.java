@@ -10,7 +10,7 @@ import com.sqlrecord.sqlrecord.product.model.vo.Product;
 public interface OrdersService {
 
 	// 주문건 멤버 정보 넣고 해당 주문건 번호 받기
-	int insertMemberOrders(MemberOrders memberOrders , int memberNo);
+	int insertMemberOrders(MemberOrders memberOrders);
 
 	int insertOrdersDetail(List<MemberOrdersDetail> odList);
 

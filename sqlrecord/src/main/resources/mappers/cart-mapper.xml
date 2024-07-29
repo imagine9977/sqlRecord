@@ -46,12 +46,19 @@
 		SELECT
 		    m.CART_NUM,
 		    m.PRODUCT_NO,
-		    m.MEMBER_NO,
+		    mb.MEMBER_NO,
+		    mb.ADDR1,
+		    mb.ADDR2,
+		    mb.POSTCODE,
 		    m.CART_AMOUNT,
 		    p.PRODUCT_NAME,
 		    p.PRODUCT_PRICE
 		FROM
 		     MEMBER_CART m
+		JOIN
+			MEMBER mb
+		ON
+			m.MEMBER_NO = mb.MEMBER_NO
 		JOIN
 			PRODUCT p
 		ON

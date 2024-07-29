@@ -19,22 +19,11 @@
 				SYSDATE,
 				#{memberNo}
 				)
+	<selectKey resultType="_int" keyProperty="memberOrdersNo" order="AFTER">
+		SELECT MEMBER_ORDERS_SEQ.CURRVAL FROM DUAL
+	</selectKey>
 	</insert>
 
-	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
-		SELECT
-				Max(MEMBER_ORDERS_NO) 
-		FROM
-				MEMBER_ORDERS
-		WHERE
-				MEMBER_NO = #{memberNo}
-		ORDER
-		BY
-				MEMBER_ORDERS_NO
-		DESC
-	</select>
-	
-	
 	<insert id="insertOrdersDetail" parameterType="memberOrdersDetail">
     	
         INSERT INTO MEMBER_ORDERS_DETAIL (

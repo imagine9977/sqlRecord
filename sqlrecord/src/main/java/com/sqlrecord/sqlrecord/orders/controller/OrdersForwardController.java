@@ -44,17 +44,7 @@ public class OrdersForwardController {
 	
 	@PostMapping("/order")
 	public String userOrdersPage(HttpServletRequest request , Cart cart) {
-		HttpSession session = request.getSession();
-
-		
-		log.info("{}" , cart.getCartList().get(0).getCartAmount());
-		for(Cart a : cart.getCartList()) {
-			log.info("mod?? : {}" , a.getCartAmount());
-		}
-		
-		
-		
-		
+	
 		if(!cart.getCartList().isEmpty()) {
 		
 		
@@ -65,6 +55,8 @@ public class OrdersForwardController {
 		memberOrders.setMemberOrdersPostcode(cart.getCartList().get(0).getMember().getPostcode());
 		memberOrders.setMemberNo(cart.getCartList().get(0).getMember().getMemberNo());
 		
+
+		List<MemberOrdersDetail> odList = new ArrayList<MemberOrdersDetail>();
 		
 		List<Integer> cartNoList = new ArrayList<Integer>();
 		
@@ -73,11 +65,7 @@ public class OrdersForwardController {
 		
 		cartService.deleteCart(cartNoList);
 		
-		
-		List<MemberOrdersDetail> odList = new ArrayList<MemberOrdersDetail>();
-		
-		
-		int successMO = ordersService.insertMemberOrders(memberOrders, cart.getCartList().get(0).getMember().getMemberNo());
+		int successMO = ordersService.insertMemberOrders(memberOrders);
 		
 		
 		for(Cart item : cart.getCartList()) { 
@@ -98,7 +86,7 @@ public class OrdersForwardController {
 		 
 		if(ordersService.insertOrdersDetail(odList) > 0) {
 		 
-		return "redirect:/orders/member/detail"; }
+			return "redirect:/orders/member/detail"; }
 		 
 		}
 		

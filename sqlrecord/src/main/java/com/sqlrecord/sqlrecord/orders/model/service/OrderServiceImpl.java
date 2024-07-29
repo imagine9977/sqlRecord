@@ -21,10 +21,10 @@ public class OrderServiceImpl implements OrdersService {
 	private final OrdersMapper ordersMapper;
 	
 	@Override
-	public int insertMemberOrders(MemberOrders memberOrders , int memberNo) {
+	public int insertMemberOrders(MemberOrders memberOrders) {
 				
 		if(ordersMapper.insertMemberOrders(memberOrders) > 0) {
-			return ordersMapper.selectOneMemberOrdersNo(memberNo);
+			return memberOrders.getMemberOrdersNo();
 		} else {
 			return 0;
 		}
