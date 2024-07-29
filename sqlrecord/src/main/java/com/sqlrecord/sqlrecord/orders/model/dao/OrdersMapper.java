@@ -41,7 +41,7 @@ public interface OrdersMapper {
 	
 	// 관리자
 //	int orderCount();
-
+//
 //	List<MemberOrders> findAllOrders(Map<String, Integer> map);
 //
 //	int exchangeCount();
