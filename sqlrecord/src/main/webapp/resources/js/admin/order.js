@@ -1,7 +1,7 @@
 // 주문건 테이블 생성
 function loadOrderTable(contentType, page = 1) {
     $.ajax({
-        url: '${hpath}/admin/ajaxMemberManagement',
+        url: '${hpath}/admin/ajaxOrdersManagement',
         type: 'GET',
         data: { page: page, type: contentType },
         success: function(response) {
@@ -19,14 +19,15 @@ function loadOrderTable(contentType, page = 1) {
 
                 response.data.forEach(function(order) {
                     table += '<tr class="accordion-header">' +
-                        '<td><input type="checkbox" name="orderCheck" value="' + order.memberOrdersNo + '"></td>' +
-                        '<td>' + order.memberOrdersNo + '</td>' +
+                        '<td><input type="checkbox" name="orderCheck" class="orderCheck" value="' + order.memberOrdersNo + '"></td>' +
+                        '<td>' + order.ordersNo + '</td>' +
                         '<td>' + 
-                        	'<p><b>주문번호 : </b>' + order.memberOrdersNo + '</p>' +
-                        	'<p><b>' + order.productNo + '. ' + order.productName + '외 ' + order.productCount + '건</b></p>'+
+                        	'<p><b>주문번호 : </b>' + order.ordersNo + '</p>' +
+                        	'<p><b>' + order.productCate + ' - ' + order.productNo + '. ' + order.productName + '외 ' + order.productCount -1 + '건</b></p>'+
                         	'<p><b>주문자 : ' + order.memberId + '</b></p>' +
-                        	'<p><b>주문일자 : </b>' + order.memberOrdersDate + '</p>' +
-                        	'<p><b>결제금액 : ' + order.price + '원</b></p>' +
+                        	'<p><b>주문일자 : </b>' + order.ordersDate + '</p>' +
+                        	'<p><b>배송주소 : </b>' + order.addr1 + order.addr2 + ' (' + order.postcode + ')</p>' +
+                        	'<p><b>결제금액 : ' + order.totalPrice + '원</b></p>' +
                         '</td>' +
                         '<td><button class="btn btn-sm btn-secondary toggle-details">상세보기</button>' +
                         '<button class="btn btn-sm btn-secondary toggle-details">삭제</button></td>' +
@@ -37,7 +38,9 @@ function loadOrderTable(contentType, page = 1) {
                             '<div class="order-details" id="order-details' + order.memberOrdersNo + '">' +
                                 '<div class="details-content">' +
                                     '<h3>주문 상세 정보</h3><br/>' +
-                                    '<p>주문번호: ' + order.memberOrdersNo + '</p>' +
+                                    '<td><input type="checkbox" name="orderDetailCheck" class="orderDetailCheck" value="' + order.memberOrdersNo + '"></td>' +
+                                    '<td><img src=' + orderDetail.product.productPhoto1.productPhotosPath + 'alt=' + orderDetail.product.productPhoto1.productPhotosName + '></td>' +
+                                    '<p><b>' + order.productCate + ' - <a href="sqlrecord/product/detail/{order.productNo}"' + order.productNo + '. ' + order.productName + ' /></b></p>'+
                                     '<div class="order-items" id="order-items-' + order.memberOrdersNo + '"></div>' +
                                 '</div>' +
                             '</div>' +

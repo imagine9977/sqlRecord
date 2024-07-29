@@ -1,5 +1,6 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class OrderServiceImpl implements OrdersService {
 
+	private static final int PAGE_SIZE = 20;
 	
 	private final OrdersMapper ordersMapper;
 	
@@ -93,37 +95,57 @@ public class OrderServiceImpl implements OrdersService {
 		return ordersMapper.getOrdersEx(memberNo);
 	}
 
+
 	
 	//관리자
 	
-	@Override
-	public int orderCount() {
-		return ordersMapper.orderCount();
-	}
+//	@Override
+//	public int orderCount() {
+//		return ordersMapper.orderCount();
+//	}
+//	
+//	@Override
+//	public List<MemberOrders> findAllOrders(Map<String, Integer> map) {
+//		return ordersMapper.findAllOrders(map);
+//	}
+//
+//	@Override
+//	public int exchangeCount() {
+//		return ordersMapper.exchangeCount();
+//	}
+//
+//	@Override
+//	public List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map) {
+//		return ordersMapper.findAllExchanges(map);
+//	}
+//
+//	@Override
+//	public int refundCount() {
+//		return ordersMapper.refundCount();
+//	}
+//
+//	@Override
+//	public List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map) {
+//		return ordersMapper.findAllRefunds(map);
+//	}
 	
 	@Override
-	public List<MemberOrders> findAllOrders(Map<String, Integer> map) {
-		return ordersMapper.findAllOrders(map);
+	public Map<String, Object> getAllMemberOrders(int page, String type) {
+		int offset = (page - 1) * PAGE_SIZE;
+        List<MemberOrders> ordersList = ordersMapper.getAllMemberOrders(offset, PAGE_SIZE, type);
+        int totalOrders = ordersMapper.getTotalOrdersCount(type);
+        int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", ordersList);
+        result.put("currentPage", page);
+        result.put("totalPages", totalPages);
+        return result;
 	}
 
 	@Override
-	public int exchangeCount() {
-		return ordersMapper.exchangeCount();
-	}
-
-	@Override
-	public List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map) {
-		return ordersMapper.findAllExchanges(map);
-	}
-
-	@Override
-	public int refundCount() {
-		return ordersMapper.refundCount();
-	}
-
-	@Override
-	public List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map) {
-		return ordersMapper.findAllRefunds(map);
+	public List<MemberOrdersDetail> getMemberOrderDetails(int memberOrdersNo) {
+		return ordersMapper.getMemberOrdersDetails(memberOrdersNo);
 	}
 	
 	

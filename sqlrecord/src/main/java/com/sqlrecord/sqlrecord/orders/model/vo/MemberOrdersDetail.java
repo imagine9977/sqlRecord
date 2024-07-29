@@ -29,9 +29,5 @@ public class MemberOrdersDetail {
 	private Product Product;
 	private MemberOrders memberOrders;
 	
-	private int productNo;
-	private String productName;
-	private ProductPhotos productPhotos;
-	
-	private List<Product> productList;
+	public List<Product> productList;
 }

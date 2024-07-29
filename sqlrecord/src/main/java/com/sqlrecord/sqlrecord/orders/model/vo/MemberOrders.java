@@ -1,5 +1,11 @@
 package com.sqlrecord.sqlrecord.orders.model.vo;
 
+import java.util.List;
+
+import com.sqlrecord.sqlrecord.member.model.vo.Member;
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +25,7 @@ public class MemberOrders {
 	private String memberOrdersDate;
 	private int memberNo;
 	
-	private String memberId;
-	private int price;
-	private int productCount;
-	private String productName;
-	private int productNo;
+	public List<MemberOrdersDetail> memberOrdersDetailList;
+	public List<Product> productList;
+	private int totalPrice;	// 상품가격 계산해야 함
 }

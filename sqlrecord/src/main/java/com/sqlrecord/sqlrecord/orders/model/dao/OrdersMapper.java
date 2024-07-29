@@ -38,18 +38,25 @@ public interface OrdersMapper {
 
 	List<MemberOrdersEx> getOrdersEx(int memberNo);
 
+	
 	// 관리자
-	int orderCount();
+//	int orderCount();
 
-	List<MemberOrders> findAllOrders(Map<String, Integer> map);
+//	List<MemberOrders> findAllOrders(Map<String, Integer> map);
+//
+//	int exchangeCount();
+//
+//	List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map);
+//
+//	int refundCount();
+//
+//	List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map);
 
-	int exchangeCount();
+	List<MemberOrders> getAllMemberOrders(int offset, int pageSize, String type);
 
-	List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map);
+	int getTotalOrdersCount(String type);
 
-	int refundCount();
-
-	List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map);
+	List<MemberOrdersDetail> getMemberOrdersDetails(int memberOrdersNo);
 
 	
 

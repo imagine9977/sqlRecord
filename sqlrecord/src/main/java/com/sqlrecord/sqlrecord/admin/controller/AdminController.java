@@ -24,7 +24,7 @@ import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.notice.model.service.NoticeService;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
-import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
+import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
 
 import lombok.extern.slf4j.Slf4j;
@@ -242,180 +242,202 @@ public class AdminController {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	@GetMapping("/ajaxMemberOrders")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> getMemberOrders(
-            @RequestParam(value="page", defaultValue="1") int page,
-            @RequestParam(value="type", defaultValue="orders") String type) {
-        
-        int listCount = ordersService.orderCount();
-        int currentPage = page;
-        int pageLimit = 5;
-        int boardLimit = 15;
-
-        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
-        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
-        int endPage = startPage + pageLimit - 1;
-
-        if (endPage > maxPage) {
-            endPage = maxPage;
-        }
-
-        PageInfo pageInfo = PageInfo.builder()
-                .listCount(listCount)
-                .currentPage(currentPage)
-                .pageLimit(pageLimit)
-                .boardLimit(boardLimit)
-                .maxPage(maxPage)
-                .startPage(startPage)
-                .endPage(endPage)
-                .build();
-        
-        Map<String, Integer> map = new HashMap<>();
-        int startValue = (currentPage - 1) * boardLimit + 1;
-        int endValue = startValue + boardLimit - 1;
-        map.put("startValue", startValue);
-        map.put("endValue", endValue);
-
-        // 조회
-        List<MemberOrders> orderList = ordersService.findAllOrders(map);
-
-        List<Map<String, Object>> formattedOrderList = new ArrayList<>();
-        for (MemberOrders order : orderList) {
-            Map<String, Object> formattedOrder = new HashMap<>();
-            formattedOrder.put("ordersNo", order.getMemberOrdersNo());
-            formattedOrder.put("memberId", order.getMemberId());
-            formattedOrder.put("ordersDate", order.getMemberOrdersDate());
-            formattedOrder.put("paymentPrice", order.getPrice());
-            formattedOrderList.add(formattedOrder);
-        }
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("data", formattedOrderList);
-        response.put("pageInfo", pageInfo);
-        
-        return ResponseEntity.ok(response);
-    }
+//	  @GetMapping("/ajaxMemberOrders")
+//    @ResponseBody
+//    public ResponseEntity<Map<String, Object>> getMemberOrders(
+//            @RequestParam(value="page", defaultValue="1") int page,
+//            @RequestParam(value="type", defaultValue="orders") String type) {
+//        
+//        int listCount = ordersService.orderCount();
+//        int currentPage = page;
+//        int pageLimit = 5;
+//        int boardLimit = 10;
+//
+//        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+//        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+//        int endPage = startPage + pageLimit - 1;
+//
+//        if (endPage > maxPage) {
+//            endPage = maxPage;
+//        }
+//
+//        PageInfo pageInfo = PageInfo.builder()
+//                .listCount(listCount)
+//                .currentPage(currentPage)
+//                .pageLimit(pageLimit)
+//                .boardLimit(boardLimit)
+//                .maxPage(maxPage)
+//                .startPage(startPage)
+//                .endPage(endPage)
+//                .build();
+//        
+//        Map<String, Integer> map = new HashMap<>();
+//        int startValue = (currentPage - 1) * boardLimit + 1;
+//        int endValue = startValue + boardLimit - 1;
+//        map.put("startValue", startValue);
+//        map.put("endValue", endValue);
+//
+//        // 조회
+//        List<MemberOrders> orderList = ordersService.findAllOrders(map);
+//
+//        List<Map<String, Object>> formattedOrderList = new ArrayList<>();
+//        for (MemberOrders order : orderList) {
+//            Map<String, Object> formattedOrder = new HashMap<>();
+//            formattedOrder.put("ordersNo", order.getMemberOrdersNo());
+//            formattedOrder.put("memberId", order.member.getMemberId());
+//            formattedOrder.put("addr1", order.getMemberOrdersAddress());
+//            formattedOrder.put("addr2", order.getMemberOrdersAddress2());
+//            formattedOrder.put("postcode", order.getMemberOrdersPostcode());
+//            formattedOrder.put("ordersDate", order.getMemberOrdersDate());
+//            formattedOrder.put("totalPrice", order.getTotalPrice());
+//            // 연결 테이블 컬럼(토글 상세보기용)
+//            formattedOrder.put("productNo", order.product.getProductNo());
+//            formattedOrder.put("productCate", order.product.getProductCate());
+//            formattedOrder.put("productName", order.product.getProductName());
+//            formattedOrder.put("productPhoto1", order.productPhoto1.getProductPhotosPath());
+//            formattedOrder.put("productPhotosName", order.productPhoto1.getProductPhotosName());
+//            formattedOrderList.add(formattedOrder);
+//        }
+//        
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("data", formattedOrderList);
+//        response.put("pageInfo", pageInfo);
+//        
+//        return ResponseEntity.ok(response);
+//    }
 	
-	@GetMapping("/ajaxExchangeRequests")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> getExchangeRequests(
-            @RequestParam(value="page", defaultValue="1") int page,
-            @RequestParam(value="type", defaultValue="exchanges") String type) {
-        
-        int listCount = ordersService.exchangeCount();
-        int currentPage = page;
-        int pageLimit = 5;
-        int boardLimit = 15;
-
-        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
-        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
-        int endPage = startPage + pageLimit - 1;
-
-        if (endPage > maxPage) {
-            endPage = maxPage;
-        }
-
-        PageInfo pageInfo = PageInfo.builder()
-                .listCount(listCount)
-                .currentPage(currentPage)
-                .pageLimit(pageLimit)
-                .boardLimit(boardLimit)
-                .maxPage(maxPage)
-                .startPage(startPage)
-                .endPage(endPage)
-                .build();
-        
-        Map<String, Integer> map = new HashMap<>();
-        int startValue = (currentPage - 1) * boardLimit + 1;
-        int endValue = startValue + boardLimit - 1;
-        map.put("startValue", startValue);
-        map.put("endValue", endValue);
-
-        // 조회
-        List<MemberOrdersEx> exchangeList = ordersService.findAllExchanges(map);
-
-        List<Map<String, Object>> formattedExchangeList = new ArrayList<>();
-        for (MemberOrdersEx exchange : exchangeList) {
-            Map<String, Object> formattedExchange = new HashMap<>();
-            formattedExchange.put("ordersExchangeNo", exchange.getMemberOrdersExNo());
-            formattedExchange.put("memberId", exchange.getMemberId());
-            formattedExchange.put("ordersExchangeDate", exchange.getMemberOrdersExDate());
-            formattedExchange.put("ordersQuantity", exchange.getMemberOrdersQuantity());
-            formattedExchange.put("price", exchange.getPrice());
-            formattedExchange.put("requestReason", exchange.getMemberOrdersExReason());
-            formattedExchangeList.add(formattedExchange);
-        }
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("data", formattedExchangeList);
-        response.put("pageInfo", pageInfo);
-        
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/ajaxRefundRequests")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> getRefundRequests(
-            @RequestParam(value="page", defaultValue="1") int page,
-            @RequestParam(value="type", defaultValue="refunds") String type) {
-        
-        int listCount = ordersService.refundCount();
-        int currentPage = page;
-        int pageLimit = 5;
-        int boardLimit = 15;
-
-        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
-        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
-        int endPage = startPage + pageLimit - 1;
-
-        if (endPage > maxPage) {
-            endPage = maxPage;
-        }
-
-        PageInfo pageInfo = PageInfo.builder()
-                .listCount(listCount)
-                .currentPage(currentPage)
-                .pageLimit(pageLimit)
-                .boardLimit(boardLimit)
-                .maxPage(maxPage)
-                .startPage(startPage)
-                .endPage(endPage)
-                .build();
-        
-        Map<String, Integer> map = new HashMap<>();
-        int startValue = (currentPage - 1) * boardLimit + 1;
-        int endValue = startValue + boardLimit - 1;
-        map.put("startValue", startValue);
-        map.put("endValue", endValue);
-
-        // 조회
-        List<MemberOrdersEx> refundList = ordersService.findAllRefunds(map);
-
-        List<Map<String, Object>> formattedRefundList = new ArrayList<>();
-        for (MemberOrdersEx refund : refundList) {
-            Map<String, Object> formattedRefund = new HashMap<>();
-            formattedRefund.put("ordersRefundNo", refund.getMemberOrdersExNo());
-            formattedRefund.put("memberId", refund.getMemberId());
-            formattedRefund.put("ordersRefundDate", refund.getMemberOrdersExDate());
-            formattedRefund.put("ordersQuantity", refund.getMemberOrdersQuantity());
-            formattedRefund.put("price", refund.getPrice());
-            formattedRefund.put("requestReason", refund.getMemberOrdersExReason());
-            formattedRefundList.add(formattedRefund);
-        }
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("data", formattedRefundList);
-        response.put("pageInfo", pageInfo);
-        
-        return ResponseEntity.ok(response);
-    }
-
-
-	/* 상품 바인딩
-	@GetMapping("/productData")
-	public ResponseEntity<Message> getProductList() {
-		List<Notice> productList = productService.findAll();
+	
+	// 전체 memberOrders(주문건) 리스트
+	@GetMapping("/ajaxOrdersManagement")
+	@ResponseBody
+	public Map<String, Object> getAllMemberOrders(@RequestParam int page, @RequestParam String type) {
+		return ordersService.getAllMemberOrders(page, type);
 	}
-	*/
+	
+	// 특정 memberOrdersNo에 해당하는 memberOrdersDetail 리스트
+	@GetMapping("ajaxOrderDetails")
+	@ResponseBody
+	public List<MemberOrdersDetail> getMemberOrderDetails(@RequestParam int memberOrdersNo) {
+		return ordersService.getMemberOrderDetails(memberOrdersNo);
+	}
+	
+	
+	
+	
+	
+	
+	
+//	@GetMapping("/ajaxExchangeRequests")
+//    @ResponseBody
+//    public ResponseEntity<Map<String, Object>> getExchangeRequests(
+//            @RequestParam(value="page", defaultValue="1") int page,
+//            @RequestParam(value="type", defaultValue="exchanges") String type) {
+//        
+//        int listCount = ordersService.exchangeCount();
+//        int currentPage = page;
+//        int pageLimit = 5;
+//        int boardLimit = 15;
+//
+//        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+//        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+//        int endPage = startPage + pageLimit - 1;
+//
+//        if (endPage > maxPage) {
+//            endPage = maxPage;
+//        }
+//
+//        PageInfo pageInfo = PageInfo.builder()
+//                .listCount(listCount)
+//                .currentPage(currentPage)
+//                .pageLimit(pageLimit)
+//                .boardLimit(boardLimit)
+//                .maxPage(maxPage)
+//                .startPage(startPage)
+//                .endPage(endPage)
+//                .build();
+//        
+//        Map<String, Integer> map = new HashMap<>();
+//        int startValue = (currentPage - 1) * boardLimit + 1;
+//        int endValue = startValue + boardLimit - 1;
+//        map.put("startValue", startValue);
+//        map.put("endValue", endValue);
+//
+//        // 조회
+//        List<MemberOrdersEx> exchangeList = ordersService.findAllExchanges(map);
+//
+//        List<Map<String, Object>> formattedExchangeList = new ArrayList<>();
+//        for (MemberOrdersEx exchange : exchangeList) {
+//            Map<String, Object> formattedExchange = new HashMap<>();
+//            formattedExchange.put("ordersExchangeNo", exchange.getMemberOrdersExNo());
+//            formattedExchange.put("memberId", exchange.getMemberId());
+//            formattedExchange.put("ordersExchangeDate", exchange.getMemberOrdersExDate());
+//            formattedExchange.put("ordersQuantity", exchange.getMemberOrdersQuantity());
+//            formattedExchange.put("price", exchange.getPrice());
+//            formattedExchange.put("requestReason", exchange.getMemberOrdersExReason());
+//            formattedExchangeList.add(formattedExchange);
+//        }
+//        
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("data", formattedExchangeList);
+//        response.put("pageInfo", pageInfo);
+//        
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @GetMapping("/ajaxRefundRequests")
+//    @ResponseBody
+//    public ResponseEntity<Map<String, Object>> getRefundRequests(
+//            @RequestParam(value="page", defaultValue="1") int page,
+//            @RequestParam(value="type", defaultValue="refunds") String type) {
+//        
+//        int listCount = ordersService.refundCount();
+//        int currentPage = page;
+//        int pageLimit = 5;
+//        int boardLimit = 15;
+//
+//        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+//        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+//        int endPage = startPage + pageLimit - 1;
+//
+//        if (endPage > maxPage) {
+//            endPage = maxPage;
+//        }
+//
+//        PageInfo pageInfo = PageInfo.builder()
+//                .listCount(listCount)
+//                .currentPage(currentPage)
+//                .pageLimit(pageLimit)
+//                .boardLimit(boardLimit)
+//                .maxPage(maxPage)
+//                .startPage(startPage)
+//                .endPage(endPage)
+//                .build();
+//        
+//        Map<String, Integer> map = new HashMap<>();
+//        int startValue = (currentPage - 1) * boardLimit + 1;
+//        int endValue = startValue + boardLimit - 1;
+//        map.put("startValue", startValue);
+//        map.put("endValue", endValue);
+//
+//        // 조회
+//        List<MemberOrdersEx> refundList = ordersService.findAllRefunds(map);
+//
+//        List<Map<String, Object>> formattedRefundList = new ArrayList<>();
+//        for (MemberOrdersEx refund : refundList) {
+//            Map<String, Object> formattedRefund = new HashMap<>();
+//            formattedRefund.put("ordersRefundNo", refund.getMemberOrdersExNo());
+//            formattedRefund.put("memberId", refund.getMemberId());
+//            formattedRefund.put("ordersRefundDate", refund.getMemberOrdersExDate());
+//            formattedRefund.put("ordersQuantity", refund.getMemberOrdersQuantity());
+//            formattedRefund.put("price", refund.getPrice());
+//            formattedRefund.put("requestReason", refund.getMemberOrdersExReason());
+//            formattedRefundList.add(formattedRefund);
+//        }
+//        
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("data", formattedRefundList);
+//        response.put("pageInfo", pageInfo);
+//        
+//        return ResponseEntity.ok(response);
+//    }
 }

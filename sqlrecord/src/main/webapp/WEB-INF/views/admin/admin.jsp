@@ -69,8 +69,10 @@ $(document).ready(function() {
 	            loadMemberTable('all', page);
 	        } else if (currentTab === 'notice') {
 	            loadNoticeTable('default', page);
+	        } else if (currentTab === 'reply') {
+	            loadReplyTable('default', page);
 	        } else if (currentTab === 'order') {
-	            loadNoticeTable('default', page);
+	            loadOrderTable('default', page);
 	        }
 	    });
 	}
