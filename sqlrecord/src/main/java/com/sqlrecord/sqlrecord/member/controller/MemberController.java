@@ -111,7 +111,8 @@ at Object.jQueryDetection"
 
 	
 	@GetMapping("idCheck.do")
-	public void idCheck(@RequestParam("memberId") String memberId, HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
+	public void idCheck(@RequestParam("memberId") String memberId, 
+			            HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
 		
 		Member cus = memberService.getMember(memberId);
 		
@@ -140,19 +141,13 @@ at Object.jQueryDetection"
 								ModelAndView mv) {
 	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
 	    memberService.insMember(member);
-	    //memberGenre.setMemberNo(member.getMemberNo());
-	    //memberService.insGenre(memberGenre);
-	    //log.info("회원이 입력한 값 : {} ", member);
-	    
-	    //log.info("태그?? : {}" , tagNos.size());
+
 	    for (Integer tagNo : tagNos) {
 	        MemberGenre memberGenre = new MemberGenre();
 	        memberGenre.setTagNo(tagNo);
 	        memberGenre.setMemberNo(member.getMemberNo());
 	        memberService.insGenre(memberGenre);
 	    }
-	    
-	    
 	    
 	    mv.addObject("msg", "회원가입을 축하합니다.");
 	    mv.setViewName("redirect:/");
@@ -177,11 +172,11 @@ at Object.jQueryDetection"
 		//log.info("name1 : {}", name);
 		//log.info("email1 : {}", email);
 		// 아이디 찾기 입력받은 값을 조회
-		member = memberService.infoId(member);
 		member.setName(name);
 		member.setEmail(email);
+		member = memberService.infoId(member);
 		member.getMemberId();
-		//log.info("name : {}", name);
+		//log.info("member : {}", member.getMemberId());
 		//log.info("email : {}", email);
 		
 		// 인증번호 생성
@@ -337,10 +332,7 @@ at Object.jQueryDetection"
 						HttpSession session,
 						Model model) {
 		log.info("수정 요청 실패 :{}",member);
-		//String encPwd = bCryptPasswordEncoder.encode(member.getUserPwd());
-		//member.setUserPwd(encPwd);
 		Member currentUser = (Member) session.getAttribute("loginUser");
-		
 		memberService.deleteGenre(currentUser.getMemberNo());
 		
 		for (Integer tagNo : tagNos) {

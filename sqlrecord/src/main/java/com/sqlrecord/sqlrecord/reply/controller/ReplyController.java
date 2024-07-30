@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
-import com.sqlrecord.sqlrecord.reply.model.service.ReplyService;
 import com.sqlrecord.sqlrecord.reply.model.vo.ChReply;
 import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
 
@@ -24,7 +23,7 @@ import com.sqlrecord.sqlrecord.reply.model.vo.Reply;
 @RequestMapping("/reply/")
 public class ReplyController {
 	
-	
+	/*
 	@Autowired
 	private ReplyService replyService;
 	
@@ -145,4 +144,5 @@ public class ReplyController {
         
         return "product/detail"; // 별점 분포를 표시할 JSP 페이지
     }
+    */
 }
