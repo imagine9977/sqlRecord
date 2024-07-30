@@ -128,7 +128,6 @@ input[class="check"]:checked + label:after {
       <div>가격</div>
       <div>수량</div>
       
-
 	      <c:choose>
 		      <c:when test="${not empty list }">
 			      <c:forEach var="item" items="${list }" varStatus="status">
@@ -150,11 +149,7 @@ input[class="check"]:checked + label:after {
 		      <c:otherwise>
 		      	<h2>장바구니가 비어있습니다.</h2>
 		      </c:otherwise>
-	      </c:choose>
-     
-  
-      
-      
+	      </c:choose>   
     </div>
     
     <div id="item2">
