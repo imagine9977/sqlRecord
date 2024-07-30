@@ -19,22 +19,11 @@
 				SYSDATE,
 				#{memberNo}
 				)
+	<selectKey resultType="_int" keyProperty="memberOrdersNo" order="AFTER">
+		SELECT MEMBER_ORDERS_SEQ.CURRVAL FROM DUAL
+	</selectKey>
 	</insert>
 
-	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
-		SELECT
-				Max(MEMBER_ORDERS_NO) 
-		FROM
-				MEMBER_ORDERS
-		WHERE
-				MEMBER_NO = #{memberNo}
-		ORDER
-		BY
-				MEMBER_ORDERS_NO
-		DESC
-	</select>
-	
-	
 	<insert id="insertOrdersDetail" parameterType="memberOrdersDetail">
     	
         INSERT INTO MEMBER_ORDERS_DETAIL (
@@ -154,6 +143,8 @@
         		mod.PRODUCT_NO = p.PRODUCT_NO
        	WHERE
                 mo.MEMBER_NO = #{memberNo}
+        AND
+        		mod.MEMBER_ORDERS_DETAIL_EXD = 'N'
         ORDER
         BY
                 MEMBER_ORDERS_DATE
@@ -281,7 +272,7 @@
 		WHERE
 				MEMBER_ORDERS_DETAIL_NO
 				=
-				#{memberOrdersDetailNo.memberOrdersDetailNo}
+				#{memberOrdersDetail.memberOrdersDetailNo}
 
 	</update>
 	
@@ -295,18 +286,18 @@
 				#{memberOrdersExType},
 				#{memberOrdersExAmount},
 				SYSDATE,
-				#{memberOrdersDetailNo.memberOrdersDetailNo},
+				#{memberOrdersDetail.memberOrdersDetailNo},
 				DEFAULT,
 				#{memberOrdersExAddress},
 				#{memberOrdersExAddress2},
 				#{memberOrdersExPostcode},
 				DEFAULT,
 				<choose>
-					<when test="productNo.productNo == 0">
+					<when test="product.productNo == 0">
 						DEFAULT,
 					</when>
 					<otherwise>
-						#{productNo.productNo},
+						#{product.productNo},
 					</otherwise>
 				</choose>
 				#{memberOrdersExReason}				

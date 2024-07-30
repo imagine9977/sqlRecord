@@ -27,4 +27,5 @@ public class MemberOrdersDetail {
 	private String memberOrdersDetailStatus;
 	private Product product;
 	private MemberOrders memberOrders; 
+	
 }

@@ -3,6 +3,7 @@ package com.sqlrecord.sqlrecord.orders.model.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
@@ -21,10 +22,10 @@ public class OrderServiceImpl implements OrdersService {
 	private final OrdersMapper ordersMapper;
 	
 	@Override
-	public int insertMemberOrders(MemberOrders memberOrders , int memberNo) {
+	public int insertMemberOrders(MemberOrders memberOrders) {
 				
 		if(ordersMapper.insertMemberOrders(memberOrders) > 0) {
-			return ordersMapper.selectOneMemberOrdersNo(memberNo);
+			return memberOrders.getMemberOrdersNo();
 		} else {
 			return 0;
 		}
@@ -67,6 +68,7 @@ public class OrderServiceImpl implements OrdersService {
 	}
 
 	@Override
+	@Transactional
 	public int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx) {
 		
 		if(ordersMapper.updateMemberOrdersExd(memberOrdersEx) > 0) {
