@@ -62,6 +62,10 @@ public class OrdersForwardController {
 		
 		for(Cart item : cart.getCartList()) { cartNoList.add(item.getCartNum()); }
 		
+		for(int item : cartNoList) {
+			log.info("숫자?? : {}" , item);
+		}
+		
 		
 		cartService.deleteCart(cartNoList);
 		
