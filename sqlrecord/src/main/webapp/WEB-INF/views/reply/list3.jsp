@@ -272,8 +272,8 @@
     	                console.log('삭제 성공:', response);
     	                //console.log('status:', response.status); // 상태를 직접 출력
     	                if (response.status === 'success') {
-    	                	reloadContent(productNo);
-    	                	//location.reload();
+    	                	//reloadContent(productNo);
+    	                	location.reload();
     	                    alert('댓글 삭제에 성공했습니다.');
     	                } else {
     	                    alert('댓글 삭제에 실패했습니다.');
@@ -316,8 +316,9 @@
 		    const currentContent = $(this).closest('.review-content').find('.yrecon').text();
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
 		    const imgSrc = [];
+		    //const imgFiles = $(this).closest('#yimgbox1').find('.imgFiles');	
 		    
-		 // imgFiles 클래스가 있는 이미지가 있는지 확인합니다.
+		 	// imgFiles 클래스가 있는 이미지가 있는지 확인합니다.
 		    if ($('.imgFiles').length > 0) {
 		        // 각 imgFiles 요소를 순회하며 src를 배열에 추가합니다.
 		        $('.imgFiles').each(function() {
@@ -329,8 +330,9 @@
 		                $('#editimgbox').css("display", "block");
 		            }
 		        });
-		    }
-
+		    }else {
+                $('#editimgbox').css("display", "none");
+            }
 		    // 이미지 소스를 콘솔에 출력합니다.
 		    console.log(imgSrc);
 		    
@@ -524,7 +526,6 @@
 	            const imgElement = editImages[i];
 	            imgElement.src = imgSrc[i];
 	        }
-		    
 		}
 	 
 	 // 답글
@@ -543,48 +544,6 @@
 	        document.getElementById('editPopup2').style.display = 'none';
 	    }
 
-	    // 수정 제출 함수
-	    function submitEdit(replyNo) {
-	    	//const replyNo = reviewElement.data('replyNo'); // 이걸 추가하면 별점 데이터가 다 사라짐.. 그래서 빼고 실행
-	    	//const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
-		    console.log(replyNo); // 댓글 번호 출력
-		    const updatedContent = document.getElementById('editContent').value;
-		    const updatedRating = document.getElementById('editRatingInput').value;
-			
-		    
-		    // AJAX 요청 예시
-		    $.ajax({
-		        type: 'POST',
-		        url: '${hpath}/productFor/upReply.do',
-		        data: {
-		            replyNo: replyNo,
-		            content: updatedContent,
-		            star: updatedRating,
-		        },
-		        success: function(response) {
-		            alert("댓글 수정에 성공했습니다.");
-		            location.reload();
-		
-		            // 수정 완료 후 수정 창 닫기
-		            closeEditPopup();
-		
-		            // DOM 업데이트
-		            const reviewElement = document.querySelector(`.reviews[data-replyNo='${replyNo}']`);
-		            if (reviewElement) {
-		                reviewElement.querySelector('.yrecon').textContent = updatedContent;
-		                reviewElement.querySelector('.yrestar').textContent = updatedRating;
-		            }
-		        },
-		        error: function(xhr, status, error) {
-		            alert("댓글 수정에 실패했습니다.");
-		            console.error("댓글 수정 실패:", error);
-		        }
-		    });
-		}
-	    
-	 
-	    
-	    
        function updateRating(rate) {
            const max = 5;
            const percent = (rate / max) * 100;
@@ -610,9 +569,6 @@
        $("#overlay").click(function() {
            closePopup();
        });
-       
-       
-       
 
        function submitRating() {
            event.preventDefault(); // form태그 안에서 새로고침 막는 용도
@@ -624,9 +580,6 @@
                alert("유효한 평점을 입력하세요 (0-5 사이).");
            }
        }
-
-       
-       
        
        function commentWrite() {
            // 파일 업로드를 위한 FormData 객체를 생성
