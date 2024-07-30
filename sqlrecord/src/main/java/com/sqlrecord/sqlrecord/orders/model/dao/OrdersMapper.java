@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
 
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
@@ -40,24 +42,8 @@ public interface OrdersMapper {
 
 	
 	// 관리자
-//	int orderCount();
-//
-//	List<MemberOrders> findAllOrders(Map<String, Integer> map);
-//
-//	int exchangeCount();
-//
-//	List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map);
-//
-//	int refundCount();
-//
-//	List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map);
-
-	List<MemberOrders> getAllMemberOrders(int offset, int pageSize, String type);
-
-	int getTotalOrdersCount(String type);
-
-	List<MemberOrdersDetail> getMemberOrdersDetails(int memberOrdersNo);
-
-	
+	int getTotalOrdersCount(SqlSessionTemplate sqlSession);
+    List<Map<String, Object>> getAllMemberOrders(SqlSessionTemplate sqlSession, RowBounds rowBounds);
+    List<Map<String, Object>> getMemberOrdersDetails(SqlSessionTemplate sqlSession, int memberOrdersNo);
 
 }

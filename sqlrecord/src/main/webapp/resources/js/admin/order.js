@@ -1,15 +1,16 @@
 // 주문건 테이블 생성
 function loadOrderTable(contentType, page = 1) {
     $.ajax({
-        url: '${hpath}/admin/ajaxOrdersManagement',
+        url: '/sqlrecord/admin/ajaxOrdersManagement', // URL 확인
         type: 'GET',
         data: { page: page, type: contentType },
         success: function(response) {
+            console.log("Response: ", response);  // 로그 추가
             if (response.data && response.data.length > 0) {
                 var table = '<table class="accordion-table">' +
                     '<thead>' +
                     '<tr>' +
-                    '<th><input type="checkbox" class="checkAllOrders"></th>' +
+                    '<th><input type="checkbox" id="checkAllOrders"></th>' +
                     '<th>No.</th>' +
                     '<th>주문 내역</th>' +
                     '<th>작업</th>' +
@@ -19,29 +20,28 @@ function loadOrderTable(contentType, page = 1) {
 
                 response.data.forEach(function(order) {
                     table += '<tr class="accordion-header">' +
-                        '<td><input type="checkbox" name="orderCheck" class="orderCheck" value="' + order.memberOrdersNo + '"></td>' +
-                        '<td>' + order.ordersNo + '</td>' +
+                        '<td><input type="checkbox" name="orderCheck" class="orderCheck" value="' + order.MEMBERORDERSNO + '"></td>' +
+                        '<td>' + order.memberOrdersNo + '</td>' +
                         '<td>' + 
-                        	'<p><b>주문번호 : </b>' + order.ordersNo + '</p>' +
-                        	'<p><b>' + order.productCate + ' - ' + order.productNo + '. ' + order.productName + '외 ' + order.productCount -1 + '건</b></p>'+
-                        	'<p><b>주문자 : ' + order.memberId + '</b></p>' +
-                        	'<p><b>주문일자 : </b>' + order.ordersDate + '</p>' +
-                        	'<p><b>배송주소 : </b>' + order.addr1 + order.addr2 + ' (' + order.postcode + ')</p>' +
-                        	'<p><b>결제금액 : ' + order.totalPrice + '원</b></p>' +
+                            '<p><b>주문번호 : </b>' + order.MEMBERORDERSNO + '</p>' +
+                            '<p><b>' + order.productCate + ' - ' + order.productNo + '. ' + order.productName + '외</b></p>'+
+                            '<p><b>주문자 : ' + order.memberId + '</b></p>' +
+                            '<p><b>주문일자 : </b>' + order.orderDate + '</p>' +
+                            '<p><b>배송주소 : </b>' + order.ADDR1 + ' ' + order.ADDR2 + ' (' + order.postcode + ')</p>' +
+                            '<p><b>결제금액 : ' + order.totalPrice + '원</b></p>' +
                         '</td>' +
                         '<td><button class="btn btn-sm btn-secondary toggle-details">상세보기</button>' +
-                        '<button class="btn btn-sm btn-secondary toggle-details">삭제</button></td>' +
+                        '<button class="btn btn-sm btn-secondary delete-order">삭제</button></td>' +
                     '</tr>' +
                     
                     '<tr class="accordion-content">' +
                         '<td colspan="4">' +
-                            '<div class="order-details" id="order-details' + order.memberOrdersNo + '">' +
+                            '<div class="order-details" id="order-details-' + order.memberOrdersNo + '">' +
                                 '<div class="details-content">' +
                                     '<h3>주문 상세 정보</h3><br/>' +
-                                    '<td><input type="checkbox" name="orderDetailCheck" class="orderDetailCheck" value="' + order.memberOrdersNo + '"></td>' +
-                                    '<td><img src=' + orderDetail.product.productPhoto1.productPhotosPath + 'alt=' + orderDetail.product.productPhoto1.productPhotosName + '></td>' +
-                                    '<p><b>' + order.productCate + ' - <a href="sqlrecord/product/detail/{order.productNo}"' + order.productNo + '. ' + order.productName + ' /></b></p>'+
                                     '<div class="order-items" id="order-items-' + order.memberOrdersNo + '"></div>' +
+                                    '<button class="btn btn-sm btn-secondary">수락</button>' +
+                                    '<button class="btn btn-sm btn-secondary">거절</button>' +
                                 '</div>' +
                             '</div>' +
                         '</td>' +
@@ -78,7 +78,7 @@ function loadOrderTable(contentType, page = 1) {
                     $(this).closest('tr').next('.accordion-content').slideToggle();
                     
                     // MemberOrdersDetail 정보 함수 호출
-                    loadOrderDetails(orderNo);		
+                    loadOrderDetails(orderNo);        
                 });
 
                 // 페이지네이션 생성
@@ -91,7 +91,7 @@ function loadOrderTable(contentType, page = 1) {
         },
         error: function(xhr, status, error) {
             console.error("주문 데이터 호출 중 오류 발생: ", error);
-          	$('#content-area').html('<div class="error">데이터를 불러오는 중 오류가 발생했습니다.</div>');
+            $('#content-area').html('<div class="error">데이터를 불러오는 중 오류가 발생했습니다.</div>');
         }
     });
 }
@@ -99,30 +99,33 @@ function loadOrderTable(contentType, page = 1) {
 // 주문 상세 정보 로드
 function loadOrderDetails(memberOrdersNo) {
     $.ajax({
-        url: '/sqlrecord/admin/ajaxOrderDetails',
+        url: '/sqlrecord/admin/ajaxOrderDetails', // URL 확인
         type: 'GET',
         data: { memberOrdersNo: memberOrdersNo },
         success: function(response) {
-            if (response.data && response.data.length > 0) {
+            console.log("Order Details Response: ", response);  // 로그 추가
+            if (response && response.length > 0) {
                 var details = '';
-                response.data.forEach(function(detail) {
-                    details += '<img src="" alt="" style="width:100px; height:100px;">' +
+                response.forEach(function(detail) {
+                    details += '<div class="order-detail-item">' +
+                               '<img src="' + detail.photoPath + '" alt="' + detail.photoName + '" style="width:100px; height:100px;">' +
                                '<p>상품명: ' + detail.productNo + '. ' + detail.productName + '</p>' +
                                '<p>가격: ' + detail.memberOrdersDetailPrice + '</p>' +
                                '<p>수량: ' + detail.memberOrdersDetailAmount + '</p>' +
+                               '</div>';
                 });
-                $('#order-items-' + orderNo).html(details);
+                $('#order-items-' + memberOrdersNo).html(details);
             } else {
-                $('#order-items-' + orderNo).html('<div class="no-data">상세 정보가 없습니다</div>');
+                $('#order-items-' + memberOrdersNo).html('<div class="no-data">상세 정보가 없습니다</div>');
             }
         },
         error: function(xhr, status, error) {
             console.error("주문 상세 정보 호출 중 오류 발생: ", error);
-            $('#order-items-' + orderNo).html('<div class="error">상세 정보를 불러오는 중 오류가 발생했습니다.</div>');
+            $('#order-items-' + memberOrdersNo).html('<div class="error">상세 정보를 불러오는 중 오류가 발생했습니다.</div>');
         }
     });
 }
-    
+
 // 페이지네이션 생성
 function createPagination(pageInfo, contentType) {
     var html = '<div class="pagination-custom" data-content-type="' + contentType + '">';
@@ -139,4 +142,3 @@ function createPagination(pageInfo, contentType) {
     html += '</div>';
     return html;
 }
-

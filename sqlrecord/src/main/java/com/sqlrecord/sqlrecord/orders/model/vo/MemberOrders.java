@@ -23,9 +23,5 @@ public class MemberOrders {
 	private String memberOrdersDate;
 	private int memberNo;
 	
-	public List<MemberOrdersDetail> memberOrdersDetailList;
-	public List<Product> productList;
-	private String memberName;
-	private String memberAddr1;
-	private int totalPrice;	// 상품가격 계산해야 함
+	private List<MemberOrdersDetail> memberOrdersDetailList;
 }

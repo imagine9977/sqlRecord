@@ -1,9 +1,11 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
@@ -19,9 +21,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class OrderServiceImpl implements OrdersService {
 
-	private static final int PAGE_SIZE = 20;
-	
+	@Autowired
 	private final OrdersMapper ordersMapper;
+	
+	@Autowired
+    private SqlSessionTemplate sqlSession;
 	
 	@Override
 	public int insertMemberOrders(MemberOrders memberOrders , int memberNo) {
@@ -95,60 +99,20 @@ public class OrderServiceImpl implements OrdersService {
 		return ordersMapper.getOrdersEx(memberNo);
 	}
 
-
 	
 	//관리자
-	
-//	@Override
-//	public int orderCount() {
-//		return ordersMapper.orderCount();
-//	}
-//	
-//	@Override
-//	public List<MemberOrders> findAllOrders(Map<String, Integer> map) {
-//		return ordersMapper.findAllOrders(map);
-//	}
-//
-//	@Override
-//	public int exchangeCount() {
-//		return ordersMapper.exchangeCount();
-//	}
-//
-//	@Override
-//	public List<MemberOrdersEx> findAllExchanges(Map<String, Integer> map) {
-//		return ordersMapper.findAllExchanges(map);
-//	}
-//
-//	@Override
-//	public int refundCount() {
-//		return ordersMapper.refundCount();
-//	}
-//
-//	@Override
-//	public List<MemberOrdersEx> findAllRefunds(Map<String, Integer> map) {
-//		return ordersMapper.findAllRefunds(map);
-//	}
-	
 	@Override
-	public Map<String, Object> getAllMemberOrders(int page, String type) {
-		int offset = (page - 1) * PAGE_SIZE;
-        List<MemberOrders> ordersList = ordersMapper.getAllMemberOrders(offset, PAGE_SIZE, type);
-        int totalOrders = ordersMapper.getTotalOrdersCount(type);
-        int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
+    public int getTotalOrdersCount() {
+        return ordersMapper.getTotalOrdersCount(sqlSession);
+    }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("data", ordersList);
-        result.put("currentPage", page);
-        result.put("totalPages", totalPages);
-        return result;
-	}
+    @Override
+    public List<Map<String, Object>> getAllMemberOrders(RowBounds rowBounds) {
+        return ordersMapper.getAllMemberOrders(sqlSession, rowBounds);
+    }
 
-	@Override
-	public List<MemberOrdersDetail> getMemberOrderDetails(int memberOrdersNo) {
-		return ordersMapper.getMemberOrdersDetails(memberOrdersNo);
-	}
-	
-	
-	
-	
+    @Override
+    public List<Map<String, Object>> getMemberOrdersDetails(int memberOrdersNo) {
+        return ordersMapper.getMemberOrdersDetails(sqlSession, memberOrdersNo);
+    }
 }

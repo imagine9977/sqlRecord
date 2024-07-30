@@ -29,5 +29,5 @@ public class MemberOrdersDetail {
 	private Product Product;
 	private MemberOrders memberOrders;
 	
-	public List<Product> productList;
+	private List<Product> productList;
 }

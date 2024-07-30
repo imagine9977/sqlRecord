@@ -442,103 +442,66 @@
 		
 	</select>
 	
-	<!-- ================================ 관리자 페이지 ================================ -->
-	<!-- 주문건수 출력 -->
-	<select id="orderCount" resultType="_int">
-		SELECT
-				COUNT(MEMBER_ORDERS_NO)
-		  FROM
-		  		MEMBER_ORDERS
-	</select>
-	
-	<!-- 전체 MEMBER_ORDERS 리스트 -->
-	<select id="getAllMemberOrders" resultMap="memberOrdersResultMap">
-		SELECT
-	        O.MEMBER_ORDERS_NO memberOrdersNo,
-	        O.MEMBER_ORDERS_ADDRESS addr1,
-	        O.MEMBER_ORDERS_ADDRESS2 addr2,
-	        O.MEMBER_ORDERS_POSTCODE postcode,
-	        O.MEMBER_ORDERS_DATE orderDate,
-	        M.MEMBER_ID memberId,
-	        P.PRODUCT_CATE productCate,
-	        P.PRODUCT_NO productNo,
-	        P.PRODUCT_NAME productName,
-	        P.PRODUCT_STATUS productStatus,
-	        SUM(OD.MEMBER_ORDERS_DETAIL_PRICE) totalPrice
-	  FROM
-	        MEMBER_ORDERS O
-	  JOIN
-	        MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
-	  JOIN
-	        MEMBER_ORDERS_DETAIL OD ON O.MEMBER_ORDERS_NO = OD.MEMBER_ORDERS_NO
-	  JOIN
-	        PRODUCT P ON OD.PRODUCT_NO = P.PRODUCT_NO
-	 GROUP
-	    BY
-	        O.MEMBER_ORDERS_NO,
-	        O.MEMBER_ORDERS_ADDRESS,
-	        O.MEMBER_ORDERS_ADDRESS2,
-	        O.MEMBER_ORDERS_POSTCODE,
-	        O.MEMBER_ORDERS_DATE,
-	        M.MEMBER_ID,
-	        P.PRODUCT_CATE,
-			P.PRODUCT_NO,
-			P.PRODUCT_NAME,
-			P.PRODUCT_STATUS
-     LIMIT
-     		#{offset}, #{limit}
-	</select>
-	
-	<!-- MEMBER_ORDERS resultMap -->
-	<resultMap id="memberOrdersResultMap" type="memberOrders">
-        <id property="memberOrdersNo" column="memberOrdersNo"/>
-        <result property="addr1" column="addr1"/>
-        <result property="addr2" column="addr2"/>
-        <result property="postcode" column="postcode"/>
-        <result property="orderDate" column="orderDate"/>
-        <result property="memberId" column="memberId"/>
-        <result property="productCate" column="productCate"/>
-        <result property="productNo" column="productNo"/>
-        <result property="productName" column="productName"/>
-        <result property="productStatus" column="productStatus"/>
-        <result property="totalPrice" column="totalPrice"/>
-        
-        <association property="memberOrders" javaType="memberOrders">
-            <id property="memberOrdersNo" column="memberOrdersNo"/>
-            <result property="memberOrdersAddress" column="addr1"/>
-            <result property="memberOrdersAddress2" column="addr2"/>
-            <result property="memberOrdersPostcode" column="postcode"/>
-            <result property="memberOrdersDate" column="orderDate"/>
-            <result property="memberNo" column="memberNo"/>
-        </association>
-        
-        <collection property="products" ofType="com.sqlrecord.sqlrecord.orders.model.vo.Product">
-            <id property="productNo" column="productNo"/>
-            <result property="productName" column="productName"/>
-            <result property="productPrice" column="productPrice"/>
-            <result property="productStatus" column="productStatus"/>
-            <result property="productCate" column="productCate"/>
-            <collection property="productPhotosList" ofType="com.sqlrecord.sqlrecord.orders.model.vo.ProductPhotos">
-                <result property="productPhotosName" column="productPhotosName"/>
-                <result property="productPhotosPath" column="productPhotosPath"/>
-            </collection>
-        </collection>
-    </resultMap>
-    
-    
-    <!-- 특정 memberOrdersNo에 해당하는 memberOrdersDetail 리스트 -->
-    <select id="getMemberOrdersDetails" resultMap="memberOrdersDetailResultMap">
+  <!-- ================================ 관리자 페이지 ================================ -->
+
+
+	<select id="getTotalOrdersCount" resultType="int">
         SELECT
-	            OD.MEMBER_ORDERS_DETAIL_NO,
-	            OD.MEMBER_ORDERS_DETAIL_AMOUNT,
-	            OD.MEMBER_ORDERS_DETAIL_PRICE,
+        		COUNT(MEMBER_ORDERS_NO)
+        FROM
+        		MEMBER_ORDERS
+    </select>
+
+    <select id="getAllMemberOrders" resultType="map">
+        SELECT
+	            O.MEMBER_ORDERS_NO memberOrdersNo,
+	            O.MEMBER_ORDERS_ADDRESS addr1,
+	            O.MEMBER_ORDERS_ADDRESS2 addr2,
+	            O.MEMBER_ORDERS_POSTCODE postcode,
+	            O.MEMBER_ORDERS_DATE orderDate,
+	            M.MEMBER_ID memberId,
+	            P.PRODUCT_CATE productCate,
+	            P.PRODUCT_NO productNo,
+	            P.PRODUCT_NAME productName,
+	            P.PRODUCT_STATUS productStatus,
+	            SUM(OD.MEMBER_ORDERS_DETAIL_PRICE) totalPrice
+          FROM
+            	MEMBER_ORDERS O
+          JOIN
+            	MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
+          JOIN
+            	MEMBER_ORDERS_DETAIL OD ON O.MEMBER_ORDERS_NO = OD.MEMBER_ORDERS_NO
+          JOIN
+            	PRODUCT P ON OD.PRODUCT_NO = P.PRODUCT_NO
+         GROUP
+         	BY
+	            O.MEMBER_ORDERS_NO,
+	            O.MEMBER_ORDERS_ADDRESS,
+	            O.MEMBER_ORDERS_ADDRESS2,
+	            O.MEMBER_ORDERS_POSTCODE,
+	            O.MEMBER_ORDERS_DATE,
+	            M.MEMBER_ID,
+	            P.PRODUCT_CATE,
 	            P.PRODUCT_NO,
 	            P.PRODUCT_NAME,
-	            P.PRODUCT_PRICE,
-	            P.PRODUCT_STATUS,
-	            P.PRODUCT_CATE,
-	            PP.PHOTO_NAME AS productPhotosName,
-	            PP.PHOTO_PATH AS productPhotosPath
+	            P.PRODUCT_STATUS
+         ORDER
+        	BY
+            	O.MEMBER_ORDERS_NO DESC
+    </select>
+
+    <select id="getMemberOrdersDetails" resultType="map">
+        SELECT
+	            OD.MEMBER_ORDERS_DETAIL_NO memberOrdersDetailNo,
+	            OD.MEMBER_ORDERS_DETAIL_AMOUNT memberOrdersDetailAmount,
+	            OD.MEMBER_ORDERS_DETAIL_PRICE memberOrdersDetailPrice,
+	            P.PRODUCT_NO productNo,
+	            P.PRODUCT_NAME productName,
+	            P.PRODUCT_PRICE productPrice,
+	            P.PRODUCT_STATUS productStatus,
+	            P.PRODUCT_CATE productCate,
+	            PP.PHOTO_NAME photoName,
+	            PP.PHOTO_PATH photoPath
           FROM
             	MEMBER_ORDERS_DETAIL OD
           JOIN
@@ -549,29 +512,9 @@
          WHERE
             	OD.MEMBER_ORDERS_NO = #{memberOrdersNo}
          ORDER
-        	BY
+         	BY
             	OD.MEMBER_ORDERS_DETAIL_NO ASC
     </select>
-
-    <!-- MEMBER_ORDERS_DETAIL resultMap -->
-    <resultMap id="memberOrdersDetailResultMap" type="memberOrdersDetail">
-        <id property="memberOrdersDetailNo" column="MEMBER_ORDERS_DETAIL_NO"/>
-        <result property="memberOrdersDetailAmount" column="MEMBER_ORDERS_DETAIL_AMOUNT"/>
-        <result property="memberOrdersDetailPrice" column="MEMBER_ORDERS_DETAIL_PRICE"/>
-        
-        <association property="product" javaType="product">
-            <id property="productNo" column="PRODUCT_NO"/>
-            <result property="productName" column="PRODUCT_NAME"/>
-            <result property="productPrice" column="PRODUCT_PRICE"/>
-            <result property="productStatus" column="PRODUCT_STATUS"/>
-            <result property="productCate" column="PRODUCT_CATE"/>
-            
-            <collection property="productPhotosList" ofType="productPhotos">
-                <result property="productPhotosName" column="productPhotosName"/>
-                <result property="productPhotosPath" column="productPhotosPath"/>
-            </collection>
-        </association>
-    </resultMap>
 	
 
 </mapper>
