@@ -24,7 +24,6 @@ public class TrackingServiceImpl implements TrackingService{
 	public int insertTrackingInfo(TrackingInfo trackingInfo) {
 		return trackingMapper.insertTrackingInfo(trackingInfo);
 	}
-	
-	
+
 	
 }

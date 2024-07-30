@@ -143,6 +143,8 @@
         		mod.PRODUCT_NO = p.PRODUCT_NO
        	WHERE
                 mo.MEMBER_NO = #{memberNo}
+        AND
+        		mod.MEMBER_ORDERS_DETAIL_EXD = 'N'
         ORDER
         BY
                 MEMBER_ORDERS_DATE
@@ -270,7 +272,7 @@
 		WHERE
 				MEMBER_ORDERS_DETAIL_NO
 				=
-				#{memberOrdersDetailNo.memberOrdersDetailNo}
+				#{memberOrdersDetail.memberOrdersDetailNo}
 
 	</update>
 	
@@ -284,18 +286,18 @@
 				#{memberOrdersExType},
 				#{memberOrdersExAmount},
 				SYSDATE,
-				#{memberOrdersDetailNo.memberOrdersDetailNo},
+				#{memberOrdersDetail.memberOrdersDetailNo},
 				DEFAULT,
 				#{memberOrdersExAddress},
 				#{memberOrdersExAddress2},
 				#{memberOrdersExPostcode},
 				DEFAULT,
 				<choose>
-					<when test="productNo.productNo == 0">
+					<when test="product.productNo == 0">
 						DEFAULT,
 					</when>
 					<otherwise>
-						#{productNo.productNo},
+						#{product.productNo},
 					</otherwise>
 				</choose>
 				#{memberOrdersExReason}				
