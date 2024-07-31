@@ -191,11 +191,28 @@ function processOrder(orderNos, action) {
     $.ajax({
         url: `/sqlrecord/admin/${action}`,
         type: 'PUT',
-        data: { memberOrdersDetailNos: orderNos },
-        traditional: true,
+        contentType: 'application/json',
+        data: JSON.stringify(orderNos), // Ensure the data is an array
         success: function(response) {
             alert(response.message);
             loadOrderTable('all'); // Reload the table after processing the order
+        },
+        error: function(xhr, status, error) {
+            console.error(`${action} 처리 중 오류 발생: `, error);
+        }
+    });
+}
+
+// 주문 상세 처리 함수
+function processOrderDetail(detailIds, action) {
+    $.ajax({
+        url: `/sqlrecord/admin/${action}`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(detailIds), // Ensure the data is an array
+        success: function(response) {
+            alert(response.message);
+            loadOrderTable('all'); // Reload the table after processing the order detail
         },
         error: function(xhr, status, error) {
             console.error(`${action} 처리 중 오류 발생: `, error);
@@ -225,6 +242,7 @@ $(document).on('click', '#acceptSelectedOrders', function() {
 $(document).on('click', '#denySelectedOrders', function() {
     processSelectedOrders('orderDenied');
 });
+
 
 
 // 페이지네이션 생성

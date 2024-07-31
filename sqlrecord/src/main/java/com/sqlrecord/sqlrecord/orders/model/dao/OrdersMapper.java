@@ -44,6 +44,5 @@ public interface OrdersMapper {
 	int getTotalOrdersCount();
 	List<MemberOrdersDTO> getAllMemberOrders(@Param("startValue") int startValue, @Param("endValue") int endValue);
     List<MemberOrdersDetailDTO> getMemberOrderDetails(@Param("memberOrdersNo") int memberOrdersNo);
-	Object acceptOrders(List<Integer> memberOrdersDetailNos);
-	Object denyOrders(List<Integer> memberOrdersDetailNos);
+    void updateOrderStatus(@Param("memberOrdersDetailNo") int memberOrdersDetailNo, @Param("status") String status, @Param("trackingNum") String trackingNum);
 }

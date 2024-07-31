@@ -486,11 +486,17 @@
 				        O.MEMBER_ORDERS_DATE,
 				        M.MEMBER_ID,
 				        (
-				            SELECT P.PRODUCT_CATE
-				            FROM PRODUCT P
-				            JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-				            WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				            AND ROWNUM = 1
+				            SELECT
+				            		P.PRODUCT_CATE
+				              FROM
+				            		PRODUCT P
+				              JOIN
+				            		FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+				             WHERE
+				            		OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+				               AND
+				            		ROWNUM = 1
+				            
 				        ) AS PRODUCT_CATE,
 				        (
 				            SELECT P.PRODUCT_NO
@@ -569,7 +575,6 @@
             	MEMBER_ORDERS_DETAIL OD
           JOIN
             	PRODUCT P ON OD.PRODUCT_NO = P.PRODUCT_NO
-          LEFT
           JOIN
             	PRODUCT_PHOTOS PP ON P.PRODUCT_NO = PP.PRODUCT_NO
          WHERE

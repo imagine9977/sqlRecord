@@ -286,15 +286,15 @@ public class AdminController {
     }
     
     @PutMapping("/orderAccepted")
-    public ResponseEntity<Map<String, String>> orderAccepted(@RequestParam List<Integer> memberOrdersDetailNos) {
-    	ordersService.acceptOrders(memberOrdersDetailNos);
-    	Map<String, String> response = new HashMap<>();
-    	response.put("message", "주문수락처리 성공");
-    	return ResponseEntity.ok(response);
+    public ResponseEntity<Map<String, String>> orderAccepted(@RequestBody List<Integer> memberOrdersDetailNos) {
+        ordersService.acceptOrders(memberOrdersDetailNos);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "주문수락처리 성공");
+        return ResponseEntity.ok(response);
     }
-    
+
     @PutMapping("/orderDenied")
-    public ResponseEntity<Map<String, String>> orderDenied(@RequestParam List<Integer> memberOrdersDetailNos) {
+    public ResponseEntity<Map<String, String>> orderDenied(@RequestBody List<Integer> memberOrdersDetailNos) {
         ordersService.denyOrders(memberOrdersDetailNos);
         Map<String, String> response = new HashMap<>();
         response.put("message", "주문거절처리 성공");
