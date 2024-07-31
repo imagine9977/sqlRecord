@@ -315,8 +315,11 @@
 		    console.log(replyNo); // 댓글 번호 출력
 		    const currentContent = $(this).closest('.review-content').find('.yrecon').text();
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
+		    /*
 		    const imgSrc = [];
-		    //const imgFiles = $(this).closest('#yimgbox1').find('.imgFiles');	
+		    imgSrc.length = 0;
+		    imgSrc.splice(0, imgSrc.length);
+		    const imgFiles = $(this).closest('#yimgbox1').find('.imgFiles');	
 		    
 		 	// imgFiles 클래스가 있는 이미지가 있는지 확인합니다.
 		    if ($('.imgFiles').length > 0) {
@@ -335,8 +338,8 @@
             }
 		    // 이미지 소스를 콘솔에 출력합니다.
 		    console.log(imgSrc);
-		    
-		    openEditPopup(currentContent, currentRating, replyNo, imgSrc);
+		    */
+		    openEditPopup(currentContent, currentRating, replyNo);
 		});
      
      	//답글 수정
@@ -510,15 +513,16 @@
     
     
 	 // 수정 창 열기 함수
-	    function openEditPopup(currentContent, currentRating, replyNo, imgSrc) {
+	    function openEditPopup(currentContent, currentRating, replyNo) {
 		    // 수정 창을 열 때 가져온 내용과 별점을 해당 입력 필드에 설정합니다.
 		    //currentreplyNo = replyNo;
-		    console.log(imgSrc); // 댓글 번호 출력
+		    //console.log(imgSrc); // 댓글 번호 출력
 		    $('.submitButton').data('replyNo', replyNo);
 		    document.getElementById('editPopup').style.display = 'block';
 		    document.getElementById('editContent').value = currentContent;
 		    document.getElementById('editRatingInput').value = currentRating;
-		 	// editImg 클래스를 가진 이미지 요소들 선택
+		 	/*
+		    // editImg 클래스를 가진 이미지 요소들 선택
 	        const editImages = document.getElementsByClassName('editImg');
 
 	        // imgSrc 배열의 길이만큼 반복문을 돌려 각 이미지의 src를 설정
@@ -526,6 +530,7 @@
 	            const imgElement = editImages[i];
 	            imgElement.src = imgSrc[i];
 	        }
+	        */
 		}
 	 
 	 // 답글
