@@ -68,13 +68,19 @@
 		  		MEMBER m
 		    ON
 		        r.MEMBER_NO = m.MEMBER_NO
+     LEFT JOIN
+     			CHREPLY c
+   			ON
+   				r.REPLY_NO = c.REPLY_NO
 		 WHERE
 		 		r.STATUS != 'D'
 	 	   AND
-	 	   		PRODUCT_NO = #{productNo}	      
+	 	   		PRODUCT_NO = #{productNo}
+   	   AND NOT	      
+   	   		    (r.STATUS = 'N' AND c.REPLY_NO IS NULL)
 		 ORDER
     		BY
-        		REPLY_NO
+        		r.REPLY_NO
   		  DESC      	
 	</select>	
 	
