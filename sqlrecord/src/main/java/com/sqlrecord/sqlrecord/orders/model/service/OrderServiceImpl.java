@@ -1,14 +1,14 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.orders.model.dao.OrdersMapper;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
@@ -99,20 +99,32 @@ public class OrderServiceImpl implements OrdersService {
 		return ordersMapper.getOrdersEx(memberNo);
 	}
 
+
 	
 	//관리자
 	@Override
     public int getTotalOrdersCount() {
-        return ordersMapper.getTotalOrdersCount(sqlSession);
+        return ordersMapper.getTotalOrdersCount();
     }
 
     @Override
-    public List<Map<String, Object>> getAllMemberOrders(RowBounds rowBounds) {
-        return ordersMapper.getAllMemberOrders(sqlSession, rowBounds);
+    public List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue) {
+        return ordersMapper.getAllMemberOrders(startValue, endValue);
     }
 
     @Override
-    public List<Map<String, Object>> getMemberOrdersDetails(int memberOrdersNo) {
-        return ordersMapper.getMemberOrdersDetails(sqlSession, memberOrdersNo);
+    public List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo) {
+        return ordersMapper.getMemberOrderDetails(memberOrdersNo);
     }
+
+	@Override
+	public void acceptOrders(List<Integer> memberOrdersDetailNos) {
+		ordersMapper.acceptOrders(memberOrdersDetailNos);
+	}
+
+	@Override
+	public void denyOrders(List<Integer> memberOrdersDetailNos) {
+		ordersMapper.denyOrders(memberOrdersDetailNos);		
+	}
+
 }

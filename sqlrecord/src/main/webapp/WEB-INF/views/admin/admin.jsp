@@ -64,7 +64,7 @@ $(document).ready(function() {
 	        console.log('Clicked page:', page);
 	        console.log('Content type:', contentType);
 	        console.log('Current tab:', currentTab);
-	
+			
 	        if (currentTab === 'member') {
 	            loadMemberTable('all', page);
 	        } else if (currentTab === 'notice') {

@@ -8,14 +8,15 @@ import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sqlrecord.sqlrecord.common.template.PageTemplate;
 import com.sqlrecord.sqlrecord.common.vo.PageInfo;
@@ -23,11 +24,13 @@ import com.sqlrecord.sqlrecord.member.model.service.MemberService;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.notice.model.service.NoticeService;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @RequestMapping("/admin")
 @Slf4j
 public class AdminController {
@@ -51,7 +54,6 @@ public class AdminController {
 /////////////////////////////////////////////////////////////////////////////////	
 	
 	// Notice 리스트 + 페이징
-	@ResponseBody
 	@GetMapping("/ajaxNoticeManagement")
 	public ResponseEntity<Map<String, Object>> getNoticeListAjax(@RequestParam(value="page", defaultValue="1") int page) {
 		int listCount = noticeService.noticeCount();
@@ -110,7 +112,6 @@ public class AdminController {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// Member 리스트 + 페이징
-	@ResponseBody
 	@GetMapping("/ajaxMemberManagement")
 	public ResponseEntity<Map<String, Object>> getMemberListAjax(
 			@RequestParam(value="page", defaultValue="1") int page,
@@ -187,7 +188,6 @@ public class AdminController {
 	
 	// 회원 상태 업데이트
 	@PostMapping("/updateMemberStatus")
-	@ResponseBody
 	public ResponseEntity<String> updateMemberStatus(@RequestBody Map<String, Object> payload) {
 		
 		List<Integer> memberNos = (List<Integer>) payload.get("memberNos");
@@ -240,14 +240,11 @@ public class AdminController {
 ////////////////////////////////////////////////////////////
 	
 	@GetMapping("/ajaxOrdersManagement")
-	@ResponseBody
 	public ResponseEntity<Map<String, Object>> getAllMemberOrders(
-	        @RequestParam(value = "page", defaultValue = "1") int page) {
-
-	    System.out.println("getAllMemberOrders called with page: " + page);
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "type", defaultValue = "default") String type) {
 
 	    int listCount = ordersService.getTotalOrdersCount();
-	    System.out.println("Total Orders Count: " + listCount);
 	    int currentPage = page;
 	    int pageLimit = 5;
 	    int boardLimit = 5;
@@ -270,10 +267,10 @@ public class AdminController {
 	            .endPage(endPage)
 	            .build();
 
-	    RowBounds rowBounds = new RowBounds((currentPage - 1) * boardLimit, boardLimit);
+	    int startValue = (currentPage - 1) * boardLimit + 1;
+	    int endValue = currentPage * boardLimit;
 
-	    List<Map<String, Object>> ordersList = ordersService.getAllMemberOrders(rowBounds);
-	    System.out.println("Orders List: " + ordersList);
+	    List<MemberOrdersDTO> ordersList = ordersService.getAllMemberOrders(startValue, endValue);
 
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("data", ordersList);
@@ -282,14 +279,25 @@ public class AdminController {
 	    return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/ajaxOrderDetails")
-	@ResponseBody
-	public ResponseEntity<List<Map<String, Object>>> getMemberOrdersDetails(@RequestParam int memberOrdersNo) {
-	    System.out.println("getMemberOrdersDetails called with memberOrdersNo: " + memberOrdersNo);
-
-	    List<Map<String, Object>> result = ordersService.getMemberOrdersDetails(memberOrdersNo);
-	    System.out.println("Order Details: " + result);
-
-	    return ResponseEntity.ok(result);
-	}
+    @GetMapping("/ajaxOrderDetails")
+    public ResponseEntity<List<MemberOrdersDetailDTO>> getMemberOrdersDetails(@RequestParam int memberOrdersNo) {
+        List<MemberOrdersDetailDTO> result = ordersService.getMemberOrdersDetails(memberOrdersNo);
+        return ResponseEntity.ok(result);
+    }
+    
+    @PutMapping("/orderAccepted")
+    public ResponseEntity<Map<String, String>> orderAccepted(@RequestParam List<Integer> memberOrdersDetailNos) {
+    	ordersService.acceptOrders(memberOrdersDetailNos);
+    	Map<String, String> response = new HashMap<>();
+    	response.put("message", "주문수락처리 성공");
+    	return ResponseEntity.ok(response);
+    }
+    
+    @PutMapping("/orderDenied")
+    public ResponseEntity<Map<String, String>> orderDenied(@RequestParam List<Integer> memberOrdersDetailNos) {
+        ordersService.denyOrders(memberOrdersDetailNos);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "주문거절처리 성공");
+        return ResponseEntity.ok(response);
+    }
 }

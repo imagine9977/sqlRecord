@@ -199,3 +199,51 @@
 	.record-actions button {
 	    margin-left: 5px;
 	}
+    .order-detail-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .order-detail-item img {
+        flex-shrink: 0;
+        width: 100px;
+        height: 100px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .order-detail-info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .order-detail-info p {
+        margin: 5px 0;
+    }
+
+    .order-detail-buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .details-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .order-items {
+        margin-bottom: 10px;
+    }
+
+    .accordion-header input[type="checkbox"], .order-detail-item input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    
+    .accordion-table .accordion-header p {
+        margin: 0.3rem 0;
+    }

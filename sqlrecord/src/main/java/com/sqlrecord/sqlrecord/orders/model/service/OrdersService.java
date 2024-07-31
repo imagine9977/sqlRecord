@@ -1,10 +1,9 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.session.RowBounds;
-
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
@@ -36,8 +35,10 @@ public interface OrdersService {
 	
 	// 관리자
 	int getTotalOrdersCount();
-    List<Map<String, Object>> getAllMemberOrders(RowBounds rowBounds);
-    List<Map<String, Object>> getMemberOrdersDetails(int memberOrdersNo);
+    List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue);
+    List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo);
+	void acceptOrders(List<Integer> memberOrdersDetailNos);
+	void denyOrders(List<Integer> memberOrdersDetailNos);
 
 
 

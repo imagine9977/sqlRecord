@@ -1,13 +1,12 @@
 package com.sqlrecord.sqlrecord.orders.model.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
-import org.mybatis.spring.SqlSessionTemplate;
 
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
@@ -42,8 +41,9 @@ public interface OrdersMapper {
 
 	
 	// 관리자
-	int getTotalOrdersCount(SqlSessionTemplate sqlSession);
-    List<Map<String, Object>> getAllMemberOrders(SqlSessionTemplate sqlSession, RowBounds rowBounds);
-    List<Map<String, Object>> getMemberOrdersDetails(SqlSessionTemplate sqlSession, int memberOrdersNo);
-
+	int getTotalOrdersCount();
+	List<MemberOrdersDTO> getAllMemberOrders(@Param("startValue") int startValue, @Param("endValue") int endValue);
+    List<MemberOrdersDetailDTO> getMemberOrderDetails(@Param("memberOrdersNo") int memberOrdersNo);
+	Object acceptOrders(List<Integer> memberOrdersDetailNos);
+	Object denyOrders(List<Integer> memberOrdersDetailNos);
 }
