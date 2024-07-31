@@ -5,12 +5,83 @@
 <%@ include file="../head.jsp"%>
 <title>Home</title>
 <style>
+#insert-container {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+
+
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control, .form-control-file, select {
+    width: 100%;
+    height:50px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea.form-control {
+    resize: none;
+}
+#qnaContent{
+	height: 300px;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn[type="reset"] {
+    background-color: #ff52a0;
+    color: white;
+    border: 0;
+    opacity: 0.8;
+}
+
+.btn[type="reset"]:hover {
+    opacity: 1;
+}
+
+.btn[type="submit"] {
+    background-color: red;
+    color: white;
+    border: 0;
+    opacity: 0.8;
+}
+
+.btn[type="submit"]:hover {
+    opacity: 1;
+}
+}
 </style>
 </head>
 <body>
 	<%@ include file="../header.jsp"%>
-	<div id="main_content">
-		<%@ include file="../searchHeader.jsp"%>
+	<%@ include file="../searchHeader.jsp"%>
+	<div id="insert-container">
+		
 
 		<!-- 여기에 작성 -->
 		<form id="enrollForm" method="post" action="${hpath }/qna/insert.do"

@@ -5,12 +5,117 @@
 <%@ include file="../head.jsp"%>
 <title>수정하기</title>
 <style>
+#update-container {
+	margin: 20px auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	max-width: 800px;
+	.
+	card-body
+	{
+	padding
+	:
+	20px;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.form-control, .form-control-file, select {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+textarea.form-control {
+	resize: none;
+}
+
+.file-list {
+	margin-top: 10px;
+}
+
+.file-list ol {
+	padding-left: 20px;
+}
+
+.file-list li {
+	list-style: decimal;
+	margin-bottom: 10px;
+}
+
+.file-list a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+.file-list a:hover {
+	text-decoration: underline;
+}
+
+.fileDelBtn {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+.fileDelBtn:hover {
+	background-color: #c82333;
+}
+
+.button, .btn {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 4px;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.button {
+	background-color: #ff52a0;
+	color: white;
+	border: 0;
+	opacity: 0.8;
+}
+
+.button:hover {
+	opacity: 1;
+}
+
+.btn {
+	background-color: red;
+	color: white;
+	border: 0;
+	opacity: 0.8;
+}
+
+.btn:hover {
+	opacity: 1;
+}
+}
 </style>
 </head>
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../searchHeader.jsp"%>
-	<div id="main_content">
+	<div id="update-container">
 		
 
 		<form id="updateForm" method="post"

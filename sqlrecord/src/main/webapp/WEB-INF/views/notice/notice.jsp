@@ -223,6 +223,7 @@
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+	margin-right: 100px;
 }
 
 #notice-container .add-notice-button:hover {
@@ -269,13 +270,7 @@
 					<button type="button" class="btn btn-outline-secondary"
 						onclick="findByCate('etc')">기타</button>
 				</div>
-				<div class="search">
-					<form action="/" method="get">
-						<input type="search" name="s" placeholder="검색어를 입력하세요." /> <input
-							type="hidden" name="post_type" value="notice" /> <input
-							type="submit" value="검색" />
-					</form>
-				</div>
+				
 			</div>
 			<div class="modal fade" id="noticeModal" tabindex="-1"
 				aria-labelledby="noticeModalLabel" aria-hidden="true">
@@ -299,8 +294,6 @@
 								</div>
 							</div>
 						</div>
-
-
 						<div class="modal-footer">
 							<div id="noticeActions">
 							<!-- <a class="btn btn-warning" onclick="toggleUpdateModal();"

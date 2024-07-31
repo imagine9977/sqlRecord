@@ -16,6 +16,7 @@
 		FROM
 		NOTICE
 	</sql>
+	
 	<sql id="selectFile">
 		SELECT
 		NFILE_NO nfileNo,
@@ -45,12 +46,12 @@
 		NOTICE_NO = #{noticeNo}
 	</select>
 
-	<select id="findFiles" resultType="com.sqlrecord.sqlrecord.notice.model.vo.NFile" parameterType="_int">
+	<select id="findFiles" resultType="nFile" parameterType="_int">
 		<include refid="selectFile" />
 		WHERE
 		NOTICE_NO = #{noticeNo}
 	</select>
-	<select id="findFileById" resultType="com.sqlrecord.sqlrecord.notice.model.vo.NFile" parameterType="_int">
+	<select id="findFileById" resultType="nFile" parameterType="_int">
 		<include refid="selectFile" />
 		WHERE
 		NFILE_NO = #{nfileNo}
@@ -65,7 +66,7 @@
 		SELECT NOTICE_SEQ.CURRVAL FROM DUAL
 	</select>
 	<insert id="saveFile"
-		parameterType="com.sqlrecord.sqlrecord.notice.model.vo.NFile">
+		parameterType="nFile">
 		INSERT INTO NFILE
 		VALUES (NFILE_SEQ.NEXTVAL,
 		#{originalName}, #{changedName},
@@ -99,7 +100,7 @@
 		
 	</update>
 	<update id="updateFile"
-		parameterType="com.sqlrecord.sqlrecord.notice.model.vo.NFile">
+		parameterType="nFile">
 		UPDATE NFILE
 		SET
 		NFILE_ORIGINAL = #{originalName},NFILE_CHANGD #{changedName}

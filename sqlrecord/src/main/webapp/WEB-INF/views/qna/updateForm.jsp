@@ -5,7 +5,7 @@
 <%@ include file="../head.jsp"%>
 <title>수정하기</title>
 <style>
-#qna-update-container {
+#update-container {
 	margin: 20px auto;
 	padding: 20px;
 	background-color: #fff;
@@ -115,7 +115,7 @@ textarea.form-control {
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../searchHeader.jsp"%>
-	<div id="qna-update-container">
+	<div id="update-container">
 
 
 		<form id="updateForm" method="post" action="${hpath }/qna/update.do"
