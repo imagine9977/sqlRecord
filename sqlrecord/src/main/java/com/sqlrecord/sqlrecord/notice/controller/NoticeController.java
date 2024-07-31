@@ -154,17 +154,7 @@ public class NoticeController {
 		return "resources/uploadFiles/notice/" + changeName; // 얘는 슬래시 앞에 없어야 함 savePath 지정할때 이미 넣어서
 	}
 
-	/*
-	 * @PostMapping public ResponseEntity<Message> save(Notice notice) {
-	 * 
-	 * if ("".equals(notice.getNoticeTitle()) || "".equals(notice.getNoticeNo()) ||
-	 * "".equals(notice.getNoticeContent())) { return
-	 * ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	 * .body(Message.builder().data("서비스 요청실패").message("필수 파라미터 누락").build()); }
-	 * int result = noticeService.save(notice); Message responseMsg =
-	 * Message.builder().data(result).message("서비스 요청 성공").build(); return
-	 * ResponseEntity.status(HttpStatus.OK).body(responseMsg); }
-	 */
+
 	@DeleteMapping("/notice/{id}")
 	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
 		Notice notice = noticeService.findById(id);
@@ -185,55 +175,10 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 
-	// 업데이트 모달용
-	// 미구현 상태, 모달 오류로 더미 데이터
-	@PutMapping("/update/{updateNo}")
-	public ResponseEntity<Message> update(@PathVariable(value = "updateNo") int noticeNo,
-			@RequestParam("updateTitle") String noticeTitle, @RequestParam("updateCategory") String noticeCategory,
-			@RequestParam("updateContent") String noticeContent,
-			@RequestParam(value = "fileNoDel[]", required = false) int[] delfiles,
-			@RequestPart(value = "updatefile", required = false) List<MultipartFile> upfiles, HttpSession session) {
-		log.info("start");
-		List<NFile> nfiles = new ArrayList<>();
-		if (delfiles.length != 0) {
-			for (int i = 0; i < delfiles.length; i++) {
-				NFile tempFile = new NFile();
-				tempFile = noticeService.findFileById(delfiles[i]);
-				noticeService.deleteFile(delfiles[i]);
-				
-			}
-		}
-		for (MultipartFile reupfile : upfiles) {
-			NFile nfile = new NFile();
-			if (!reupfile.getOriginalFilename().equals("")) {
-				nfile.setOriginalName(reupfile.getOriginalFilename());
-				nfile.setChangedName(saveFile(reupfile, session));
-
-			}
-			nfiles.add(nfile);
-		}
-		
-		Notice notice = new Notice();
-		notice.setNoticeNo(noticeNo);
-		notice.setNoticeCategory(noticeCategory);
-		notice.setNoticeContent(noticeContent);
-		notice.setNoticeTitle(noticeTitle);
-		notice.setFiles(nfiles);
-		int result = noticeService.update(notice);
-		log.info(" result:{}", result);
-		if (result == 0) {
-			return ResponseEntity.status(HttpStatus.OK).body(Message.builder().message("공지사항 변경에 실패했습니다").build());
-		}
-		Message responseMsg = Message.builder().data(result).message("공지사항 변경을 성공했습니다.").build();
-		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
-	}
-
 	// 업데이트 페이지용
 	@PostMapping("/update.do")
 	public String updateForm(Notice notice, @RequestParam("updatefile") MultipartFile[] upfiles, HttpSession session,
 			@RequestParam(value = "fileNoDel", required = false) String fileNoDel) {
-		log.info("start");
-		log.info(fileNoDel);
 		List<NFile> nfiles = new ArrayList<>();
 		String savePath = session.getServletContext().getRealPath("");
 		if (fileNoDel != null && !fileNoDel.isEmpty()) {
@@ -242,15 +187,11 @@ public class NoticeController {
 			for (int i = 0; i < delFilesArray.length; i++) {
 				delfiles[i] = Integer.parseInt(delFilesArray[i]);
 			}
-
 			for (int delfile : delfiles) {
 				NFile tempFile = new NFile();
 				tempFile = noticeService.findFileById(delfile);
-	
-				log.info("Deleting file with ID: " + delfile);
 				String filePath = tempFile.getChangedName();
-				File xFile = new File(savePath + filePath);
-				
+				File xFile = new File(savePath + filePath);			
 				boolean fileDelete = xFile.delete();
 				noticeService.deleteFile(delfile);
 			}
@@ -272,10 +213,8 @@ public class NoticeController {
 					log.info(nfile.toString());
 					nfiles.add(nfile);
 				}
-
 			}
 		}
-		
 		Notice newNotice = new Notice();
 		newNotice.setNoticeNo(notice.getNoticeNo());
 		newNotice.setNoticeCategory(notice.getNoticeCategory());
@@ -286,11 +225,7 @@ public class NoticeController {
 		} else {
 			newNotice.setFiles(nfiles);
 		}
-		log.info(newNotice.toString());
-		log.info("updatef files");
 		int result = noticeService.update(newNotice);
-		log.info(" result:{}", result);
-
 		if (result == 0) {
 			session.setAttribute("errorMsg", "게시글 작성 실패");
 			return "redirect:/notices/update.do/" + newNotice.getNoticeNo();
@@ -298,5 +233,6 @@ public class NoticeController {
 		session.setAttribute("alertMsg", "게시글 작성 성공");
 		return "redirect:/notices";
 	}
+
 
 }
