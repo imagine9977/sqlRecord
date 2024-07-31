@@ -338,7 +338,7 @@
             }
 		    // 이미지 소스를 콘솔에 출력합니다.
 		    console.log(imgSrc);
-		   */ 
+		    */
 		    openEditPopup(currentContent, currentRating, replyNo);
 		});
      
