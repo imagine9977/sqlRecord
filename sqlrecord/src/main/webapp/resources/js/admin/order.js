@@ -1,4 +1,61 @@
-// 주문건 테이블 생성
+// 주문 처리 함수
+function processOrder(orderNos, action) {
+    $.ajax({
+        url: `/sqlrecord/admin/${action}`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(orderNos), // Ensure the data is an array
+        success: function(response) {
+            alert(response.message);
+            loadOrderTable('all'); // Reload the table after processing the order
+        },
+        error: function(xhr, status, error) {
+            console.error(`${action} 처리 중 오류 발생: `, error);
+        }
+    });
+}
+
+// 주문 상세 처리 함수
+function processOrderDetail(detailIds, action) {
+    $.ajax({
+        url: `/sqlrecord/admin/${action}`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(detailIds), // Ensure the data is an array
+        success: function(response) {
+            alert(response.message);
+            loadOrderTable('all'); // Reload the table after processing the order detail
+        },
+        error: function(xhr, status, error) {
+            console.error(`${action} 처리 중 오류 발생: `, error);
+        }
+    });
+}
+
+// 선택된 주문 상세 처리 함수
+function processSelectedOrders(action) {
+    const selectedDetailIds = [];
+    $('.detailCheck:checked').each(function() {
+        selectedDetailIds.push(parseInt($(this).val()));
+    });
+
+    if (selectedDetailIds.length > 0) {
+        processOrder(selectedDetailIds, action);
+    } else {
+        alert('선택된 주문이 없습니다.');
+    }
+}
+
+// 선택 주문 수락 및 거절 버튼 이벤트 추가
+$(document).on('click', '#acceptSelectedOrders', function() {
+    processSelectedOrders('orderAccepted');
+});
+
+$(document).on('click', '#denySelectedOrders', function() {
+    processSelectedOrders('orderDenied');
+});
+
+// 주문 테이블 생성 시 각 버튼에 대한 이벤트 추가
 function loadOrderTable(contentType, page = 1) {
     $.ajax({
         url: '/sqlrecord/admin/ajaxOrdersManagement',
@@ -93,12 +150,12 @@ function loadOrderTable(contentType, page = 1) {
                 // 주문수락 및 주문거절 버튼 이벤트 추가
                 $('.accept-all-order').click(function() {
                     const orderNo = $(this).data('order-no');
-                    processOrder(orderNo, 'orderAccepted');
+                    processOrder([orderNo], 'orderAccepted'); // Send as an array
                 });
 
                 $('.deny-all-order').click(function() {
                     const orderNo = $(this).data('order-no');
-                    processOrder(orderNo, 'orderDenied');
+                    processOrder([orderNo], 'orderDenied'); // Send as an array
                 });
 
                 // 페이지네이션 생성
@@ -167,12 +224,12 @@ function loadOrderDetails(memberOrdersNo) {
                 // 토글 내 개별 수락/거절 버튼 이벤트 추가
                 $('.accept-order').click(function() {
                     const detailId = $(this).data('detail-id');
-                    processOrderDetail(detailId, 'orderAccepted');
+                    processOrderDetail([detailId], 'orderAccepted'); // Send as an array
                 });
 
                 $('.reject-order').click(function() {
                     const detailId = $(this).data('detail-id');
-                    processOrderDetail(detailId, 'orderDenied');
+                    processOrderDetail([detailId], 'orderDenied'); // Send as an array
                 });
 
             } else {
@@ -185,65 +242,6 @@ function loadOrderDetails(memberOrdersNo) {
         }
     });
 }
-
-// 주문 처리 함수
-function processOrder(orderNos, action) {
-    $.ajax({
-        url: `/sqlrecord/admin/${action}`,
-        type: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(orderNos), // Ensure the data is an array
-        success: function(response) {
-            alert(response.message);
-            loadOrderTable('all'); // Reload the table after processing the order
-        },
-        error: function(xhr, status, error) {
-            console.error(`${action} 처리 중 오류 발생: `, error);
-        }
-    });
-}
-
-// 주문 상세 처리 함수
-function processOrderDetail(detailIds, action) {
-    $.ajax({
-        url: `/sqlrecord/admin/${action}`,
-        type: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(detailIds), // Ensure the data is an array
-        success: function(response) {
-            alert(response.message);
-            loadOrderTable('all'); // Reload the table after processing the order detail
-        },
-        error: function(xhr, status, error) {
-            console.error(`${action} 처리 중 오류 발생: `, error);
-        }
-    });
-}
-
-// 선택된 주문 상세 처리 함수
-function processSelectedOrders(action) {
-    const selectedDetailIds = [];
-    $('.detailCheck:checked').each(function() {
-        selectedDetailIds.push($(this).val());
-    });
-
-    if (selectedDetailIds.length > 0) {
-        processOrder(selectedDetailIds, action);
-    } else {
-        alert('선택된 주문이 없습니다.');
-    }
-}
-
-// 선택 주문 수락 및 거절 버튼 이벤트 추가
-$(document).on('click', '#acceptSelectedOrders', function() {
-    processSelectedOrders('orderAccepted');
-});
-
-$(document).on('click', '#denySelectedOrders', function() {
-    processSelectedOrders('orderDenied');
-});
-
-
 
 // 페이지네이션 생성
 function createPagination(pageInfo, contentType) {

@@ -240,44 +240,44 @@ public class AdminController {
 ////////////////////////////////////////////////////////////
 	
 	@GetMapping("/ajaxOrdersManagement")
-	public ResponseEntity<Map<String, Object>> getAllMemberOrders(
-	        @RequestParam(value = "page", defaultValue = "1") int page,
-	        @RequestParam(value = "type", defaultValue = "default") String type) {
+    public ResponseEntity<Map<String, Object>> getAllMemberOrders(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "type", defaultValue = "default") String type) {
 
-	    int listCount = ordersService.getTotalOrdersCount();
-	    int currentPage = page;
-	    int pageLimit = 5;
-	    int boardLimit = 5;
+        int listCount = ordersService.getTotalOrdersCount();
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 5;
 
-	    int maxPage = (int) Math.ceil((double) listCount / boardLimit);
-	    int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
-	    int endPage = startPage + pageLimit - 1;
+        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+        int endPage = startPage + pageLimit - 1;
 
-	    if (endPage > maxPage) {
-	        endPage = maxPage;
-	    }
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
 
-	    PageInfo pageInfo = PageInfo.builder()
-	            .listCount(listCount)
-	            .currentPage(currentPage)
-	            .pageLimit(pageLimit)
-	            .boardLimit(boardLimit)
-	            .maxPage(maxPage)
-	            .startPage(startPage)
-	            .endPage(endPage)
-	            .build();
+        PageInfo pageInfo = PageInfo.builder()
+                .listCount(listCount)
+                .currentPage(currentPage)
+                .pageLimit(pageLimit)
+                .boardLimit(boardLimit)
+                .maxPage(maxPage)
+                .startPage(startPage)
+                .endPage(endPage)
+                .build();
 
-	    int startValue = (currentPage - 1) * boardLimit + 1;
-	    int endValue = currentPage * boardLimit;
+        int startValue = (currentPage - 1) * boardLimit + 1;
+        int endValue = currentPage * boardLimit;
 
-	    List<MemberOrdersDTO> ordersList = ordersService.getAllMemberOrders(startValue, endValue);
+        List<MemberOrdersDTO> ordersList = ordersService.getAllMemberOrders(startValue, endValue);
 
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("data", ordersList);
-	    response.put("pageInfo", pageInfo);
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", ordersList);
+        response.put("pageInfo", pageInfo);
 
-	    return ResponseEntity.ok(response);
-	}
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/ajaxOrderDetails")
     public ResponseEntity<List<MemberOrdersDetailDTO>> getMemberOrdersDetails(@RequestParam int memberOrdersNo) {
@@ -289,7 +289,7 @@ public class AdminController {
     public ResponseEntity<Map<String, String>> orderAccepted(@RequestBody List<Integer> memberOrdersDetailNos) {
         ordersService.acceptOrders(memberOrdersDetailNos);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "주문수락처리 성공");
+        response.put("message", "Orders accepted successfully");
         return ResponseEntity.ok(response);
     }
 
@@ -297,7 +297,7 @@ public class AdminController {
     public ResponseEntity<Map<String, String>> orderDenied(@RequestBody List<Integer> memberOrdersDetailNos) {
         ordersService.denyOrders(memberOrdersDetailNos);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "주문거절처리 성공");
+        response.put("message", "Orders denied successfully");
         return ResponseEntity.ok(response);
     }
 }
