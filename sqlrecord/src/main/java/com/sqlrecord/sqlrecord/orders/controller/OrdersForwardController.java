@@ -47,8 +47,6 @@ public class OrdersForwardController {
 	
 		if(!cart.getCartList().isEmpty()) {
 		
-		
-		
 		MemberOrders memberOrders = new MemberOrders();
 		memberOrders.setMemberOrdersAddress(cart.getCartList().get(0).getMember().getAddr1());
 		memberOrders.setMemberOrdersAddress2(cart.getCartList().get(0).getMember().getAddr2());
@@ -62,12 +60,6 @@ public class OrdersForwardController {
 		
 		for(Cart item : cart.getCartList()) { cartNoList.add(item.getCartNum()); }
 		
-		for(int item : cartNoList) {
-			log.info("숫자?? : {}" , item);
-		}
-		
-		
-		cartService.deleteCart(cartNoList);
 		
 		int successMO = ordersService.insertMemberOrders(memberOrders);
 		
@@ -89,8 +81,9 @@ public class OrdersForwardController {
 		
 		 
 		if(ordersService.insertOrdersDetail(odList) > 0) {
-		 
-			return "redirect:/orders/member/detail"; }
+			cartService.deleteCart(cartNoList);
+			return "redirect:/orders/member/detail"; 
+		}
 		 
 		}
 		
@@ -136,11 +129,9 @@ public class OrdersForwardController {
 	public String exInsertPage(@PathVariable int memberOrdersDetailNo , Model model) {
 		
 		
-		log.info("멤버 상세 번호 : {}" , memberOrdersDetailNo);
 		
 		MemberOrdersDetail memberOrdersDetail = ordersService.getOrdersDetailOne(memberOrdersDetailNo);
 		List<Product> productList = ordersService.getProduct();
-		log.info("엑 오디 원 : {}" , memberOrdersDetail.getProduct().getProductName());
 		
 		
 		model.addAttribute("memberOrdersDetail" , memberOrdersDetail);

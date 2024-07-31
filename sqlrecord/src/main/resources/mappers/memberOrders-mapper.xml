@@ -24,33 +24,36 @@
 	</selectKey>
 	</insert>
 
+
 	<insert id="insertOrdersDetail" parameterType="memberOrdersDetail">
-    	
-        INSERT INTO MEMBER_ORDERS_DETAIL (
-            MEMBER_ORDERS_DETAIL_NO,
-            PRODUCT_NO,
-            MEMBER_ORDERS_NO,
-            MEMBER_ORDERS_DETAIL_AMOUNT,
-            MEMBER_ORDERS_DETAIL_PRICE
+		<selectKey resultType="_int" keyProperty="MEMBER_ORDERS_DETAIL_NO" order="BEFORE">
+			SELECT NVL(MAX(MEMBER_ORDERS_DETAIL_NO)+1,0) FROM MEMBER_ORDERS_DETAIL 
+		</selectKey>		
+		<foreach collection="list" item="item" separator=" " index="index" open="INSERT ALL" close="SELECT * FROM DUAL">
+			INTO MEMBER_ORDERS_DETAIL (
+			
+	            MEMBER_ORDERS_DETAIL_NO,
+	            PRODUCT_NO,
+	            MEMBER_ORDERS_NO,
+	            MEMBER_ORDERS_DETAIL_AMOUNT,
+	            MEMBER_ORDERS_DETAIL_PRICE
 
-        ) 
-        SELECT MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL AS memberOrdersDetailNo , A.*
-        FROM (
-        	<foreach collection="list" item="item" separator="UNION ALL">
-        	SELECT  
-        	#{item.product.productNo} AS productNo,
-            #{item.memberOrders.memberOrdersNo} AS memberOrdersNo,
-            #{item.memberOrdersDetailAmount} AS memberOrdersDetailAmount,
-            #{item.memberOrdersDetailPrice} AS memberOrdersDetailPrice
+        	) 
+			VALUES
+			(
+			#{MEMBER_ORDERS_DETAIL_NO} + #{index},
+			#{item.product.productNo},
+            #{item.memberOrders.memberOrdersNo} ,
+            #{item.memberOrdersDetailAmount} ,
+            #{item.memberOrdersDetailPrice} 
+            )
+		</foreach>
+	</insert>
+	
 
-             FROM DUAL
-       
-        </foreach>
-        	 ) A
-        
-    
-    
-</insert>
+	
+	
+	
 	
 	
 	
@@ -107,7 +110,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 	
 	
 	
@@ -149,7 +152,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 
 
 	
@@ -189,7 +192,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 
 	<select id="getOrdersDetailOneForTracking" parameterType="_int" resultMap="odRM">
         SELECT
@@ -226,7 +229,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 
 
 	<update id="updateMemberOrdersStatus" parameterType="map">
