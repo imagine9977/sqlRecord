@@ -43,67 +43,50 @@ public class OrdersForwardController {
 	private final OrdersService ordersService;
 	
 	@PostMapping("/order")
-	public String userOrdersPage( 
-								 HttpServletRequest request
-								 ) {
-		HttpSession session = request.getSession();
+	public String userOrdersPage(HttpServletRequest request , Cart cart) {
+	
+		if(!cart.getCartList().isEmpty()) {
+		
+		MemberOrders memberOrders = new MemberOrders();
+		memberOrders.setMemberOrdersAddress(cart.getCartList().get(0).getMember().getAddr1());
+		memberOrders.setMemberOrdersAddress2(cart.getCartList().get(0).getMember().getAddr2());
+		memberOrders.setMemberOrdersPostcode(cart.getCartList().get(0).getMember().getPostcode());
+		memberOrders.setMemberNo(cart.getCartList().get(0).getMember().getMemberNo());
+		
 
-		String[] cart_amountArr = request.getParameterValues("cartAmount");
-		String[] product_priceArr = request.getParameterValues("productPrice");
-		String[] product_noArr = request.getParameterValues("productNo");
-		String[] cartNo_Arr = request.getParameterValues("cartNum");
+		List<MemberOrdersDetail> odList = new ArrayList<MemberOrdersDetail>();
 		
-		int value = cart_amountArr.length;
+		List<Integer> cartNoList = new ArrayList<Integer>();
 		
-		if(product_priceArr.length == value && product_noArr.length == value && cartNo_Arr.length == value) {
-			
-			Member member =  (Member) session.getAttribute("loginUser");
-			
-			
-			MemberOrders memberOrders = new MemberOrders();
-			memberOrders.setMemberOrdersAddress(member.getAddr1());
-			memberOrders.setMemberOrdersAddress2(member.getAddr2());
-			memberOrders.setMemberOrdersPostcode(member.getPostcode());
-			memberOrders.setMemberNo(member.getMemberNo());
-			
-			
-			List<Integer> cartNoList = new ArrayList<Integer>();
-			
-			for(String item : cartNo_Arr) {
-				cartNoList.add(Integer.parseInt(item));
-			}
-			
-			
+		for(Cart item : cart.getCartList()) { cartNoList.add(item.getCartNum()); }
+		
+		
+		int successMO = ordersService.insertMemberOrders(memberOrders);
+		
+		
+		for(Cart item : cart.getCartList()) { 
+		MemberOrdersDetail ordersDetail = new MemberOrdersDetail(); 
+		Product product = new Product();
+		product.setProductNo(item.getProduct().getProductNo());
+		ordersDetail.setProduct(product); 
+		MemberOrders memberOrders1 = new MemberOrders(); 
+		memberOrders1.setMemberOrdersNo(successMO);
+		ordersDetail.setMemberOrders(memberOrders1);
+		ordersDetail.setMemberOrdersDetailAmount(item.getCartAmount());
+		ordersDetail.setMemberOrdersDetailPrice(item.getCartAmount() * item.getProduct().getProductPrice());
+		
+		odList.add(ordersDetail); 
+		
+		}
+		
+		 
+		if(ordersService.insertOrdersDetail(odList) > 0) {
 			cartService.deleteCart(cartNoList);
-			
-			
-			List<MemberOrdersDetail> odList = new ArrayList<MemberOrdersDetail>();
-			
-
-			int successMO = ordersService.insertMemberOrders(memberOrders, member.getMemberNo());
-			
-
-			for(int i = 0; i < cart_amountArr.length; i++) {
-				MemberOrdersDetail ordersDetail = new MemberOrdersDetail();
-				Product product = new Product();
-				product.setProductNo(Integer.parseInt(product_noArr[i]));
-				ordersDetail.setProduct(product);
-				MemberOrders memberOrders1 = new MemberOrders();
-				memberOrders1.setMemberOrdersNo(successMO);
-				ordersDetail.setMemberOrders(memberOrders1);
-				ordersDetail.setMemberOrdersDetailAmount(Integer.parseInt(cart_amountArr[i]));
-				ordersDetail.setMemberOrdersDetailPrice(Integer.parseInt(cart_amountArr[i]) * Integer.parseInt(product_priceArr[i]));
-				
-				odList.add(ordersDetail);
-			}
-			
-
-			if(ordersService.insertOrdersDetail(odList) > 0) {
-				
-				return "redirect:/orders/member/detail";
-			}
-			
-		} 
+			return "redirect:/orders/member/detail"; 
+		}
+		 
+		}
+		
 		
 		return "redirect:/sqlrecord/error";
 		
@@ -146,11 +129,9 @@ public class OrdersForwardController {
 	public String exInsertPage(@PathVariable int memberOrdersDetailNo , Model model) {
 		
 		
-		log.info("멤버 상세 번호 : {}" , memberOrdersDetailNo);
 		
 		MemberOrdersDetail memberOrdersDetail = ordersService.getOrdersDetailOne(memberOrdersDetailNo);
 		List<Product> productList = ordersService.getProduct();
-		log.info("엑 오디 원 : {}" , memberOrdersDetail.getProduct().getProductName());
 		
 		
 		model.addAttribute("memberOrdersDetail" , memberOrdersDetail);

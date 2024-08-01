@@ -17,23 +17,16 @@
 		  FROM
 		  		REPLY
 	</sql>
-	<!--  
-	<select id="replyCount">
-		SELECT 
-				 COUNT(*)
-			FROM
-				  REPLY
-		   WHERE
-		   		  PRODUCT_NO = #{productNo} 			
-	</select>
-	-->
+
 	<select id="replyCount" resultType="int">
 		SELECT
 				COUNT(*)
 		  FROM
 		  		REPLY
   		 WHERE
-  		 		STATUS = 'Y'	
+  		 		STATUS = 'Y'
+		   AND		
+  		 		PRODUCT_NO = #{productNo}	
 	</select>
 	
 	<select id="chReplyCount" resultType="int">
@@ -43,6 +36,19 @@
 		        CHREPLY
 		  WHERE
 		        REPLY_NO = REPLY_NO
+	</select>
+	
+	<select id="getImgList" resultType="replyFile">
+		SELECT
+				FILE_NO fileNo,
+				ORIGINNAME,
+				CHANGENAME,
+				REPLY_NO replyNo,
+				MEMBER_NO memberNo
+		  FROM
+		  		REPLY_FILE
+  		 WHERE
+  		 		REPLY_NO = REPLY_NO
 	</select>
 	
 	<select id="getReplyList" resultType="reply">
@@ -62,11 +68,19 @@
 		  		MEMBER m
 		    ON
 		        r.MEMBER_NO = m.MEMBER_NO
+     LEFT JOIN
+     			CHREPLY c
+   			ON
+   				r.REPLY_NO = c.REPLY_NO
 		 WHERE
-		 		r.STATUS != 'D'      
+		 		r.STATUS != 'D'
+	 	   AND
+	 	   		PRODUCT_NO = #{productNo}
+   	   AND NOT	      
+   	   		    (r.STATUS = 'N' AND c.REPLY_NO IS NULL)
 		 ORDER
     		BY
-        		REPLY_NO
+        		r.REPLY_NO
   		  DESC      	
 	</select>	
 	
@@ -102,7 +116,29 @@
 				ROUND(AVG(STAR), 1) AS avgStar 
 		  FROM
 		  		REPLY
+	  	 WHERE
+	  	 		PRODUCT_NO = #{productNo}
+  	 	   AND
+  	 	   		STATUS = 'Y'		
 	</select>
+	
+	<insert id="insFile" parameterType="replyFile">
+		INSERT
+			INTO Reply_File (
+							 FILE_NO,
+							 ORIGINNAME,
+							 CHANGENAME,
+							 REPLY_NO,
+							 MEMBER_NO
+							 )
+				  VALUES	(
+				  			 FILE_SEQ.NEXTVAL,
+				  			 #{originName},
+				  			 #{changeName},
+				  			 REPLY_SEQ.CURRVAL,
+				  			 #{memberNo}
+				  			 )
+	</insert>
 	
 	<insert id="insReply" parameterType="reply">
 		INSERT
@@ -153,7 +189,8 @@
 				REPLY
 		   SET
 		   		STAR = #{star},
-		   		CONTENT = #{content}
+		   		CONTENT = #{content},
+		   		WRITE_DATE = SYSDATE
 	   	 WHERE
 	   	 		REPLY_NO = #{replyNo}	 		
 	</update>
@@ -162,7 +199,8 @@
 		UPDATE
 				CHREPLY
 		   SET
-		   		CHCONTENT =#{chContent}
+		   		CHCONTENT =#{chContent},
+		   		WRITE_DATE = SYSDATE
    		 WHERE
    		 		CHREPLY_NO = #{chReplyNo}	
 	</update>
@@ -181,10 +219,19 @@
                 (SELECT COUNT(*) FROM CHREPLY CR WHERE CR.REPLY_NO = R.REPLY_NO) > 0 THEN '삭제되었습니다'
                 ELSE R.CONTENT
            END,
-           		R.STAR = 0
+           		R.STAR = 0,
+           		R.WRITE_DATE = SYSDATE
          WHERE 
                 R.REPLY_NO = #{replyNo}	 
 	</update>
+	
+	<delete id="delFile" parameterType="replyFile">
+		DELETE 
+		  FROM 
+		  		REPLY_FILE
+  		 WHERE
+  		 		REPLY_NO = #{replyNo}
+	</delete>
 	
 	<delete id="delChReply" parameterType="chReply">
 		DELETE 
@@ -195,60 +242,44 @@
 	</delete>
 	
 	<select id="getReplyStarAll" resultMap="StarMap">
-    <![CDATA[ 
-         WITH stats AS (
-		      SELECT
-		        CASE 
-		          WHEN star = 5.0 THEN '5점 MAX'
-		          WHEN star >= 4.0 AND star < 5.0 THEN '4점 GPA'
-		          WHEN star >= 3.0 AND star < 4.0 THEN '3점 GPA'
-		          WHEN star >= 2.0 AND star < 3.0 THEN '2점 GPA'
-		          WHEN star >= 1.0 AND star < 2.0 THEN '1점 GPA'
-		        END AS rating_range,
-		        COUNT(*) AS count,
-		        CASE 
-		          WHEN star = 5.0 THEN 1
-		          WHEN star >= 4.0 AND star < 5.0 THEN 2
-		          WHEN star >= 3.0 AND star < 4.0 THEN 3
-		          WHEN star >= 2.0 AND star < 3.0 THEN 4
-		          WHEN star >= 1.0 AND star < 2.0 THEN 5
-		        END AS rating_index
-		      FROM REPLY
-		      WHERE star >= 1.0
-		      GROUP BY
-		        CASE 
-		          WHEN star = 5.0 THEN '5점 MAX'
-		          WHEN star >= 4.0 AND star < 5.0 THEN '4점 GPA'
-		          WHEN star >= 3.0 AND star < 4.0 THEN '3점 GPA'
-		          WHEN star >= 2.0 AND star < 3.0 THEN '2점 GPA'
-		          WHEN star >= 1.0 AND star < 2.0 THEN '1점 GPA'
-		        END,
-		        CASE 
-		          WHEN star = 5.0 THEN 1
-		          WHEN star >= 4.0 AND star < 5.0 THEN 2
-		          WHEN star >= 3.0 AND star < 4.0 THEN 3
-		          WHEN star >= 2.0 AND star < 3.0 THEN 4
-		          WHEN star >= 1.0 AND star < 2.0 THEN 5
-		        END
-		    ),
-		    total AS (
-		      SELECT COUNT(*) AS total_count FROM REPLY
-		    )
-		    SELECT 
-		      s.rating_range,
-		      s.count,
-		      ROUND(s.count * 100.0 / t.total_count, 1) AS percentage,
-		      s.rating_index
-		    FROM stats s, total t
-		    ORDER BY s.rating_index
+	    <![CDATA[
+	        WITH rating_ranges AS (
+	            SELECT
+	                star,
+	                CASE 
+	                    WHEN star = 5.0 THEN '5점 MAX'
+	                    WHEN star >= 4.0 AND star < 5.0 THEN '4점 GPA'
+	                    WHEN star >= 3.0 AND star < 4.0 THEN '3점 GPA'
+	                    WHEN star >= 2.0 AND star < 3.0 THEN '2점 GPA'
+	                    WHEN star >= 1.0 AND star < 2.0 THEN '1점 GPA'
+	                END AS rating_range
+	            FROM REPLY
+	            WHERE star >= 1.0 AND PRODUCT_NO = #{productNo}
+	        ),
+	        stats AS (
+	            SELECT rating_range, COUNT(*) AS count
+	            FROM rating_ranges
+	            GROUP BY rating_range
+	        ),
+	        total AS (
+	            SELECT COUNT(*) AS total_count 
+	            FROM REPLY
+	            WHERE PRODUCT_NO = #{productNo}
+	        )
+	        SELECT 
+	            s.rating_range,
+	            s.count,
+	            ROUND(s.count * 100.0 / t.total_count, 1) AS percentage
+	        FROM stats s
+	        CROSS JOIN total t
+			ORDER BY s.rating_range DESC
 	    ]]>
 	</select>
 
-<resultMap id="StarMap" type="java.util.HashMap">
-    <result property="ratingRange" column="rating_range"/>
-    <result property="count" column="count"/>
-    <result property="percentage" column="percentage"/>
-    <result property="ratingIndex" column="rating_index"/>
-</resultMap>
+	<resultMap id="StarMap" type="java.util.HashMap">
+	    <result property="ratingRange" column="rating_range"/>
+	    <result property="count" column="count"/>
+	    <result property="percentage" column="percentage"/>
+	</resultMap>
 	
 </mapper>

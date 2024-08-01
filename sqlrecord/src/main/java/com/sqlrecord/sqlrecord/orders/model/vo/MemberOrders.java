@@ -1,5 +1,9 @@
 package com.sqlrecord.sqlrecord.orders.model.vo;
 
+import java.util.List;
+
+import com.sqlrecord.sqlrecord.product.model.vo.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +22,6 @@ public class MemberOrders {
 	private String memberOrdersPostcode;
 	private String memberOrdersDate;
 	private int memberNo;
+	
+	private List<MemberOrdersDetail> memberOrdersDetailList;
 }

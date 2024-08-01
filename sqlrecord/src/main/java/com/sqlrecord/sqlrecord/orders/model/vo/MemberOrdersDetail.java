@@ -2,8 +2,9 @@ package com.sqlrecord.sqlrecord.orders.model.vo;
 
 import java.util.List;
 
-import com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
+import com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,4 +28,6 @@ public class MemberOrdersDetail {
 	private String memberOrdersDetailStatus;
 	private Product product;
 	private MemberOrders memberOrders; 
+	
+	private List<Product> productList;
 }

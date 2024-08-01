@@ -26,7 +26,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 
 
-	<div class="container">
+	<div class="container" id="container">
 	    <div class="review-header" style="text-align: center;">
 	        <h1>REVIEW</h1>
 	    </div>
@@ -57,14 +57,6 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class="dropdown">
-	        <label for="itemsPerPage">한 번에 보기&nbsp;:&nbsp;</label>
-	        <select id="itemsPerPage" name="itemsPerPage">
-	            <option value="12">12</option>
-	            <option value="18">18</option>
-	            <option value="24">24</option>
-	        </select>
-	    </div>
 	    <c:if test="${!empty sessionScope.loginUser}">
 	        <div id="commentForm">
 	            <div class="overlay" id="overlay"></div>
@@ -75,7 +67,7 @@
 	            </div>
 	            <div class="review-header">
 	                <p>리뷰 작성하기</p>
-	                <input type="hidden" name="productNo" id="productNo" value="21"> <!-- 상품 번호를 포함 -->
+	                <input type="hidden" name="productNo" id="productNo" value="${product.productNo}"> <!-- 상품 번호를 포함 -->
 	                <input type="hidden" name="depth" id="depth" value="0"> <!-- 기본 댓글이므로 깊이는 0 -->
 	                <div class="stars">
 	                    <div class="score-wrapper">
@@ -92,8 +84,7 @@
 	                </button>
 	                <input type="file" id="fileInput" multiple="multiple" style="display: none;" onchange="loadImg(this)">
 	                <button class="rebtn2" id="rebtn2" onclick="commentWrite()">등록</button>
-	                <div id="yimgbox">
-                    </div>
+	                <div id="yimgbox"></div>
 	            </div>
 	        </div>
 	    </c:if>
@@ -130,6 +121,16 @@
 	                            <p>댓글 수정하기</p>
 	                            <input type="number" id="editRatingInput" name="star" min="0" max="5" step="0.1" placeholder="별점 입력">
 	                            <textarea id="editContent" name="content" rows="4" placeholder="내용 수정"></textarea>
+	                            <div id="editimgbox">
+				                	<c:forEach var="img" items="${imgList}">
+				                		<c:if test="${reply.replyNo eq img.replyNo}">
+				                			<img class="editImg" src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img"
+				                			data-reply-no="${reply.replyNo}" 
+				                			data-image-path="${hpath}/resources/uploadFiles/reply/${img.changeName}">
+				                		</c:if>
+				                	</c:forEach>
+				                </div>
+				                <br>
 	                            <button class="submitButton" type="button">수정 완료</button>
 	                        </div>
 	                    </div>
@@ -141,6 +142,14 @@
 	                            <button class="submitButton2" type="button">수정 완료</button>
 	                        </div>
 	                    </div>
+	                </div>
+	                <div id="yimgbox1">
+	                	<c:forEach var="img" items="${imgList}">
+	                		<c:if test="${reply.replyNo eq img.replyNo}">
+	                			<img  src="${hpath}/resources/uploadFiles/reply/${img.changeName}" alt="img" class="imgFiles" id="imgFile-${reply.replyNo}"">
+	                			<input type="hidden" class="hiddenReplyNo" value="${reply.replyNo }">
+	                		</c:if>
+	                	</c:forEach>
 	                </div>
 	                <div class="reply-section">
 					    <button class="reply-toggle">답글 보기</button>
@@ -237,6 +246,7 @@
             const percent = (avgStar1 / max) * 100;
             $(this).find(".s1favg").css("width", percent + "%");
         });
+        
     });
     
   /*  이거는 모든 요소를 다 반복하면서 처리해서 오류 발생함 ㅗ fuck 
@@ -248,28 +258,34 @@
     }); */
 
     $(document).ready(function() {
-        $('.deleteButton').on('click', function() {
-            //const replyNo = $(this).closest('.reviews').data('replyNo');
-			const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
-			console.log(replyNo); // 댓글 번호 출력
-            
-            if (confirm('댓글을 삭제하시겠습니까?')) {
-                $.ajax({
-                    type: 'POST',
-                    url: '${hpath}/reply/delReply.do',
-                    data: { "replyNo" : replyNo },
-                    success: function(response) {
-                        console.log('삭제 성공:', response);
-                        // 삭제 후 페이지 리로드 또는 다른 동작 수행
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('삭제 실패:', error);
-                    }
-                });
-            }
-        });
-        
+    	$('.deleteButton').on('click', function() {
+    		const productNo = $('#productNo').val();
+    	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
+    	    console.log(productNo); // 댓글 번호 출력
+    	    
+    	    if (confirm('댓글을 삭제하시겠습니까?')) {
+    	        $.ajax({
+    	            type: 'POST',
+    	            url: '${hpath}/productFor/delReply.do',
+    	            data: { "replyNo": replyNo },
+    	            success: function(response) {
+    	                console.log('삭제 성공:', response);
+    	                //console.log('status:', response.status); // 상태를 직접 출력
+    	                if (response.status === 'success') {
+    	                	//reloadContent(productNo);
+    	                	location.reload();
+    	                    alert('댓글 삭제에 성공했습니다.');
+    	                } else {
+    	                    alert('댓글 삭제에 실패했습니다.');
+    	                }
+    	            },
+    	            error: function(xhr, status, error) {
+    	                console.error('삭제 실패:', error);
+    	                alert('오류 발생');
+    	            }
+    	        });
+    	    }
+    	});
         
         $('.deleteButton2').on('click', function() {
         	const chReplyNo = $(this).closest('.deleteButton2').attr('id').split('-')[1];
@@ -278,7 +294,7 @@
             if (confirm('댓글을 삭제하시겠습니까?')) {
                 $.ajax({
                     type: 'POST',
-                    url: '${hpath}/reply/delChReply.do',
+                    url: '${hpath}/productFor/delChReply.do',
                     data: { "chReplyNo" : chReplyNo },
                     success: function(response) {
                         console.log('삭제 성공:', response);
@@ -295,17 +311,35 @@
         
      // 수정 버튼 클릭 시 해당 댓글의 내용과 별점을 가져와 수정 팝업을 열도록 설정
 		$(".editButton").click(function() {
-			/*
-			// 해당 수정 버튼이 속한 댓글 요소를 찾습니다.
-		    const reviewElement = $(this).closest('.reviews');
-		    // 댓글 요소에서 replyNo 값을 가져옵니다.
-		    const replyNo = reviewElement.data('replyNo');
-		    */
 		    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
 		    console.log(replyNo); // 댓글 번호 출력
 		    const currentContent = $(this).closest('.review-content').find('.yrecon').text();
 		    const currentRating = $(this).closest('.review').find('.pavg1').text();
-		    openEditPopup(currentContent, currentRating,replyNo);
+		    /*
+		    const imgSrc = [];
+		    imgSrc.length = 0;
+		    imgSrc.splice(0, imgSrc.length);
+		    const imgFiles = $(this).closest('#yimgbox1').find('.imgFiles');	
+		    
+		 	// imgFiles 클래스가 있는 이미지가 있는지 확인합니다.
+		    if ($('.imgFiles').length > 0) {
+		        // 각 imgFiles 요소를 순회하며 src를 배열에 추가합니다.
+		        $('.imgFiles').each(function() {
+		            const imgElement = $(this);
+
+		            // replyNo에 해당하는 이미지만 처리합니다.
+		            if (imgElement.attr('id').split('-')[1] === replyNo) {
+		                imgSrc.push(imgElement.attr('src'));
+		                $('#editimgbox').css("display", "block");
+		            }
+		        });
+		    }else {
+                $('#editimgbox').css("display", "none");
+            }
+		    // 이미지 소스를 콘솔에 출력합니다.
+		    console.log(imgSrc);
+		    */
+		    openEditPopup(currentContent, currentRating, replyNo);
 		});
      
      	//답글 수정
@@ -328,7 +362,7 @@
 		     
 		    $.ajax({
 		        type: 'POST',
-		        url: '${hpath}/reply/upReply.do',
+		        url: '${hpath}/productFor/upReply.do',
 		        data: {
 		            replyNo: replyNo,
 		            content: updatedContent,
@@ -364,7 +398,7 @@
 			
 		     $.ajax({
 			        type: 'POST',
-			        url: '${hpath}/reply/upChReply.do',
+			        url: '${hpath}/productFor/upChReply.do',
 			        data: {
 			        	chReplyNo: chReplyNo,
 			        	chContent: updatedContent
@@ -408,7 +442,7 @@
 
 	         $.ajax({
 	             type: "POST",
-	             url: "${hpath}/reply/chInsReply.do",
+	             url: "${hpath}/productFor/chInsReply.do",
 	             data: formData,
 	             contentType: false,
 	             processData: false,
@@ -424,19 +458,79 @@
 	     });
     });
     
-    
-    
+    // 기능 실행후에 화면 리로드를 하면 기능들 안되는 문제 발생 -> 이벤트 핸들러 재바인딩.. 해봐도 문제해결 안됨
+    function bindEventHandlers() {
+    	$('.deleteButton').on('click', function() {
+    		const productNo = $('#productNo').val();
+    	    const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
+    	    console.log(productNo); // 댓글 번호 출력
+    	    
+    	    if (confirm('댓글을 삭제하시겠습니까?')) {
+    	        $.ajax({
+    	            type: 'POST',
+    	            url: '${hpath}/productFor/delReply.do',
+    	            data: { "replyNo": replyNo },
+    	            success: function(response) {
+    	                console.log('삭제 성공:', response);
+    	                console.log('status:', response.status); // 상태를 직접 출력
+    	                if (response.status === 'success') {
+    	                	reloadContent(productNo);
+    	                    alert('댓글 삭제에 성공했습니다.');
+    	                } else {
+    	                    alert('댓글 삭제에 실패했습니다.');
+    	                }
+    	            },
+    	            error: function(xhr, status, error) {
+    	                console.error('삭제 실패:', error);
+    	                alert('오류 발생');
+    	            }
+    	        });
+    	    }
+    	});
+        
+        
+        $('.deleteButton2').on('click', function() {
+        	const chReplyNo = $(this).closest('.deleteButton2').attr('id').split('-')[1];
+			console.log(chReplyNo); // 댓글 번호 출력
+            
+            if (confirm('댓글을 삭제하시겠습니까?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: '${hpath}/productFor/delChReply.do',
+                    data: { "chReplyNo" : chReplyNo },
+                    success: function(response) {
+                        console.log('삭제 성공:', response);
+                        // 삭제 후 페이지 리로드 또는 다른 동작 수행
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('삭제 실패:', error);
+                    }
+                });
+            }
+        });
+    }
     
     
 	 // 수정 창 열기 함수
-	    function openEditPopup(currentContent, currentRating,replyNo) {
+	    function openEditPopup(currentContent, currentRating, replyNo) {
 		    // 수정 창을 열 때 가져온 내용과 별점을 해당 입력 필드에 설정합니다.
 		    //currentreplyNo = replyNo;
-		    console.log(replyNo); // 댓글 번호 출력
+		    //console.log(imgSrc); // 댓글 번호 출력
 		    $('.submitButton').data('replyNo', replyNo);
 		    document.getElementById('editPopup').style.display = 'block';
 		    document.getElementById('editContent').value = currentContent;
 		    document.getElementById('editRatingInput').value = currentRating;
+		 	/*
+		    // editImg 클래스를 가진 이미지 요소들 선택
+	        const editImages = document.getElementsByClassName('editImg');
+
+	        // imgSrc 배열의 길이만큼 반복문을 돌려 각 이미지의 src를 설정
+	        for (let i = 0; i < imgSrc.length;  i++) {
+	            const imgElement = editImages[i];
+	            imgElement.src = imgSrc[i];
+	        }
+	        */
 		}
 	 
 	 // 답글
@@ -455,48 +549,6 @@
 	        document.getElementById('editPopup2').style.display = 'none';
 	    }
 
-	    // 수정 제출 함수
-	    function submitEdit(replyNo) {
-	    	//const replyNo = reviewElement.data('replyNo'); // 이걸 추가하면 별점 데이터가 다 사라짐.. 그래서 빼고 실행
-	    	//const replyNo = $(this).closest('.reviews').attr('id').split('-')[1];
-		    console.log(replyNo); // 댓글 번호 출력
-		    const updatedContent = document.getElementById('editContent').value;
-		    const updatedRating = document.getElementById('editRatingInput').value;
-			
-		    
-		    // AJAX 요청 예시
-		    $.ajax({
-		        type: 'POST',
-		        url: '${hpath}/reply/upReply.do',
-		        data: {
-		            replyNo: replyNo,
-		            content: updatedContent,
-		            star: updatedRating,
-		        },
-		        success: function(response) {
-		            alert("댓글 수정에 성공했습니다.");
-		            location.reload();
-		
-		            // 수정 완료 후 수정 창 닫기
-		            closeEditPopup();
-		
-		            // DOM 업데이트
-		            const reviewElement = document.querySelector(`.reviews[data-replyNo='${replyNo}']`);
-		            if (reviewElement) {
-		                reviewElement.querySelector('.yrecon').textContent = updatedContent;
-		                reviewElement.querySelector('.yrestar').textContent = updatedRating;
-		            }
-		        },
-		        error: function(xhr, status, error) {
-		            alert("댓글 수정에 실패했습니다.");
-		            console.error("댓글 수정 실패:", error);
-		        }
-		    });
-		}
-	    
-	 
-	    
-	    
        function updateRating(rate) {
            const max = 5;
            const percent = (rate / max) * 100;
@@ -522,9 +574,6 @@
        $("#overlay").click(function() {
            closePopup();
        });
-       
-       
-       
 
        function submitRating() {
            event.preventDefault(); // form태그 안에서 새로고침 막는 용도
@@ -536,9 +585,6 @@
                alert("유효한 평점을 입력하세요 (0-5 사이).");
            }
        }
-
-       
-       
        
        function commentWrite() {
            // 파일 업로드를 위한 FormData 객체를 생성
@@ -556,7 +602,7 @@
            }
            $.ajax({
                type: "POST",
-               url: "${hpath}/reply/insReply.do",
+               url: "${hpath}/productFor/insReply.do",
                data: formData,
                contentType: false,
                processData: false,
@@ -572,7 +618,6 @@
                    
                    // 파일 입력 초기화
                    fileInput.value = '';
-
                },
                error: function(xhr, status, error) {
                	alert("댓글 등록에 실패했습니다.");
@@ -600,18 +645,11 @@
 			                    const img = document.createElement('img');
 			                    img.src = e.target.result;
 			                    img.id = `img${i}`;
-			                    img.alt = `Image ${i + 1}`;
-			                    img.style.marginRight = '15px';
-		
 			                    yimgbox.appendChild(img);
 			                    
 			                    formData.append('files', file);
 			                    loadedFilesCount++;
 
-			                    // 모든 파일이 로드되었을 때 AJAX 요청 보내기
-			                    if (inputFile.files.length>0) {
-			                        sendFilesToServer(formData);
-			                    }
 			                };
 		    			};
 		    			yimgbox.style.display = "flex"; // 이미지 박스 표시
@@ -620,7 +658,23 @@
 		   		    }
 		   		} 
       		 
-       
+        //ajax 작업 성공후 화면 리로드
+		function reloadContent(productNo) {
+			console.log('Reloading content for productNo:', productNo);
+		    $.ajax({
+		        type: 'GET',
+		        url: `${hpath}/productFor/detail2/${productNo}`,
+		        success: function(data) {
+		            $('#container').html(data); // 전체 컨텐츠 부분 갱신
+		            bindEventHandlers();
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('컨텐츠 로드 실패:', error);
+		            alert('컨텐츠를 로드하는 중 오류가 발생했습니다.');
+		        }
+		    });
+		}
+		
        /*
        function reloadComments() {
            $.ajax({

@@ -42,7 +42,6 @@
         width: 1500px;
         min-width: 1200px;
         height: auto;
-        border: 1px solid black;
         margin: 0 auto;
         padding: 10px;
         margin-top: 50px;
@@ -60,8 +59,9 @@
         display: block;
         width: 18%;
         height: auto;
-        border: 1px solid black;
-        padding: 10px;
+        border: 1px solid #626262;
+        border-radius:10px;
+        padding: 20px;
         text-align: left;
     }
     .sidebar-element a {
@@ -171,6 +171,10 @@
 	.accordion-table .accordion-content {
         display: none;
     }
+    .accordion-table a {
+	    text-decoration: underline;
+	    color: black;
+	}
 
     .accordion-table .member-details {
         padding: 10px;
@@ -199,3 +203,51 @@
 	.record-actions button {
 	    margin-left: 5px;
 	}
+    .order-detail-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .order-detail-item img {
+        flex-shrink: 0;
+        width: 100px;
+        height: 100px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .order-detail-info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .order-detail-info p {
+        margin: 5px 0;
+    }
+
+    .order-detail-buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .details-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .order-items {
+        margin-bottom: 10px;
+    }
+
+    .accordion-header input[type="checkbox"], .order-detail-item input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    
+    .accordion-table .accordion-header p {
+        margin: 0.3rem 0;
+    }

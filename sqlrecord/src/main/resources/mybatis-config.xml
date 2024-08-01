@@ -25,15 +25,21 @@
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.Reply" alias="reply" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.ChReply" alias="chReply" />
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.reply.model.vo.ReplyFile" alias="replyFile" />
 
 
 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.MemberGenre" alias="MemberGenre" />
 
-		  <typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/> 	  	
+		<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders" alias="memberOrders"/> 	  	
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail" alias="memberOrdersDetail" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx" alias="memberOrdersEx" />
  	  	<typeAlias type="com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo" alias="trackingInfo" />
+ 	  	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO" alias="memberOrdersDTO"/>
+	    <typeAlias type="com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO" alias="memberOrdersDetailDTO"/>
+	    <typeAlias type="com.sqlrecord.sqlrecord.orders.model.dto.ProductDTO" alias="productDTO"/>
+	    <typeAlias type="com.sqlrecord.sqlrecord.orders.model.dto.ProductPhotosDTO" alias="productPhotosDTO"/>
  
  	</typeAliases>
  	

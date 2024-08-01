@@ -3,7 +3,8 @@ package com.sqlrecord.sqlrecord.member.model.service;
 import java.util.List;
 import java.util.Map;
 
-
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sqlrecord.sqlrecord.member.model.dao.MemberMapper;
@@ -19,6 +20,7 @@ public class MemberServiceImpl implements MemberService{
 
 
 	private final MemberMapper memberMapper;
+	private final SqlSessionTemplate sqlSession;
 	
 	@Override
 	public Member login(Member member) {
@@ -94,5 +96,20 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int memberCount() {
 		return memberMapper.memberCount();
+	}
+
+	@Override
+	public void updateMemberStatus(int memberNo, String status) {
+		memberMapper.updateMemberStatus(memberNo, status);
+	}
+
+	@Override
+	public int searchMemberCount(Map<String, String> map) {
+		return memberMapper.searchMemberCount(sqlSession, map);
+	}
+
+	@Override
+	public List<Member> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds) {
+		return memberMapper.findByConditionAndKeyword(sqlSession, map, rowBounds);
 	}
 }

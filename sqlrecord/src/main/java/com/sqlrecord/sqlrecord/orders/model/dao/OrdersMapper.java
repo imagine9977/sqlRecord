@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
@@ -38,5 +40,10 @@ public interface OrdersMapper {
 	List<MemberOrdersEx> getOrdersEx(int memberNo);
 
 	
-
+	// 관리자
+	int getTotalOrdersCount();
+	List<MemberOrdersDTO> getAllMemberOrders(@Param("startValue") int startValue, @Param("endValue") int endValue);
+    List<MemberOrdersDetailDTO> getMemberOrderDetails(@Param("memberOrdersNo") int memberOrdersNo);
+    void updateOrderStatus(@Param("memberOrdersDetailNo") int memberOrdersDetailNo, 
+            			   @Param("status") String status);
 }

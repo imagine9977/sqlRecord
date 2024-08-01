@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,7 +70,15 @@ public class TrackingController {
 	
 	
 	
-	
+	@GetMapping("/{trackingInfoNum}")
+	public List<TrackingInfo> getTrackingInfo(@PathVariable("trackingInfoNum") int trackingInfoNum) {
+		
+		List<TrackingInfo> tlist = trackingService.getTrackingInfoList(trackingInfoNum);
+		
+		
+		
+		return tlist;
+	}
 	
 	
 	

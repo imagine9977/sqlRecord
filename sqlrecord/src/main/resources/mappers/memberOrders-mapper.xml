@@ -19,39 +19,41 @@
 				SYSDATE,
 				#{memberNo}
 				)
+	<selectKey resultType="_int" keyProperty="memberOrdersNo" order="AFTER">
+		SELECT MEMBER_ORDERS_SEQ.CURRVAL FROM DUAL
+	</selectKey>
 	</insert>
 
-	<select id="selectOneMemberOrdersNo" parameterType="_int" resultType="_int">
-		SELECT
-				Max(MEMBER_ORDERS_NO) 
-		FROM
-				MEMBER_ORDERS
-		WHERE
-				MEMBER_NO = #{memberNo}
-		ORDER
-		BY
-				MEMBER_ORDERS_NO
-		DESC
-	</select>
-	
-	
-	<insert id="insertOrdersDetail" parameterType="list">
-		<foreach open="INSERT ALL" collection="list" item="item" separator="," close="SELECT * FROM DUAL">
-		INTO
-				MEMBER_ORDERS_DETAIL
-		VALUES
-				(
-				MEMBER_ORDERS_DETAIL_SEQ.NEXTVAL,
-				#{item.product.productNo},
-				#{item.memberOrders.memberOrdersNo},
-				#{item.memberOrdersDetailAmount},
-				#{item.memberOrdersDetailPrice},
-				DEFAULT,
-				DEFAULT,
-				DEFAULT
-				)
+
+	<insert id="insertOrdersDetail" parameterType="memberOrdersDetail">
+		<selectKey resultType="_int" keyProperty="MEMBER_ORDERS_DETAIL_NO" order="BEFORE">
+			SELECT NVL(MAX(MEMBER_ORDERS_DETAIL_NO)+1,0) FROM MEMBER_ORDERS_DETAIL 
+		</selectKey>		
+		<foreach collection="list" item="item" separator=" " index="index" open="INSERT ALL" close="SELECT * FROM DUAL">
+			INTO MEMBER_ORDERS_DETAIL (
+			
+	            MEMBER_ORDERS_DETAIL_NO,
+	            PRODUCT_NO,
+	            MEMBER_ORDERS_NO,
+	            MEMBER_ORDERS_DETAIL_AMOUNT,
+	            MEMBER_ORDERS_DETAIL_PRICE
+
+        	) 
+			VALUES
+			(
+			#{MEMBER_ORDERS_DETAIL_NO} + #{index},
+			#{item.product.productNo},
+            #{item.memberOrders.memberOrdersNo} ,
+            #{item.memberOrdersDetailAmount} ,
+            #{item.memberOrdersDetailPrice} 
+            )
 		</foreach>
 	</insert>
+	
+
+	
+	
+	
 	
 	
 	
@@ -108,7 +110,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 	
 	
 	
@@ -144,11 +146,13 @@
         		mod.PRODUCT_NO = p.PRODUCT_NO
        	WHERE
                 mo.MEMBER_NO = #{memberNo}
+        AND
+        		mod.MEMBER_ORDERS_DETAIL_EXD = 'N'
         ORDER
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 
 
 	
@@ -188,7 +192,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 
 	<select id="getOrdersDetailOneForTracking" parameterType="_int" resultMap="odRM">
         SELECT
@@ -225,7 +229,7 @@
         BY
                 MEMBER_ORDERS_DATE
         DESC
-</select>
+	</select>
 
 
 	<update id="updateMemberOrdersStatus" parameterType="map">
@@ -271,7 +275,7 @@
 		WHERE
 				MEMBER_ORDERS_DETAIL_NO
 				=
-				#{memberOrdersDetailNo.memberOrdersDetailNo}
+				#{memberOrdersDetail.memberOrdersDetailNo}
 
 	</update>
 	
@@ -285,18 +289,18 @@
 				#{memberOrdersExType},
 				#{memberOrdersExAmount},
 				SYSDATE,
-				#{memberOrdersDetailNo.memberOrdersDetailNo},
+				#{memberOrdersDetail.memberOrdersDetailNo},
 				DEFAULT,
 				#{memberOrdersExAddress},
 				#{memberOrdersExAddress2},
 				#{memberOrdersExPostcode},
 				DEFAULT,
 				<choose>
-					<when test="productNo.productNo == 0">
+					<when test="product.productNo == 0">
 						DEFAULT,
 					</when>
 					<otherwise>
-						#{productNo.productNo},
+						#{product.productNo},
 					</otherwise>
 				</choose>
 				#{memberOrdersExReason}				
@@ -366,6 +370,162 @@
     	DESC
 		
 	</select>
+	
+  <!-- ================================ 관리자 페이지 ================================ -->
 
+	<select id="getTotalOrdersCount" resultType="int">
+        SELECT
+        		COUNT(DISTINCT MEMBER_ORDERS_NO)
+          FROM
+          		MEMBER_ORDERS
+    </select>
 
+    <select id="getAllMemberOrders" resultMap="memberOrdersResultMap">
+	    SELECT 
+		        rnum,
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ORDERS_ADDRESS,
+		        MEMBER_ORDERS_ADDRESS2,
+		        MEMBER_ORDERS_POSTCODE,
+		        MEMBER_ORDERS_DATE,
+		        MEMBER_ID,
+		        PRODUCT_CATE,
+		        PRODUCT_NO,
+		        PRODUCT_NAME,
+		        PRODUCT_STATUS,
+		        totalPrice,
+		        detailsCount,
+		        MEMBER_ORDERS_DETAIL_STATUS
+	      FROM (
+		        SELECT 
+		            ROWNUM AS rnum,
+		            O.MEMBER_ORDERS_NO,
+		            O.MEMBER_ORDERS_ADDRESS,
+		            O.MEMBER_ORDERS_ADDRESS2,
+		            O.MEMBER_ORDERS_POSTCODE,
+		            O.MEMBER_ORDERS_DATE,
+		            M.MEMBER_ID,
+		            (
+		                SELECT P.PRODUCT_CATE
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_CATE,
+		            (
+		                SELECT P.PRODUCT_NO
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_NO,
+		            (
+		                SELECT P.PRODUCT_NAME
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_NAME,
+		            (
+		                SELECT P.PRODUCT_STATUS
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_STATUS,
+		            (
+		                SELECT SUM(OD.MEMBER_ORDERS_DETAIL_PRICE)
+		                FROM MEMBER_ORDERS_DETAIL OD
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		            ) AS totalPrice,
+		            (
+		                SELECT COUNT(*)
+		                FROM MEMBER_ORDERS_DETAIL OD
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		            ) AS detailsCount,
+		            (
+		                SELECT OD.MEMBER_ORDERS_DETAIL_STATUS
+		                FROM MEMBER_ORDERS_DETAIL OD
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS MEMBER_ORDERS_DETAIL_STATUS
+	          FROM 
+	            	MEMBER_ORDERS O
+	          JOIN 
+	            	MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
+	         ORDER
+	         	BY 
+	            	O.MEMBER_ORDERS_NO DESC
+	    		)
+	    WHERE rnum BETWEEN #{startValue} AND #{endValue}
+	</select>
+	
+	<resultMap id="memberOrdersResultMap" type="memberOrdersDTO">
+	    <id property="memberOrdersNo" column="MEMBER_ORDERS_NO"/>
+	    <result property="addr1" column="MEMBER_ORDERS_ADDRESS"/>
+	    <result property="addr2" column="MEMBER_ORDERS_ADDRESS2"/>
+	    <result property="postcode" column="MEMBER_ORDERS_POSTCODE"/>
+	    <result property="orderDate" column="MEMBER_ORDERS_DATE"/>
+	    <result property="memberId" column="MEMBER_ID"/>
+	    <result property="productCate" column="PRODUCT_CATE"/>
+	    <result property="productNo" column="PRODUCT_NO"/>
+	    <result property="productName" column="PRODUCT_NAME"/>
+	    <result property="productStatus" column="PRODUCT_STATUS"/>
+	    <result property="totalPrice" column="totalPrice"/>
+	    <result property="detailsCount" column="detailsCount"/>
+	    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
+	</resultMap>
+
+    <select id="getMemberOrderDetails" resultMap="memberOrdersDetailResultMap">
+        SELECT
+	            OD.MEMBER_ORDERS_DETAIL_NO,
+	            OD.MEMBER_ORDERS_DETAIL_AMOUNT,
+	            OD.MEMBER_ORDERS_DETAIL_PRICE,
+	            OD.MEMBER_ORDERS_DETAIL_STATUS,
+	            P.PRODUCT_NO,
+	            P.PRODUCT_NAME,
+	            P.PRODUCT_PRICE,
+	            P.PRODUCT_STATUS,
+	            P.PRODUCT_CATE,
+	            PP.PHOTO_NAME,
+	            PP.PHOTO_PATH
+          FROM
+            	MEMBER_ORDERS_DETAIL OD
+          JOIN
+            	PRODUCT P ON OD.PRODUCT_NO = P.PRODUCT_NO
+          JOIN
+            	PRODUCT_PHOTOS PP ON P.PRODUCT_NO = PP.PRODUCT_NO
+         WHERE
+            	OD.MEMBER_ORDERS_NO = #{memberOrdersNo}
+         ORDER
+        	BY
+            	OD.MEMBER_ORDERS_DETAIL_NO ASC
+    </select>
+
+    <resultMap id="memberOrdersDetailResultMap" type="memberOrdersDetailDTO">
+        <id property="memberOrdersDetailNo" column="MEMBER_ORDERS_DETAIL_NO"/>
+        <result property="memberOrdersDetailAmount" column="MEMBER_ORDERS_DETAIL_AMOUNT"/>
+        <result property="memberOrdersDetailPrice" column="MEMBER_ORDERS_DETAIL_PRICE"/>
+        <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/> <!-- 이 부분을 올바르게 수정 -->
+        <association property="product" javaType="productDTO">
+            <id property="productNo" column="PRODUCT_NO"/>
+            <result property="productName" column="PRODUCT_NAME"/>
+            <result property="productPrice" column="PRODUCT_PRICE"/>
+            <result property="productStatus" column="PRODUCT_STATUS"/>
+            <result property="productCate" column="PRODUCT_CATE"/>
+            <collection property="productPhotosList" ofType="productPhotosDTO">
+                <result property="productPhotosName" column="PHOTO_NAME"/>
+                <result property="productPhotosPath" column="PHOTO_PATH"/>
+            </collection>
+        </association>
+    </resultMap>
+    
+    <update id="updateOrderStatus">
+	    UPDATE
+	    		MEMBER_ORDERS_DETAIL
+	       SET
+	    		MEMBER_ORDERS_DETAIL_STATUS = #{status}
+	     WHERE
+	     		MEMBER_ORDERS_DETAIL_NO = #{memberOrdersDetailNo}
+	</update>
 </mapper>

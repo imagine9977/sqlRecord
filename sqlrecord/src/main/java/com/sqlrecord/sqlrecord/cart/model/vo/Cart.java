@@ -1,5 +1,7 @@
 package com.sqlrecord.sqlrecord.cart.model.vo;
 
+import java.util.List;
+
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
@@ -19,4 +21,6 @@ public class Cart {
 	private int cartAmount;
 	private Product product;
 	private Member member;
+	
+	private List<Cart> cartList;
 }
