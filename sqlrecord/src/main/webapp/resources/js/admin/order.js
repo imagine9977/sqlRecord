@@ -7,7 +7,7 @@ function processOrder(orderNos, action) {
         data: JSON.stringify(orderNos), // Ensure the data is an array
         success: function(response) {
             alert(response.message);
-            loadOrderTable('all'); // Reload the table after processing the order
+            loadOrderTable('all');
         },
         error: function(xhr, status, error) {
             console.error(`${action} 처리 중 오류 발생: `, error);
@@ -21,10 +21,10 @@ function processOrderDetail(detailIds, action) {
         url: `/sqlrecord/admin/${action}`,
         type: 'PUT',
         contentType: 'application/json',
-        data: JSON.stringify(detailIds), // Ensure the data is an array
+        data: JSON.stringify(detailIds),
         success: function(response) {
             alert(response.message);
-            loadOrderTable('all'); // Reload the table after processing the order detail
+            loadOrderTable('default');
         },
         error: function(xhr, status, error) {
             console.error(`${action} 처리 중 오류 발생: `, error);
@@ -191,6 +191,7 @@ function loadOrderDetails(memberOrdersNo) {
                                 <p>상품명: ${detail.product.productNo}. ${detail.product.productName}</p>
                                 <p>가격: ${detail.memberOrdersDetailPrice}</p>
                                 <p>수량: ${detail.memberOrdersDetailAmount}</p>
+                                <p>주문상태: ${detail.memberOrdersDetailStatus}</p>
                             </div>
                             <div class="order-detail-buttons">
                                 <button class="btn btn-sm btn-secondary accept-order" data-detail-id="${detail.memberOrdersDetailNo}">주문수락</button>

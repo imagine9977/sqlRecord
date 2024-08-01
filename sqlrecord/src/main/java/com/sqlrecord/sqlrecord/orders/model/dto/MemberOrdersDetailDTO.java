@@ -15,6 +15,6 @@ public class MemberOrdersDetailDTO {
 	private int memberOrdersDetailNo;
     private int memberOrdersDetailAmount;
     private int memberOrdersDetailPrice;
-    private int memberOrdersDetailStatus;
+    private String memberOrdersDetailStatus;
     private ProductDTO product;
 }

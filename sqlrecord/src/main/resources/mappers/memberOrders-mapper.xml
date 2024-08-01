@@ -573,7 +573,7 @@
          WHERE
             	OD.MEMBER_ORDERS_NO = #{memberOrdersNo}
          ORDER
-         	BY
+        	BY
             	OD.MEMBER_ORDERS_DETAIL_NO ASC
     </select>
 
@@ -581,7 +581,7 @@
         <id property="memberOrdersDetailNo" column="MEMBER_ORDERS_DETAIL_NO"/>
         <result property="memberOrdersDetailAmount" column="MEMBER_ORDERS_DETAIL_AMOUNT"/>
         <result property="memberOrdersDetailPrice" column="MEMBER_ORDERS_DETAIL_PRICE"/>
-        <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
+        <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/> <!-- 이 부분을 올바르게 수정 -->
         <association property="product" javaType="productDTO">
             <id property="productNo" column="PRODUCT_NO"/>
             <result property="productName" column="PRODUCT_NAME"/>
