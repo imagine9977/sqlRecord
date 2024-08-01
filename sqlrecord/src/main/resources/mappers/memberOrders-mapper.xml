@@ -569,4 +569,42 @@
 	     WHERE
 	     		MEMBER_ORDERS_NO = #{memberOrdersNo}
 	</select>
+	
+	<select id="searchMemberCount" parameterType="map" resultType="int">
+	    SELECT 
+	    		COUNT(*)
+	      FROM 
+	    		MEMBER_ORDERS
+	     WHERE 
+	    	<if test="condition == 'memberId'">
+	        	MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
+	    	</if>
+	    	<if test="condition == 'productName'">
+	        	PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
+	    	</if>
+	</select>
+	
+	<select id="findByConditionAndKeyword" parameterType="map" resultType="MemberOrdersDTO">
+	    SELECT 
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ID,
+		        PRODUCT_NO,
+		        PRODUCT_NAME,
+		        ORDER_DATE,
+		        ORDER_STATUS
+	      FROM
+	    		MEMBER_ORDERS
+	     WHERE 
+		    <if test="condition == 'memberId'">
+		        MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
+		    </if>
+		    <if test="condition == 'productName'">
+		        PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
+		    </if>
+		 ORDER 
+		 	BY 
+		 		MEMBER_ORDERS_NO DESC
+		 LIMIT 
+		 		#{rowBounds.offset}, #{rowBounds.limit}
+	</select>
 </mapper>

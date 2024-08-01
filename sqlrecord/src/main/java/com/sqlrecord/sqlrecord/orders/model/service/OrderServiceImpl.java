@@ -1,8 +1,10 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -150,4 +152,13 @@ public class OrderServiceImpl implements OrdersService {
 		return ordersMapper.getMemberOrdersDetailNos(memberOrdersNo);
 	}
 
+	@Override
+    public int searchOrderCount(Map<String, String> map) {
+        return ordersMapper.searchOrderCount(map);
+    }
+
+    @Override
+    public List<MemberOrdersDTO> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds) {
+        return ordersMapper.findByConditionAndKeyword(map, rowBounds);
+    }
 }

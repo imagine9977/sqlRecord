@@ -310,3 +310,127 @@ function createPagination(pageInfo, contentType) {
     html += `</div>`;
     return html;
 }
+
+// 검색 기능 추가
+$('#search-button').click(function() {
+    const condition = $('#search-condition').val();
+    const keyword = $('#search-keyword').val();
+    loadSearchResults(condition, keyword);
+});
+
+function loadSearchResults(condition, keyword, page = 1) {
+    $.ajax({
+        url: `/sqlrecord/admin/memberSearch`,
+        type: 'GET',
+        data: { condition: condition, keyword: keyword, page: page },
+        success: function(response) {
+            if (response.list && response.list.length > 0) {
+                let table = `
+                    <table class="accordion-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkAllOrders"></th>
+                                <th>No.</th>
+                                <th>주문 내역</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                response.list.forEach(function(order) {
+                    const orderDetailsCount = order.detailsCount;
+                    const orderDescription = orderDetailsCount > 1 ?
+                        `[${order.productCate}] - ${order.productNo}. ${order.productName} 외 ${orderDetailsCount - 1}건` :
+                        `[${order.productCate}] - ${order.productNo}. ${order.productName}`;
+
+                    table += `
+                        <tr class="accordion-header">
+                            <td><input type="checkbox" class="orderCheck" value="${order.memberOrdersNo}"></td>
+                            <td>${order.memberOrdersNo}</td>
+                            <td>
+                                <h4>${orderDescription}</h4><br/>
+                                <p><b>· 주문자 : ${order.memberId}</b></p>
+                                <p><b>· 주문일자 : </b>${order.orderDate}</p>
+                                <p><b>· 배송주소 : ${order.addr1} ${order.addr2} (${order.postcode})</b></p>
+                                <p><b>· 결제금액 : ${order.totalPrice}원</b></p>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary toggle-details">상세보기</button>
+                                <button class="btn btn-sm btn-secondary accept-all-order" data-order-no="${order.memberOrdersNo}">주문수락</button>
+                                <button class="btn btn-sm btn-secondary deny-all-order" data-order-no="${order.memberOrdersNo}">주문거절</button>
+                            </td>
+                        </tr>
+                        <tr class="accordion-content" style="display: none;">
+                            <td colspan="4">
+                                <div class="order-details" id="order-details-${order.memberOrdersNo}">
+                                    <div class="details-content">
+                                        <h3>주문 상세 정보</h3><br/>
+                                        <div class="order-items" id="order-items-${order.memberOrdersNo}"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                table += `
+                        </tbody>
+                    </table>
+                    <div class="pagination-custom"></div>
+                    <div class="table-footer">
+                        <button id="acceptSelectedOrders">선택주문수락</button>
+                        <button id="denySelectedOrders">선택주문거절</button>
+                    </div>
+                `;
+
+                $('#content-area').html(table);
+
+                // 전체 선택 체크박스 기능 추가
+                $('#checkAllOrders').click(function() {
+                    $('input.orderCheck, .order-detail-item input[type="checkbox"]').prop('checked', this.checked);
+                });
+                
+                // 개별 체크박스 선택 시 전체 선택 체크박스 상태 업데이트
+                $('input.orderCheck').click(function() {
+                    if ($('input.orderCheck').length === $('input.orderCheck:checked').length) {
+                        $('#checkAllOrders').prop('checked', true);
+                    } else {
+                        $('#checkAllOrders').prop('checked', false);
+                    }
+                });
+                
+                // slideToggle 기능 추가
+                $('.toggle-details').click(function() {
+                    const orderNo = $(this).closest('tr').find('input.orderCheck').val();
+                    $(this).closest('tr').next('.accordion-content').slideToggle();
+                    
+                    // MemberOrdersDetail 정보 함수 호출
+                    loadOrderDetails(orderNo);        
+                });
+
+                // 주문수락 및 주문거절 버튼 이벤트 추가
+                $('.accept-all-order').click(function() {
+                    const orderNo = $(this).data('order-no');
+                    processSingleOrder(orderNo, 'orderAccepted');
+                });
+
+                $('.deny-all-order').click(function() {
+                    const orderNo = $(this).data('order-no');
+                    processSingleOrder(orderNo, 'orderDenied');
+                });
+
+                // 페이지네이션 생성
+                const pageInfo = response.pageInfo;
+                const pagingHtml = createPagination(pageInfo, 'order');
+                $('#content-area').append(pagingHtml);
+            } else {
+                $('#content-area').html('<div class="no-data">조회된 내용이 없습니다</div>');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("검색 결과 호출 중 오류 발생: ", error);
+            $('#content-area').html('<div class="error">검색 결과를 불러오는 중 오류가 발생했습니다.</div>');
+        }
+    });
+}

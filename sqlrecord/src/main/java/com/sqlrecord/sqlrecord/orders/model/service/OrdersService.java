@@ -1,6 +1,9 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.RowBounds;
 
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
@@ -45,7 +48,10 @@ public interface OrdersService {
     void acceptOrders(List<Integer> memberOrdersDetailNos);
     // 주문거절
     void denyOrders(List<Integer> memberOrdersDetailNos);
-
+    // 검색 조회수
+    int searchOrderCount(Map<String, String> map);
+    // 검색내용조회
+    List<MemberOrdersDTO> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds);
 
 
 

@@ -352,4 +352,41 @@ public class AdminController {
         }
         return ResponseEntity.ok(allDetailNos);
     }
+    
+    @GetMapping("/orderSearch")
+    public String orderSearch(@RequestParam(value="condition", required=false) String condition,
+                               @RequestParam(value="keyword", required=false) String keyword,
+                               @RequestParam(value="page", defaultValue="1") int page,
+                               Model model) {
+
+        log.info("검색 조건 : {}", condition);
+        log.info("검색 키워드 : {}", keyword);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("condition", condition);
+        map.put("keyword", keyword);
+
+        // 검색 결과 수
+        int searchOrderCount = ordersService.searchOrderCount(map);
+        log.info("검색 조건에 부합하는 행의 수 : {}", searchOrderCount);
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 15;
+
+        PageInfo pageInfo = PageTemplate.getPageInfo(searchOrderCount,
+                                                     currentPage,
+                                                     pageLimit,
+                                                     boardLimit);
+
+        RowBounds rowBounds = new RowBounds((currentPage - 1) * boardLimit, boardLimit);
+
+        List<MemberOrdersDTO> orderList = ordersService.findByConditionAndKeyword(map, rowBounds);
+
+        model.addAttribute("list", orderList);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("condition", condition);
+
+        return "admin/admin";
+    }
 }

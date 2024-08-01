@@ -1,9 +1,11 @@
 package com.sqlrecord.sqlrecord.orders.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
@@ -50,4 +52,6 @@ public interface OrdersMapper {
     void insertTrackingNum(@Param("trackingNum") String trackingNum);
 
 	List<Integer> getMemberOrdersDetailNos(int memberOrdersNo);
+	int searchOrderCount(Map<String, String> map);
+    List<MemberOrdersDTO> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds);
 }
