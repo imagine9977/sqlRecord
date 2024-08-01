@@ -123,8 +123,8 @@ at Object.jQueryDetection"
 	public boolean idCheck(@RequestParam("memberId") String memberId,
 			               HttpSession session) {
 		String ckId = memberId;
-	    Member cus = memberService.getMember(memberId);
-	    session.setAttribute("ckId", memberId);
+	    Member cus = memberService.getMember(ckId);
+	    session.setAttribute("ckId", ckId);
 	    log.info("ckId : {} ", ckId);
 	    boolean result = (cus == null);
 	    //log.info("result : {} ", result);
@@ -250,7 +250,6 @@ at Object.jQueryDetection"
 							   Mail mail) throws MessagingException {
 										 
 		
-		//일치 회원 있으면 메일 보내야하니 멤버에 저장
 		member = memberService.infoId(member);
 		member.setName(name);
 		member.setEmail(email);
