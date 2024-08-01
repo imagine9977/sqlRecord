@@ -16,8 +16,8 @@ public class TrackingServiceImpl implements TrackingService{
 	private final TrackingMapper trackingMapper;
 	
 	@Override
-	public List<TrackingInfo> getTrackingInfoList(int trackingInfoNum) {
-		return trackingMapper.getTrackingInfoList(trackingInfoNum);
+	public List<TrackingInfo> getTrackingInfoList(String trackingNum) {
+		return trackingMapper.getTrackingInfoList(trackingNum);
 	}
 
 	@Override

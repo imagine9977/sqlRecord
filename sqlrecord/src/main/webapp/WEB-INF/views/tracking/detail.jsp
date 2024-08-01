@@ -26,14 +26,15 @@
         </div>
     </div>
     <!-- 배송 완료를 선택하고 입력을 누르면 배송 완료 체크박스가 사라진다.-->
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="배송완료" id="trackingStatus">
-        <label class="form-check-label" for="flexCheckDefault">
-          배송완료
-        </label>
-    </div>
+    <c:if test="${ status  ne '배송완료'}">
+	    <div class="form-check">
+	        <input class="form-check-input" type="checkbox" value="배송완료" id="trackingStatus">
+	        <label class="form-check-label" for="flexCheckDefault">
+	          배송완료
+	        </label>
+	    </div>
     <button type="button" class="btn btn-primary" id="insertTrackingInfo" onclick="insertTracking()">입력</button>
-
+	 </c:if>
     <br><br><br><br>
 	
 	<c:if test="${ status eq '배송완료' }">
@@ -86,10 +87,18 @@
 				
 				
 				
-				
+				if(trackingStatus) {
+					let form_check = document.querySelector(".form-check");
+					let insertTrackingInfo = document.querySelector("#insertTrackingInfo");
+					form_check.style.display = 'none';
+					insertTrackingInfo.style.display = 'none';
+				}
 				
 				tbody.innerHTML += str;
 				console.log(result);
+				
+				
+				
 			}
 		})
 	}

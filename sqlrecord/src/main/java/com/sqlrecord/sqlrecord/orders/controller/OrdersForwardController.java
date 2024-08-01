@@ -79,6 +79,21 @@ public class OrdersForwardController {
 		
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		 
 		if(ordersService.insertOrdersDetail(odList) > 0) {
 			cartService.deleteCart(cartNoList);

@@ -12,7 +12,7 @@
 <%@ include file="/WEB-INF/views/searchHeader.jsp" %>
 
 <h2>민식 택배 - <strong id="what">배송중</strong></h2>
-	<button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('배송요청')">배송 요청된 운송장</button>
+	<button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('상품준비중')">배송 요청된 운송장</button>
     <button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('배송중')">배송중 운송장</button>
     <button type="button" class="btn btn-secondary" id="trackingReq" onclick="onClick('배송완료')">배송 완료 운송장</button>
     <br><br>

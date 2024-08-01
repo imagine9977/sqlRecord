@@ -24,9 +24,9 @@ public interface OrdersService {
 
 	List<MemberOrdersDetail> getOrdersDetailAll();
 
-	MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum);
+	MemberOrdersDetail getOrdersDetailOneForTracking(String trackingNum);
 
-	int updateMemberOrdersStatus(String string, int trackingNum);
+	int updateMemberOrdersStatus(String string, String trackingNum);
 
 	int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx);
 

@@ -19,7 +19,7 @@ public class MemberOrdersEx {
     private String memberOrdersExType;
     private int memberOrdersExAmount;
     private String memberOrdersExDate;
-    private int trackingNum;
+    private String trackingNum;
     private String memberOrdersExAddress;
     private String memberOrdersExAddress2;
     private String memberOrdersExPostcode;
