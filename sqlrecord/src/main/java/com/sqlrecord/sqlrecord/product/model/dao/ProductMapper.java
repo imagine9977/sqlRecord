@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 
+import com.sqlrecord.sqlrecord.orders.model.dto.ProductDTO;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 @Mapper
@@ -24,5 +25,7 @@ public interface ProductMapper {
 			RowBounds rowBounds);
 
 	public Product findOne(int productNo);
+
+	public List<ProductDTO> getAllProducts(int startValue, int endValue);
 
 }

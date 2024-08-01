@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
+import com.sqlrecord.sqlrecord.orders.model.dto.ProductDTO;
 import com.sqlrecord.sqlrecord.product.model.dao.ProductMapper;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
@@ -51,39 +52,12 @@ public class ProductServiceImpl implements ProductService {
 	public Product findOne(int productNo) {
 		return productMapper.findOne(productNo);
 	}
-	
-	
 
-	/*
-
-	private final ProductMapper productMapper;
-	private final SqlSessionTemplate sqlSession;
-
-	// 전체 상품 수 조회
+	//페이징 조회
 	@Override
-	public int productCount() {
-		return productMapper.productCount(sqlSession);
+	public List<ProductDTO> getAllProducts(int startValue, int endValue) {
+		return productMapper.getAllProducts(startValue, endValue);
 	}
-
-	// 전체 상품 조회 (페이징)
-	@Override
-	public List<Product> findAll(Map<String, Integer> map) {
-		return productMapper.findAll(sqlSession, map);
-	}
-
-	// 상품 검색 결과 수
-	@Override
-	public int searchCount(Map<String, String> map) {
-		return productMapper.searchCount(sqlSession, map);
-	}
-
-	// 상품 검색 결과
-	@Override
-	public List<Product> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds) {
-		return productMapper.findByConditionAndKeyword(sqlSession, map, rowBounds);
-	}
-
-	
 	
 	
 	// 1개 상품 조회
@@ -97,7 +71,6 @@ public class ProductServiceImpl implements ProductService {
 	
 	// 상품 삭제 (update status 'Y'->'N')
 	
-	*/
 	
 	
 }

@@ -124,6 +124,20 @@ function loadOrderTable(contentType, page = 1) {
 
                 $('#content-area').html(table);
                 
+                // 검색 박스 추가
+                $('#content-area').prepend(`
+                    <div class="search-box">
+                        <div id="section_search_item1_inputBox">
+                            <div id="section_search_item1_inputBox_item">
+                                <div class="search-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><!-- !Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path fill="#aeaab1" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                                </div>
+                                <input id="section_search_item1_input" type="text" placeholder="주문자 검색">
+                            </div>
+                        </div>
+                    </div>
+                `);
+                
                 // 전체 선택 체크박스 기능 추가
                 $('#checkAllOrders').click(function() {
                     $('input.orderCheck, .order-detail-item input[type="checkbox"]').prop('checked', this.checked);

@@ -3,7 +3,7 @@
         var sidebarContent = `
             <div class="sidebar">
                 <h2>상품 카테고리</h2>
-                <div class="sidebar-element"><p><a href="#" data-content="all">상품 전체</a></p></div>
+                <div class="sidebar-element"><p><a href="#" data-content="default">상품 전체</a></p></div>
                 <hr/>
                 <div class="sidebar-element"><p><a href="#" data-content="turntables">TURNTABLES</a></p></div>
                 <hr/>
