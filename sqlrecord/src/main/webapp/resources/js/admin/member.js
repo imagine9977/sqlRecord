@@ -12,7 +12,7 @@
 	                var table = '<table class="accordion-table">' +
 	                    '<thead>' +
 	                    '<tr>' +
-	                    '<th><input type="checkbox"></th>' +
+	                    '<th><input type="checkbox" class="checkAll"></th>' +
 	                    '<th>No.</th>' +
 	                    '<th>아이디</th>' +
 	                    '<th>이름</th>' +

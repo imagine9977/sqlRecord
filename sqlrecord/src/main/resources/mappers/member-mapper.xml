@@ -200,7 +200,7 @@
   
   <!-- 관리자 페이지 : 회원 1명 상세정보 조회 -->
 	<select id="getOneMember" parameterType="String" resultType="member">
-		<include refid="selectMember"/>
+		<include refid="selectAdminMember"/>
 		WHERE
 				MEMBER_NO = #{memberNo}
 	</select>
@@ -238,7 +238,7 @@
     </select>
 
     <!-- 회원 수 카운트 쿼리 -->
-    <select id="memberCount" resultType="int">
+    <select id="memberCount" resultType="_int">
         SELECT
             COUNT(M.MEMBER_NO)
         FROM
@@ -246,7 +246,6 @@
         WHERE
             M.MEMBER_ID != 'admin'
     </select>
-	
 	
 	<select id="memberIdFindByNo" parameterType="_int" resultType="String">
 		SELECT
@@ -256,4 +255,49 @@
 		WHERE
 			MEMBER_NO = #{memberNo}
 	</select>
+    
+    <!-- 회원 상태 업데이트(삭제) -->
+    <update id="updateMemberStatus">
+    	UPDATE
+    			MEMBER
+    	   SET
+    	   		STATUS = #{status}
+    	 WHERE
+    	 		MEMBER_NO = #{memberNo}
+    </update>
+    
+    <!-- 회원 검색 수 -->
+    <select id="searchMemberCount" parameterType="hashmap" resultType="_int">
+    	SELECT
+    			COUNT(MEMBER_NO)
+    	  FROM
+    	  		MEMBER
+    	 WHERE
+    	 	<if test="condition == 'memberId'">
+    	 		MEMBER_ID
+    	 	</if>
+    	 	<if test="condition == 'name'">
+    	 		NAME
+    	 	</if>
+    	 		LIKE '%' || #{keyword} || '%'
+    </select>
+    
+    <!-- 회원 검색 결과 -->
+    <select id="findByConditionAndKeyword" parameterType="hashmap" resultType="member">
+    	<include refid="selectAdminMember" />
+    		<choose>
+	            <when test="condition == 'memberId'">
+	               	AND MEMBER_ID
+	            </when>
+	            <otherwise>
+	               AND NAME
+	         	</otherwise>
+	         </choose>
+	         	LIKE '%' || #{keyword} || '%'
+	     ORDER
+	      	BY
+	      		MEMBER_NO ASC
+    </select>
+
 </mapper>
+

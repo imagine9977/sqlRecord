@@ -2,6 +2,8 @@ package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
 
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrders;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersDetail;
 import com.sqlrecord.sqlrecord.orders.model.vo.MemberOrdersEx;
@@ -29,6 +31,19 @@ public interface OrdersService {
 	int insertMemberOrdersEx(MemberOrdersEx memberOrdersEx);
 
 	List<MemberOrdersEx> getOrdersEx(int memberNo);
+
+	
+	// 관리자
+	int getTotalOrdersCount();
+    List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue);
+    List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo);
+    void acceptOrders(List<Integer> memberOrdersDetailNos);
+    void denyOrders(List<Integer> memberOrdersDetailNos);
+
+
+
+
+
 	
 	
 }

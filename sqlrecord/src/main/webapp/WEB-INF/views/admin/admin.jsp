@@ -29,7 +29,7 @@
         <li class="tab-btnItem" data-tab="review"><a href="#review">리뷰</a></li>
         <li class="tab-btnItem" data-tab="analytics"><a href="#analytics">통계·분석</a></li>
         <li class="tab-btnItem" data-tab="notice"><a href="#notice">공지사항</a></li>
-        <li class="tab-btnItem" data-tab="qna"><a href="${hath }/qna/qnas">고객지원↗</a></li>
+        <li class="tab-btnItem" data-tab="qna"><a href="${hath }/qna/list">고객지원↗</a></li>
     </ul>
 </div>
 
@@ -39,6 +39,9 @@
 
     <!-- 컨텐츠 영역 -->
     <div class="content-area" id="content-area"></div>
+    
+    <!-- 버튼 영역 -->
+    <div id="action-buttons"></div>
 </div>
 
 <!-- 푸터 -->
@@ -61,16 +64,20 @@ $(document).ready(function() {
 	        console.log('Clicked page:', page);
 	        console.log('Content type:', contentType);
 	        console.log('Current tab:', currentTab);
-	
+			
 	        if (currentTab === 'member') {
 	            loadMemberTable('all', page);
 	        } else if (currentTab === 'notice') {
 	            loadNoticeTable('default', page);
+	        } else if (currentTab === 'reply') {
+	            loadReplyTable('default', page);
+	        } else if (currentTab === 'order') {
+	            loadOrderTable('default', page);
 	        }
 	    });
 	}
 	
-	// 탭 호출
+	// 탭 호출 + 사이드바 여부
     function loadTab(tabName) {
         $('.tab-btnItem').removeClass('active');
         $('.tab-btnItem[data-tab="' + tabName + '"]').addClass('active');
