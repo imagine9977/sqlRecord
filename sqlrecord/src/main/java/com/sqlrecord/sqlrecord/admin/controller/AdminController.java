@@ -343,4 +343,13 @@ public class AdminController {
         response.put("message", "주문거절 성공");
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/getMemberOrdersDetailNos")
+    public ResponseEntity<List<Integer>> getMemberOrdersDetailNos(@RequestBody List<Integer> memberOrdersNos) {
+        List<Integer> allDetailNos = new ArrayList<>();
+        for (int memberOrdersNo : memberOrdersNos) {
+            allDetailNos.addAll(ordersService.getMemberOrdersDetailNos(memberOrdersNo));
+        }
+        return ResponseEntity.ok(allDetailNos);
+    }
 }

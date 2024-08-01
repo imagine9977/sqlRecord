@@ -35,9 +35,15 @@ public interface OrdersService {
 	
 	// 관리자
 	int getTotalOrdersCount();
+	// 모든 주문건 출력
     List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue);
+    // 모든 주문상세 출력
     List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo);
+    // 선택한 주문상세값의 리스트를 가져오기
+    List<Integer> getMemberOrdersDetailNos(int memberOrdersNo);
+    // 주문수락
     void acceptOrders(List<Integer> memberOrdersDetailNos);
+    // 주문거절
     void denyOrders(List<Integer> memberOrdersDetailNos);
 
 

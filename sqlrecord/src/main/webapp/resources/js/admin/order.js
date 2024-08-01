@@ -202,13 +202,17 @@ function loadOrderDetails(memberOrdersNo) {
                             <input type="checkbox" class="detailCheck" value="${detail.memberOrdersDetailNo}" data-order-no="${memberOrdersNo}">
                             <img src="${detail.product.productPhotosList[0].productPhotosPath}" alt="${detail.product.productPhotosList[0].productPhotosName}">
                             <div class="order-detail-info">
-                                <p><b>상품명: <a href="">${detail.product.productNo}. ${detail.product.productName}↗</a></b></p>
-                                <p>가격: ${detail.memberOrdersDetailPrice}</p>
-                                <p>수량: ${detail.memberOrdersDetailAmount}</p>
+                                <p><b>상품명: <a href="/sqlrecord/productFor/detail/${detail.product.productNo}">${detail.product.productNo}. ${detail.product.productName}↗</a></b></p>
+                                <p>결제가격: ${detail.memberOrdersDetailPrice}</p>
+                                <p>주문수량: ${detail.memberOrdersDetailAmount}</p>
                                 <p><b>주문상태: ${detail.memberOrdersDetailStatus}</b></p>
+                                <p><b>송장번호: ${detail.trackingNum}</b></p>
                             </div>
                             <div class="order-detail-buttons">
-                                <button class="btn btn-sm btn-secondary accept-order" data-detail-id="${detail.memberOrdersDetailNo}">주문수락</button>
+                                ${detail.memberOrdersDetailStatus !== '상품준비중' ? 
+                                    `<button class="btn btn-sm btn-secondary accept-order" data-detail-id="${detail.memberOrdersDetailNo}">주문수락</button>` : 
+                                    `<button class="btn btn-sm btn-secondary accept-order" data-detail-id="${detail.memberOrdersDetailNo}" disabled>주문수락</button>`
+                                }
                                 <button class="btn btn-sm btn-secondary reject-order" data-detail-id="${detail.memberOrdersDetailNo}">주문거절</button>
                             </div>
                         </div>
@@ -257,6 +261,8 @@ function loadOrderDetails(memberOrdersNo) {
         }
     });
 }
+                                
+                                
 
 // 페이지네이션 생성
 function createPagination(pageInfo, contentType) {
