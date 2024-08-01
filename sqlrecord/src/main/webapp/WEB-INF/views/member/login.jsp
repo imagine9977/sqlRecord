@@ -279,7 +279,7 @@
 	    function checkId() {
 	    	if($("#memberId").val()==""){
 	            alert("아이디를 입력 해주세요.");
-	            $("#memberId").focus();
+	            	$("#memberId").focus();
 	            return;
 	    		}
 	    	var params = { memberId : $("#memberId").val() }
