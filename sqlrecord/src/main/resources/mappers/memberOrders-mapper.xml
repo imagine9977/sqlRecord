@@ -452,86 +452,82 @@
     </select>
 
     <select id="getAllMemberOrders" resultMap="memberOrdersResultMap">
-	    WITH FilteredOrdersDetail AS (
-	        SELECT *
-	        FROM MEMBER_ORDERS_DETAIL
-	        WHERE MEMBER_ORDERS_DETAIL_STATUS != '주문취소됨'
-	    )
 	    SELECT 
-	        rnum,
-	        MEMBER_ORDERS_NO,
-	        MEMBER_ORDERS_ADDRESS,
-	        MEMBER_ORDERS_ADDRESS2,
-	        MEMBER_ORDERS_POSTCODE,
-	        MEMBER_ORDERS_DATE,
-	        MEMBER_ID,
-	        PRODUCT_CATE,
-	        PRODUCT_NO,
-	        PRODUCT_NAME,
-	        PRODUCT_STATUS,
-	        totalPrice,
-	        detailsCount,
-	        MEMBER_ORDERS_DETAIL_STATUS
-	    FROM (
-	        SELECT 
-	            ROWNUM AS rnum,
-	            O.MEMBER_ORDERS_NO,
-	            O.MEMBER_ORDERS_ADDRESS,
-	            O.MEMBER_ORDERS_ADDRESS2,
-	            O.MEMBER_ORDERS_POSTCODE,
-	            O.MEMBER_ORDERS_DATE,
-	            M.MEMBER_ID,
-	            (
-	                SELECT P.PRODUCT_CATE
-	                FROM PRODUCT P
-	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	                AND ROWNUM = 1
-	            ) AS PRODUCT_CATE,
-	            (
-	                SELECT P.PRODUCT_NO
-	                FROM PRODUCT P
-	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	                AND ROWNUM = 1
-	            ) AS PRODUCT_NO,
-	            (
-	                SELECT P.PRODUCT_NAME
-	                FROM PRODUCT P
-	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	                AND ROWNUM = 1
-	            ) AS PRODUCT_NAME,
-	            (
-	                SELECT P.PRODUCT_STATUS
-	                FROM PRODUCT P
-	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	                AND ROWNUM = 1
-	            ) AS PRODUCT_STATUS,
-	            (
-	                SELECT SUM(OD2.MEMBER_ORDERS_DETAIL_PRICE)
-	                FROM FilteredOrdersDetail OD2
-	                WHERE OD2.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	            ) AS totalPrice,
-	            (
-	                SELECT COUNT(*)
-	                FROM FilteredOrdersDetail OD3
-	                WHERE OD3.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	            ) AS detailsCount,
-	            (
-	                SELECT OD.MEMBER_ORDERS_DETAIL_STATUS
-	                FROM FilteredOrdersDetail OD
-	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-	                AND ROWNUM = 1
-	            ) AS MEMBER_ORDERS_DETAIL_STATUS
-	        FROM 
-	            MEMBER_ORDERS O
-	        JOIN 
-	            MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
-	        ORDER BY 
-	            O.MEMBER_ORDERS_NO DESC
-	    )
+		        rnum,
+		        MEMBER_ORDERS_NO,
+		        MEMBER_ORDERS_ADDRESS,
+		        MEMBER_ORDERS_ADDRESS2,
+		        MEMBER_ORDERS_POSTCODE,
+		        MEMBER_ORDERS_DATE,
+		        MEMBER_ID,
+		        PRODUCT_CATE,
+		        PRODUCT_NO,
+		        PRODUCT_NAME,
+		        PRODUCT_STATUS,
+		        totalPrice,
+		        detailsCount,
+		        MEMBER_ORDERS_DETAIL_STATUS
+	      FROM (
+		        SELECT 
+		            ROWNUM AS rnum,
+		            O.MEMBER_ORDERS_NO,
+		            O.MEMBER_ORDERS_ADDRESS,
+		            O.MEMBER_ORDERS_ADDRESS2,
+		            O.MEMBER_ORDERS_POSTCODE,
+		            O.MEMBER_ORDERS_DATE,
+		            M.MEMBER_ID,
+		            (
+		                SELECT P.PRODUCT_CATE
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_CATE,
+		            (
+		                SELECT P.PRODUCT_NO
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_NO,
+		            (
+		                SELECT P.PRODUCT_NAME
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_NAME,
+		            (
+		                SELECT P.PRODUCT_STATUS
+		                FROM PRODUCT P
+		                JOIN MEMBER_ORDERS_DETAIL OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS PRODUCT_STATUS,
+		            (
+		                SELECT SUM(OD.MEMBER_ORDERS_DETAIL_PRICE)
+		                FROM MEMBER_ORDERS_DETAIL OD
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		            ) AS totalPrice,
+		            (
+		                SELECT COUNT(*)
+		                FROM MEMBER_ORDERS_DETAIL OD
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		            ) AS detailsCount,
+		            (
+		                SELECT OD.MEMBER_ORDERS_DETAIL_STATUS
+		                FROM MEMBER_ORDERS_DETAIL OD
+		                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+		                AND ROWNUM = 1
+		            ) AS MEMBER_ORDERS_DETAIL_STATUS
+	          FROM 
+	            	MEMBER_ORDERS O
+	          JOIN 
+	            	MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
+	         ORDER
+	         	BY 
+	            	O.MEMBER_ORDERS_NO DESC
+	    		)
 	    WHERE rnum BETWEEN #{startValue} AND #{endValue}
 	</select>
 	

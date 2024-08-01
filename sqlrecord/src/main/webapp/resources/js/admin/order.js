@@ -4,7 +4,7 @@ function processOrder(orderNos, action) {
         url: `/sqlrecord/admin/${action}`,
         type: 'PUT',
         contentType: 'application/json',
-        data: JSON.stringify(orderNos), // Ensure the data is an array
+        data: JSON.stringify(orderNos),
         success: function(response) {
             alert(response.message);
             loadOrderTable('all');
@@ -77,10 +77,10 @@ function loadOrderTable(contentType, page = 1) {
                 `;
 
                 response.data.forEach(function(order) {
-                    const orderDetailsCount = order.detailsCount;  // Assuming detailsCount is included in response
+                    const orderDetailsCount = order.detailsCount;
                     const orderDescription = orderDetailsCount > 1 ?
-                        `${order.productCate} - ${order.productNo}. ${order.productName} 외 ${orderDetailsCount - 1}건` :
-                        `${order.productCate} - ${order.productNo}. ${order.productName}`;
+                        `[${order.productCate}] - ${order.productNo}. ${order.productName} 외 ${orderDetailsCount - 1}건` :
+                        `[${order.productCate}] - ${order.productNo}. ${order.productName}`;
 
                     table += `
                         <tr class="accordion-header">
@@ -150,12 +150,12 @@ function loadOrderTable(contentType, page = 1) {
                 // 주문수락 및 주문거절 버튼 이벤트 추가
                 $('.accept-all-order').click(function() {
                     const orderNo = $(this).data('order-no');
-                    processOrder([orderNo], 'orderAccepted'); // Send as an array
+                    processOrder([orderNo], 'orderAccepted');
                 });
 
                 $('.deny-all-order').click(function() {
                     const orderNo = $(this).data('order-no');
-                    processOrder([orderNo], 'orderDenied'); // Send as an array
+                    processOrder([orderNo], 'orderDenied');
                 });
 
                 // 페이지네이션 생성
@@ -188,10 +188,10 @@ function loadOrderDetails(memberOrdersNo) {
                             <input type="checkbox" class="detailCheck" value="${detail.memberOrdersDetailNo}" data-order-no="${memberOrdersNo}">
                             <img src="${detail.product.productPhotosList[0].productPhotosPath}" alt="${detail.product.productPhotosList[0].productPhotosName}">
                             <div class="order-detail-info">
-                                <p>상품명: ${detail.product.productNo}. ${detail.product.productName}</p>
+                                <p><b>상품명: <a href="">${detail.product.productNo}. ${detail.product.productName}↗</a></b></p>
                                 <p>가격: ${detail.memberOrdersDetailPrice}</p>
                                 <p>수량: ${detail.memberOrdersDetailAmount}</p>
-                                <p>주문상태: ${detail.memberOrdersDetailStatus}</p>
+                                <p><b>주문상태: ${detail.memberOrdersDetailStatus}</b></p>
                             </div>
                             <div class="order-detail-buttons">
                                 <button class="btn btn-sm btn-secondary accept-order" data-detail-id="${detail.memberOrdersDetailNo}">주문수락</button>
@@ -225,12 +225,12 @@ function loadOrderDetails(memberOrdersNo) {
                 // 토글 내 개별 수락/거절 버튼 이벤트 추가
                 $('.accept-order').click(function() {
                     const detailId = $(this).data('detail-id');
-                    processOrderDetail([detailId], 'orderAccepted'); // Send as an array
+                    processOrderDetail([detailId], 'orderAccepted');
                 });
 
                 $('.reject-order').click(function() {
                     const detailId = $(this).data('detail-id');
-                    processOrderDetail([detailId], 'orderDenied'); // Send as an array
+                    processOrderDetail([detailId], 'orderDenied');
                 });
 
             } else {
