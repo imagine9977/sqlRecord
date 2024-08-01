@@ -32,7 +32,7 @@ public class QnaServiceImpl implements QnaService{
 	@Override
 	public int qnaCountCate(String cate, String bool) {
 		// TODO Auto-generated method stub
-		if(bool.equals("N")) {
+		if(bool.equals("N")||bool.equals("Y")) {
 			return qnaMapper.qnaCountCateUnsolved(cate, bool);
 		}return qnaMapper.qnaCountCate(cate);
 	
