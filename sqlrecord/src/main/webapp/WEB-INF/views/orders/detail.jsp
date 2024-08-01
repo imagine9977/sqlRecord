@@ -50,8 +50,11 @@
 		            <td>${item.memberOrdersDetailStatus }</td>
 		            
 		            <c:choose>
-		            	<c:when test="${item.memberOrdersDetailStatus eq '상품준비중' }">
+		            	<c:when test="${item.memberOrdersDetailStatus eq '주문요청됨' }">
 		            		<td><button class="btn btn-danger"><a href="${hpath}/orders/delete/${ item.memberOrdersDetailNo}" >주문 취소</a></button></td>
+		            	</c:when>
+		            	<c:when test="${item.memberOrdersDetailStatus eq '상품준비중' }">
+		            		<td></td>
 		            	</c:when>
 		            	<c:when test="${item.memberOrdersDetailStatus eq '배송중' }">
 		            		<td></td>
@@ -65,16 +68,23 @@
 		            </c:choose>
 
 		            <c:choose>
+		            	<c:when test="${ item.memberOrdersDetailStatus eq '상품준비중'  }">
+		            		<td>
+		            			<button data-toggle="modal" data-target="#exampleModal" class="btn btn-secondary" id="checkTracking" onclick="onClick('${ item.trackingNum}')">
+		            				배송 현황
+		            			</button>
+		            		</td>
+		            	</c:when>
 		            	<c:when test="${ item.memberOrdersDetailStatus eq '배송중'  }">
 		            		<td>
-		            			<button data-toggle="modal" data-target="#exampleModal" class="btn btn-secondary" id="checkTracking" onclick="onClick(${ item.trackingNum})">
+		            			<button data-toggle="modal" data-target="#exampleModal" class="btn btn-secondary" id="checkTracking" onclick="onClick('${ item.trackingNum}')">
 		            				배송 현황
 		            			</button>
 		            		</td>
 		            	</c:when>
 		            	<c:when test="${item.memberOrdersDetailStatus eq '배송완료' }">
 		            		<td>
-		            			<button data-toggle="modal" data-target="#exampleModal" class="btn btn-secondary" id="checkTracking" onclick="onClick(${ item.trackingNum})">
+		            			<button data-toggle="modal" data-target="#exampleModal" class="btn btn-secondary" id="checkTracking" onclick="onClick('${ item.trackingNum}')">
 		            				배송 현황
 		            			</button>
 		            		</td>
@@ -98,7 +108,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">운송장 번호 : </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -119,7 +129,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
@@ -134,6 +143,8 @@
 	function onClick(e) {
 		
 		const tbody = document.querySelector("#tbody");
+		const modal_title = document.querySelector(".modal-title");
+		
 		
 		
 		console.log(e);
@@ -151,6 +162,7 @@
 						+  "</tr>";
 				})
 				tbody.innerHTML = str;
+				modal_title.innerHTML = '운송장 번호 : \t' + e;
 			}
 		})
 	}

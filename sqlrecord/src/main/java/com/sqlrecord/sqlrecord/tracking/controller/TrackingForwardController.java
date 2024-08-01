@@ -40,7 +40,7 @@ public class TrackingForwardController {
 		log.info("modList : {}" , modList.size());
 		
 		
-		List<MemberOrdersDetail> newMoList = modList.stream().filter((item) -> item.getTrackingNum() != 0)
+		List<MemberOrdersDetail> newMoList = modList.stream().filter((item) -> item.getTrackingNum() != null)
 															 .collect(Collectors.toList());
 		
 		model.addAttribute("newMoList",newMoList);
@@ -51,7 +51,7 @@ public class TrackingForwardController {
 	
 	
 	@GetMapping("/{trackingNum}")
-	public String getTrackingOnePage(@PathVariable int trackingNum ,  Model model) {
+	public String getTrackingOnePage(@PathVariable String trackingNum ,  Model model) {
 		
 		List<TrackingInfo> trackingInfoList = trackingService.getTrackingInfoList(trackingNum);
 		

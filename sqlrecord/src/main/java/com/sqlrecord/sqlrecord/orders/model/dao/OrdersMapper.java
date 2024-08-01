@@ -29,9 +29,9 @@ public interface OrdersMapper {
 
 	List<MemberOrdersDetail> getOrdersDetailAll();
 
-	MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum);
+	MemberOrdersDetail getOrdersDetailOneForTracking(String trackingNum);
 
-	int updateMemberOrdersStatus(@Param("string") String string, @Param("trackingNum") int trackingNum);
+	int updateMemberOrdersStatus(@Param("string") String string, @Param("trackingNum") String trackingNum);
 
 	int updateMemberOrdersExd(MemberOrdersEx memberOrdersEx);
 	
