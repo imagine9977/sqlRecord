@@ -16,12 +16,12 @@ function processOrder(orderNos, action) {
 }
 
 // 주문 상세 처리 함수
-function processOrderDetail(detailIds, action) {
+function processOrderDetail(detailNos, action) {
     $.ajax({
         url: `/sqlrecord/admin/${action}`,
         type: 'PUT',
         contentType: 'application/json',
-        data: JSON.stringify(detailIds),
+        data: JSON.stringify(detailNos),
         success: function(response) {
             alert(response.message);
             loadOrderTable('default');
@@ -32,18 +32,39 @@ function processOrderDetail(detailIds, action) {
     });
 }
 
-// 선택된 주문 상세 처리 함수
+// 선택된 주문 처리 함수
 function processSelectedOrders(action) {
-    const selectedDetailIds = [];
-    $('.detailCheck:checked').each(function() {
-        selectedDetailIds.push(parseInt($(this).val()));
+    const selectedOrderNos = [];
+    $('.orderCheck:checked').each(function() {
+        selectedOrderNos.push(parseInt($(this).val()));
     });
 
-    if (selectedDetailIds.length > 0) {
-        processOrder(selectedDetailIds, action);
+    if (selectedOrderNos.length > 0) {
+        getMemberOrdersDetailNos(selectedOrderNos, action);
     } else {
         alert('선택된 주문이 없습니다.');
     }
+}
+
+// 개별 주문 처리 함수
+function processSingleOrder(orderNo, action) {
+    getMemberOrdersDetailNos([orderNo], action);
+}
+
+// 상세 주문 번호 가져오기 함수
+function getMemberOrdersDetailNos(orderNos, action) {
+    $.ajax({
+        url: '/sqlrecord/admin/getMemberOrdersDetailNos',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(orderNos),
+        success: function(detailNos) {
+            processOrder(detailNos, action);
+        },
+        error: function(xhr, status, error) {
+            console.error('상세 주문 번호 가져오는 중 오류 발생: ', error);
+        }
+    });
 }
 
 // 선택 주문 수락 및 거절 버튼 이벤트 추가
@@ -53,6 +74,17 @@ $(document).on('click', '#acceptSelectedOrders', function() {
 
 $(document).on('click', '#denySelectedOrders', function() {
     processSelectedOrders('orderDenied');
+});
+
+// 개별 주문 수락 및 거절 버튼 이벤트 추가
+$(document).on('click', '.accept-all-order', function() {
+    const orderNo = $(this).data('order-no');
+    processSingleOrder(orderNo, 'orderAccepted');
+});
+
+$(document).on('click', '.deny-all-order', function() {
+    const orderNo = $(this).data('order-no');
+    processSingleOrder(orderNo, 'orderDenied');
 });
 
 // 주문 테이블 생성 시 각 버튼에 대한 이벤트 추가
@@ -126,15 +158,15 @@ function loadOrderTable(contentType, page = 1) {
                 
                 // 검색 박스 추가
                 $('#content-area').prepend(`
-                    <div class="search-box">
+                    <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px;">
                         <div id="section_search_item1_inputBox">
-                            <div id="section_search_item1_inputBox_item">
-                                <div class="search-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><!-- !Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path fill="#aeaab1" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
-                                </div>
-                                <input id="section_search_item1_input" type="text" placeholder="주문자 검색">
-                            </div>
-                        </div>
+					        <div id="section_search_item1_inputBox_item">
+					            <div style="margin:5px; align-items:center; justify-content: center;">
+					                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><!-- !Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path fill="#aeaab1" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+					            </div>
+					            <input id="section_search_item1_input" type="text" placeholder="주문자 검색">
+					        </div>
+					    </div>
                     </div>
                 `);
                 
@@ -164,12 +196,12 @@ function loadOrderTable(contentType, page = 1) {
                 // 주문수락 및 주문거절 버튼 이벤트 추가
                 $('.accept-all-order').click(function() {
                     const orderNo = $(this).data('order-no');
-                    processOrder([orderNo], 'orderAccepted');
+                    processSingleOrder(orderNo, 'orderAccepted');
                 });
 
                 $('.deny-all-order').click(function() {
                     const orderNo = $(this).data('order-no');
-                    processOrder([orderNo], 'orderDenied');
+                    processSingleOrder(orderNo, 'orderDenied');
                 });
 
                 // 페이지네이션 생성
@@ -205,8 +237,8 @@ function loadOrderDetails(memberOrdersNo) {
                                 <p><b>상품명: <a href="/sqlrecord/productFor/detail/${detail.product.productNo}">${detail.product.productNo}. ${detail.product.productName}↗</a></b></p>
                                 <p>결제가격: ${detail.memberOrdersDetailPrice}</p>
                                 <p>주문수량: ${detail.memberOrdersDetailAmount}</p>
-                                <p><b>주문상태: ${detail.memberOrdersDetailStatus}</b></p>
-                                <p><b>송장번호: ${detail.trackingNum}</b></p>
+                                <p>주문상태: <b>${detail.memberOrdersDetailStatus}</b></p>
+                                <p>송장번호: <b>${detail.trackingNum}</b></p>
                             </div>
                             <div class="order-detail-buttons">
                                 ${detail.memberOrdersDetailStatus !== '상품준비중' ? 
@@ -261,8 +293,6 @@ function loadOrderDetails(memberOrdersNo) {
         }
     });
 }
-                                
-                                
 
 // 페이지네이션 생성
 function createPagination(pageInfo, contentType) {

@@ -29,7 +29,7 @@
         <li class="tab-btnItem" data-tab="review"><a href="#review">리뷰</a></li>
         <li class="tab-btnItem" data-tab="analytics"><a href="#analytics">통계·분석</a></li>
         <li class="tab-btnItem" data-tab="notice"><a href="#notice">공지사항</a></li>
-        <li class="tab-btnItem" data-tab="qna"><a href="${hath }/qna/list">고객지원↗</a></li>
+        <li class="tab-btnItem" data-tab="qna"><a href="${hath }/sqlrecord/qnas">고객지원↗</a></li>
     </ul>
 </div>
 
