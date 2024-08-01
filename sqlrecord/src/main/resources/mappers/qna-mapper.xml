@@ -52,7 +52,8 @@
 			to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
 			to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
 			DELSTATUS delStatus,
-			QNA_WRITER_NO memberNo
+			QNA_WRITER_NO memberNo,
+			 memberId
 		FROM
 			OrderedQNA
 		WHERE
@@ -94,12 +95,15 @@
 			TO_CHAR(CREATE_DATE, 'yyyy-mm-dd') AS createDate,
 			TO_CHAR(CHANGE_DATE, 'yyyy-mm-dd') AS changeDate,
 			DELSTATUS AS delStatus,
-			QNA_WRITER_NO AS memberNo,
+			QNA_WRITER_NO memberNo,
+			QNA_WRITER_NO memberNo,
 			memberId
 		FROM
 			OrderedQNA
 		WHERE
 			RNUM BETWEEN #{startValue} AND #{endValue}
+		ORDER BY 
+			QNA_NO DESC
 	</select>
 
 	<select id="findByCate" resultType="qna">
@@ -136,11 +140,12 @@
 			to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
 			to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
 			DELSTATUS delStatus,
-			QNA_WRITER_NO memberNo
+			QNA_WRITER_NO memberNo,
+			memberId
 		FROM
 			OrderedQNA
 		WHERE
-			ROWNUM BETWEEN #{startValue} AND #{endValue}
+			RNUM BETWEEN #{startValue} AND #{endValue}
 		ORDER BY QNA_NO DESC
 
 	</select>
@@ -179,11 +184,12 @@
 			to_char(CREATE_DATE,'yyyy-mm-dd') createDate,
 			to_char(CHANGE_DATE,'yyyy-mm-dd') changeDate,
 			DELSTATUS delStatus,
-			QNA_WRITER_NO memberNo
+			QNA_WRITER_NO memberNo,
+			memberId
 		FROM
 			OrderedQNA
 		WHERE
-			ROWNUM BETWEEN #{startValue} AND #{endValue}
+			RNUM BETWEEN #{startValue} AND #{endValue}
 		ORDER BY QNA_NO DESC
 
 	</select>
@@ -231,40 +237,41 @@
 	
 	<select id="findById" parameterType="_int" resultType="qna">
 		SELECT
-		Q.QNA_NO AS qnaNo,
-		Q.SECRET AS secret,
-		Q.QNA_TITLE AS qnaTitle,
-		Q.CATEGORY AS qnaCategory,
-		Q.QNA_CONTENT AS qnaContent,
-		Q.SOLVED AS solved,
-		Q.COUNT AS count,
-		TO_CHAR(Q.CREATE_DATE, 'yyyy-mm-dd') AS createDate,
-		TO_CHAR(Q.CHANGE_DATE, 'yyyy-mm-dd') AS changeDate,
-		Q.DELSTATUS AS delStatus,
-		Q.QNA_WRITER_NO AS memberNo,
-		M.MEMBER_ID AS memberId
+			Q.QNA_NO AS qnaNo,
+			Q.SECRET AS secret,
+			Q.QNA_TITLE AS qnaTitle,
+			Q.CATEGORY AS qnaCategory,
+			Q.QNA_CONTENT AS qnaContent,
+			Q.SOLVED AS solved,
+			Q.COUNT AS count,
+			TO_CHAR(Q.CREATE_DATE, 'yyyy-mm-dd') AS createDate,
+			TO_CHAR(Q.CHANGE_DATE, 'yyyy-mm-dd') AS changeDate,
+			Q.DELSTATUS AS delStatus,
+			Q.QNA_WRITER_NO AS memberNo,
+			M.MEMBER_ID AS memberId
 		FROM
-		QNA Q,
-		MEMBER M
+			QNA Q,
+			MEMBER M
 		WHERE
-		Q.DELSTATUS = 'Y'
-		AND Q.QNA_WRITER_NO = M.MEMBER_NO
-		AND Q.QNA_NO = #{qnaNo}
+			Q.DELSTATUS = 'Y'
+			AND Q.QNA_WRITER_NO = M.MEMBER_NO
+			AND Q.QNA_NO = #{qnaNo}
 	</select>
 	<select id="findComments" resultType="comm">
 		SELECT
-		COMMENT_NO commentNo,
-		QNA_NO qnaNo,
-		MEMBER_NO memberNo,
-		COMMENT_CONTENT commentContent,
-		to_char(RESDATE,'yyyy-mm-dd') resdate,
-		STATUS status
+		    C.COMMENT_NO commentNo,
+		    C.QNA_NO qnaNo,
+		    C.MEMBER_NO memberNo,
+		    C.COMMENT_CONTENT commentContent,
+		    TO_CHAR(C.RESDATE, 'yyyy-mm-dd') resdate,
+		    C.STATUS status,
+		    M.MEMBER_ID memberId
 		FROM
-		COMM
+		    COMM C
+		    INNER JOIN MEMBER M ON C.MEMBER_NO = M.MEMBER_NO
 		WHERE
-		STATUS='Y'
-		AND
-		QNA_NO = #{qnaNo}
+		    C.STATUS = 'Y'
+   			AND C.QNA_NO =#{qnaNo}
 	</select>
 	<select id="findFiles" resultType="qnaFile">
 		<include refid="selectQnaFiles" />

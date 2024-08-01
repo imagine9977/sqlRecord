@@ -31,6 +31,7 @@
 	crossorigin="anonymous"></script>
 
 <style>
+
 /* Scoped styles for notice.jsp content */
 #notice-container {
 	font-family: Arial, sans-serif;
@@ -202,7 +203,7 @@
 
 #notice-container .button-line {
 	display: flex;
-	justify-content: space-between;
+	justify-content: end;
 	align-items: center;
 	width: 100%;
 	text-align: center;
@@ -214,6 +215,7 @@
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+	
 }
 
 #notice-container .add-notice-button {
@@ -223,7 +225,7 @@
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	margin-right: 100px;
+	margin-right: 300px;
 }
 
 #notice-container .add-notice-button:hover {
@@ -244,6 +246,19 @@
 
 #notice-container #liveAlertPlaceholder {
 	height:auto;
+}
+
+#notice-container .admin-button {
+	background: #666362;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+
+}
+
+#notice-container .admin-button:hover {
+	background:  #494F55;
 }
 </style>
 </head>
@@ -373,9 +388,13 @@
 
 		<div class="button-line">
 			<div class="see-more">
-				<!--  <span class="get-more-list" onclick="loadMoreNotices()">더 보기</span> -->
 			</div>
 			<c:if test="${ sessionScope.loginUser.memberId eq 'admin'}">
+				<div class="admin-button">
+						<a class=" admin-button btn" href="${hpath }/adminFor#notice">관리자페이지로
+							가기</a>
+				</div>
+			
 				<div class="add">
 
 					<a class="add-notice-button" href="notices/insert.do">공지 추가하기</a>
@@ -430,76 +449,7 @@
 			    $('.get-more-list-cate').remove();
 			    $('.load-more-container').remove();
 			}
-			// 공지사항 업데이트 
-			$("#btnSubmit").click(function (event) {         
-				event.preventDefault();  // Prevent default form submission
-
-		        var formData = new FormData();
-
-		        // Retrieve and append form data
-		        var intupdateNo = parseInt(document.getElementById('updateNo').value);
-			    formData.append('updateNo', intupdateNo);
-		        formData.append('updateTitle', document.getElementById('updateTitle').value);
-		        formData.append('updateCategory', document.getElementById('updateCategory').value);
-		        formData.append('updateContent', document.getElementById('updateContent').value);
-				
-				const fileNoDel = [];
-				$('#updateModal .fileDelBtn').each(function() {
-				    if ($(this).data('nfileNo')) {
-				        fileNoDel.push($(this).data('nfileNo'));
-				    }
-				});
-				if (fileNoDel.length > 0) {
-				    fileNoDel.forEach((fileNo, index) => {
-				        formData.append('fileNoDel[]', fileNo);
-				    });
-				}
-				 // Append multiple files
-		        var fileInputs = document.querySelectorAll('input[name="updatefile"]');
-		        fileInputs.forEach(input => {
-		            if (input.files.length > 0) {
-		                for (var i = 0; i < input.files.length; i++) {
-		                    formData.append('updatefile', input.files[i]);
-		                }
-		            }
-		        });
-		        for (var key of formData.entries()) {
-		            console.log(key[0] + ', ' + key[1]);
-		        }
-			    $.ajax({             
-			        type: "put",  
-			        url: "notice/update/"+intupdateNo,
-			        data :JSON.stringify(formData),
-			       
-			        cache: false,
-			 		/*
-			        headers: {
-		                'Accept': 'application/json',
-		                'Content-Type': 'application/json'
-		            },
-		            */
-		            encType: 'multipart/form-data',
-		            processData: false,
-		            contentType: 'application/json',
-				  
-			       
-			        success: function (result) {
-			            if (result.data === 1) {
-			                document.getElementById('outerDiv').remove();
-			                findAll();
-			                $('#detail').slideUp(300);
-			            }else {
-			                alert("업데이트 실패. 다시 시도해주세요.");
-			            }
-			        },
-			        error: function (e) {  
-			            console.log("ERROR : ", e);     
-			            $("#btnSubmit").prop("disabled", false);    
-			            alert("fail");      
-			        }   
-			    });  
-			});
-
+			
 			// 공지사항 추가하기 
 			function insert() {
                 const requestData = {
@@ -565,18 +515,18 @@
                      } 
                  });
              }
-			// 공지 전부 띄우기 
+	
 			const findAll = () => {
 			    currentCategory = 'all';
-			    currentPage = 0; // 페이지 갯수 초기화
+			    currentPage = 0; 
 			    $.ajax({
 			        url: 'notice/list',
 			        type: 'get',
 			        success: response => {
-			        	noticeListGlobal = response.data; // Store initial notice list globally
-			            noticeListGlobal = formatDates(noticeListGlobal); // Format the dates
+			        	noticeListGlobal = response.data; 
+			            noticeListGlobal = formatDates(noticeListGlobal); 
 			            renderNotices(noticeListGlobal.slice(0, noticesPerPage));
-			            currentPage++; // Increment page after loading initial data
+			            currentPage++;
 			            checkLoadMoreButton();
 			        },
 			        error: err => {
@@ -585,18 +535,18 @@
 			    });
 			};
 
-			// Function to load notices by category
+		
 			const findByCate = (cate) => {
 			    currentCategory = cate;
-			    currentPageCate[cate] = 0; // Initialize page count for this category
+			    currentPageCate[cate] = 0; 
 			    $.ajax({
 			        url: 'notice/list/cate/' + cate,
 			        type: 'get',
 			        success: response => {
-			            noticeListGlobal = response.data; // Store initial notice list globally
+			            noticeListGlobal = response.data; 
 			            noticeListGlobal = formatDates(noticeListGlobal);
 			            renderNoticesCate(cate, noticeListGlobal.slice(0, noticesPerPage));
-			            currentPageCate[cate]++; // Increment page after loading initial data
+			            currentPageCate[cate]++; 
 			            checkLoadMoreButtonCate(cate);
 			        },
 			        error: err => {
@@ -610,7 +560,7 @@
 			        url: 'notice/nFile/' + noticeNo,
 			        type: 'get',
 			        success: response => {
-			        	nfileListGlobal = response.data; // Store initial notice list globally
+			        	nfileListGlobal = response.data;
 			        },
 			        error: err => {
 			            console.error('Error fetching data:', err);
@@ -618,17 +568,17 @@
 			    });
 			};
 			
-			// Function to load more notices when "Load More" is clicked for findAll
+			
 			const loadMoreNotices = () => {
 			    renderNotices(noticeListGlobal.slice(0, (currentPage + 1) * noticesPerPage));
-			    currentPage++; // Increment page after loading more data
+			    currentPage++; 
 			    checkLoadMoreButton();
 			};
 
-			// Function to load more notices by category when "Load More" is clicked for findByCate
+		
 			const loadMoreNoticesCate = (cate) => {
 			    renderNoticesCate(cate, noticeListGlobal.slice(0, (currentPageCate[cate] + 1) * noticesPerPage));
-			    currentPageCate[cate]++; // Increment page after loading more data
+			    currentPageCate[cate]++; 
 			    checkLoadMoreButtonCate(cate);
 			};
 			const formatDates = (noticeList) => {
@@ -642,11 +592,11 @@
 
 
 			const formatDate = (dateString) => {
-			    const date = new Date(dateString); // Create a Date object from the datetime string
+			    const date = new Date(dateString); 
 
-			    const year = date.getFullYear(); // Get the year
-			    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Get the month (adding 1 because months are zero-indexed)
-			    const day = ('0' + date.getDate()).slice(-2); // Get the day
+			    const year = date.getFullYear(); 
+			    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+			    const day = ('0' + date.getDate()).slice(-2); 
 
 			    return `${year}-${month}-${day}`;
 			};
@@ -662,12 +612,12 @@
 			        case 'general':
 			            return '일반';
 			        default:
-			            return 'Unknown Category'; // Default case if category does not match any known types
+			            return 'Unknown Category'; 
 			    }
 			}
-			// Function to render notices in the UI for findAll
+			
 			const renderNotices = (noticeList) => {
-			    clearNoticeList(); // Clear existing notices
+			    clearNoticeList();
 			    const outerDiv = document.createElement('div');
 			    outerDiv.id = 'outerDiv';
 			    const headerRow = document.createElement('div');
@@ -690,24 +640,23 @@
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
 
-			    // Add "Load More" button for findAll if there are more notices to load
+
 			    if (currentPage * noticesPerPage < noticeListGlobal.length) {
 			        const loadMoreButtonContainer = document.createElement('div');
-			        loadMoreButtonContainer.className = 'load-more-container'; // Container for centering
+			        loadMoreButtonContainer.className = 'load-more-container'; 
 
 			        const loadMoreButton = document.createElement('button');
 			        loadMoreButton.className = 'get-more-list btn btn-outline-secondary';
 			        loadMoreButton.textContent = '더 보기';
 			        loadMoreButton.onclick = loadMoreNotices;
 
-			        loadMoreButtonContainer.appendChild(loadMoreButton); // Add button to the container
-			        document.getElementById('content').appendChild(loadMoreButtonContainer); // Add container to the content
+			        loadMoreButtonContainer.appendChild(loadMoreButton);
+			        document.getElementById('content').appendChild(loadMoreButtonContainer);
 			    }
 			};
 			
-			// Function to render notices by category in the UI for findByCate
 			const renderNoticesCate = (cate, noticeList) => {
-			    clearNoticeList(); // Clear existing notices
+			    clearNoticeList(); 
 			    const outerDiv = document.createElement('div');
 			    outerDiv.id = 'outerDiv';
 			    const headerRow = document.createElement('div');
@@ -728,34 +677,32 @@
 			    });
 			    document.getElementById('content').appendChild(outerDiv);
 
-			    // Add "Load More" button for this category if there are more notices to load
 			    if (currentPageCate[cate] * noticesPerPage < noticeListGlobal.length) {
 			        const loadMoreButtonContainer = document.createElement('div');
-			        loadMoreButtonContainer.className = 'load-more-container'; // Container for centering
+			        loadMoreButtonContainer.className = 'load-more-container';
 
 			        const loadMoreButton = document.createElement('button');
 			        loadMoreButton.className = 'get-more-list-cate btn btn-outline-secondary';
 			        loadMoreButton.textContent = '더 보기';
 			        loadMoreButton.onclick = () => loadMoreNoticesCate(cate);
 
-			        loadMoreButtonContainer.appendChild(loadMoreButton); // Add button to the container
-			        document.getElementById('content').appendChild(loadMoreButtonContainer); // Add container to the content
+			        loadMoreButtonContainer.appendChild(loadMoreButton);
+			        document.getElementById('content').appendChild(loadMoreButtonContainer); 
 			    }
 			};
 
-			// Function to check and manage "Load More" button visibility for findAll
+			
 			const checkLoadMoreButton = () => {
 			    const loadMoreButton = document.querySelector('.get-more-list');
 			    if (loadMoreButton && currentPage * noticesPerPage >= noticeListGlobal.length) {
-			        loadMoreButton.style.display = 'none'; // Hide button if no more notices to load
+			        loadMoreButton.style.display = 'none'; 
 			    }
 			};
 
-			// Function to check and manage "Load More" button visibility for findByCate
 			const checkLoadMoreButtonCate = (cate) => {
 			    const loadMoreButton = document.querySelector('.get-more-list-cate');
 			    if (loadMoreButton && currentPageCate[cate] * noticesPerPage >= noticeListGlobal.length) {
-			        loadMoreButton.style.display = 'none'; // Hide button if no more notices to load
+			        loadMoreButton.style.display = 'none'; 
 			    }
 			};
 
@@ -772,7 +719,6 @@
 			window.onload = () => {
 				findAll();
 
-			    // Attach click events to category buttons if they exist in the DOM
 			    const generalButton = document.getElementById('generalButton');
 			    const serviceButton = document.getElementById('serviceButton');
 			    const eventButton = document.getElementById('eventButton');
@@ -794,7 +740,7 @@
 			    
 			    //게시글 클릭할 시 
 			    $('#content').on('click', '.noticeEl', e => {
-			        const noticeNo = e.currentTarget.childNodes[0].innerText; // Assuming first child is the noticeNo
+			        const noticeNo = e.currentTarget.childNodes[0].innerText;
 
 			        $.ajax({
 			            url: 'notice/' + noticeNo,
@@ -802,7 +748,6 @@
 			            success: response => {
 			                const notice = response.data;
 			                currentNoticeNo = parseInt(noticeNo);
-			                // Update modal content with notice details
 			                var textTitle = noticeNo+'. [' +getKoreanNoticeCategory(notice.noticeCategory)+'] '+notice.noticeTitle;
 			                $('#noticeModal #noticeNo').val(noticeNo);
 			                $('#noticeModal #noticeHeader').text(textTitle);

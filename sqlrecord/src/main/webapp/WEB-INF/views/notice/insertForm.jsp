@@ -5,6 +5,11 @@
 <%@ include file="../head.jsp"%>
 <title>Home</title>
 <style>
+body{
+ background-image: url("../resources/imgs/background/backgroundRecord.webp") ; 
+ background-repeat: repeat-y;
+  background-size: 100% ;
+  }
 #insert-container {
     margin: 20px auto;
     padding: 20px;

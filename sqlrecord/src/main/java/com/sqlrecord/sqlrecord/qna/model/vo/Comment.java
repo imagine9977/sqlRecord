@@ -18,4 +18,5 @@ public class Comment {
 	private String commentContent;
 	private String resdate;
 	private String status;
+	private String memberId;
 }
