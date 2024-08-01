@@ -286,6 +286,7 @@
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+	margin-right: 200px;
 }
 
 #qna-container .add-qna-button:hover {
@@ -298,7 +299,7 @@
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	paddint-right: 20px;
+	padding-right: 20px;
 }
 
 #qna-container .admin-button:hover {
@@ -366,7 +367,7 @@
 	<div id="qna-container">
 
 		<header>
-			<h1>QNA 질문게시판</h1>
+			<h1>QNA 고객지원</h1>
 		</header>
 		<div class="container">
 			<div class="filter-search-container">
@@ -384,15 +385,7 @@
 					<button type="button" class="btn btn-outline-secondary"
 						id="toggleSolved" onclick="turnQnaSolved()">미해결/해결 보기</button>
 				</div>
-				<!-- 
-				<div class="search">
-					<form action="/" method="get">
-						<input type="search" name="s" placeholder="검색어를 입력하세요." /> <input
-							type="hidden" name="post_type" value="qna" /> <input
-							type="submit" value="검색" />
-					</form>
-				</div>
-				 -->
+				
 			</div>
 			<div class="modal fade" id="qnaModal" tabindex="-1"
 				aria-labelledby="qnaModalLabel" aria-hidden="true">
@@ -500,7 +493,7 @@
 		var fileNameArry = [];
 		var userRole = '${sessionScope.loginUser.memberId}';
 		
-		// Check if the "goToUpdatePage" element exists before setting the onclick property
+		
 	    const goToUpdatePageButton = document.getElementById("goToUpdatePage");
 	    if (goToUpdatePageButton) {
 	        goToUpdatePageButton.onclick = function () {
@@ -523,7 +516,6 @@
 		    $('#commentForm').toggle();
 		});
 
-		// Handle comment form submission
 		$('#submitCommentButton').on('click', () => {
 		    const commentContent = $('#newCommentContent').val();
 		    if (!commentContent) {
@@ -544,7 +536,6 @@
 		        data: JSON.stringify(newComment),
 		        success: response => {
 		            
-		                // Add the new comment to the comments section
 		                const commentDiv = $('<div>')
 		                    .addClass('comment')
 		                    .append($('<span>').addClass('comment-author').text('Author: ' + newComment.memberNo))
@@ -555,8 +546,8 @@
 		                    );
 
 		                $('#qnaModal #comments').append(commentDiv);
-		                $('#newCommentContent').val(''); // Clear the comment input
-		                $('#commentForm').hide(); // Hide the comment form
+		                $('#newCommentContent').val(''); 
+		                $('#commentForm').hide(); 
 		            
 		        }
 		    });
@@ -594,8 +585,7 @@
 		
 		//공지 삭제하기 확인 프롬프트
 		function ConfirmDelete(qnaNo) {
-		    if (confirm("Are you sure you want to delete this qna?")) {
-		    	 console.log(qnaNo);
+		    if (confirm("질문글을 삭제하시겠습니까?")) {
 		    	deleteById(qnaNo);
 		    }
 		    return false;
@@ -623,28 +613,27 @@
 		// 공지 전부 띄우기 
 		const findAll = (solvedBoolean,page=1) => {
 		    currentCategory = 'all';
-		    currentPage = 0; // 페이지 갯수 초기화
+		    currentPage = 0; 
 		    $.ajax({
 		        url: 'qna/list/' + currentCategory+'/'+solvedBoolean+'/'+page,
 		        type: 'get',
 		        success: function(response)  {
-		        	qnaListGlobal = response.data.qnaList; // Access qnaList
-		            const pageInfo = response.data.pageInfo; // Access pageInfo
+		        	qnaListGlobal = response.data.qnaList;
+		            const pageInfo = response.data.pageInfo; 
 		            renderqnas(qnaListGlobal.slice(0, qnasPerPage));
 		            renderPagination(pageInfo);
-		            currentPage++; // Increment page after loading initial data
+		            currentPage++; 
 		            
 		        },
 		        error: err => {
 		        	
-		        	console.error('Error fetching data:', err);
 		        	 try {
-		                 qnaListGlobal = response.data.qnaList; // Access qnaList
-		                 const pageInfo = response.data.pageInfo; // Access pageInfo
+		                 qnaListGlobal = response.data.qnaList; 
+		                 const pageInfo = response.data.pageInfo; 
 		                 renderqnas(qnaListGlobal.slice(0, qnasPerPage));
 		                 renderPagination(pageInfo);
 		             } catch (parseErr) {
-		                 console.error('Error parsing error response:', parseErr);
+		                 
 		                 qnaListGlobal = [];
 		                 renderqnas(qnaListGlobal);
 		             }
@@ -668,15 +657,13 @@
 		           
 		        },
 		        error: err => {
-		        	
-		            console.error('Error fetching data:', err);
 		            try {
 		                qnaListGlobal = response.data.qnaList; 
 		                const pageInfo = response.data.pageInfo;
 		                renderqnas(qnaListGlobal.slice(0, qnasPerPage));
 		                renderPagination(pageInfo);
 		            } catch (parseErr) {
-		                console.error('Error parsing error response:', parseErr);
+		         
 		                qnaListGlobal = [];
 		                renderqnas(qnaListGlobal);
 		            }
@@ -689,7 +676,7 @@
 		        url: 'qna/qnaFile/' + qnaNo,
 		        type: 'get',
 		        success: response => {
-		        	qnaFileListGlobal = response.data; // Store initial qna list globally
+		        	qnaFileListGlobal = response.data; 
 		        },
 		        error: err => {
 		            console.error('Error fetching data:', err);
@@ -711,12 +698,12 @@
 		        case 'unsolved':
 		            return '미해결';
 		        default:
-		            return 'Unknown Category'; // Default case if category does not match any known types
+		            return 'Unknown Category'; 
 		    }
 		}
-		// Function to render qnas in the UI for findAll
+		
 		const renderqnas = (qnaList) => {
-clearqnaList(); // Clear existing qnas
+clearqnaList(); 
 const outerDiv = document.createElement('div');
 outerDiv.id = 'outerDiv';
 
@@ -742,7 +729,9 @@ if (qnaList.length === 0) {
         qnaEl.appendChild(createDiv(getKoreanqnaCategory(o.qnaCategory), '130px'));
         
         let newTitle = o.qnaTitle;
+       
         const currentUser = '${sessionScope.loginUser.memberId}';
+  
         if (o.secret === 'Y') {
             if (currentUser === 'admin' || currentUser === o.memberId) {
                 newTitle = '🔑' + o.qnaTitle;
@@ -765,9 +754,8 @@ document.getElementById('content').appendChild(outerDiv);
 };
 
 		
-		// Function to render qnas by category in the UI for findByCate
 		const renderqnasCate = (cate, qnaList) => {
-		    clearqnaList(); // Clear existing qnas
+		    clearqnaList(); 
 		    const outerDiv = document.createElement('div');
 		    outerDiv.id = 'outerDiv';
 		    if (qnaList.length === 0) {
@@ -793,7 +781,7 @@ document.getElementById('content').appendChild(outerDiv);
 		        let newTitle = o.qnaTitle;
 				if (o.secret === 'Y') {
 					const currentUser = '${sessionScope.loginUser.memberId}';
-					console.log(o.memberId);
+		
 				    if (currentUser === 'admin' || currentUser === o.memberId) {
 				                newTitle = '🔑' + o.qnaTitle;
 				    } else {
@@ -813,7 +801,6 @@ document.getElementById('content').appendChild(outerDiv);
 		    }
 		    document.getElementById('content').appendChild(outerDiv);
 
-		    // Add "Load More" button for this category if there are more qnas to load
 		    if (currentPageCate[cate] * qnasPerPage < qnaListGlobal.length) {
 		        
 		    }
@@ -834,7 +821,6 @@ document.getElementById('content').appendChild(outerDiv);
 		window.onload = () => {
 			findAll(solvedBoolean);
 			
-		    // Attach click events to category buttons if they exist in the DOM
 		    const generalButton = document.getElementById('generalButton');
 		    const serviceButton = document.getElementById('serviceButton');
 		    const payButton = document.getElementById('payButton');
@@ -860,7 +846,7 @@ document.getElementById('content').appendChild(outerDiv);
 		    
 		    //게시글 클릭할 시 
 		    $('#content').on('click', '.qnaEl', e => {
-		        const qnaNo = e.currentTarget.childNodes[0].innerText; // Assuming first child is the qnaNo
+		        const qnaNo = e.currentTarget.childNodes[0].innerText;
 
 		        $.ajax({
 		            url: 'qna/' + qnaNo,
@@ -871,17 +857,14 @@ document.getElementById('content').appendChild(outerDiv);
 		                 const isAdmin = currentUserId === 'admin';
 		                 const isAuthor = currentUserId === qna.memberId;
 		                 
-		                 // Check if the Q&A is secret and if the user is authorized to view it
 		                 if ((qna.secret ==='Y'  )&& !isAdmin && !isAuthor) {
 		                     alert('비밀글은 작성자 또는 관리자만 확인할 수 있습니다.');
 		                     return;
 		                 }
 		                 
-		                 console.log(currentUserId);
-		                 console.log(qna.memberId);
-		                 console.log(isAuthor);
+		               
 		                currentQnaNo = parseInt(qnaNo);
-		                // Update modal content with qna details
+		               
 		               
 		                let newTitle ='';
 				        if (qna.secret === 'Y') {
@@ -901,12 +884,12 @@ document.getElementById('content').appendChild(outerDiv);
 		                $('#qnaModal #comments').empty();
 		                
 						
-		                // Append file links if files exist
+
 		                if (qna.files && qna.files.length > 0) {
 		                    qna.files.forEach((file, index) => {
 		                        const fileLink = $('<div>')
 		                            .append($('<span>').text((index + 1) + '. '))
-		                            .append($('<a>').attr('href', '${path0}/' + file.changedName) // Ensure this path is correct
+		                            .append($('<a>').attr('href', '${path0}/' + file.changedName) 
 		                                .attr('download', file.originalName)
 		                                .text(file.originalName));
 		                        
@@ -917,7 +900,7 @@ document.getElementById('content').appendChild(outerDiv);
 						
 		                
 			            } else {
-			                // If no files exist
+			            
 			                $('#qnaModal #files').html('<p>파일이 존재하지 않습니다.</p>');
 			                
 			                
@@ -926,13 +909,16 @@ document.getElementById('content').appendChild(outerDiv);
 		                    qna.comments.forEach(comment => {
 		                    	const commentDiv = $('<div>')
 		                        .addClass('comment')
-		                        .append($('<span>').addClass('comment-author').text('작성자: ' + comment.memberNo + '  '))
+		                        .append($('<span>').addClass('comment-author').text('작성자: ' + comment.memberId + '  '))
 		                        .append($('<span>').addClass('comment-date').text('날짜: ' + comment.resdate))
 		                        .append($('<div>').addClass('comment-content').text(comment.commentContent));
 		                    
-		                    // Check if the user is logged in and append Edit/Delete buttons
-		                  if (${sessionScope.loginUser != null && (sessionScope.loginUser.memberId == 'admin' || sessionScope.loginUser.memberNo == comment.memberNo) } ) {
-		                        const changeBtn = $('<div>').addClass('comment-change btn').text('수정');
+		                    //console.log(currentUserId);
+		                    //console.log(comment.memberId);
+		                  
+		                  if (${sessionScope.loginUser != null  }&& (currentUserId== 'admin' || currentUserId == comment.memberId) ) {
+		                          //console.log(currentUserId== 'admin' || currentUserId == comment.memberId);
+		                          const changeBtn = $('<div>').addClass('comment-change btn').text('수정');
 		                        const deleteBtn = $('<div>').addClass('comment-delete btn').text('삭제');
 		
 		                        changeBtn.click(() => {
@@ -949,7 +935,7 @@ document.getElementById('content').appendChild(outerDiv);
 		                    $('#qnaModal #comments').append(commentDiv);
 		                    });
 		                } else {
-		                    // If no comments exist
+		                    
 		                    $('#qnaModal #comments').html('<p>댓글이 없습니다.</p>');
 		                }
 		                if (isAdmin || isAuthor) {
@@ -980,13 +966,13 @@ document.getElementById('content').appendChild(outerDiv);
 		        const saveBtn = $('<div>').addClass('btn').text('저장');
 		        const closeBtn = $('<div>').addClass('btn').text('닫기');
 
-		        // Replace comment content with input field
+
 		        contentDiv.empty().append(editInput);
 
-		        // Add save and close buttons
+	
 		        contentDiv.append(saveBtn).append(closeBtn);
 
-                // Save button click event
+      
                 saveBtn.click(() => {
                     const newContent = editInput.val();
                     comment.commentContent = newContent;
@@ -996,13 +982,13 @@ document.getElementById('content').appendChild(outerDiv);
                             memberNo: comment.memberNo,
                             commentContent: newContent
                         };
+                   
                     
-                    console.log(JSON.stringify(updatedComment));
                     
                     $.ajax({
                     	 url: 'qna/comment/edit',
                          type: 'put',
-                        // traditional: true,
+                     
                          contentType: 'application/json',
                          data: JSON.stringify(updatedComment),
                          success: response => {
@@ -1021,23 +1007,20 @@ document.getElementById('content').appendChild(outerDiv);
                     });
                 });
 
-                // Close button click event
                 closeBtn.click(() => {
                     contentDiv.text(originalContent);
                 });
             }
 		    function deleteComment(commentDiv, comment) {
-		        // Show confirmation dialog
-		        
-		            // Send AJAX request to delete the comment
+		       
 		            $.ajax({
-		                url: 'qna/commentDelete.do', // Ensure this matches the backend endpoint
-		                type: 'POST', // Use POST for deletion, not PUT
+		                url: 'qna/commentDelete.do', 
+		                type: 'POST', 
 		                contentType: 'application/json',
-		                data: JSON.stringify({ commentNo: comment.commentNo }), // Send only commentNo
+		                data: JSON.stringify({ commentNo: comment.commentNo }), 
 		                success: response => {
 		                    if (response.message === '댓글 삭제 성공') {
-		                        // Remove the comment from the UI
+		                        
 		                        commentDiv.remove();
 		                    } else {
 		                        alert('댓글 삭제 실패');
@@ -1063,9 +1046,9 @@ document.getElementById('content').appendChild(outerDiv);
 
 			const renderPagination = (pageInfo) => {
 			    const paginationUl = document.getElementById('paginationUl');
-			    paginationUl.innerHTML = ''; // Clear previous pagination
+			    paginationUl.innerHTML = ''; 
 
-			    // "Previous" button
+			  
 			    const prevLi = document.createElement('li');
 			    prevLi.className = `page-item ${pageInfo.currentPage == 1 ? 'disabled' : ''}`;
 			    const prevLink = document.createElement('a');
@@ -1075,12 +1058,16 @@ document.getElementById('content').appendChild(outerDiv);
 			    prevLink.onclick = (e) => {
 			        e.preventDefault();
 			        if (pageInfo.currentPage > 1) {
-			            findAll(solvedBoolean, pageInfo.currentPage - 1); // Fetch previous page
+			        	if(currentCategory=='all'){
+			        		findAll(solvedBoolean, pageInfo.currentPage - 1);
+			        	}else{
+			        		findByCate(currentCategory, solvedBoolean, pageInfo.currentPage - 1);
+			        	}
+			            
 			        }
 			    };
 			    prevLi.appendChild(prevLink);
 			    paginationUl.appendChild(prevLi);
-
 			    // Page numbers
 			    for (let p = pageInfo.startPage; p <= pageInfo.endPage; p++) {
 			        const pageLi = document.createElement('li');
@@ -1089,18 +1076,22 @@ document.getElementById('content').appendChild(outerDiv);
 			        pageLink.className = 'page-link';
 			        pageLink.href = `#`;
 			        pageLink.innerText = p;
-			        pageLink.style.color = pageInfo.currentPage == p ? 'red' : ''; // Change color of current page
+			        pageLink.style.color = pageInfo.currentPage == p ? 'red' : ''; 
 			        pageLink.onclick = (e) => {
 			            e.preventDefault();
-			            findAll(solvedBoolean, p); // Fetch specific page
+			            if(currentCategory=='all'){
+			        		findAll(solvedBoolean, p);
+			        	}else{
+			        		
+			        		findByCate(currentCategory, solvedBoolean, p);
+			        	}
 			        };
 			        pageLi.appendChild(pageLink);
 			        paginationUl.appendChild(pageLi);
 			    }
 			 // "Next" button
 			    const nextLi = document.createElement('li');
-			 	console.log(pageInfo.currentPage);
-			 	console.log(pageInfo.maxPage);
+			 
 			    nextLi.className = `page-item `;
 			    const nextLink = document.createElement('a');
 			    nextLink.className = 'page-link';
@@ -1109,7 +1100,13 @@ document.getElementById('content').appendChild(outerDiv);
 			    nextLink.onclick = (e) => {
 			        e.preventDefault();
 			        if (pageInfo.currentPage < pageInfo.maxPage) {
-			            findAll(solvedBoolean, pageInfo.currentPage + 1); // Fetch next page
+			        	
+			        	if(currentCategory=='all'){
+			        		findAll(solvedBoolean, pageInfo.currentPage + 1);
+			        	}else{
+			        		
+			        		findByCate(currentCategory, solvedBoolean, pageInfo.currentPage + 1);
+			        	}
 			        }
 			    };
 			    nextLi.appendChild(nextLink);
