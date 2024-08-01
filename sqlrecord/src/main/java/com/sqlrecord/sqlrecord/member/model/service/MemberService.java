@@ -15,7 +15,6 @@ public interface MemberService {
 	int insGenre(MemberGenre memberGenre);
 	Member infoId(Member member);
 	int pwChange(Member member);
-  
 	List<Integer> genre(MemberGenre memberGenre);
 	int update(Member member);
 	int deleteGenre(int memberNo);

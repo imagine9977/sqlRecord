@@ -169,7 +169,7 @@
 	</div>
 
 	<div id="successId">
-        <h3 id="idVeiw">회원님이 사용중이신 아이디는<br><strong style="color: rgb(12, 113, 153);">"<c:out value='${memberId}'/>"</strong> 입니다.</h3>
+        <h3 id="idVeiw">회원님이 사용중이신 아이디는<br><strong style="color: rgb(12, 113, 153);" id="ok" value=""></strong> 입니다.</h3>
         <div class="btnbox">
             <button id="loginGo"><a href="${hpath}/member/login.do">로그인</a></button>
             <button id="findPw"><a href="${hpath}/member/findIdPw">비밀번호 찾기</a></button>
@@ -211,6 +211,7 @@
     	} else {
 			$('.tab_content').css('display','none');
 			$('#successId').css('display','block');
+			$('#ok').text('${memberId}');
     	}
     }
     

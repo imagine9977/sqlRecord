@@ -1,19 +1,16 @@
 package com.sqlrecord.sqlrecord.member.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sqlrecord.sqlrecord.mail.Mail;
 import com.sqlrecord.sqlrecord.member.model.service.MemberService;
+import com.sqlrecord.sqlrecord.member.model.service.PointService;
 import com.sqlrecord.sqlrecord.member.model.vo.Member;
 import com.sqlrecord.sqlrecord.member.model.vo.MemberGenre;
 
@@ -42,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final MemberService memberService;
+	private final PointService pointService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	
@@ -68,7 +67,17 @@ at Object.jQueryDetection"
 	}
 	
 	@GetMapping("mypage")
-	public String mypage() {
+	public String mypage(Model model,
+			             HttpSession session) {
+		Member member = (Member) session.getAttribute("loginUser");
+		int memberNo = member.getMemberNo();
+		//String memberName = member.getName();
+		Map<String, Object> point = pointService.point(memberNo);
+		model.addAttribute("point",point);
+		model.addAttribute("memberName",member.getName());
+		log.info("point : {}",point);
+		//log.info("memberName : {}",memberName);
+		log.info("member : {}",member);
 		return "member/mypage";
 	}
 	
@@ -103,55 +112,52 @@ at Object.jQueryDetection"
 			//log.info("loginUser : {} ", loginUser);
 			mv.setViewName("redirect:/");
 		} else {
-			mv.addObject("errorMsg", "로그인 실패 했습니다.").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "일치하는 회원이 없습니다.").setViewName("member/login");
 		}
 		return mv;  
 	}
 	
 
-	
+	@ResponseBody
 	@GetMapping("idCheck.do")
-	public void idCheck(@RequestParam("memberId") String memberId, 
-			            HttpServletResponse response, Model model) throws IllegalArgumentException, IOException {
-		
-		Member cus = memberService.getMember(memberId);
-		
-		//boolean result = (cus == null); cus가 null이 아니면 false
-		
-		boolean result;
-		if(cus!=null) {
-			result = false;
-		} else {
-			result = true;
-		}
-		
-		// 결과를 JSON 객체로 변환
-	    JSONObject json = new JSONObject();
-	    json.put("data", result);
-	    
-	    // JSON 응답을 클라이언트에 보냄
-	    PrintWriter out = response.getWriter();
-	    out.println(json.toString());
-		
+	public boolean idCheck(@RequestParam("memberId") String memberId,
+			               HttpSession session) {
+		String ckId = memberId;
+	    Member cus = memberService.getMember(memberId);
+	    session.setAttribute("ckId", memberId);
+	    log.info("ckId : {} ", ckId);
+	    boolean result = (cus == null);
+	    //log.info("result : {} ", result);
+	    return result;
 	}
 	
 	@PostMapping("joinPro.do")
 	public ModelAndView joinPro(Member member,
-								@RequestParam("tagNo") List<Integer> tagNos, 
+								@RequestParam("tagNo") List<Integer> tagNos,
+								HttpServletRequest request,
 								ModelAndView mv) {
-	    member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
-	    memberService.insMember(member);
-
-	    for (Integer tagNo : tagNos) {
-	        MemberGenre memberGenre = new MemberGenre();
-	        memberGenre.setTagNo(tagNo);
-	        memberGenre.setMemberNo(member.getMemberNo());
-	        memberService.insGenre(memberGenre);
+		HttpSession session = request.getSession();
+		member.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw())); // 비밀번호 암호화
+		String memberId = member.getMemberId().trim();
+	    String sessionId = session.getAttribute("ckId").toString().trim();
+		log.info("member.getMemberId() : {} ", member.getMemberId());
+	    if(memberId.equals(sessionId)) {
+	    	memberService.insMember(member);
+	    	for (Integer tagNo : tagNos) {
+		        MemberGenre memberGenre = new MemberGenre();
+		        memberGenre.setTagNo(tagNo);
+		        memberGenre.setMemberNo(member.getMemberNo());
+		        memberService.insGenre(memberGenre);
+		    }
+		    mv.addObject("msg", "회원가입을 축하합니다.");
+		    mv.setViewName("redirect:/");
+		    return mv;
+		    
+	    }else {
+	    	mv.addObject("msg", "아이디 중복검사를 다시 해주세요.");
+	    	mv.setViewName("member/login");
+	    	return mv;
 	    }
-	    
-	    mv.addObject("msg", "회원가입을 축하합니다.");
-	    mv.setViewName("redirect:/");
-	    return mv;
 	}
 	
 	@GetMapping("logout.do")

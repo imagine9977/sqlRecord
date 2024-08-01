@@ -87,7 +87,6 @@
         <div class="cont">
             <div class="form sign-in">
                 <img id="logo" src="${hpath}/resources/imgs/login/SQL LCODE.png" alt="">
-                    
                     <form id="accesspanel" name="loginForm" action="${hpath }/member/loginPro.do" method="post">
                         <div class="inset">
                             <p style="text-align: center;">
@@ -104,6 +103,9 @@
                             <p class="p-container">
                                 <input type="submit" name="Login" id="go" value="LOGIN">
                             </p>
+                       <c:if test="${not empty errorMsg}">
+                       <script>alert('${errorMsg}');</script>
+                       </c:if>
                        <c:if test="${not empty msg}">
                        <script>alert('${msg}');</script>
                        </c:if>
@@ -282,13 +284,13 @@
 	    		}
 	    	var params = { memberId : $("#memberId").val() }
 	    	$.ajax({
-	    		url: "${hpath }/member/idCheck.do?memberId="+$("#memberId").val(),
+	    		url: "${hpath }/member/idCheck.do",
 				type: "get",
 				dataType: "json",
-				//data : params,
+				data : params,
 				success:function(result){
-					console.log(result.data);
-	                var idChk = result.data;	//true 또는 false를 받음
+					console.log(result);
+	                var idChk = result;	//true 또는 false를 받음
 	                if(idChk == false){	//사용할 수 없는 아이디
 	                    $("#idck").val("no");
 	                    $("#msg1").html("<strong style='color:red'>이미 사용중인 아이디가 있습니다.</strong>");
