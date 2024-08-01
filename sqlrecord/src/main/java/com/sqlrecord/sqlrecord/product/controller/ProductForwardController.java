@@ -157,7 +157,6 @@ public class ProductForwardController {
     public String upReply(@ModelAttribute Reply reply,
     					  Member member, 
     					  Model model, 
-    					  ReplyFile replyFile,
     					  HttpSession session) {
     	Member loginUser = (Member) session.getAttribute("loginUser");
     	reply.setMemberNo(loginUser.getMemberNo());
@@ -194,7 +193,6 @@ public class ProductForwardController {
     	//별점 점수대별 갯수 퍼센트 가져오기
     	List<Map<String, Object>> starAll = replyService.getReplyStarAll(productNo);
         model.addAttribute("starAll", starAll);
-        
         
         //총 리뷰 평점 가져오기
         float avgStar = replyService.avgStar(productNo);
