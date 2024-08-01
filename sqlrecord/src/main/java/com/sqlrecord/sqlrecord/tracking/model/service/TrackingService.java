@@ -6,7 +6,7 @@ import com.sqlrecord.sqlrecord.tracking.model.vo.TrackingInfo;
 
 public interface TrackingService {
 
-	List<TrackingInfo> getTrackingInfoList(int trackingInfoNum);
+	List<TrackingInfo> getTrackingInfoList(String trackingNum);
 
 	int insertTrackingInfo(TrackingInfo trackingInfo);
 

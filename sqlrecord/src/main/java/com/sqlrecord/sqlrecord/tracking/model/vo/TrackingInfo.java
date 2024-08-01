@@ -15,5 +15,5 @@ public class TrackingInfo {
 	private int trackingInfoNum;
 	private String trackingInfoWhere;
 	private String trackingInfoDate;
-	private int trackingNum;
+	private String trackingNum;
 }

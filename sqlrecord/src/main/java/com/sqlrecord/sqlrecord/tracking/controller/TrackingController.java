@@ -35,7 +35,7 @@ public class TrackingController {
 		
 		
 		List<MemberOrdersDetail> newList = (List<MemberOrdersDetail>) modList.stream()
-																			 .filter((item) -> param.equals(item.getMemberOrdersDetailStatus()) && item.getTrackingNum() != 0)
+																			 .filter((item) -> param.equals(item.getMemberOrdersDetailStatus()) && item.getTrackingNum() != null)
 																			 .collect(Collectors.toList());
 		
 		return  newList;
@@ -43,7 +43,7 @@ public class TrackingController {
 	
 	
 	@GetMapping(value = "/insert" , produces = "application/json; charset=UTF-8")
-	public TrackingInfo insertTrackingInf(int trackingNum , String  trackingInfoWhere , boolean trackingStatus) {
+	public TrackingInfo insertTrackingInf(String trackingNum , String  trackingInfoWhere , boolean trackingStatus) {
 		
 		
 		MemberOrdersDetail memberOrdersDetail = ordersService.getOrdersDetailOneForTracking(trackingNum);
@@ -54,7 +54,14 @@ public class TrackingController {
 			trackingInfo.setTrackingInfoWhere(trackingInfoWhere);
 			ordersService.updateMemberOrdersStatus("배송완료" , trackingNum);
 			trackingService.insertTrackingInfo(trackingInfo);
-		} else {
+		} else if(!trackingStatus) {
+			TrackingInfo trackingInfo = new TrackingInfo();
+			trackingInfo.setTrackingNum(trackingNum);
+			trackingInfo.setTrackingInfoWhere(trackingInfoWhere);
+			ordersService.updateMemberOrdersStatus("배송중" , trackingNum);
+			trackingService.insertTrackingInfo(trackingInfo);
+		}
+		else {
 			TrackingInfo trackingInfo = new TrackingInfo();
 			trackingInfo.setTrackingNum(trackingNum);
 			trackingInfo.setTrackingInfoWhere(trackingInfoWhere);
@@ -71,10 +78,9 @@ public class TrackingController {
 	
 	
 	@GetMapping("/{trackingInfoNum}")
-	public List<TrackingInfo> getTrackingInfo(@PathVariable("trackingInfoNum") int trackingInfoNum) {
+	public List<TrackingInfo> getTrackingInfo(@PathVariable("trackingInfoNum") String trackingInfoNum) {
 		
 		List<TrackingInfo> tlist = trackingService.getTrackingInfoList(trackingInfoNum);
-		
 		
 		
 		return tlist;
