@@ -1,6 +1,5 @@
 package com.sqlrecord.sqlrecord.orders.model.dto;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +24,8 @@ public class MemberOrdersDTO {
     private int productNo;
     private String productName;
     private String productStatus;
-    private BigDecimal totalPrice;
+    private int totalPrice;
     private int detailsCount;
+    private String memberOrdersDetailStatus;
 
 }

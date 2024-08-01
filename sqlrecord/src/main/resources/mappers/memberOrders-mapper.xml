@@ -452,96 +452,87 @@
     </select>
 
     <select id="getAllMemberOrders" resultMap="memberOrdersResultMap">
-		WITH FilteredOrdersDetail AS (
-		    SELECT 
-		    		*
-		      FROM
-		      		MEMBER_ORDERS_DETAIL
-		     WHERE
-		     		MEMBER_ORDERS_DETAIL_STATUS != '주문취소됨'
-		)
-		
-		SELECT 
-			    rnum,
-			    MEMBER_ORDERS_NO,
-			    MEMBER_ORDERS_ADDRESS,
-			    MEMBER_ORDERS_ADDRESS2,
-			    MEMBER_ORDERS_POSTCODE,
-			    MEMBER_ORDERS_DATE,
-			    MEMBER_ID,
-			    PRODUCT_CATE,
-			    PRODUCT_NO,
-			    PRODUCT_NAME,
-			    PRODUCT_STATUS,
-			    totalPrice,
-			    detailsCount
-		  FROM 
-		  		(
-			    SELECT 
-				        ROWNUM AS rnum,
-				        O.MEMBER_ORDERS_NO,
-				        O.MEMBER_ORDERS_ADDRESS,
-				        O.MEMBER_ORDERS_ADDRESS2,
-				        O.MEMBER_ORDERS_POSTCODE,
-				        O.MEMBER_ORDERS_DATE,
-				        M.MEMBER_ID,
-				        (
-				            SELECT
-				            		P.PRODUCT_CATE
-				              FROM
-				            		PRODUCT P
-				              JOIN
-				            		FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-				             WHERE
-				            		OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				               AND
-				            		ROWNUM = 1
-				            
-				        ) AS PRODUCT_CATE,
-				        (
-				            SELECT P.PRODUCT_NO
-				            FROM PRODUCT P
-				            JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-				            WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				            AND ROWNUM = 1
-				        ) AS PRODUCT_NO,
-				        (
-				            SELECT P.PRODUCT_NAME
-				            FROM PRODUCT P
-				            JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-				            WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				            AND ROWNUM = 1
-				        ) AS PRODUCT_NAME,
-				        (
-				            SELECT P.PRODUCT_STATUS
-				            FROM PRODUCT P
-				            JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
-				            WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				            AND ROWNUM = 1
-				        ) AS PRODUCT_STATUS,
-				        (
-				            SELECT SUM(OD2.MEMBER_ORDERS_DETAIL_PRICE)
-				            FROM FilteredOrdersDetail OD2
-				            WHERE OD2.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				        ) AS totalPrice,
-				        (
-				            SELECT
-				            		COUNT(MEMBER_ORDERS_DETAIL_NO)
-				              FROM
-				              		FilteredOrdersDetail OD3
-				             WHERE 
-				             		OD3.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
-				        ) AS detailsCount
-			      FROM 
-			        	MEMBER_ORDERS O
-			      JOIN 
-			        	MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
-			     ORDER
-			    	BY 
-			        	O.MEMBER_ORDERS_NO DESC
-			)
-		WHERE
-				rnum BETWEEN #{startValue} AND #{endValue}
+	    WITH FilteredOrdersDetail AS (
+	        SELECT *
+	        FROM MEMBER_ORDERS_DETAIL
+	        WHERE MEMBER_ORDERS_DETAIL_STATUS != '주문취소됨'
+	    )
+	    SELECT 
+	        rnum,
+	        MEMBER_ORDERS_NO,
+	        MEMBER_ORDERS_ADDRESS,
+	        MEMBER_ORDERS_ADDRESS2,
+	        MEMBER_ORDERS_POSTCODE,
+	        MEMBER_ORDERS_DATE,
+	        MEMBER_ID,
+	        PRODUCT_CATE,
+	        PRODUCT_NO,
+	        PRODUCT_NAME,
+	        PRODUCT_STATUS,
+	        totalPrice,
+	        detailsCount,
+	        MEMBER_ORDERS_DETAIL_STATUS
+	    FROM (
+	        SELECT 
+	            ROWNUM AS rnum,
+	            O.MEMBER_ORDERS_NO,
+	            O.MEMBER_ORDERS_ADDRESS,
+	            O.MEMBER_ORDERS_ADDRESS2,
+	            O.MEMBER_ORDERS_POSTCODE,
+	            O.MEMBER_ORDERS_DATE,
+	            M.MEMBER_ID,
+	            (
+	                SELECT P.PRODUCT_CATE
+	                FROM PRODUCT P
+	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	                AND ROWNUM = 1
+	            ) AS PRODUCT_CATE,
+	            (
+	                SELECT P.PRODUCT_NO
+	                FROM PRODUCT P
+	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	                AND ROWNUM = 1
+	            ) AS PRODUCT_NO,
+	            (
+	                SELECT P.PRODUCT_NAME
+	                FROM PRODUCT P
+	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	                AND ROWNUM = 1
+	            ) AS PRODUCT_NAME,
+	            (
+	                SELECT P.PRODUCT_STATUS
+	                FROM PRODUCT P
+	                JOIN FilteredOrdersDetail OD ON P.PRODUCT_NO = OD.PRODUCT_NO
+	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	                AND ROWNUM = 1
+	            ) AS PRODUCT_STATUS,
+	            (
+	                SELECT SUM(OD2.MEMBER_ORDERS_DETAIL_PRICE)
+	                FROM FilteredOrdersDetail OD2
+	                WHERE OD2.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	            ) AS totalPrice,
+	            (
+	                SELECT COUNT(*)
+	                FROM FilteredOrdersDetail OD3
+	                WHERE OD3.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	            ) AS detailsCount,
+	            (
+	                SELECT OD.MEMBER_ORDERS_DETAIL_STATUS
+	                FROM FilteredOrdersDetail OD
+	                WHERE OD.MEMBER_ORDERS_NO = O.MEMBER_ORDERS_NO
+	                AND ROWNUM = 1
+	            ) AS MEMBER_ORDERS_DETAIL_STATUS
+	        FROM 
+	            MEMBER_ORDERS O
+	        JOIN 
+	            MEMBER M ON O.MEMBER_NO = M.MEMBER_NO
+	        ORDER BY 
+	            O.MEMBER_ORDERS_NO DESC
+	    )
+	    WHERE rnum BETWEEN #{startValue} AND #{endValue}
 	</select>
 	
 	<resultMap id="memberOrdersResultMap" type="memberOrdersDTO">
@@ -557,6 +548,7 @@
 	    <result property="productStatus" column="PRODUCT_STATUS"/>
 	    <result property="totalPrice" column="totalPrice"/>
 	    <result property="detailsCount" column="detailsCount"/>
+	    <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
 	</resultMap>
 
     <select id="getMemberOrderDetails" resultMap="memberOrdersDetailResultMap">
@@ -564,6 +556,7 @@
 	            OD.MEMBER_ORDERS_DETAIL_NO,
 	            OD.MEMBER_ORDERS_DETAIL_AMOUNT,
 	            OD.MEMBER_ORDERS_DETAIL_PRICE,
+	            OD.MEMBER_ORDERS_DETAIL_STATUS,
 	            P.PRODUCT_NO,
 	            P.PRODUCT_NAME,
 	            P.PRODUCT_PRICE,
@@ -588,6 +581,7 @@
         <id property="memberOrdersDetailNo" column="MEMBER_ORDERS_DETAIL_NO"/>
         <result property="memberOrdersDetailAmount" column="MEMBER_ORDERS_DETAIL_AMOUNT"/>
         <result property="memberOrdersDetailPrice" column="MEMBER_ORDERS_DETAIL_PRICE"/>
+        <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
         <association property="product" javaType="productDTO">
             <id property="productNo" column="PRODUCT_NO"/>
             <result property="productName" column="PRODUCT_NAME"/>
@@ -601,14 +595,12 @@
         </association>
     </resultMap>
     
-    <!-- 주문 상세 상태 업데이트 -->
     <update id="updateOrderStatus">
-    	UPDATE
-    			MEMBER_ORDERS_DETAIL
-    	   SET
-    	   		MEMBER_ORDERS_DETAIL_STATUS = #{status},
-    	   		TRACKING_NUM = #{trackingNum}
-    	 WHERE
-    	 		MEMBER_ORDERS_DETAIL_NO = #{memberOrdersDetailNo}
-    </update>
+	    UPDATE
+	    		MEMBER_ORDERS_DETAIL
+	       SET
+	    		MEMBER_ORDERS_DETAIL_STATUS = #{status}
+	     WHERE
+	     		MEMBER_ORDERS_DETAIL_NO = #{memberOrdersDetailNo}
+	</update>
 </mapper>

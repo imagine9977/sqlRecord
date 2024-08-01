@@ -120,20 +120,15 @@ public class OrderServiceImpl implements OrdersService {
     @Override
     public void acceptOrders(List<Integer> memberOrdersDetailNos) {
         for (int detailNo : memberOrdersDetailNos) {
-            String trackingNum = generateTrackingNum();
-            ordersMapper.updateOrderStatus(detailNo, "상품준비중", trackingNum);
+            ordersMapper.updateOrderStatus(detailNo, "상품준비중");
         }
     }
 
     @Override
     public void denyOrders(List<Integer> memberOrdersDetailNos) {
         for (int detailNo : memberOrdersDetailNos) {
-            ordersMapper.updateOrderStatus(detailNo, "주문취소됨", null);
+            ordersMapper.updateOrderStatus(detailNo, "주문취소됨");
         }
-    }
-
-    private String generateTrackingNum() {
-        return "TrackingNum" + (int) (Math.random() * 1000000000);
     }
 
 }

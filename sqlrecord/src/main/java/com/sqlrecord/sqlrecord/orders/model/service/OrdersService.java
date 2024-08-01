@@ -37,8 +37,8 @@ public interface OrdersService {
 	int getTotalOrdersCount();
     List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue);
     List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo);
-	void acceptOrders(List<Integer> memberOrdersDetailNos);
-	void denyOrders(List<Integer> memberOrdersDetailNos);
+    void acceptOrders(List<Integer> memberOrdersDetailNos);
+    void denyOrders(List<Integer> memberOrdersDetailNos);
 
 
 

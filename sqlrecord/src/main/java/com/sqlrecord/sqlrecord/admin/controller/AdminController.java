@@ -289,7 +289,7 @@ public class AdminController {
     public ResponseEntity<Map<String, String>> orderAccepted(@RequestBody List<Integer> memberOrdersDetailNos) {
         ordersService.acceptOrders(memberOrdersDetailNos);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Orders accepted successfully");
+        response.put("message", "주문처리 성공");
         return ResponseEntity.ok(response);
     }
 
@@ -297,7 +297,7 @@ public class AdminController {
     public ResponseEntity<Map<String, String>> orderDenied(@RequestBody List<Integer> memberOrdersDetailNos) {
         ordersService.denyOrders(memberOrdersDetailNos);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Orders denied successfully");
+        response.put("message", "주문거절 성공");
         return ResponseEntity.ok(response);
     }
 }
