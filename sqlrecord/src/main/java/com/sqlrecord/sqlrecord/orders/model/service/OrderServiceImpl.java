@@ -1,7 +1,10 @@
 package com.sqlrecord.sqlrecord.orders.model.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrdersService {
+
+
 
 	@Autowired
 	private final OrdersMapper ordersMapper;
@@ -65,18 +70,13 @@ public class OrderServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public MemberOrdersDetail getOrdersDetailOneForTracking(String trackingNum) {
+	public MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum) {
 		return ordersMapper.getOrdersDetailOneForTracking(trackingNum);
 	}
 
 	@Override
-	public int updateMemberOrdersStatus(String string , String trackingNum) {
-		
-		
+	public int updateMemberOrdersStatus(String string , int trackingNum) {
 		return ordersMapper.updateMemberOrdersStatus(string , trackingNum);
-		
-		
-		
 	}
 
 	@Override
@@ -99,32 +99,66 @@ public class OrderServiceImpl implements OrdersService {
 	
 	//관리자
 	@Override
+	// 전체 주문건수 조회
     public int getTotalOrdersCount() {
         return ordersMapper.getTotalOrdersCount();
     }
-
+	
+	// 전체 주문건 조회
     @Override
     public List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue) {
         return ordersMapper.getAllMemberOrders(startValue, endValue);
     }
-
+    
+    // 전체 주문상세 조회
     @Override
     public List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo) {
         return ordersMapper.getMemberOrderDetails(memberOrdersNo);
     }
 
+    // 주문수락처리 - '상품준비중' 전환, 송장번호 생성 
     @Override
     public void acceptOrders(List<Integer> memberOrdersDetailNos) {
         for (int detailNo : memberOrdersDetailNos) {
-            ordersMapper.updateOrderStatus(detailNo, "상품준비중");
+            String trackingNum = generateRandomTrackingNum();
+            ordersMapper.insertTrackingNum(trackingNum);
+            ordersMapper.updateOrderStatus(detailNo, "상품준비중", trackingNum);
         }
     }
 
+    // 주문거절처리 - '주문취소됨' 전환, 송장번호=NULL
     @Override
     public void denyOrders(List<Integer> memberOrdersDetailNos) {
         for (int detailNo : memberOrdersDetailNos) {
-            ordersMapper.updateOrderStatus(detailNo, "주문취소됨");
+            ordersMapper.updateOrderStatus(detailNo, "주문취소됨", null);
         }
     }
+    
+    // 랜덤 송장번호 생성(문자열)
+    private String generateRandomTrackingNum() {
+        int length = 20;
+        String characters = "0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return sb.toString();
+    }
+    
+    // 선택한 주문상세번호 값 모두 받아오기
+	@Override
+	public List<Integer> getMemberOrdersDetailNos(int memberOrdersNo) {
+		return ordersMapper.getMemberOrdersDetailNos(memberOrdersNo);
+	}
 
+	@Override
+    public int searchOrderCount(Map<String, String> map) {
+        return ordersMapper.searchOrderCount(map);
+    }
+
+    @Override
+    public List<MemberOrdersDTO> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds) {
+        return ordersMapper.findByConditionAndKeyword(map, rowBounds);
+    }
 }
