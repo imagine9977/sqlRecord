@@ -1,9 +1,11 @@
 package com.sqlrecord.sqlrecord.orders.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
@@ -44,6 +46,12 @@ public interface OrdersMapper {
 	int getTotalOrdersCount();
 	List<MemberOrdersDTO> getAllMemberOrders(@Param("startValue") int startValue, @Param("endValue") int endValue);
     List<MemberOrdersDetailDTO> getMemberOrderDetails(@Param("memberOrdersNo") int memberOrdersNo);
-    void updateOrderStatus(@Param("memberOrdersDetailNo") int memberOrdersDetailNo, 
-            			   @Param("status") String status);
+    void updateOrderStatus(@Param("detailNo") int detailNo,
+    					   @Param("status") String status,
+    					   @Param("trackingNum") String trackingNum);
+    void insertTrackingNum(@Param("trackingNum") String trackingNum);
+
+	List<Integer> getMemberOrdersDetailNos(int memberOrdersNo);
+	int searchOrderCount(Map<String, String> map);
+    List<MemberOrdersDTO> findByConditionAndKeyword(Map<String, String> map, RowBounds rowBounds);
 }

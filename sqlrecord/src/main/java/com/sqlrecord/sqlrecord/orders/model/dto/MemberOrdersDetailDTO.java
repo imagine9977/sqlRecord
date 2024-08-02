@@ -17,4 +17,6 @@ public class MemberOrdersDetailDTO {
     private int memberOrdersDetailPrice;
     private String memberOrdersDetailStatus;
     private ProductDTO product;
+    
+    private String trackingNum;
 }

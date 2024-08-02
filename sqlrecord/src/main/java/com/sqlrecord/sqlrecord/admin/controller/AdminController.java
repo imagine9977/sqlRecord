@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sqlrecord.sqlrecord.common.template.PageTemplate;
@@ -26,7 +25,9 @@ import com.sqlrecord.sqlrecord.notice.model.service.NoticeService;
 import com.sqlrecord.sqlrecord.notice.model.vo.Notice;
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDTO;
 import com.sqlrecord.sqlrecord.orders.model.dto.MemberOrdersDetailDTO;
+import com.sqlrecord.sqlrecord.orders.model.dto.ProductDTO;
 import com.sqlrecord.sqlrecord.orders.model.service.OrdersService;
+import com.sqlrecord.sqlrecord.product.model.service.ProductService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,10 +36,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AdminController {
 
-//	// Service 생성자 주입
-//	@Autowired
-//	private ProductService productService;
-//	
+	// Service 생성자 주입
+	@Autowired
+	private ProductService productService;
+	
 	@Autowired
 	private OrdersService ordersService;
 	
@@ -50,6 +51,48 @@ public class AdminController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+/////////////////////////////////////////////////////////////////////////////////
+	
+	@GetMapping("/ajaxProductManagement")
+    public ResponseEntity<Map<String, Object>> getAllProducts(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "type", defaultValue = "default") String type) {
+
+        int listCount = productService.productCount();
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 10;
+
+        int maxPage = (int) Math.ceil((double) listCount / boardLimit);
+        int startPage = ((currentPage - 1) / pageLimit) * pageLimit + 1;
+        int endPage = startPage + pageLimit - 1;
+
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+
+        PageInfo pageInfo = PageInfo.builder()
+                .listCount(listCount)
+                .currentPage(currentPage)
+                .pageLimit(pageLimit)
+                .boardLimit(boardLimit)
+                .maxPage(maxPage)
+                .startPage(startPage)
+                .endPage(endPage)
+                .build();
+
+        int startValue = (currentPage - 1) * boardLimit + 1;
+        int endValue = currentPage * boardLimit;
+
+        List<ProductDTO> productList = productService.getAllProducts(startValue, endValue);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", productList);
+        response.put("pageInfo", pageInfo);
+
+        return ResponseEntity.ok(response);
+    }
 	
 /////////////////////////////////////////////////////////////////////////////////	
 	
@@ -299,5 +342,51 @@ public class AdminController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "주문거절 성공");
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/getMemberOrdersDetailNos")
+    public ResponseEntity<List<Integer>> getMemberOrdersDetailNos(@RequestBody List<Integer> memberOrdersNos) {
+        List<Integer> allDetailNos = new ArrayList<>();
+        for (int memberOrdersNo : memberOrdersNos) {
+            allDetailNos.addAll(ordersService.getMemberOrdersDetailNos(memberOrdersNo));
+        }
+        return ResponseEntity.ok(allDetailNos);
+    }
+    
+    @GetMapping("/orderSearch")
+    public String orderSearch(@RequestParam(value="condition", required=false) String condition,
+                               @RequestParam(value="keyword", required=false) String keyword,
+                               @RequestParam(value="page", defaultValue="1") int page,
+                               Model model) {
+
+        log.info("검색 조건 : {}", condition);
+        log.info("검색 키워드 : {}", keyword);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("condition", condition);
+        map.put("keyword", keyword);
+
+        // 검색 결과 수
+        int searchOrderCount = ordersService.searchOrderCount(map);
+        log.info("검색 조건에 부합하는 행의 수 : {}", searchOrderCount);
+        int currentPage = page;
+        int pageLimit = 5;
+        int boardLimit = 15;
+
+        PageInfo pageInfo = PageTemplate.getPageInfo(searchOrderCount,
+                                                     currentPage,
+                                                     pageLimit,
+                                                     boardLimit);
+
+        RowBounds rowBounds = new RowBounds((currentPage - 1) * boardLimit, boardLimit);
+
+        List<MemberOrdersDTO> orderList = ordersService.findByConditionAndKeyword(map, rowBounds);
+
+        model.addAttribute("list", orderList);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("condition", condition);
+
+        return "admin/admin";
     }
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 
+import com.sqlrecord.sqlrecord.orders.model.dto.ProductDTO;
 import com.sqlrecord.sqlrecord.product.model.vo.Product;
 
 public interface ProductService {
@@ -23,6 +24,9 @@ public interface ProductService {
 
 
 	Product findOne(int productNo);
+
+
+	List<ProductDTO> getAllProducts(int startValue, int endValue);
 
 
 	

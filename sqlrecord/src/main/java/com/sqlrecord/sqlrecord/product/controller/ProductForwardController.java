@@ -57,15 +57,6 @@ public class ProductForwardController {
 		return "product/detail";
 	}
 	
-	/*
-	@GetMapping("count.do")
-    public String getReplyCount(Model model) {
-        int replyCount = replyService.replyCount();
-        model.addAttribute("replyCount", replyCount);
-        return "reply/list3"; 
-    }
-	*/
-	
 	@PostMapping("chInsReply.do")
 	@ResponseBody
 	public String chInsReply(@ModelAttribute ChReply chReply, 
