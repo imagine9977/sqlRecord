@@ -398,7 +398,7 @@
 		        MEMBER_ORDERS_DETAIL_STATUS
 	      FROM (
 		        SELECT 
-		            ROWNUM AS rnum,
+		            ROWNUM rnum,
 		            O.MEMBER_ORDERS_NO,
 		            O.MEMBER_ORDERS_ADDRESS,
 		            O.MEMBER_ORDERS_ADDRESS2,
