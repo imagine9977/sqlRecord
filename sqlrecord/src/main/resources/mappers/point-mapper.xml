@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqlrecord.sqlrecord.member.model.dao.PointMapper">
+	
+	<select id="point" parameterType="map" resultType="map">
+		SELECT
+			      SUM(POINT_AMOUNT) AS total,
+			      SUM(CASE WHEN HISTORY = '적립' THEN POINT_AMOUNT ELSE 0 END) AS totalAll
+			FROM
+			      POINT
+			WHERE
+			      MEMBER_NO = #{memberNo}
+	</select>
+	
+</mapper>
