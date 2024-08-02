@@ -194,7 +194,7 @@
         DESC
 	</select>
 
-	<select id="getOrdersDetailOneForTracking" parameterType="string" resultMap="odRM">
+	<select id="getOrdersDetailOneForTracking" parameterType="_int" resultMap="odRM">
         SELECT
                 od.MEMBER_ORDERS_DETAIL_NO,
 		        p.PRODUCT_NO,
@@ -572,7 +572,7 @@
 	
 	<select id="searchMemberCount" parameterType="map" resultType="int">
 	    SELECT 
-	    		COUNT(*)
+	    		COUNT(MEMBER_ORDERS_NO)
 	      FROM 
 	    		MEMBER_ORDERS
 	     WHERE 

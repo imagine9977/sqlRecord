@@ -70,18 +70,13 @@ public class OrderServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public MemberOrdersDetail getOrdersDetailOneForTracking(String trackingNum) {
+	public MemberOrdersDetail getOrdersDetailOneForTracking(int trackingNum) {
 		return ordersMapper.getOrdersDetailOneForTracking(trackingNum);
 	}
 
 	@Override
-	public int updateMemberOrdersStatus(String string , String trackingNum) {
-		
-		
+	public int updateMemberOrdersStatus(String string , int trackingNum) {
 		return ordersMapper.updateMemberOrdersStatus(string , trackingNum);
-		
-		
-		
 	}
 
 	@Override
