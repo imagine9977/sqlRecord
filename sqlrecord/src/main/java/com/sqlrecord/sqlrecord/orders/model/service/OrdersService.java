@@ -42,12 +42,12 @@ public interface OrdersService {
     List<MemberOrdersDTO> getAllMemberOrders(int startValue, int endValue);
     // 모든 주문상세 출력
     List<MemberOrdersDetailDTO> getMemberOrdersDetails(int memberOrdersNo);
-    // 선택한 주문상세값의 리스트를 가져오기
-    List<Integer> getMemberOrdersDetailNos(int memberOrdersNo);
     // 주문수락
     void acceptOrders(List<Integer> memberOrdersDetailNos);
     // 주문거절
     void denyOrders(List<Integer> memberOrdersDetailNos);
+    // 선택한 주문상세값의 리스트를 가져오기
+    List<Integer> getMemberOrdersDetailNos(int memberOrdersNo);
     // 검색 조회수
     int searchOrderCount(Map<String, String> map);
     // 검색내용조회
