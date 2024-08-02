@@ -155,7 +155,7 @@ public class NoticeController {
 	}
 
 
-	@DeleteMapping("/notice/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Message> deletebyId(@PathVariable int id, HttpSession session) {
 		Notice notice = noticeService.findById(id);
 		int result = noticeService.delete(id);

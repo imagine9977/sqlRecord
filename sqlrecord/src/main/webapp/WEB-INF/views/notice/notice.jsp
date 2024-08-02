@@ -491,7 +491,7 @@
 			
 			//공지 삭제하기 확인 프롬프트
 			function ConfirmDelete(noticeNo) {
-			    if (confirm("Are you sure you want to delete this notice?")) {
+			    if (confirm("공지사항을 삭제하시겠습니까?")) {
 			    	 console.log(noticeNo);
 			    	deleteById(noticeNo);
 			    }
@@ -501,7 +501,7 @@
 			 function deleteById(noticeNo) {
                  $.ajax({
                 	
-                     url: 'notice/' + noticeNo,
+                     url: 'notice/delete/' + noticeNo,
                      type: 'delete',
                      success: response => {
                          if (response.message === '게시글 삭제 성공') {

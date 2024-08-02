@@ -28,6 +28,7 @@ public class Member {
     private int pointNo;
     private Date changeDate;
 	private int pointAmount;
+	private int point;
 	private String history;
 	
 }

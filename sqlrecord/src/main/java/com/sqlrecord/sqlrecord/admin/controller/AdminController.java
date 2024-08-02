@@ -198,7 +198,7 @@ public class AdminController {
         for (Member member : memberList) {
             System.out.println("memberNo: " + member.getMemberNo());
             System.out.println("memberId: " + member.getMemberId());
-            System.out.println("point: " + member.getPoint());
+//            System.out.println("point: " + member.getPoint());
         }
 
         List<Map<String, Object>> formattedMemberList = new ArrayList<>();
