@@ -43,6 +43,9 @@
             <button type="submit" id="fnext">NEXT</button>
         </form>
         </div>
+        <c:if test="${not empty errorMsg}">
+          <script>alert('${errorMsg}');</script>
+        </c:if>
         <div class="conbox con2">
         <form action="${hpath }/member/emailckPw" method="post">
             <label for="idf">이름 </label>
@@ -54,6 +57,7 @@
             <button type="submit" id="fnext1">NEXT</button>
         </form>
         </div>
+        
     </div>
     <script>
     

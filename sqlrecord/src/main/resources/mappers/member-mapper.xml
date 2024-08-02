@@ -88,31 +88,46 @@
 	</select>
 	
 	<insert id="insMember" parameterType="member">
-		INSERT 
-			INTO MEMBER (
-						 MEMBER_NO,
-            			 MEMBER_ID,
-			             MEMBER_PW,
-			             NAME,
-			             EMAIL,
-			             TELL,
-			             ADDR1,
-			             ADDR2,
-			             POSTCODE,
-			             BIRTH
-        	   			) 
-        	   VALUES   (
-        	   			 member_SEQ.NEXTVAL,
-			             #{memberId},
-			             #{memberPw},
-			             #{name},
-			             #{email},
-			             #{tell},
-			             #{addr1},
-			             #{addr2},
-			             #{postcode},
-			             #{birth}
-       					)
+		INSERT ALL
+		    INTO MEMBER (
+				        MEMBER_NO,
+				        MEMBER_ID,
+				        MEMBER_PW,
+				        NAME,
+				        EMAIL,
+				        TELL,
+				        ADDR1,
+				        ADDR2,
+				        POSTCODE,
+				        BIRTH
+				     	) 
+			    VALUES (
+				        member_SEQ.NEXTVAL,
+				        #{memberId},
+				        #{memberPw},
+				        #{name},
+				        #{email},
+				        #{tell},
+				        #{addr1},
+				        #{addr2},
+				        #{postcode},
+				        #{birth}
+				    	)
+		    INTO POINT (
+				        POINT_NO,
+				        MEMBER_NO,
+				        HISTORY,
+				        POINT_AMOUNT,
+				        CHANGE_DATE
+				    	)
+			    VALUES (
+			    		POINT_SEQ.NEXTVAL,
+				        member_SEQ.CURRVAL,
+				        DEFAULT,
+				        DEFAULT,
+        				DEFAULT
+				   		)
+		SELECT * FROM DUAL
 	</insert>
 	
 	<insert id="insGenre" parameterType="memberGenre">
@@ -196,6 +211,15 @@
 				 MEMBER_ID = #{memberId} 
 	</update>
 
+	<select id="point" parameterType="member" resultType="member">
+		SELECT
+			      SUM(POINT_AMOUNT) AS totalAll,
+			      SUM(CASE WHEN HISTORY = '적립' THEN POINT_AMOUNT ELSE 0 END) AS total
+			FROM
+			      POINT
+			WHERE
+			      MEMBER_NO = #{memberNo}
+	</select>
   
   
   <!-- 관리자 페이지 : 회원 1명 상세정보 조회 -->
