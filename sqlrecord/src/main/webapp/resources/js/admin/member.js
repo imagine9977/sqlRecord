@@ -12,7 +12,7 @@
 	                var table = '<table class="accordion-table">' +
 	                    '<thead>' +
 	                    '<tr>' +
-	                    '<th><input type="checkbox" class="checkAll"></th>' +
+	                    '<th><input type="checkbox" class="checkAllMembers"></th>' +
 	                    '<th>No.</th>' +
 	                    '<th>아이디</th>' +
 	                    '<th>이름</th>' +
@@ -60,7 +60,7 @@
 	                table += '</tbody></table>';
 	
 	                $('#content-area').html(table);
-	
+	                
 	                // 페이지네이션 생성
 	                var pageInfo = response.pageInfo;
 	                var pagingHtml = createPagination(pageInfo, 'member');
