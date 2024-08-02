@@ -15,6 +15,7 @@
  	  	<typeAlias type="com.sqlrecord.sqlrecord.product.model.vo.ProductPhotos" alias="productPhotos"/>
 	
 	
+ 	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Point" alias="point" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.member.model.vo.Member" alias="member" /> 
  	  	<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.Notice" alias="notice" />
 		<typeAlias type="com.sqlrecord.sqlrecord.notice.model.vo.NFile" alias="nFile" />
@@ -48,6 +49,7 @@
  		<!-- <mapper resource="/mappers/member-mapper.xml"/>  -->
  	  	<mapper resource="/mappers/cart-mapper.xml"/>
  		<mapper resource="/mappers/member-mapper.xml"/>  
+ 		<mapper resource="/mappers/point-mapper.xml"/>  
 
  		<mapper resource="/mappers/reply-mapper.xml"/>  
  	    
