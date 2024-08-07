@@ -194,7 +194,7 @@
         DESC
 	</select>
 
-	<select id="getOrdersDetailOneForTracking" parameterType="_int" resultMap="odRM">
+	<select id="getOrdersDetailOneForTracking" parameterType="string" resultMap="odRM">
         SELECT
                 od.MEMBER_ORDERS_DETAIL_NO,
 		        p.PRODUCT_NO,
@@ -373,7 +373,7 @@
 	
   <!-- ================================ 관리자 페이지 ================================ -->
 
-	<select id="getTotalOrdersCount" resultType="int">
+	<select id="getTotalOrdersCount" resultType="_int">
         SELECT
         		COUNT(DISTINCT MEMBER_ORDERS_NO)
           FROM
@@ -478,55 +478,35 @@
 
     <select id="getMemberOrderDetails" resultMap="memberOrdersDetailResultMap">
         SELECT
-			    OD.MEMBER_ORDERS_DETAIL_NO,
-			    OD.MEMBER_ORDERS_DETAIL_AMOUNT,
-			    OD.MEMBER_ORDERS_DETAIL_PRICE,
-			    OD.MEMBER_ORDERS_DETAIL_STATUS,
-			    OD.TRACKING_NUM,
-			    P.PRODUCT_NO,
-			    P.PRODUCT_NAME,
-			    P.PRODUCT_PRICE,
-			    P.PRODUCT_STATUS,
-			    P.PRODUCT_CATE,
-			    PP.PHOTO_NAME,
-			    PP.PHOTO_PATH
-		  FROM
-		    	MEMBER_ORDERS_DETAIL OD
-		  JOIN
-		    	PRODUCT P ON OD.PRODUCT_NO = P.PRODUCT_NO
-		  JOIN
-		    	(
-			        SELECT
-				            PRODUCT_NO,
-				            PHOTO_NAME,
-				            PHOTO_PATH
-			          FROM
-			            	PRODUCT_PHOTOS
-			         WHERE
-				            (PRODUCT_NO, PHOTO_NO) IN (
-				                SELECT
-				                		PRODUCT_NO,
-				                		MIN(PHOTO_NO)
-				                  FROM
-				                  		PRODUCT_PHOTOS
-				                 GROUP
-				                 	BY
-				                 		PRODUCT_NO
-				            )
-		    	) PP ON P.PRODUCT_NO = PP.PRODUCT_NO
-		 WHERE
-		    	OD.MEMBER_ORDERS_NO = #{memberOrdersNo}
-		 ORDER
-		 	BY
-		    	OD.MEMBER_ORDERS_DETAIL_NO ASC
+	            OD.MEMBER_ORDERS_DETAIL_NO,
+	            OD.MEMBER_ORDERS_DETAIL_AMOUNT,
+	            OD.MEMBER_ORDERS_DETAIL_PRICE,
+	            OD.MEMBER_ORDERS_DETAIL_STATUS,
+	            P.PRODUCT_NO,
+	            P.PRODUCT_NAME,
+	            P.PRODUCT_PRICE,
+	            P.PRODUCT_STATUS,
+	            P.PRODUCT_CATE,
+	            PP.PHOTO_NAME,
+	            PP.PHOTO_PATH
+          FROM
+            	MEMBER_ORDERS_DETAIL OD
+          JOIN
+            	PRODUCT P ON OD.PRODUCT_NO = P.PRODUCT_NO
+          JOIN
+            	PRODUCT_PHOTOS PP ON P.PRODUCT_NO = PP.PRODUCT_NO
+         WHERE
+            	OD.MEMBER_ORDERS_NO = #{memberOrdersNo}
+         ORDER
+        	BY
+            	OD.MEMBER_ORDERS_DETAIL_NO ASC
     </select>
 
     <resultMap id="memberOrdersDetailResultMap" type="memberOrdersDetailDTO">
         <id property="memberOrdersDetailNo" column="MEMBER_ORDERS_DETAIL_NO"/>
         <result property="memberOrdersDetailAmount" column="MEMBER_ORDERS_DETAIL_AMOUNT"/>
         <result property="memberOrdersDetailPrice" column="MEMBER_ORDERS_DETAIL_PRICE"/>
-        <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/>
-        <result property="trackingNum" column="TRACKING_NUM"/>
+        <result property="memberOrdersDetailStatus" column="MEMBER_ORDERS_DETAIL_STATUS"/> <!-- 이 부분을 올바르게 수정 -->
         <association property="product" javaType="productDTO">
             <id property="productNo" column="PRODUCT_NO"/>
             <result property="productName" column="PRODUCT_NAME"/>
@@ -534,77 +514,19 @@
             <result property="productStatus" column="PRODUCT_STATUS"/>
             <result property="productCate" column="PRODUCT_CATE"/>
             <collection property="productPhotosList" ofType="productPhotosDTO">
+                <result property="productPhotosNo" column="PHOTO_NO"/>
                 <result property="productPhotosName" column="PHOTO_NAME"/>
                 <result property="productPhotosPath" column="PHOTO_PATH"/>
             </collection>
         </association>
     </resultMap>
-	
-	<!-- 배송상태 업데이트(송장번호 추가) -->
-	<update id="updateOrderStatus" parameterType="map">
-        UPDATE 
-        		MEMBER_ORDERS_DETAIL
-           SET 
-           		MEMBER_ORDERS_DETAIL_STATUS = #{status},
-            	TRACKING_NUM = #{trackingNum}
-         WHERE 
-        		MEMBER_ORDERS_DETAIL_NO = #{detailNo}
-    </update>
-
-	<!-- 송장번호 테이블 삽입 -->
-    <insert id="insertTrackingNum" parameterType="string">
-        INSERT
-          INTO
-          		TRACKING_NUM (TRACKING_NUM)
-        VALUES
-        		(#{trackingNum})
-    </insert>
     
-	<!-- memberOrdersDetailsNos 값 받아와 주문수락/거절 처리 -->
-	<select id="getMemberOrdersDetailNos" parameterType="_int" resultType="_int">
-	    SELECT
-	    		MEMBER_ORDERS_DETAIL_NO
-	      FROM
-	      		MEMBER_ORDERS_DETAIL
+    <update id="updateOrderStatus">
+	    UPDATE
+	    		MEMBER_ORDERS_DETAIL
+	       SET
+	    		MEMBER_ORDERS_DETAIL_STATUS = #{status}
 	     WHERE
-	     		MEMBER_ORDERS_NO = #{memberOrdersNo}
-	</select>
-	
-	<select id="searchMemberCount" parameterType="map" resultType="int">
-	    SELECT 
-	    		COUNT(*)
-	      FROM 
-	    		MEMBER_ORDERS
-	     WHERE 
-	    	<if test="condition == 'memberId'">
-	        	MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
-	    	</if>
-	    	<if test="condition == 'productName'">
-	        	PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
-	    	</if>
-	</select>
-	
-	<select id="findByConditionAndKeyword" parameterType="map" resultType="MemberOrdersDTO">
-	    SELECT 
-		        MEMBER_ORDERS_NO,
-		        MEMBER_ID,
-		        PRODUCT_NO,
-		        PRODUCT_NAME,
-		        ORDER_DATE,
-		        ORDER_STATUS
-	      FROM
-	    		MEMBER_ORDERS
-	     WHERE 
-		    <if test="condition == 'memberId'">
-		        MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
-		    </if>
-		    <if test="condition == 'productName'">
-		        PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%')
-		    </if>
-		 ORDER 
-		 	BY 
-		 		MEMBER_ORDERS_NO DESC
-		 LIMIT 
-		 		#{rowBounds.offset}, #{rowBounds.limit}
-	</select>
+	     		MEMBER_ORDERS_DETAIL_NO = #{memberOrdersDetailNo}
+	</update>
 </mapper>
